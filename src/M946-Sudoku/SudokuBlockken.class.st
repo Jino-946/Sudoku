@@ -1,0 +1,62 @@
+Class {
+	#name : #SudokuBlockken,
+	#superclass : #Object,
+	#instVars : [
+		'blockkenA2D',
+		'boardRows',
+		'boardCols'
+	],
+	#category : #'M946-Sudoku-Core'
+}
+
+{ #category : #accessing }
+SudokuBlockken >> blockkenA2D [
+
+	^blockkenA2D
+]
+
+{ #category : #accessing }
+SudokuBlockken >> boardCols [
+	"blockkenの列のindex(1-3)に対応するSudokuBoardのindex配列を返す"
+	^boardCols 
+]
+
+{ #category : #accessing }
+SudokuBlockken >> boardRows [
+	"blockkenの行のindex(1-3)に対応するSudokuBoardのindex配列を返す"
+	^boardRows 
+]
+
+{ #category : #initialization }
+SudokuBlockken >> initialize [ 
+
+	super initialize .
+	blockkenA2D := Array2D new:  3 element: 0.
+	boardRows  := Array braceWith: 0 with:0  with: 0.
+	boardCols  := Array braceWith: 0 with:0  with: 0.
+	
+]
+
+{ #category : #printing }
+SudokuBlockken >> printOn: aStream [
+
+	aStream
+		nextPutAll: 'blockkenA2D'; cr;
+		nextPutAll: blockkenA2D asString; cr;
+		nextPutAll: 'board rows: ';
+		nextPutAll: boardRows  asString;cr;
+		nextPutAll: 'board cols: ';
+		nextPutAll: boardCols asString
+]
+
+{ #category : #accessing }
+SudokuBlockken >> row: anInteger column: anInteger2 [
+
+	^blockkenA2D at: anInteger at: anInteger2 
+]
+
+{ #category : #accessing }
+SudokuBlockken >> row: anInteger column: anInteger2 put: val [
+
+	^blockkenA2D at: anInteger at: anInteger2 put: val
+]
