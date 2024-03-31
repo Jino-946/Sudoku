@@ -9,6 +9,16 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
+{ #category : #comparing }
+SudokuBlockken >> = aSudokuBlockken [
+
+	^ aSudokuBlockken class == self class
+		and: [ aSudokuBlockken blockkenA2D = self blockkenA2D 
+				and: [ aSudokuBlockken boardRows = self boardRows 
+					and: [ aSudokuBlockken boardCols = self boardCols ] ] ]
+	
+]
+
 { #category : #accessing }
 SudokuBlockken >> blockkenA2D [
 

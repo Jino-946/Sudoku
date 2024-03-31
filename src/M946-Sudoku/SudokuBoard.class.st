@@ -11,6 +11,17 @@ Class {
 SudokuBoard >> blockkenAt: anInt [
 
 	anInt = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
+	anInt = 2 ifTrue: [ ^self blockkenAt: 1 at: 4 ].
+	anInt = 3 ifTrue: [ ^self blockkenAt: 1 at: 7 ].
+	
+	anInt = 4 ifTrue: [ ^self blockkenAt: 4 at: 1 ].
+	anInt = 5 ifTrue: [ ^self blockkenAt: 4 at: 4 ].
+	anInt = 6 ifTrue: [ ^self blockkenAt: 4 at: 7 ].
+	
+	anInt = 7 ifTrue: [ ^self blockkenAt: 7 at: 1 ].
+	anInt = 8 ifTrue: [ ^self blockkenAt: 7 at: 4 ].
+	anInt = 9 ifTrue: [ ^self blockkenAt: 7 at: 7 ].
+
 ]
 
 { #category : #accessing }
