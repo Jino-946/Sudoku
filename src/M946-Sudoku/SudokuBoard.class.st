@@ -89,15 +89,18 @@ SudokuBoard >> printOn: aStream [
 
 { #category : #accessing }
 SudokuBoard >> row: rowIndex column: colIndex [
-	"rowIndexとcolIndexで指定した位置の値を返す	
+	"rowIndexとcolIndexで指定した位置のボードの値を返す	
 	"
 	^board at: rowIndex at: colIndex 
 ]
 
 { #category : #accessing }
-SudokuBoard >> row: anInteger column: anInteger2 put: val [
+SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
+	"
+	rowIndexとcolIndexで指定した位置に値をセットする	
+	"
 
-	^board at: anInteger at: anInteger2 put: val
+	^board at: rowIndex at: colIndex put: aNumber
 ]
 
 { #category : #examples }
