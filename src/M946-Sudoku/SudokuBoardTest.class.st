@@ -112,6 +112,37 @@ SudokuBoardTest >> testBlockkenAtAt [
 ]
 
 { #category : #tests }
+SudokuBoardTest >> testBoardRowsAt [
+
+	| example sb expected index|
+	example := #(#(1 9 7   0 0 4   2 0 5) 
+				  #(6 8 0   5 3 0   9 0 0) 
+				  #(5 0 3   0 7 2   1 6 8)
+	
+				  #(0 6 0   4 0 9   7 0 2) 
+				  #(0 7 5   0 1 0   6 8 0) 
+				  #(2 0 9   8 0 7   0 4 0) 
+	
+				  #(7 5 6   3 2 0   4 0 1) 
+				  #(0 0 1   0 4 5   0 2 6) 
+				  #(8 0 4   1 0 0   3 5 7)).
+
+	
+	sb := SudokuBoard new.
+	sb loadExample: example .
+	index := 2.
+	expected := example at: index.
+	self assert: (sb boardRowsAt: index) equals: expected.
+	
+	index := 8.
+	expected := example at: index .
+	self assert: (sb boardRowsAt: index) equals: expected.
+	
+	
+	
+]
+
+{ #category : #tests }
 SudokuBoardTest >> testRowColumn [
 
 	| sb |
