@@ -31,22 +31,119 @@ SudokuBoard >> blockkenAt: aNumber [
 	 4  5  6
 	 7  8  9	
 	"
-	aNumber = 1 ifTrue: [ ^(self blockkenAt: 1 at: 1) blockNumber: aNumber].
-	aNumber = 2 ifTrue: [ ^(self blockkenAt: 1 at: 4) blockNumber: aNumber].
-	aNumber = 3 ifTrue: [ ^(self blockkenAt: 1 at: 7) blockNumber: aNumber].
-	
-	aNumber = 4 ifTrue: [ ^(self blockkenAt: 4 at: 1) blockNumber: aNumber].
-	aNumber = 5 ifTrue: [ ^(self blockkenAt: 4 at: 4) blockNumber: aNumber].
-	aNumber = 6 ifTrue: [ ^(self blockkenAt: 4 at: 7) blockNumber: aNumber].
-	
-	aNumber = 7 ifTrue: [ ^(self blockkenAt: 7 at: 1) blockNumber: aNumber].
-	aNumber = 8 ifTrue: [ ^(self blockkenAt: 7 at: 4) blockNumber: aNumber].
-	aNumber = 9 ifTrue: [ ^(self blockkenAt: 7 at: 7) blockNumber: aNumber].
 
+	aNumber = 1 ifTrue: [
+		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+	aNumber = 2 ifTrue: [
+		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+	aNumber = 3 ifTrue: [
+		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+
+	aNumber = 4 ifTrue: [
+		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+	aNumber = 5 ifTrue: [
+		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+	aNumber = 6 ifTrue: [
+		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+
+	aNumber = 7 ifTrue: [
+		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ].
+	aNumber = 8 ifTrue: [
+		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ].
+	aNumber = 9 ifTrue: [
+		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ]
+]
+
+{ #category : #accessing }
+SudokuBoard >> board [
+
+	^board 
+]
+
+{ #category : #helper }
+SudokuBoard >> boardAsString [
+	"
+	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
+	"
+	| aStream separateIndices |
+	separateIndices := #( 3 6 ).
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'SUDOKU Board'; cr.
+	aStream nextPutAll: '---------------------------------------';cr.
+	1 to: 9 do: [ :rowIndex |
+		1 to: 9 do: [ :colIndex | |number|
+			number := self board at: rowIndex at: colIndex.	
+			aStream nextPutAll: number asString; tab.
+			"
+			number = 0
+			ifTrue: [ aStream nextPutAll: '_'; tab ]
+			ifFalse: [aStream nextPutAll: number asString; tab] .
+			"
+			(separateIndices includes: colIndex)
+			ifTrue:[ aStream  tab]].
+		aStream cr.
+		(separateIndices includes: rowIndex )
+		ifTrue: [ aStream  cr;cr ]
+	].
+	
+	^aStream contents 
 ]
 
 { #category : #logic }
-SudokuBoard >> blockkenAt: rowStart at: colStart [
+SudokuBoard >> colsAt: colIndex [
+	"
+	boardよりcolIndex指定した列の要素を行を上から串刺しにした配列にして返す
+	"
+	| result |
+	result := Array new: 9 withAll: 0.
+	
+	1 to: 9 do: [ :rowIndex | result at: rowIndex  put: (board at: rowIndex at: colIndex) ].
+	
+	^result
+]
+
+{ #category : #initialization }
+SudokuBoard >> initialize [ 
+
+	super initialize .
+	board := Array2D new:9 element: 0
+]
+
+{ #category : #examples }
+SudokuBoard >> loadExample: anArray [
+	"
+	2次元配列の数独問題データ(anArray)を数独ボードデータへ(Array2D)へコピーする
+	"
+	1 to: 9 do:[ :i | |row|
+		row := anArray at:i.
+		row doWithIndex: [ :num :j | board at: i at: j put: num ]
+	]
+
+" example0
+
+#(  #(1 9 7   0 0 4   2 0 5) 
+	#(6 8 0   5 3 0   9 0 0) 
+	#(5 0 3   0 7 2   1 6 8)
+	
+	#(0 6 0   4 0 9   7 0 2) 
+	#(0 7 5   0 1 0   6 8 0) 
+	#(2 0 9   8 0 7   0 4 0) 
+	
+	#(7 5 6   3 2 0   4 0 1) 
+	#(0 0 1   0 4 5   0 2 6) 
+	#(8 0 4   1 0 0   3 5 7))
+
+"
+]
+
+{ #category : #printing }
+SudokuBoard >> printOn: aStream [
+
+	aStream nextPutAll: self boardAsString 
+]
+
+{ #category : #logic }
+SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
 	ブロック(3X3)を取り出す。
@@ -85,94 +182,6 @@ SudokuBoard >> blockkenAt: rowStart at: colStart [
 ]
 
 { #category : #accessing }
-SudokuBoard >> board [
-
-	^board 
-]
-
-{ #category : #helper }
-SudokuBoard >> boardAsString [
-	"
-	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
-	"
-	| aStream separateIndices |
-	separateIndices := #( 3 6 ).
-	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'SUDOKU Board'; cr.
-	aStream nextPutAll: '---------------------------------------';cr.
-	1 to: 9 do: [ :rowIndex |
-		1 to: 9 do: [ :colIndex | |number|
-			number := self board at: rowIndex at: colIndex.	
-			aStream nextPutAll: number asString; tab.
-			"
-			number = 0
-			ifTrue: [ aStream nextPutAll: '_'; tab ]
-			ifFalse: [aStream nextPutAll: number asString; tab] .
-			"
-			(separateIndices includes: colIndex)
-			ifTrue:[ aStream  tab]].
-		aStream cr.
-		(separateIndices includes: rowIndex )
-		ifTrue: [ aStream  cr;cr ]
-	].
-	
-	^aStream contents 
-]
-
-{ #category : #accessing }
-SudokuBoard >> boardRowsAt: rowIndex [
-	"
-	boardよりrowIndex指定した要素(列配列)を返す。
-	"
-	| result |
-	result := Array new: 9 withAll: 0.
-	
-	1 to: 9 do: [ :colIndex | result at: colIndex put: (board at: rowIndex at: colIndex)].
-	
-	^result
-]
-
-{ #category : #initialization }
-SudokuBoard >> initialize [ 
-
-	super initialize .
-	board := Array2D new:9 element: 0
-]
-
-{ #category : #initialization }
-SudokuBoard >> loadExample: anArray [
-	"
-	
-	"
-	1 to: 9 do:[ :i | |row|
-		row := anArray at:i.
-		row doWithIndex: [ :num :j | board at: i at: j put: num ]
-	]
-
-" example0
-
-#(  #(1 9 7   0 0 4   2 0 5) 
-	#(6 8 0   5 3 0   9 0 0) 
-	#(5 0 3   0 7 2   1 6 8)
-	
-	#(0 6 0   4 0 9   7 0 2) 
-	#(0 7 5   0 1 0   6 8 0) 
-	#(2 0 9   8 0 7   0 4 0) 
-	
-	#(7 5 6   3 2 0   4 0 1) 
-	#(0 0 1   0 4 5   0 2 6) 
-	#(8 0 4   1 0 0   3 5 7))
-
-"
-]
-
-{ #category : #printing }
-SudokuBoard >> printOn: aStream [
-
-	aStream nextPutAll: self boardAsString 
-]
-
-{ #category : #accessing }
 SudokuBoard >> row: rowIndex column: colIndex [
 	"rowIndexとcolIndexで指定した位置のボードの値を返す	
 	"
@@ -186,6 +195,19 @@ SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
 	"
 
 	^board at: rowIndex at: colIndex put: aNumber
+]
+
+{ #category : #logic }
+SudokuBoard >> rowsAt: rowIndex [
+	"
+	boardよりrowIndex指定した行(列配列)を返す。
+	"
+	| result |
+	result := Array new: 9 withAll: 0.
+	
+	1 to: 9 do: [ :colIndex | result at: colIndex put: (board at: rowIndex at: colIndex)].
+	
+	^result
 ]
 
 { #category : #examples }

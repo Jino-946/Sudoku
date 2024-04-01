@@ -66,7 +66,36 @@ SudokuBoardTest >> testBlockkenAt [
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testBlockkenAtAt [
+SudokuBoardTest >> testColsAt [
+
+	| example sb expected index|
+	example := #(#(1 9 7   0 0 4   2 0 5) 
+				  #(6 8 0   5 3 0   9 0 0) 
+				  #(5 0 3   0 7 2   1 6 8)
+	
+				  #(0 6 0   4 0 9   7 0 2) 
+				  #(0 7 5   0 1 0   6 8 0) 
+				  #(2 0 9   8 0 7   0 4 0) 
+	
+				  #(7 5 6   3 2 0   4 0 1) 
+				  #(0 0 1   0 4 5   0 2 6) 
+				  #(8 0 4   1 0 0   3 5 7)).
+
+	
+	sb := SudokuBoard new.
+	sb loadExample: example .
+	index := 2.
+	expected := self privateSkewerCellsAt: index from: example .
+	self assert: (sb colsAt: index) equals: expected.
+	
+	index := 8.
+	expected := self privateSkewerCellsAt: index from: example .
+	self assert: (sb colsAt: index) equals: expected.
+	
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testPrivateBlockkenAtAt [
 	"
 	ダミーボード
 	1 2 3  4 5 6  7 8 9
@@ -108,13 +137,13 @@ SudokuBoardTest >> testBlockkenAtAt [
 	board := SudokuBoard new.
 	board setDummy.
 
-	self assert: (board blockkenAt: 7 at: 1) equals: expected
+	self assert: (board privateBlockkenAt: 7 at: 1) equals: expected
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testBoardRowsAt [
+SudokuBoardTest >> testPrivateSkewerCellsAtFrom [
 
-	| example sb expected index|
+	| example result expected index|
 	example := #(#(1 9 7   0 0 4   2 0 5) 
 				  #(6 8 0   5 3 0   9 0 0) 
 				  #(5 0 3   0 7 2   1 6 8)
@@ -128,18 +157,17 @@ SudokuBoardTest >> testBoardRowsAt [
 				  #(8 0 4   1 0 0   3 5 7)).
 
 	
-	sb := SudokuBoard new.
-	sb loadExample: example .
-	index := 2.
-	expected := example at: index.
-	self assert: (sb boardRowsAt: index) equals: expected.
+	index := 7.
+	expected := #(2 9 1 7 6 0 4 0 3).
+	result := self privateSkewerCellsAt: index from: example .
+	self assert: result equals: expected.
 	
-	index := 8.
-	expected := example at: index .
-	self assert: (sb boardRowsAt: index) equals: expected.
+	index := 4.
+	expected := #(0 5 0 4 0 8 3 0 1).
+	result := self privateSkewerCellsAt: index from: example .
+	self assert: result equals: expected.
 	
-	
-	
+
 ]
 
 { #category : #tests }
@@ -161,4 +189,35 @@ SudokuBoardTest >> testRowColumnPut [
 	sb row: 3 column: 5 put: 7.
 	
 	self assert: (sb row: 3 column: 5) equals: 7
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testRowsAt [
+
+	| example sb expected index|
+	example := #(#(1 9 7   0 0 4   2 0 5) 
+				  #(6 8 0   5 3 0   9 0 0) 
+				  #(5 0 3   0 7 2   1 6 8)
+	
+				  #(0 6 0   4 0 9   7 0 2) 
+				  #(0 7 5   0 1 0   6 8 0) 
+				  #(2 0 9   8 0 7   0 4 0) 
+	
+				  #(7 5 6   3 2 0   4 0 1) 
+				  #(0 0 1   0 4 5   0 2 6) 
+				  #(8 0 4   1 0 0   3 5 7)).
+
+	
+	sb := SudokuBoard new.
+	sb loadExample: example .
+	index := 2.
+	expected := example at: index.
+	self assert: (sb rowsAt: index) equals: expected.
+	
+	index := 8.
+	expected := example at: index .
+	self assert: (sb rowsAt: index) equals: expected.
+	
+	
+	
 ]
