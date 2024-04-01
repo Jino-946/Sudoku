@@ -35,21 +35,21 @@ SudokuBoard >> blockkenAt: aNumber [
 	aNumber = 1 ifTrue: [
 		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
 	aNumber = 2 ifTrue: [
-		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 1 at: 4) blockNumber: aNumber ].
 	aNumber = 3 ifTrue: [
-		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 1 at: 7) blockNumber: aNumber ].
 
 	aNumber = 4 ifTrue: [
-		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 4 at: 1) blockNumber: aNumber ].
 	aNumber = 5 ifTrue: [
 		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
 	aNumber = 6 ifTrue: [
-		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 4 at: 7) blockNumber: aNumber ].
 
 	aNumber = 7 ifTrue: [
-		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 7 at: 1) blockNumber: aNumber ].
 	aNumber = 8 ifTrue: [
-		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ].
+		^ (self privateBlockkenAt: 7 at: 4) blockNumber: aNumber ].
 	aNumber = 9 ifTrue: [
 		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ]
 ]
