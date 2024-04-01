@@ -56,6 +56,7 @@ SudokuBoard >> blockkenAt: rowStart at: colStart [
 	 	7-1 7-4 7-7
 	組み合わせの整合性はチェックは行わないのでblockkenAt:を利用して引数の
 	整合性を担保する。	
+	また、blockNumberはセットされないので注意すること！
 	"
 	| blockken rs cs |
 	rs := rowStart.

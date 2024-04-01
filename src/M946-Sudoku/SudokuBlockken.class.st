@@ -16,7 +16,8 @@ SudokuBlockken >> = aSudokuBlockken [
 	^ aSudokuBlockken class == self class
 		and: [ aSudokuBlockken blockkenA2D = self blockkenA2D 
 				and: [ aSudokuBlockken boardRows = self boardRows 
-					and: [ aSudokuBlockken boardCols = self boardCols ] ] ]
+					and: [ aSudokuBlockken boardCols = self boardCols 
+						and: [ aSudokuBlockken blockNumber = self blockNumber ]]]]
 	
 ]
 
