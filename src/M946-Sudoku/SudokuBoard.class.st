@@ -88,9 +88,10 @@ SudokuBoard >> printOn: aStream [
 ]
 
 { #category : #accessing }
-SudokuBoard >> row: anInteger column: anInteger2 [
-
-	^board at: anInteger at: anInteger2 
+SudokuBoard >> row: rowIndex column: colIndex [
+	"rowIndexとcolIndexで指定した位置の値を返す	
+	"
+	^board at: rowIndex at: colIndex 
 ]
 
 { #category : #accessing }
