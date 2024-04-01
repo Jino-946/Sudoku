@@ -7,7 +7,7 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
-{ #category : #accessing }
+{ #category : #logic }
 SudokuBoard >> blockkenAt: anInt [
 
 	anInt = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
@@ -24,9 +24,18 @@ SudokuBoard >> blockkenAt: anInt [
 
 ]
 
-{ #category : #accessing }
+{ #category : #logic }
 SudokuBoard >> blockkenAt: rowStart at: colStart [
-
+	" private
+	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
+	ブロック(3X3)を取り出す。
+	rowStartとcolStartの組み合わせ(rowStart-colStart)は次の9通りだが
+	 	1-1 1-4 1-7
+	 	4-1 4-4 4-7
+	 	7-1 7-4 7-7
+	組み合わせの整合性はチェックは行わないのでblockkenAt:を利用して引数の
+	整合性を担保する。	
+	"
 	| blockken rs cs |
 	rs := rowStart.
 	cs := colStart.
@@ -59,21 +68,6 @@ SudokuBoard >> board [
 	^board 
 ]
 
-{ #category : #examples }
-SudokuBoard >> example1 [
-	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ の例題"
-
-	#(8 0 0 0 0 5 1 0 0) doWithIndex:  [ :num :i | board at: 1 at: i put: num ].
-	#(0 0 1 0 0 0 8 0 0) doWithIndex:  [ :num :i | board at: 2 at: i put: num ].
-	#(0 4 0 2 0 0 0 9 0) doWithIndex:  [ :num :i | board at: 3 at: i put: num ].
-	#(0 0 0 0 3 0 0 0 2) doWithIndex:  [ :num :i | board at: 4 at: i put: num ].
-	#(1 2 3 4 0 6 7 8 9) doWithIndex:  [ :num :i | board at: 5 at: i put: num ].
-	#(6 0 0 0 1 0 0 0 0) doWithIndex:  [ :num :i | board at: 6 at: i put: num ].
-	#(0 8 0 0 0 9 0 5 0) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
-	#(0 0 2 0 0 0 4 0 0) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
-	#(0 0 7 6 0 0 0 0 1) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
-]
-
 { #category : #initialization }
 SudokuBoard >> initialize [ 
 
@@ -99,7 +93,7 @@ SudokuBoard >> row: anInteger column: anInteger2 put: val [
 	^board at: anInteger at: anInteger2 put: val
 ]
 
-{ #category : #initialization }
+{ #category : #examples }
 SudokuBoard >> setDummy [
 
 	#(1 2 3 4 5 6 7 8 9) doWithIndex:  [ :num :i | board at: 1 at: i put: num ].
@@ -111,4 +105,19 @@ SudokuBoard >> setDummy [
 	#(7 8 9 1 2 3 4 5 6) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
 	#(8 9 1 2 3 4 5 6 7) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
 	#(9 1 2 3 4 5 6 7 8) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+]
+
+{ #category : #examples }
+SudokuBoard >> setExample1 [
+	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ の例題"
+
+	#(8 0 0 0 0 5 1 0 0) doWithIndex:  [ :num :i | board at: 1 at: i put: num ].
+	#(0 0 1 0 0 0 8 0 0) doWithIndex:  [ :num :i | board at: 2 at: i put: num ].
+	#(0 4 0 2 0 0 0 9 0) doWithIndex:  [ :num :i | board at: 3 at: i put: num ].
+	#(0 0 0 0 3 0 0 0 2) doWithIndex:  [ :num :i | board at: 4 at: i put: num ].
+	#(1 2 3 4 0 6 7 8 9) doWithIndex:  [ :num :i | board at: 5 at: i put: num ].
+	#(6 0 0 0 1 0 0 0 0) doWithIndex:  [ :num :i | board at: 6 at: i put: num ].
+	#(0 8 0 0 0 9 0 5 0) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
+	#(0 0 2 0 0 0 4 0 0) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
+	#(0 0 7 6 0 0 0 0 1) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
 ]

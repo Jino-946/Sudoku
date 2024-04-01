@@ -9,8 +9,8 @@ SudokuBoardTest >> testBlockkenAt [
 
 	|board result expected |
 	expected := SudokuBlockken new.
-	"Test 5"
-	expected row: 1 column: 1 put: 0;
+	"Test ブロック5"
+	expected row: 1 column: 1 put:0;
 			row:1 column: 2 put: 3;
 			row:1 column: 3 put: 0;
 			row:2 column: 1 put: 4;
@@ -30,11 +30,11 @@ SudokuBoardTest >> testBlockkenAt [
 						at: 3 put: 6.
 						
 	board  := SudokuBoard new.
-	board  example1.
+	board  setExample1.
 	result := board blockkenAt: 5.	
 	self assert: result equals: expected.
 	
-	"Test 9"
+	"Test ブロック9"
 	expected row: 1 column: 1 put: 0;
 			row:1 column: 2 put: 5;
 			row:1 column: 3 put: 0;
