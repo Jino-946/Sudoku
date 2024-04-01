@@ -4,6 +4,17 @@ Class {
 	#category : #'M946-Sudoku-Tests'
 }
 
+{ #category : #'private utilities' }
+SudokuBoardTest >> privateSkewerCellsAt: colIndex from: anArray [
+
+	| result |
+	result := Array new: 9 withAll: 0.
+	
+	1 to: 9 do: [ :rowIndex | result at: rowIndex put: ((anArray at: rowIndex) at: colIndex)].
+	
+	^result
+]
+
 { #category : #tests }
 SudokuBoardTest >> testBlockkenAt [
 
