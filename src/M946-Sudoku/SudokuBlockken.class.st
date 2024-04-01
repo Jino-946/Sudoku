@@ -66,7 +66,7 @@ SudokuBlockken >> row: rowIndex column: colIndex [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> row: anInteger column: anInteger2 put: val [
+SudokuBlockken >> row: rowIndex column: colIndex put: aNumber [
 
-	^blockkenA2D at: anInteger at: anInteger2 put: val
+	^blockkenA2D at: rowIndex at: colIndex put: aNumber
 ]
