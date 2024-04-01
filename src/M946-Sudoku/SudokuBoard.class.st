@@ -99,19 +99,22 @@ SudokuBoard >> boardAsString [
 	separateIndices := #( 3 6 ).
 	aStream := ReadWriteStream on: String new.
 	aStream nextPutAll: 'SUDOKU Board'; cr.
-	aStream nextPutAll: '--------------------';cr.
+	aStream nextPutAll: '---------------------------------------';cr.
 	1 to: 9 do: [ :rowIndex |
-		1 to: 9 do: [ :colIndex |
-			aStream 
-				nextPutAll: (self board at: rowIndex at: colIndex) asString;
-				space.
+		1 to: 9 do: [ :colIndex | |number|
+			number := self board at: rowIndex at: colIndex.	
+			aStream nextPutAll: number asString; tab.
+			"
+			number = 0
+			ifTrue: [ aStream nextPutAll: '_'; tab ]
+			ifFalse: [aStream nextPutAll: number asString; tab] .
+			"
 			(separateIndices includes: colIndex)
 			ifTrue:[ aStream  tab]].
 		aStream cr.
 		(separateIndices includes: rowIndex )
-		ifTrue: [ aStream  cr ]
+		ifTrue: [ aStream  cr;cr ]
 	].
-	aStream nextPutAll: '--------------------'.
 	
 	^aStream contents 
 ]
