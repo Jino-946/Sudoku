@@ -8,19 +8,25 @@ Class {
 }
 
 { #category : #logic }
-SudokuBoard >> blockkenAt: anInt [
-
-	anInt = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
-	anInt = 2 ifTrue: [ ^self blockkenAt: 1 at: 4 ].
-	anInt = 3 ifTrue: [ ^self blockkenAt: 1 at: 7 ].
+SudokuBoard >> blockkenAt: blockNumber [
+	"
+	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
+	数独ボード(9X9)とブロックの位置関係
+	 	1  2  3
+	 	4  5  6
+	 	7  8  9	
+	"
+	blockNumber = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
+	blockNumber = 2 ifTrue: [ ^self blockkenAt: 1 at: 4 ].
+	blockNumber = 3 ifTrue: [ ^self blockkenAt: 1 at: 7 ].
 	
-	anInt = 4 ifTrue: [ ^self blockkenAt: 4 at: 1 ].
-	anInt = 5 ifTrue: [ ^self blockkenAt: 4 at: 4 ].
-	anInt = 6 ifTrue: [ ^self blockkenAt: 4 at: 7 ].
+	blockNumber = 4 ifTrue: [ ^self blockkenAt: 4 at: 1 ].
+	blockNumber = 5 ifTrue: [ ^self blockkenAt: 4 at: 4 ].
+	blockNumber = 6 ifTrue: [ ^self blockkenAt: 4 at: 7 ].
 	
-	anInt = 7 ifTrue: [ ^self blockkenAt: 7 at: 1 ].
-	anInt = 8 ifTrue: [ ^self blockkenAt: 7 at: 4 ].
-	anInt = 9 ifTrue: [ ^self blockkenAt: 7 at: 7 ].
+	blockNumber = 7 ifTrue: [ ^self blockkenAt: 7 at: 1 ].
+	blockNumber = 8 ifTrue: [ ^self blockkenAt: 7 at: 4 ].
+	blockNumber = 9 ifTrue: [ ^self blockkenAt: 7 at: 7 ].
 
 ]
 
