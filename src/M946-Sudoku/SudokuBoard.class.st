@@ -90,6 +90,32 @@ SudokuBoard >> board [
 	^board 
 ]
 
+{ #category : #helper }
+SudokuBoard >> boardAsString [
+	"
+	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
+	"
+	| aStream separateIndices |
+	separateIndices := #( 3 6 ).
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'SUDOKU Board'; cr.
+	aStream nextPutAll: '--------------------';cr.
+	1 to: 9 do: [ :rowIndex |
+		1 to: 9 do: [ :colIndex |
+			aStream 
+				nextPutAll: (self board at: rowIndex at: colIndex) asString;
+				space.
+			(separateIndices includes: colIndex)
+			ifTrue:[ aStream  tab]].
+		aStream cr.
+		(separateIndices includes: rowIndex )
+		ifTrue: [ aStream  cr ]
+	].
+	aStream nextPutAll: '--------------------'.
+	
+	^aStream contents 
+]
+
 { #category : #initialization }
 SudokuBoard >> initialize [ 
 
@@ -100,7 +126,7 @@ SudokuBoard >> initialize [
 { #category : #printing }
 SudokuBoard >> printOn: aStream [
 
-	aStream nextPutAll: board asString 
+	aStream nextPutAll: self boardAsString 
 ]
 
 { #category : #accessing }
