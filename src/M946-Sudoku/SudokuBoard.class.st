@@ -163,6 +163,23 @@ SudokuBoard >> setDummy [
 ]
 
 { #category : #examples }
+SudokuBoard >> setExample0 [
+	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ 初級編動画の例題"
+
+	#(1 9 7 0 0 4 2 0 5) doWithIndex:  [ :num :i | board at: 1 at: i put: num ].
+	#(6 8 0 5 3 0 9 0 0) doWithIndex:  [ :num :i | board at: 2 at: i put: num ].
+	#(5 0 3 0 7 2 1 6 8) doWithIndex:  [ :num :i | board at: 3 at: i put: num ].
+	
+	#(0 6 0 4 0 9 7 0 2) doWithIndex:  [ :num :i | board at: 4 at: i put: num ].
+	#(0 7 5 0 1 0 6 8 0) doWithIndex:  [ :num :i | board at: 5 at: i put: num ].
+	#(2 0 9 8 0 7 0 4 0) doWithIndex:  [ :num :i | board at: 6 at: i put: num ].
+	
+	#(7 5 6 3 2 0 4 0 1) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
+	#(0 0 1 0 4 5 0 2 6) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
+	#(8 0 4 1 0 0 3 5 7) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+]
+
+{ #category : #examples }
 SudokuBoard >> setExample1 [
 	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ の例題"
 
