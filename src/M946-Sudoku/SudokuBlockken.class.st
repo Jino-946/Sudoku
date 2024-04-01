@@ -60,9 +60,9 @@ SudokuBlockken >> printOn: aStream [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> row: anInteger column: anInteger2 [
+SudokuBlockken >> row: rowIndex column: colIndex [
 
-	^blockkenA2D at: anInteger at: anInteger2 
+	^blockkenA2D at: rowIndex at: colIndex 
 ]
 
 { #category : #accessing }
