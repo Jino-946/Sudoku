@@ -11,10 +11,25 @@ Class {
 SudokuBoard >> blockkenAt: blockNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
-	数独ボード(9X9)とブロックの位置関係
-	 	1  2  3
-	 	4  5  6
-	 	7  8  9	
+	
+	数独ボード
+	1 2 3  4 5 6  7 8 9
+	2 3 4  5 6 7  8 9 1 
+	3 4 5  6 7 8  9 1 2
+	
+	4 5 6  7 8 9  1 2 3
+	5 6 7  8 9 1  2 3 4
+	6 7 8  9 1 2  3 4 5
+	
+	7 8 9  1 2 3  4 5 6
+	8 9 1  2 3 4  5 6 7 
+	9 1 2  3 4 5  6 7 8	
+	
+	数独ボード(9X9)とblockNumberの位置関係	
+	ブロック
+	 1  2  3
+	 4  5  6
+	 7  8  9	
 	"
 	blockNumber = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
 	blockNumber = 2 ifTrue: [ ^self blockkenAt: 1 at: 4 ].
