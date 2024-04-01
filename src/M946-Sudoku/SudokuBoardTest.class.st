@@ -61,7 +61,20 @@ SudokuBoardTest >> testBlockkenAt [
 
 { #category : #tests }
 SudokuBoardTest >> testBlockkenAtAt [
-
+	"
+	ダミーボード
+	1 2 3  4 5 6  7 8 9
+	2 3 4  5 6 7  8 9 1 
+	3 4 5  6 7 8  9 1 2
+	
+	4 5 6  7 8 9  1 2 3
+	5 6 7  8 9 1  2 3 4
+	6 7 8  9 1 2  3 4 5
+	
+	7 8 9  1 2 3  4 5 6
+	8 9 1  2 3 4  5 6 7 
+	9 1 2  3 4 5  6 7 8	
+	"
 	|board  expected |
 	expected := SudokuBlockken new.
 	
@@ -80,7 +93,8 @@ SudokuBoardTest >> testBlockkenAtAt [
 						
 	expected boardCols  at: 1 put: 1;
 						at: 2 put: 2;
-						at: 3 put: 3.			
+						at: 3 put: 3.		
+									
 	board := SudokuBoard new.
 	board setDummy.
 	
