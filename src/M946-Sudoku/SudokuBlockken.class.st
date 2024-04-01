@@ -25,6 +25,27 @@ SudokuBlockken >> blockkenA2D [
 	^blockkenA2D
 ]
 
+{ #category : #helper }
+SudokuBlockken >> blockkenAsString [
+	"
+	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
+	"
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: '=========';  cr.
+	(1 to: blockkenA2D  numberOfRows)
+		do: [ :r |
+				(blockkenA2D  atRow: r)
+					do: [ :each | aStream print: each ]
+					separatedBy: [ aStream tab ]]
+		separatedBy: [ aStream cr ].
+	aStream cr; nextPutAll: '========='.
+	
+	^aStream contents
+
+	
+]
+
 { #category : #accessing }
 SudokuBlockken >> boardCols [
 	"blockkenの列のindex(1-3)に対応するSudokuBoardのindex配列を返す"
@@ -52,7 +73,7 @@ SudokuBlockken >> printOn: aStream [
 
 	aStream
 		nextPutAll: 'blockkenA2D'; cr;
-		nextPutAll: blockkenA2D asString; cr;
+		nextPutAll: self blockkenAsString; cr;
 		nextPutAll: 'board rows: ';
 		nextPutAll: boardRows  asString;cr;
 		nextPutAll: 'board cols: ';
