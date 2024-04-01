@@ -60,6 +60,35 @@ SudokuBoardTest >> testBlockkenAt [
 ]
 
 { #category : #tests }
+SudokuBoardTest >> testBlockkenAtAt [
+
+	|board  expected |
+	expected := SudokuBlockken new.
+	
+	expected row: 1 column: 1 put:7;
+			row:1 column: 2 put: 8;
+			row:1 column: 3 put: 9;
+			row:2 column: 1 put: 8;
+			row:2 column: 2 put: 9;
+			row:2 column: 3 put: 1;
+			row:3 column: 1 put: 9;
+			row:3 column: 2 put: 1;
+			row:3 column: 3 put: 2.
+	expected boardRows at: 1 put: 7;
+						at: 2 put: 8;
+						at: 3 put: 9.
+						
+	expected boardCols  at: 1 put: 1;
+						at: 2 put: 2;
+						at: 3 put: 3.			
+	board := SudokuBoard new.
+	board setDummy.
+	
+	self assert: (board blockkenAt: 7 at: 1) equals: expected 
+			
+]
+
+{ #category : #tests }
 SudokuBoardTest >> testRowColumn [
 
 	| sb |
