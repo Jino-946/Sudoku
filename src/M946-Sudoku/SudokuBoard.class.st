@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #logic }
-SudokuBoard >> blockkenAt: blockNumber [
+SudokuBoard >> blockkenAt: aNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
 	
@@ -31,17 +31,17 @@ SudokuBoard >> blockkenAt: blockNumber [
 	 4  5  6
 	 7  8  9	
 	"
-	blockNumber = 1 ifTrue: [ ^self blockkenAt: 1 at: 1 ].
-	blockNumber = 2 ifTrue: [ ^self blockkenAt: 1 at: 4 ].
-	blockNumber = 3 ifTrue: [ ^self blockkenAt: 1 at: 7 ].
+	aNumber = 1 ifTrue: [ ^(self blockkenAt: 1 at: 1) blockNumber: aNumber].
+	aNumber = 2 ifTrue: [ ^(self blockkenAt: 1 at: 4) blockNumber: aNumber].
+	aNumber = 3 ifTrue: [ ^(self blockkenAt: 1 at: 7) blockNumber: aNumber].
 	
-	blockNumber = 4 ifTrue: [ ^self blockkenAt: 4 at: 1 ].
-	blockNumber = 5 ifTrue: [ ^self blockkenAt: 4 at: 4 ].
-	blockNumber = 6 ifTrue: [ ^self blockkenAt: 4 at: 7 ].
+	aNumber = 4 ifTrue: [ ^(self blockkenAt: 4 at: 1) blockNumber: aNumber].
+	aNumber = 5 ifTrue: [ ^(self blockkenAt: 4 at: 4) blockNumber: aNumber].
+	aNumber = 6 ifTrue: [ ^(self blockkenAt: 4 at: 7) blockNumber: aNumber].
 	
-	blockNumber = 7 ifTrue: [ ^self blockkenAt: 7 at: 1 ].
-	blockNumber = 8 ifTrue: [ ^self blockkenAt: 7 at: 4 ].
-	blockNumber = 9 ifTrue: [ ^self blockkenAt: 7 at: 7 ].
+	aNumber = 7 ifTrue: [ ^(self blockkenAt: 7 at: 1) blockNumber: aNumber].
+	aNumber = 8 ifTrue: [ ^(self blockkenAt: 7 at: 4) blockNumber: aNumber].
+	aNumber = 9 ifTrue: [ ^(self blockkenAt: 7 at: 7) blockNumber: aNumber].
 
 ]
 

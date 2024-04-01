@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'blockkenA2D',
 		'boardRows',
-		'boardCols'
+		'boardCols',
+		'blockNumber'
 	],
 	#category : #'M946-Sudoku-Core'
 }
@@ -20,6 +21,18 @@ SudokuBlockken >> = aSudokuBlockken [
 ]
 
 { #category : #accessing }
+SudokuBlockken >> blockNumber [
+
+	^blockNumber 
+]
+
+{ #category : #accessing }
+SudokuBlockken >> blockNumber: aNumber [
+
+	blockNumber := aNumber
+]
+
+{ #category : #accessing }
 SudokuBlockken >> blockkenA2D [
 
 	^blockkenA2D
@@ -32,13 +45,14 @@ SudokuBlockken >> blockkenAsString [
 	"
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: '=========';  cr.
+	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
+	aStream nextPutAll: '========='; cr. 
 	(1 to: blockkenA2D  numberOfRows)
 		do: [ :r |
 				(blockkenA2D  atRow: r)
 					do: [ :each | aStream print: each ]
 					separatedBy: [ aStream tab ]]
-		separatedBy: [ aStream cr ].
+		separatedBy: [ aStream cr].
 	aStream cr; nextPutAll: '========='.
 	
 	^aStream contents
@@ -65,6 +79,7 @@ SudokuBlockken >> initialize [
 	blockkenA2D := Array2D new:  3 element: 0.
 	boardRows  := Array braceWith: 0 with:0  with: 0.
 	boardCols  := Array braceWith: 0 with:0  with: 0.
+	blockNumber := 0
 	
 ]
 
@@ -72,7 +87,6 @@ SudokuBlockken >> initialize [
 SudokuBlockken >> printOn: aStream [
 
 	aStream
-		nextPutAll: 'blockkenA2D'; cr;
 		nextPutAll: self blockkenAsString; cr;
 		nextPutAll: 'board rows: ';
 		nextPutAll: boardRows  asString;cr;
