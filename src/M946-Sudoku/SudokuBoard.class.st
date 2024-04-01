@@ -126,6 +126,33 @@ SudokuBoard >> initialize [
 	board := Array2D new:9 element: 0
 ]
 
+{ #category : #initialization }
+SudokuBoard >> loadExample: anArray [
+	"
+	
+	"
+	1 to: 9 do:[ :i | |row|
+		row := anArray at:i.
+		row doWithIndex: [ :num :j | board at: i at: j put: num ]
+	]
+
+" example0
+
+#(  #(1 9 7 0 0 4 2 0 5) 
+	#(6 8 0 5 3 0 9 0 0) 
+	#(5 0 3 0 7 2 1 6 8)
+	
+	#(0 6 0 4 0 9 7 0 2) 
+	#(0 7 5 0 1 0 6 8 0) 
+	#(2 0 9 8 0 7 0 4 0) 
+	
+	#(7 5 6 3 2 0 4 0 1) 
+	#(0 0 1 0 4 5 0 2 6) 
+	#(8 0 4 1 0 0 3 5 7))
+
+"
+]
+
 { #category : #printing }
 SudokuBoard >> printOn: aStream [
 
