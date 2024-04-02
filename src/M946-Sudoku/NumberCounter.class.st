@@ -64,6 +64,12 @@ NumberCounter >> boardOf: board [
 	]
 ]
 
+{ #category : #comparing }
+NumberCounter >> hash [ 
+
+	^ numberCount hash
+]
+
 { #category : #logic }
 NumberCounter >> incompleteNumbers [
 	

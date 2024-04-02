@@ -38,7 +38,8 @@ SudokuBlockken >> = aSudokuBlockken [
 		and: [ aSudokuBlockken blockkenA2D = self blockkenA2D 
 				and: [ aSudokuBlockken boardRows = self boardRows 
 					and: [ aSudokuBlockken boardCols = self boardCols 
-						and: [ aSudokuBlockken blockNumber = self blockNumber ]]]]
+						and: [ aSudokuBlockken blockNumber = self blockNumber
+							and: [aSudokuBlockken verifyNumber = self verifyNumber ] ]]]]
 	
 ]
 
@@ -93,6 +94,17 @@ SudokuBlockken >> boardCols [
 SudokuBlockken >> boardRows [
 	"blockkenの行のindex(1-3)に対応するSudokuBoardのindex配列を返す"
 	^boardRows 
+]
+
+{ #category : #comparing }
+SudokuBlockken >> hash [ 
+
+	^((((blockkenA2D hash bitXor: boardRows hash )
+			bitXor: boardCols hash) 
+				bitXor: blockNumber hash)
+					bitXor: verifyNumber  hash)
+					
+		
 ]
 
 { #category : #initialization }

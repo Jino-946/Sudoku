@@ -46,6 +46,14 @@ MCoordinates >> column: anInteger [
 
 ]
 
+{ #category : #comparing }
+MCoordinates >> hash [ 
+
+	^row hash bitXor: column hash
+			
+
+]
+
 { #category : #initialization }
 MCoordinates >> initialize [ 
 
