@@ -19,7 +19,7 @@ SudokuBoardTest >> privateSkewerCellsAt: colIndex from: anArray [
 SudokuBoardTest >> testBlockkenAt [
 
 	| board result expected |
-	expected := SudokuBlockken new.
+	expected := SudokuBlock new.
 	"Test ブロック5"
 	expected
 		row: 1 column: 1 put: 0;
@@ -123,7 +123,7 @@ SudokuBoardTest >> testPrivateBlockkenAtAt [
 	"
 
 	| board expected |
-	expected := SudokuBlockken new.
+	expected := SudokuBlock new.
 
 	expected
 		row: 1 column: 1 put: 7;

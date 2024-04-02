@@ -20,10 +20,10 @@ hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cl
 	verifyNumber:	<SmallInteger>
 "
 Class {
-	#name : #SudokuBlockken,
+	#name : #SudokuBlock,
 	#superclass : #Object,
 	#instVars : [
-		'blockkenA2D',
+		'blockA2D',
 		'boardRows',
 		'boardCols',
 		'blockNumber',
@@ -33,10 +33,10 @@ Class {
 }
 
 { #category : #comparing }
-SudokuBlockken >> = aSudokuBlockken [
+SudokuBlock >> = aSudokuBlockken [
 
 	^ aSudokuBlockken class == self class
-		and: [ aSudokuBlockken blockkenA2D = self blockkenA2D 
+		and: [ aSudokuBlockken blockA2D = self blockA2D 
 				and: [ aSudokuBlockken boardRows = self boardRows 
 					and: [ aSudokuBlockken boardCols = self boardCols 
 						and: [ aSudokuBlockken blockNumber = self blockNumber
@@ -45,25 +45,13 @@ SudokuBlockken >> = aSudokuBlockken [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> blockNumber [
+SudokuBlock >> blockA2D [
 
-	^blockNumber 
-]
-
-{ #category : #accessing }
-SudokuBlockken >> blockNumber: aNumber [
-
-	blockNumber := aNumber
-]
-
-{ #category : #accessing }
-SudokuBlockken >> blockkenA2D [
-
-	^blockkenA2D
+	^blockA2D
 ]
 
 { #category : #'private - helpers' }
-SudokuBlockken >> blockkenAsString [
+SudokuBlock >> blockAsString [
 	"
 	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
 	"
@@ -72,9 +60,9 @@ SudokuBlockken >> blockkenAsString [
 	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
 	aStream nextPutAll: '検証数字:'; nextPutAll: verifyNumber asString;cr.
 	aStream nextPutAll: '========='; cr. 
-	(1 to: blockkenA2D  numberOfRows)
+	(1 to: blockA2D  numberOfRows)
 		do: [ :r |
-				(blockkenA2D  atRow: r)
+				(blockA2D  atRow: r)
 					do: [ :each | aStream print: each ]
 					separatedBy: [ aStream tab ]]
 		separatedBy: [ aStream cr].
@@ -86,21 +74,33 @@ SudokuBlockken >> blockkenAsString [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> boardCols [
+SudokuBlock >> blockNumber [
+
+	^blockNumber 
+]
+
+{ #category : #accessing }
+SudokuBlock >> blockNumber: aNumber [
+
+	blockNumber := aNumber
+]
+
+{ #category : #accessing }
+SudokuBlock >> boardCols [
 	"blockkenの列のindex(1-3)に対応するSudokuBoardのindex配列を返す"
 	^boardCols 
 ]
 
 { #category : #accessing }
-SudokuBlockken >> boardRows [
+SudokuBlock >> boardRows [
 	"blockkenの行のindex(1-3)に対応するSudokuBoardのindex配列を返す"
 	^boardRows 
 ]
 
 { #category : #comparing }
-SudokuBlockken >> hash [ 
+SudokuBlock >> hash [ 
 
-	^((((blockkenA2D hash bitXor: boardRows hash )
+	^((((blockA2D hash bitXor: boardRows hash )
 			bitXor: boardCols hash) 
 				bitXor: blockNumber hash)
 					bitXor: verifyNumber  hash)
@@ -109,10 +109,10 @@ SudokuBlockken >> hash [
 ]
 
 { #category : #initialization }
-SudokuBlockken >> initialize [ 
+SudokuBlock >> initialize [ 
 
 	super initialize .
-	blockkenA2D := Array2D new:  3 element: 0.
+	blockA2D := Array2D new:  3 element: 0.
 	boardRows  := Array braceWith: 0 with:0  with: 0.
 	boardCols  := Array braceWith: 0 with:0  with: 0.
 	blockNumber := 0.
@@ -121,10 +121,10 @@ SudokuBlockken >> initialize [
 ]
 
 { #category : #printing }
-SudokuBlockken >> printOn: aStream [
+SudokuBlock >> printOn: aStream [
 
 	aStream
-		nextPutAll: self blockkenAsString; cr;
+		nextPutAll: self blockAsString; cr;
 		nextPutAll: 'board rows: ';
 		nextPutAll: boardRows  asString;cr;
 		nextPutAll: 'board cols: ';
@@ -132,19 +132,19 @@ SudokuBlockken >> printOn: aStream [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> row: rowIndex column: colIndex [
+SudokuBlock >> row: rowIndex column: colIndex [
 
-	^blockkenA2D at: rowIndex at: colIndex 
+	^blockA2D at: rowIndex at: colIndex 
 ]
 
 { #category : #accessing }
-SudokuBlockken >> row: rowIndex column: colIndex put: aNumber [
+SudokuBlock >> row: rowIndex column: colIndex put: aNumber [
 
-	^blockkenA2D at: rowIndex at: colIndex put: aNumber
+	^blockA2D at: rowIndex at: colIndex put: aNumber
 ]
 
 { #category : #logic }
-SudokuBlockken >> toBoardCoordinatesRow: blockRow column: blockCol [
+SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
 	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
 	"
@@ -157,7 +157,7 @@ SudokuBlockken >> toBoardCoordinatesRow: blockRow column: blockCol [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> verifyNumber [
+SudokuBlock >> verifyNumber [
 	"
 	ブロックの正しい配置セルを探す数字
 	"
@@ -166,7 +166,7 @@ SudokuBlockken >> verifyNumber [
 ]
 
 { #category : #accessing }
-SudokuBlockken >> verifyNumber: anInteger [
+SudokuBlock >> verifyNumber: anInteger [
 	
 	verifyNumber := anInteger 
 ]

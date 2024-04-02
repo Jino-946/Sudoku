@@ -167,7 +167,7 @@ SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
 	| blockken rs cs |
 	rs := rowStart.
 	cs := colStart.
-	blockken := SudokuBlockken new.
+	blockken := SudokuBlock new.
 	
 	blockken boardRows at:1 put: rs;
 						at: 2 put: rs + 1;
@@ -177,7 +177,7 @@ SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
 						at: 2 put: cs + 1;
 						at: 3 put: cs + 2.
 						
-	blockken blockkenA2D at: 1 at: 1 put: (board at: rs at: cs);
+	blockken blockA2D at: 1 at: 1 put: (board at: rs at: cs);
 						  at:  1 at: 2 put: (board at: rs at: cs + 1);
 						  at:  1 at: 3 put: (board at: rs at: cs + 2);	
 						  at:  2 at: 1 put: (board at: rs + 1 at: cs);
