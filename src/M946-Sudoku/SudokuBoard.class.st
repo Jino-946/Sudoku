@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : #logic }
-SudokuBoard >> blockkenAt: aNumber [
+SudokuBoard >> blockAt: aNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
 	
@@ -42,25 +42,25 @@ SudokuBoard >> blockkenAt: aNumber [
 	"
 
 	aNumber = 1 ifTrue: [
-		^ (self privateBlockkenAt: 1 at: 1) blockNumber: aNumber ].
+		^ (self privateBlockAt: 1 at: 1) blockNumber: aNumber ].
 	aNumber = 2 ifTrue: [
-		^ (self privateBlockkenAt: 1 at: 4) blockNumber: aNumber ].
+		^ (self privateBlockAt: 1 at: 4) blockNumber: aNumber ].
 	aNumber = 3 ifTrue: [
-		^ (self privateBlockkenAt: 1 at: 7) blockNumber: aNumber ].
+		^ (self privateBlockAt: 1 at: 7) blockNumber: aNumber ].
 
 	aNumber = 4 ifTrue: [
-		^ (self privateBlockkenAt: 4 at: 1) blockNumber: aNumber ].
+		^ (self privateBlockAt: 4 at: 1) blockNumber: aNumber ].
 	aNumber = 5 ifTrue: [
-		^ (self privateBlockkenAt: 4 at: 4) blockNumber: aNumber ].
+		^ (self privateBlockAt: 4 at: 4) blockNumber: aNumber ].
 	aNumber = 6 ifTrue: [
-		^ (self privateBlockkenAt: 4 at: 7) blockNumber: aNumber ].
+		^ (self privateBlockAt: 4 at: 7) blockNumber: aNumber ].
 
 	aNumber = 7 ifTrue: [
-		^ (self privateBlockkenAt: 7 at: 1) blockNumber: aNumber ].
+		^ (self privateBlockAt: 7 at: 1) blockNumber: aNumber ].
 	aNumber = 8 ifTrue: [
-		^ (self privateBlockkenAt: 7 at: 4) blockNumber: aNumber ].
+		^ (self privateBlockAt: 7 at: 4) blockNumber: aNumber ].
 	aNumber = 9 ifTrue: [
-		^ (self privateBlockkenAt: 7 at: 7) blockNumber: aNumber ]
+		^ (self privateBlockAt: 7 at: 7) blockNumber: aNumber ]
 ]
 
 { #category : #accessing }
@@ -152,7 +152,7 @@ SudokuBoard >> printOn: aStream [
 ]
 
 { #category : #'private - logics' }
-SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
+SudokuBoard >> privateBlockAt: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
 	ブロック(3X3)を取り出す。
@@ -164,30 +164,34 @@ SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
 	整合性を担保する。	
 	また、blockNumberはセットされないので注意すること！
 	"
-	| blockken rs cs |
+
+	| block rs cs |
 	rs := rowStart.
 	cs := colStart.
-	blockken := SudokuBlock new.
-	
-	blockken boardRows at:1 put: rs;
-						at: 2 put: rs + 1;
-						at: 3 put: rs + 2.
-						
-	blockken boardCols at:1 put: cs;
-						at: 2 put: cs + 1;
-						at: 3 put: cs + 2.
-						
-	blockken blockA2D at: 1 at: 1 put: (board at: rs at: cs);
-						  at:  1 at: 2 put: (board at: rs at: cs + 1);
-						  at:  1 at: 3 put: (board at: rs at: cs + 2);	
-						  at:  2 at: 1 put: (board at: rs + 1 at: cs);
-						  at:  2 at: 2 put: (board at: rs + 1 at: cs + 1);
-						  at:  2 at: 3 put: (board at: rs + 1 at: cs + 2);
-						  at:  3 at: 1 put: (board at: rs + 2 at: cs);
-						  at:  3 at: 2 put: (board at: rs + 2 at: cs + 1);
-						  at:  3 at: 3 put: (board at: rs + 2 at: cs + 2).
+	block := SudokuBlock new.
 
-	^ blockken
+	block boardRows
+		at: 1 put: rs;
+		at: 2 put: rs + 1;
+		at: 3 put: rs + 2.
+
+	block boardCols
+		at: 1 put: cs;
+		at: 2 put: cs + 1;
+		at: 3 put: cs + 2.
+
+	block blockA2D
+		at: 1 at: 1 put: (board at: rs at: cs);
+		at: 1 at: 2 put: (board at: rs at: cs + 1);
+		at: 1 at: 3 put: (board at: rs at: cs + 2);
+		at: 2 at: 1 put: (board at: rs + 1 at: cs);
+		at: 2 at: 2 put: (board at: rs + 1 at: cs + 1);
+		at: 2 at: 3 put: (board at: rs + 1 at: cs + 2);
+		at: 3 at: 1 put: (board at: rs + 2 at: cs);
+		at: 3 at: 2 put: (board at: rs + 2 at: cs + 1);
+		at: 3 at: 3 put: (board at: rs + 2 at: cs + 2).
+
+	^ block
 ]
 
 { #category : #accessing }

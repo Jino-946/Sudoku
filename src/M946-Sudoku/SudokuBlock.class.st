@@ -87,13 +87,13 @@ SudokuBlock >> blockNumber: aNumber [
 
 { #category : #accessing }
 SudokuBlock >> boardCols [
-	"blockkenの列のindex(1-3)に対応するSudokuBoardのindex配列を返す"
+	"blockの列のindex(1-3)に対応するSudokuBoardの列のindex配列を返す"
 	^boardCols 
 ]
 
 { #category : #accessing }
 SudokuBlock >> boardRows [
-	"blockkenの行のindex(1-3)に対応するSudokuBoardのindex配列を返す"
+	"blockの行のindex(1-3)に対応するSudokuBoardの行のindex配列を返す"
 	^boardRows 
 ]
 

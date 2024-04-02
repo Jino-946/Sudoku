@@ -45,7 +45,7 @@ SudokuBoardTest >> testBlockkenAt [
 
 	board := SudokuBoard new.
 	board setExample1.
-	result := board blockkenAt: 5.
+	result := board blockAt: 5.
 	self assert: result equals: expected.
 
 	"Test ブロック9"
@@ -72,7 +72,7 @@ SudokuBoardTest >> testBlockkenAt [
 		at: 3 put: 9.
 	expected blockNumber: 9.
 
-	result := board blockkenAt: 9.
+	result := board blockAt: 9.
 	self assert: result equals: expected
 ]
 
@@ -148,7 +148,7 @@ SudokuBoardTest >> testPrivateBlockkenAtAt [
 	board := SudokuBoard new.
 	board setDummy.
 
-	self assert: (board privateBlockkenAt: 7 at: 1) equals: expected
+	self assert: (board privateBlockAt: 7 at: 1) equals: expected
 ]
 
 { #category : #tests }

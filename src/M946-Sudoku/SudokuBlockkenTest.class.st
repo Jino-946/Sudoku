@@ -12,7 +12,7 @@ SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
 	sBoard setExample0 .
 	
 	"Test Block1"
-	sBlock := sBoard blockkenAt: 1.
+	sBlock := sBoard blockAt: 1.
 	"SudokuBlockken座標"
 	actual := sBlock toBoardCoordinatesRow:  1 column: 1.
 	
@@ -22,7 +22,7 @@ SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
 	self assert: actual equals: expected.
 	
 	"Test Block5"
-	sBlock := sBoard blockkenAt: 5.
+	sBlock := sBoard blockAt: 5.
 	"SudokuBlockken座標"
 	actual := sBlock toBoardCoordinatesRow:  2 column: 3.
 	"SudokuBoard座標"
@@ -34,7 +34,7 @@ SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
 	self assert: actual equals: expected.
 	
 	"Test Block6"
-	sBlock := sBoard blockkenAt: 6.
+	sBlock := sBoard blockAt: 6.
 	"SudokuBlockken座標"
 	actual := sBlock toBoardCoordinatesRow:  2 column: 3.
 	"SudokuBoard座標"
@@ -49,7 +49,7 @@ SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
 	
 	
 	"Test Block8"
-	sBlock := sBoard blockkenAt: 8.
+	sBlock := sBoard blockAt: 8.
 	actual := sBlock toBoardCoordinatesRow:  2 column: 3.
 	expected row: 8 column: 6.
 	self assert: actual equals: expected.
