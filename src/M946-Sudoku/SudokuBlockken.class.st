@@ -130,6 +130,19 @@ SudokuBlockken >> row: rowIndex column: colIndex put: aNumber [
 	^blockkenA2D at: rowIndex at: colIndex put: aNumber
 ]
 
+{ #category : #logic }
+SudokuBlockken >> toBoardCoordinatesRow: blockRow column: blockCol [
+	"
+	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
+	"
+	| bc |
+	bc := BoardCoordinates new.
+	bc row: (boardRows at: blockRow).
+	bc column: (boardCols at: blockCol).
+	
+	^bc
+]
+
 { #category : #accessing }
 SudokuBlockken >> verifyNumber [
 	"

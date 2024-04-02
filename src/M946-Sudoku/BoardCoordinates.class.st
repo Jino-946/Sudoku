@@ -20,6 +20,16 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
+{ #category : #comparing }
+BoardCoordinates >> = aBoardCoordinates [
+
+	^aBoardCoordinates class = self class
+		and: [ aBoardCoordinates row = self row 
+			and: [ aBoardCoordinates column = self column  ]]
+
+	
+]
+
 { #category : #accessing }
 BoardCoordinates >> column [
 
