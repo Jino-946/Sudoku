@@ -1,11 +1,52 @@
 Class {
-	#name : #SudokuBlockkenTest,
+	#name : #SudokuBlockTest,
 	#superclass : #TestCase,
 	#category : #'M946-Sudoku-Tests'
 }
 
 { #category : #tests }
-SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
+SudokuBlockTest >> testSudokuBoardBlockNumberVerifyNumber [
+	| board actual expected bNum vNum|
+	
+	bNum := 5.
+	vNum := 7.
+	expected := SudokuBlock new.
+	"Test ブロック5"
+	expected
+		row: 1 column: 1 put: 0;
+		row: 1 column: 2 put: 3;
+		row: 1 column: 3 put: 0;
+		row: 2 column: 1 put: 4;
+		row: 2 column: 2 put: 0;
+		row: 2 column: 3 put: 6;
+		row: 3 column: 1 put: 0;
+		row: 3 column: 2 put: 1;
+		row: 3 column: 3 put: 0.
+
+	expected boardRows
+		at: 1 put: 4;
+		at: 2 put: 5;
+		at: 3 put: 6.
+
+	expected boardCols
+		at: 1 put: 4;
+		at: 2 put: 5;
+		at: 3 put: 6.
+	expected blockNumber: bNum.
+	expected verifyNumber: vNum.
+
+	board := SudokuBoard new.
+	board setExample1.
+	actual := SudokuBlock sudokuBoard: board blockNumber: bNum verifyNumber: vNum.
+	self assert: actual equals: expected.
+
+	
+
+	
+]
+
+{ #category : #tests }
+SudokuBlockTest >> testToBoardCoordinatesRowColumn [
 
 	|sBoard sBlock actual expected|
 	sBoard := SudokuBoard new.

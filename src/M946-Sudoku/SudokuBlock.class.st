@@ -10,7 +10,8 @@ hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cl
     7  8  9
 
 インスタンスの生成
-	SudokuBlockken blockken := aSudokuBoard blockkenAt: aBlockNumber.
+	SudokuBlock block := aSudokuBoard blockAt: aBlockNumber.
+	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
 
 インスタンス変数
 	blockNumber:	<SmallInteger>
@@ -31,6 +32,15 @@ Class {
 	],
 	#category : #'M946-Sudoku-Core'
 }
+
+{ #category : #creation }
+SudokuBlock class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
+
+	| block |
+	block := board blockAt: bNum.
+	block verifyNumber: vNum.
+	^ block
+]
 
 { #category : #comparing }
 SudokuBlock >> = aSudokuBlockken [
