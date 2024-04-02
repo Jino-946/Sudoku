@@ -49,7 +49,7 @@ NumberCounter >> at: anInteger put: count [
 { #category : #utilities }
 NumberCounter >> boardOf: board [
 	"
-	引数で与えられたboardの1から9までの数字を数字毎にカウントしnumberCountに保持する
+	board上の1から9までの数字を数字毎にカウントしnumberCount<Dictionary>に保持する
 	"
 
 	numberCount :=  Dictionary new.
