@@ -1,7 +1,7 @@
 "
 SudokuBlockkenの座標をSudokuBoardの座標に変換した座標を保持する。
 
-Internal Representation and Key Implementation Points.
+
 
     Instance Variables
 	column:		<anInteger>

@@ -8,15 +8,15 @@
     4  5  6
     7  8  9
 
-- インスタンスの生成
-   SudokuBlockken blockken := aSudokuBoard blockkenAt: aBlockNumber.
+インスタンスの生成
+	SudokuBlockken blockken := aSudokuBoard blockkenAt: aBlockNumber.
 
-- インスタンス変数
-   blockNumber:	<SmallInteger>
-   blockkenA2D:	<Array2D>
-   boardCols:		<Array>
-   boardRows:		<Array>
-
+インスタンス変数
+	blockNumber:	<SmallInteger>
+	blockkenA2D:	<Array2D>
+	boardCols:		<Array>
+	boardRows:		<Array>
+	verifyNumber:	<SmallInteger>
 "
 Class {
 	#name : #SudokuBlockken,
@@ -25,7 +25,8 @@ Class {
 		'blockkenA2D',
 		'boardRows',
 		'boardCols',
-		'blockNumber'
+		'blockNumber',
+		'verifyNumber'
 	],
 	#category : #'M946-Sudoku-Core'
 }
@@ -67,6 +68,7 @@ SudokuBlockken >> blockkenAsString [
 	| aStream |
 	aStream := ReadWriteStream on: String new.
 	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
+	aStream nextPutAll: '検証数字:'; nextPutAll: verifyNumber asString;cr.
 	aStream nextPutAll: '========='; cr. 
 	(1 to: blockkenA2D  numberOfRows)
 		do: [ :r |
@@ -100,7 +102,8 @@ SudokuBlockken >> initialize [
 	blockkenA2D := Array2D new:  3 element: 0.
 	boardRows  := Array braceWith: 0 with:0  with: 0.
 	boardCols  := Array braceWith: 0 with:0  with: 0.
-	blockNumber := 0
+	blockNumber := 0.
+	verifyNumber := 0.
 	
 ]
 
@@ -125,4 +128,19 @@ SudokuBlockken >> row: rowIndex column: colIndex [
 SudokuBlockken >> row: rowIndex column: colIndex put: aNumber [
 
 	^blockkenA2D at: rowIndex at: colIndex put: aNumber
+]
+
+{ #category : #accessing }
+SudokuBlockken >> verifyNumber [
+	"
+	ブロックの正しい配置セルを探す数字
+	"
+	
+	^verifyNumber 
+]
+
+{ #category : #accessing }
+SudokuBlockken >> verifyNumber: anInteger [
+	
+	verifyNumber := anInteger 
 ]
