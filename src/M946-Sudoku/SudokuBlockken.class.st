@@ -1,3 +1,23 @@
+"
+数独ボード構成する9個のブロックを表現するクラス。
+""Blockken""とは""Block見""の駄洒落
+
+数独ボード上には下記の構成でブロックは配置される。
+
+    1  2  3
+    4  5  6
+    7  8  9
+
+- インスタンスの生成
+   SudokuBlockken blockken := aSudokuBoard blockkenAt: aBlockNumber.
+
+- インスタンス変数
+   blockNumber:	<SmallInteger>
+   blockkenA2D:	<Array2D>
+   boardCols:		<Array>
+   boardRows:		<Array>
+
+"
 Class {
 	#name : #SudokuBlockken,
 	#superclass : #Object,
@@ -39,7 +59,7 @@ SudokuBlockken >> blockkenA2D [
 	^blockkenA2D
 ]
 
-{ #category : #helper }
+{ #category : #'private - helpers' }
 SudokuBlockken >> blockkenAsString [
 	"
 	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	

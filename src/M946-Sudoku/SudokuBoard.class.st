@@ -60,7 +60,7 @@ SudokuBoard >> board [
 	^board 
 ]
 
-{ #category : #helper }
+{ #category : #'private - helpers' }
 SudokuBoard >> boardAsString [
 	"
 	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
@@ -109,7 +109,7 @@ SudokuBoard >> initialize [
 	board := Array2D new:9 element: 0
 ]
 
-{ #category : #examples }
+{ #category : #'initialization - data' }
 SudokuBoard >> loadExample: anArray [
 	"
 	2次元配列の数独問題データ(anArray)を数独ボードデータへ(Array2D)へコピーする
@@ -142,7 +142,7 @@ SudokuBoard >> printOn: aStream [
 	aStream nextPutAll: self boardAsString 
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 SudokuBoard >> privateBlockkenAt: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
