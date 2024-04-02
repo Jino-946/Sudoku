@@ -1,7 +1,7 @@
 "
 SudokuBlockkenの座標をSudokuBoardの座標に変換した座標を保持する。
 
-
+hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
 
     Instance Variables
 	column:		<anInteger>

@@ -1,21 +1,12 @@
 "
 SudokuBoardに配置された1から9までの数字を数字毎に数えて保持する
 
-Public API and Key Messages
+hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
 
-- message one
-- message two
-- (for bonus points) how to create instances.
-
-   One simple example is simply gorgeous.
-
-Internal Representation and Key Implementation Points.
 
     Instance Variables
 	numberCount:		<Dictionary>
 
-
-    Implementation Points
 "
 Class {
 	#name : #NumberCounter,

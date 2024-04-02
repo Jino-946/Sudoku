@@ -1,3 +1,12 @@
+"
+9行X9列のセルを持つ数独ボードを表現するクラス
+
+
+    Instance Variables
+	board:		<Array2D>
+
+
+"
 Class {
 	#name : #SudokuBoard,
 	#superclass : #Object,

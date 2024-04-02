@@ -1,6 +1,7 @@
 "
 数独ボード構成する9個のブロックを表現するクラス。
 ""Blockken""とは""Block見""の駄洒落
+hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
 
 数独ボード上には下記の構成でブロックは配置される。
 
