@@ -11,7 +11,7 @@ SudokuBlockkenの座標をSudokuBoardの座標に変換した座標を保持す�
     
 "
 Class {
-	#name : #BoardCoordinates,
+	#name : #MCoordinates,
 	#superclass : #Object,
 	#instVars : [
 		'row',
@@ -21,7 +21,7 @@ Class {
 }
 
 { #category : #comparing }
-BoardCoordinates >> = aBoardCoordinates [
+MCoordinates >> = aBoardCoordinates [
 
 	^aBoardCoordinates class = self class
 		and: [ aBoardCoordinates row = self row 
@@ -31,7 +31,7 @@ BoardCoordinates >> = aBoardCoordinates [
 ]
 
 { #category : #accessing }
-BoardCoordinates >> column [
+MCoordinates >> column [
 
 	^column
 
@@ -39,7 +39,7 @@ BoardCoordinates >> column [
 ]
 
 { #category : #accessing }
-BoardCoordinates >> column: anInteger [
+MCoordinates >> column: anInteger [
 
 	column := anInteger 
 
@@ -47,7 +47,7 @@ BoardCoordinates >> column: anInteger [
 ]
 
 { #category : #initialization }
-BoardCoordinates >> initialize [ 
+MCoordinates >> initialize [ 
 
 	super initialize .
 	row := 0.
@@ -55,19 +55,19 @@ BoardCoordinates >> initialize [
 ]
 
 { #category : #accessing }
-BoardCoordinates >> row [
+MCoordinates >> row [
 
 	^row
 ]
 
 { #category : #accessing }
-BoardCoordinates >> row: anInteger [
+MCoordinates >> row: anInteger [
 
 	row := anInteger 
 ]
 
 { #category : #accessing }
-BoardCoordinates >> row: anInt1 column: anInt2 [
+MCoordinates >> row: anInt1 column: anInt2 [
 
 	row := anInt1 .
 	column := anInt2

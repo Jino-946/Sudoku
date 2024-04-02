@@ -135,12 +135,12 @@ SudokuBlockken >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
 	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
 	"
-	| bc |
-	bc := BoardCoordinates new.
-	bc row: (boardRows at: blockRow).
-	bc column: (boardCols at: blockCol).
+	| coord |
+	coord := MCoordinates new.
+	coord row: (boardRows at: blockRow).
+	coord column: (boardCols at: blockCol).
 	
-	^bc
+	^coord
 ]
 
 { #category : #accessing }

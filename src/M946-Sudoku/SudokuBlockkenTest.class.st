@@ -16,7 +16,7 @@ SudokuBlockkenTest >> testToBoardCoordinatesRowColumn [
 	"SudokuBlockken座標"
 	actual := sBlock toBoardCoordinatesRow:  1 column: 1.
 	
-	expected := BoardCoordinates new.
+	expected := MCoordinates new.
 	"SudokuBoard座標"
 	expected row: 1 column: 1.
 	self assert: actual equals: expected.
