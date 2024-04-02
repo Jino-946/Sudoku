@@ -65,3 +65,10 @@ BoardCoordinates >> row: anInteger [
 
 	row := anInteger 
 ]
+
+{ #category : #accessing }
+BoardCoordinates >> row: anInt1 column: anInt2 [
+
+	row := anInt1 .
+	column := anInt2
+]
