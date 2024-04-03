@@ -20,6 +20,16 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
+{ #category : #creating }
+SBCoordinates class >> row: rowIndex column: colIndex [
+
+	| coordinates |
+	coordinates := self new.
+	coordinates row: rowIndex;
+				 column: colIndex . 
+	^ coordinates 
+]
+
 { #category : #comparing }
 SBCoordinates >> = aBoardCoordinates [
 
@@ -60,6 +70,15 @@ SBCoordinates >> initialize [
 	super initialize .
 	row := 0.
 	column := 0.
+]
+
+{ #category : #printing }
+SBCoordinates >> printOn: aStream [
+
+	aStream 
+		nextPutAll: 'SBCoodinates'; cr; 
+		nextPutAll: 'row: '; nextPutAll: row asString; cr;
+		nextPutAll: 'column: '; nextPutAll: column asString; cr.
 ]
 
 { #category : #accessing }

@@ -80,14 +80,35 @@ SudokuBlock >> = aSudokuBlockken [
 { #category : #logic }
 SudokuBlock >> bingo [
 	"
-	テンパイしたブロックのブランクセルに検索対象数をセットする。
-	ブランクセルの有ったブロックのセル位置をボード座標に変換して
-	返す。	
+	tenpaiしたセルに検証数値(verifyNumber)をセットする。
+	tenpaiしたセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+	(tenpai確認後に実行するのでブランクセルは必ず1個だけある)
 	"
-	| coordinates |
+	| rowIndex colIndex boardCoordinates|
 	
-	blockA2D tenpai 
-	
+	rowIndex := 0.
+	colIndex := 0.
+	boardCoordinates := SBCoordinates new.
+	1 to: 3 do: [ :ri |
+		1 to: 3 do: [ :ci |
+			(self row: ri column: ci) = self blankCell
+			ifTrue: [	rowIndex := ri.
+						colIndex := ci.
+			]
+		]
+	].
+	self row: rowIndex  column: colIndex put: verifyNumber .
+	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .
+	^boardCoordinates 
+
+]
+
+{ #category : #'private - helpers' }
+SudokuBlock >> blankCell [
+	"
+	ブランクセルを表現する0を返す。
+	"
+	^0
 ]
 
 { #category : #accessing }
@@ -148,7 +169,7 @@ SudokuBlock >> blockkenTenpai [
 	blankCount := 0.
 	result := false.
 	blockA2D do: [ :each |
-		each = 0
+		each = self blankCell 
 		ifTrue: [ blankCount := blankCount + 1 ]	
 	].
 
@@ -178,7 +199,7 @@ SudokuBlock >> countBlank [
 	"
 	| counts |
 	counts := 0.
-	blockA2D asArray do: [ :each | each = 0 ifTrue: [ counts := counts + 1 ] ].
+	blockA2D asArray do: [ :each | each = self blankCell  ifTrue: [ counts := counts + 1 ] ].
 	
 	^counts
 	
@@ -241,7 +262,7 @@ SudokuBlock >> tenpai [
 	numberCount := 0.
 	result := false.
 	blockA2D do: [ :each |
-		each = 0
+		each = self blankCell 
 		ifTrue: [ blankCount := blankCount + 1 ]
 		ifFalse: [  
 			each class = SmallInteger 
@@ -256,7 +277,7 @@ SudokuBlock >> tenpai [
 
 ]
 
-{ #category : #logic }
+{ #category : #'private - helpers' }
 SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
 	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
