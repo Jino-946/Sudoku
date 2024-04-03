@@ -11,7 +11,7 @@ hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cl
     
 "
 Class {
-	#name : #MCoordinates,
+	#name : #SBCoordinates,
 	#superclass : #Object,
 	#instVars : [
 		'row',
@@ -21,7 +21,7 @@ Class {
 }
 
 { #category : #comparing }
-MCoordinates >> = aBoardCoordinates [
+SBCoordinates >> = aBoardCoordinates [
 
 	^aBoardCoordinates class = self class
 		and: [ aBoardCoordinates row = self row 
@@ -31,7 +31,7 @@ MCoordinates >> = aBoardCoordinates [
 ]
 
 { #category : #accessing }
-MCoordinates >> column [
+SBCoordinates >> column [
 
 	^column
 
@@ -39,7 +39,7 @@ MCoordinates >> column [
 ]
 
 { #category : #accessing }
-MCoordinates >> column: anInteger [
+SBCoordinates >> column: anInteger [
 
 	column := anInteger 
 
@@ -47,7 +47,7 @@ MCoordinates >> column: anInteger [
 ]
 
 { #category : #comparing }
-MCoordinates >> hash [ 
+SBCoordinates >> hash [ 
 
 	^row hash bitXor: column hash
 			
@@ -55,7 +55,7 @@ MCoordinates >> hash [
 ]
 
 { #category : #initialization }
-MCoordinates >> initialize [ 
+SBCoordinates >> initialize [ 
 
 	super initialize .
 	row := 0.
@@ -63,19 +63,19 @@ MCoordinates >> initialize [
 ]
 
 { #category : #accessing }
-MCoordinates >> row [
+SBCoordinates >> row [
 
 	^row
 ]
 
 { #category : #accessing }
-MCoordinates >> row: anInteger [
+SBCoordinates >> row: anInteger [
 
 	row := anInteger 
 ]
 
 { #category : #accessing }
-MCoordinates >> row: anInt1 column: anInt2 [
+SBCoordinates >> row: anInt1 column: anInt2 [
 
 	row := anInt1 .
 	column := anInt2

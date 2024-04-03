@@ -5,7 +5,7 @@ Class {
 }
 
 { #category : #'private utilities' }
-SudokuBoardTest >> privateSkewerCellsAt: colIndex from: anArray [
+SudokuBoardTest >> privateSkeweredCellsAt: colIndex from: anArray [
 
 	| result |
 	result := Array new: 9 withAll: 0.
@@ -96,11 +96,11 @@ SudokuBoardTest >> testColsAt [
 	sb := SudokuBoard new.
 	sb loadExample: example .
 	index := 2.
-	expected := self privateSkewerCellsAt: index from: example .
+	expected := self privateSkeweredCellsAt: index from: example .
 	self assert: (sb colsAt: index) equals: expected.
 	
 	index := 8.
-	expected := self privateSkewerCellsAt: index from: example .
+	expected := self privateSkeweredCellsAt: index from: example .
 	self assert: (sb colsAt: index) equals: expected.
 	
 ]
@@ -152,8 +152,10 @@ SudokuBoardTest >> testPrivateBlockAtAt [
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testPrivateSkewerCellsAtFrom [
-
+SudokuBoardTest >> testPrivateSkeweredCellsAtFrom [
+	"private
+	セルを串刺しを要素とした配列を返したかテストする
+	"
 	| example result expected index|
 	example := #(#(1 9 7   0 0 4   2 0 5) 
 				  #(6 8 0   5 3 0   9 0 0) 
@@ -170,12 +172,12 @@ SudokuBoardTest >> testPrivateSkewerCellsAtFrom [
 	
 	index := 7.
 	expected := #(2 9 1 7 6 0 4 0 3).
-	result := self privateSkewerCellsAt: index from: example .
+	result := self privateSkeweredCellsAt: index from: example .
 	self assert: result equals: expected.
 	
 	index := 4.
 	expected := #(0 5 0 4 0 8 3 0 1).
-	result := self privateSkewerCellsAt: index from: example .
+	result := self privateSkeweredCellsAt: index from: example .
 	self assert: result equals: expected.
 	
 

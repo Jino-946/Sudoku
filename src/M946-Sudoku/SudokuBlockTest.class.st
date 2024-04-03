@@ -26,6 +26,25 @@ SudokuBlockTest >> initialize [
 ]
 
 { #category : #tests }
+SudokuBlockTest >> testBlockkenTenpai [
+	
+	| board block |
+	board := SudokuBoard new.
+	board loadExample: example0 .
+	block := board blockAt: 8.
+	
+	self assert: block countBlank  equals: 4.
+	self assert: block blockkenTenpai equals: false.
+	
+	block 	row: 2 column: 1 put: $X;
+			row: 3 column: 2 put: $X;
+			row: 3 column: 3 put: $X.
+			
+	self assert: block blockkenTenpai equals: true.
+	
+]
+
+{ #category : #tests }
 SudokuBlockTest >> testCountBlank [
 
 	| board block|
@@ -102,6 +121,23 @@ SudokuBlockTest >> testSudokuBoardBlockNumberVerifyNumber [
 ]
 
 { #category : #tests }
+SudokuBlockTest >> testTenpai [
+
+	| board block |
+	board := SudokuBoard new.
+	board loadExample: example0 .
+	block := board blockAt: 1.
+	
+	self assert: block countBlank  equals: 2.
+	self assert: block tenpai equals: false.
+	
+	block 	row: 2 column: 3 put: 4.
+			
+	self assert: block tenpai equals: true.
+		
+]
+
+{ #category : #tests }
 SudokuBlockTest >> testToBoardCoordinatesRowColumn [
 
 	|sBoard sBlock actual expected|
@@ -113,7 +149,7 @@ SudokuBlockTest >> testToBoardCoordinatesRowColumn [
 	"SudokuBlockken座標"
 	actual := sBlock toBoardCoordinatesRow:  1 column: 1.
 	
-	expected := MCoordinates new.
+	expected := SBCoordinates new.
 	"SudokuBoard座標"
 	expected row: 1 column: 1.
 	self assert: actual equals: expected.

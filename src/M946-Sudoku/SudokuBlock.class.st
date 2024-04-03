@@ -74,6 +74,15 @@ SudokuBlock >> = aSudokuBlockken [
 	
 ]
 
+{ #category : #logic }
+SudokuBlock >> bingo [
+	"
+	テンパイしたブロックのブランクセルに検索対象数をセットする。
+	ブランクセルの有ったブロックのセル位置をボード座標に変換して
+	返す。	
+	"
+]
+
 { #category : #accessing }
 SudokuBlock >> blockA2D [
 
@@ -119,6 +128,28 @@ SudokuBlock >> blockNumber [
 SudokuBlock >> blockNumber: aNumber [
 
 	blockNumber := aNumber
+]
+
+{ #category : #logic }
+SudokuBlock >> blockkenTenpai [
+	"
+	ブランクセルが１つ(ブロック上に0が1つ)ならばtrueを返す。
+	残りのセルは1-9または$X、$Qで満たされているがユーザがキーボードより
+	直接入力することを想定しないので字種のチェックは行わない。
+	"
+	| blankCount result |
+	blankCount := 0.
+	result := false.
+	blockA2D do: [ :each |
+		each = 0
+		ifTrue: [ blankCount := blankCount + 1 ]	
+	].
+
+	blankCount = 1
+	ifTrue: [ result := true ] .
+	
+	^result 
+	
 ]
 
 { #category : #accessing }
@@ -193,12 +224,38 @@ SudokuBlock >> row: rowIndex column: colIndex put: aNumber [
 ]
 
 { #category : #logic }
+SudokuBlock >> tenpai [
+	"
+	ブランクセルが残り１つ(ブロック上に0が1つ)ならばtrueを返す
+	残りのセルは1-9のみで満たされている
+	"
+	| blankCount numberCount result |
+	blankCount := 0.
+	numberCount := 0.
+	result := false.
+	blockA2D do: [ :each |
+		each = 0
+		ifTrue: [ blankCount := blankCount + 1 ]
+		ifFalse: [  
+			each class = SmallInteger 
+			ifTrue: [ numberCount := numberCount + 1 ]
+		]
+	].
+
+	blankCount = 1
+		and: [ numberCount = 8 
+			ifTrue: [ result := true ]].
+	^result 
+
+]
+
+{ #category : #logic }
 SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
 	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
 	"
 	| coord |
-	coord := MCoordinates new.
+	coord := SBCoordinates new.
 	coord row: (boardRows at: blockRow).
 	coord column: (boardCols at: blockCol).
 	
