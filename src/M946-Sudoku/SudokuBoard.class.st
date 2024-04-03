@@ -1,10 +1,19 @@
 "
 9行X9列のセルを持つ数独ボードを表現するクラス
 
+インスタンス変数
+	board:		<Array2D> 	
+		数独ボードの内部表現
 
-    Instance Variables
-	board:		<Array2D>
+主なインスタンス・メソッド
+	blockAt: aNumber
+		数独ボード(9X9)よりblockNumberで指定したブロック(3X3)を返す。
 
+	colsAt: colIndex
+		数独ボードよりcolIndexで指定した列の要素を行を串刺しにし配列にして返す
+
+	rowsAt: rowIndex
+		数独ボードよりrowIndexで指定した行を返す。
 
 "
 Class {
