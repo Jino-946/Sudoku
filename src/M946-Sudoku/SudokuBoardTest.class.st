@@ -6,7 +6,9 @@ Class {
 
 { #category : #'private utilities' }
 SudokuBoardTest >> privateSkeweredCellsAt: colIndex from: anArray [
-
+	"
+	配列のセルを串刺しを要素とした配列を返す
+	"
 	| result |
 	result := Array new: 9 withAll: 0.
 	
@@ -106,7 +108,10 @@ SudokuBoardTest >> testColsAt [
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testPrivateBlockAtAt [
+SudokuBoardTest >> testPrivateBlockAtAt [ 
+	"
+	SudokuBoard >> privateBlockAt:at: のテスト
+	"
 	"
 	ダミーボード
 	1 2 3  4 5 6  7 8 9
@@ -153,7 +158,7 @@ SudokuBoardTest >> testPrivateBlockAtAt [
 
 { #category : #tests }
 SudokuBoardTest >> testPrivateSkeweredCellsAtFrom [
-	"private
+	"private SudokuBoardTest >>  privateSkeweredCellsAt:from:のテスト
 	セルを串刺しを要素とした配列を返したかテストする
 	"
 	| example result expected index|

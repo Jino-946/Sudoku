@@ -1,9 +1,8 @@
 "
 数独ボード構成する9個のブロックを表現するクラス。
 
-hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
 
-数独ボード上には下記の構成でブロックは配置される。
+数独ボード上には下記の構成でブロックは配置される。(数字はブロック番号)
 
     1  2  3
     4  5  6
@@ -14,11 +13,15 @@ hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cl
 	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
 
 インスタンス変数
-	blockNumber:	<SmallInteger>
-	blockkenA2D:	<Array2D>
-	boardCols:		<Array>
-	boardRows:		<Array>
-	verifyNumber:	<SmallInteger>
+	blockNumber:	<SmallInteger>		ブロック番号 (1-9)
+	blockA2D:	    <Array2D>			ブロック番号に対応したブロック			
+	boardCols:		<Array>				ブロック列indexに対応したボード列indexを持つ配列
+	boardRows:		<Array>				ブロック行indexに対応したボード行indexを持つ配列
+	verifyNumber:	<SmallInteger>		検証する数値
+
+備考				
+	hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
+
 "
 Class {
 	#name : #SudokuBlock,
@@ -81,6 +84,10 @@ SudokuBlock >> bingo [
 	ブランクセルの有ったブロックのセル位置をボード座標に変換して
 	返す。	
 	"
+	| coordinates |
+	
+	blockA2D tenpai 
+	
 ]
 
 { #category : #accessing }
