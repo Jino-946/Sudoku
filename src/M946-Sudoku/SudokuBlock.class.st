@@ -34,6 +34,26 @@ Class {
 }
 
 { #category : #creation }
+SudokuBlock class >> fromArray: anArray [
+	"
+	配列からSudokuBlockインスタンスを生成する。
+	注意:blockA2Dを除くインスタンス変数は初期化されたまま
+	"
+	| block i j|
+
+	i := 0.
+	j := 0.
+	block := self new.
+	anArray do: [ :each |
+		block row: i // 3 + 1 column: j % 3 + 1 put: each.
+		i := i + 1.
+		j := j + 1.
+	]. 
+	
+	^block
+]
+
+{ #category : #creation }
 SudokuBlock class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 
 	| block |
@@ -58,6 +78,12 @@ SudokuBlock >> = aSudokuBlockken [
 SudokuBlock >> blockA2D [
 
 	^blockA2D
+]
+
+{ #category : #accessing }
+SudokuBlock >> blockA2D: anArray2D [
+
+	blockA2D := anArray2D 
 ]
 
 { #category : #'private - helpers' }
@@ -105,6 +131,19 @@ SudokuBlock >> boardCols [
 SudokuBlock >> boardRows [
 	"blockの行のindex(1-3)に対応するSudokuBoardの行のindex配列を返す"
 	^boardRows 
+]
+
+{ #category : #logic }
+SudokuBlock >> countBlank [
+	" 
+	ボード上の0を数える	
+	"
+	| counts |
+	counts := 0.
+	blockA2D asArray do: [ :each | each = 0 ifTrue: [ counts := counts + 1 ] ].
+	
+	^counts
+	
 ]
 
 { #category : #comparing }

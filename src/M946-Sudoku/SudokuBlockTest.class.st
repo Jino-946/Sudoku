@@ -1,8 +1,64 @@
 Class {
 	#name : #SudokuBlockTest,
 	#superclass : #TestCase,
+	#instVars : [
+		'example0'
+	],
 	#category : #'M946-Sudoku-Tests'
 }
+
+{ #category : #initialization }
+SudokuBlockTest >> initialize [ 
+
+	super initialize .
+	example0 := 
+#(  #(1 9 7  0 0 4  2 0 5) 
+	#(6 8 0  5 3 0  9 0 0) 
+	#(5 0 3  0 7 2  1 6 8)
+	
+	#(0 6 0  4 0 9  7 0 2) 
+	#(0 7 5  0 1 0  6 8 0) 
+	#(2 0 9  8 0 7  0 4 0) 
+	
+	#(7 5 6  3 2 0  4 0 1) 
+	#(0 0 1  0 4 5  0 2 6) 
+	#(8 0 4  1 0 0  3 5 7)).
+]
+
+{ #category : #tests }
+SudokuBlockTest >> testCountBlank [
+
+	| board block|
+	board := SudokuBoard new.
+	board loadExample: example0.
+	
+	block := board blockAt: 3.	
+	self assert: block countBlank equals: 3.
+	
+	block := board blockAt: 8.
+	self assert: block countBlank equals: 4.
+	
+
+	
+]
+
+{ #category : #tests }
+SudokuBlockTest >> testFromArray [
+
+	|board block  expected array|
+	
+	array := #(0 6 0
+				0 7 5
+				2 0 9).
+	
+	expected := SudokuBlock fromArray: array.
+	
+	board := SudokuBoard new.
+	board loadExample: example0 .
+	block := board blockAt: 4.
+	
+	self assert:  block blockA2D equals: expected blockA2D
+]
 
 { #category : #tests }
 SudokuBlockTest >> testSudokuBoardBlockNumberVerifyNumber [
