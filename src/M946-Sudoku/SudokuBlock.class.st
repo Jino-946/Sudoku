@@ -8,9 +8,35 @@
     4  5  6
     7  8  9
 
-インスタンスの生成
+インスタンス生成
 	SudokuBlock block := aSudokuBoard blockAt: aBlockNumber.
 	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
+
+主なインスタンス・メソッド
+    blockkenTenpai
+	    ブランクセルが１つ(ブロック上に0が1つ)ならばtrueを返す。
+	    残りのセルは1-9または$X、$Qのみのはずだが、ユーザがキーボードより
+	    直接入力することを想定しないので字種のチェックは行なっていない。
+
+    blockkenBingo
+        未実装
+
+    tenpai
+	    ブランクセルが残り１つ(ブロック上に0が1つ)ならばtrueを返す
+	    残りのセル8個は1-9のみか確認している。
+	
+    bingo
+        tenpai確認後に実行する。
+	    ブランクセルに検証数値(verifyNumber)をセットする。
+	    ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+	    (tenpai確認後に実行するのでブランクセルは必ず1個だけある)
+	
+    countBlank
+	    ブロック上のブランクセル(0)を数える	
+	
+    toBoardCoordinatesRow: blockRow column: blockCol
+	    SudokuBlock座標をSudokuBoard座標に変換しSBCoordinatesのインスタンスとして返す
+
 
 インスタンス変数
 	blockNumber:	<SmallInteger>		ブロック番号 (1-9)
@@ -280,7 +306,7 @@ SudokuBlock >> tenpai [
 { #category : #'private - helpers' }
 SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
-	SudokuBlockken座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
+	SudokuBlock座標をSudokuBoard座標に変換しBoardCoordinatesのインスタンスとして返す
 	"
 	| coord |
 	coord := SBCoordinates new.
