@@ -26,29 +26,6 @@ SudokuBlockTest >> initialize [
 ]
 
 { #category : #tests }
-SudokuBlockTest >> testBingo [
-
-	| board block coordinates expected |
-	board := SudokuBoard new.
-	board loadExample: example0 .
-	block := SudokuBlock sudokuBoard: board  blockNumber: 9 verifyNumber: 8.
-	block row: 1 column: 2 put: 9.
-
-	coordinates := SBCoordinates new.
-	block tenpai
-	ifTrue: [ coordinates := block bingo ].
-	
-	self assert: (block row: 2 column: 1) equals: 8.
-	
-	expected  := SBCoordinates row: 8 column: 7.
-	self assert: coordinates  equals: expected 
-	
-	
-	
-	
-]
-
-{ #category : #tests }
 SudokuBlockTest >> testBlockkenTenpai [
 	
 	| board block |
@@ -214,4 +191,27 @@ SudokuBlockTest >> testToBoardCoordinatesRowColumn [
 	expected row: 9 column: 5.
 	self assert: actual equals: expected.
 
+]
+
+{ #category : #tests }
+SudokuBlockTest >> testTsumo [
+
+	| board block coordinates expected |
+	board := SudokuBoard new.
+	board loadExample: example0 .
+	block := SudokuBlock sudokuBoard: board  blockNumber: 9 verifyNumber: 8.
+	block row: 1 column: 2 put: 9.
+
+	coordinates := SBCoordinates new.
+	block tenpai
+	ifTrue: [ coordinates := block tsumo ].
+	
+	self assert: (block row: 2 column: 1) equals: 8.
+	
+	expected  := SBCoordinates row: 8 column: 7.
+	self assert: coordinates  equals: expected 
+	
+	
+	
+	
 ]

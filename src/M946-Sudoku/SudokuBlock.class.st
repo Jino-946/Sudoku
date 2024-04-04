@@ -13,30 +13,31 @@
 	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
 
 主なインスタンス・メソッド
-    blockkenTenpai
-	    ブランクセルが１つ(ブロック上に0が1つ)ならばtrueを返す。
-	    残りのセルは1-9または$X、$Qのみのはずだが、ユーザがキーボードより
-	    直接入力することを想定しないので字種のチェックは行なっていない。
-
-    blockkenBingo
-        未実装
-
-    tenpai
-	    ブランクセルが残り１つ(ブロック上に0が1つ)ならばtrueを返す
-	    残りのセル8個は1-9のみか確認している。
-	
-    bingo
-        tenpai確認後に実行する。
-	    ブランクセルに検証数値(verifyNumber)をセットする。
-	    ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
-	    (tenpai確認後に実行するのでブランクセルは必ず1個だけある)
-	
-    countBlank
-	    ブロック上のブランクセル(0)を数える	
-	
-    toBoardCoordinatesRow: blockRow column: blockCol
-	    SudokuBlock座標をSudokuBoard座標に変換しSBCoordinatesのインスタンスとして返す
-
+- blockkenTenpai
+   ブランクセルが１つ(ブロック上に0が1つ)ならばtrueを返す。
+   ブランクセルが一つで残りのセルは数字及びXが混在している状態。
+   Xは検証数値が重複するため入り得ないセルであることを表す。
+    
+- bingo
+   未実装
+   blockkenTenpaiの時に検証数値をブランクセルに入れその座標を返す。
+   ボード上のXを0にリセットする。
+        
+- tenpai
+   ブランクセルが残り１つ(ブロック上に0が1つ)ならばtrueを返す
+   残りのセル8個は1-9のみか確認している。
+   	
+- tsumo
+   tenpai確認後に実行する。
+   1-9 の範囲でブロックに欠けてる数値をブランクセルにセットする。
+   ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+    	
+- countBlank
+   ブロック上のブランクセル(0)を数える	
+   
+- toBoardCoordinatesRow: blockRow column: blockCol
+    SudokuBlock座標をSudokuBoard座標に変換しSBCoordinatesのインスタンスとして返す
+    
 
 インスタンス変数
 	blockNumber:	<SmallInteger>		ブロック番号 (1-9)
@@ -101,32 +102,6 @@ SudokuBlock >> = aSudokuBlockken [
 						and: [ aSudokuBlockken blockNumber = self blockNumber
 							and: [aSudokuBlockken verifyNumber = self verifyNumber ] ]]]]
 	
-]
-
-{ #category : #logic }
-SudokuBlock >> bingo [
-	"
-	tenpaiしたセルに検証数値(verifyNumber)をセットする。
-	tenpaiしたセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
-	(tenpai確認後に実行するのでブランクセルは必ず1個だけある)
-	"
-	| rowIndex colIndex boardCoordinates|
-	
-	rowIndex := 0.
-	colIndex := 0.
-	boardCoordinates := SBCoordinates new.
-	1 to: 3 do: [ :ri |
-		1 to: 3 do: [ :ci |
-			(self row: ri column: ci) = self blankCell
-			ifTrue: [	rowIndex := ri.
-						colIndex := ci.
-			]
-		]
-	].
-	self row: rowIndex  column: colIndex put: verifyNumber .
-	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .
-	^boardCoordinates 
-
 ]
 
 { #category : #'private - helpers' }
@@ -314,6 +289,35 @@ SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	coord column: (boardCols at: blockCol).
 	
 	^coord
+]
+
+{ #category : #logic }
+SudokuBlock >> tsumo [
+	"
+	 tenpai確認後に実行する。
+	 1-9 の範囲でブロックに欠けてる数値(shortOfNumber)をブランクセルにセットする。
+	 ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+	"
+	| rowIndex colIndex boardCoordinates sum shortOfNumber |
+	
+	rowIndex := 0.
+	colIndex := 0.
+	sum := 0.
+	boardCoordinates := SBCoordinates new.
+	1 to: 3 do: [ :ri |
+		1 to: 3 do: [ :ci |
+			(self row: ri column: ci) = self blankCell
+			ifTrue: [	rowIndex := ri.
+						colIndex := ci.
+			].
+			sum := sum + (self row: ri column: ci).
+		]
+	].
+	shortOfNumber := 45 - sum.
+	self row: rowIndex  column: colIndex put: shortOfNumber  .
+	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .
+	^boardCoordinates 
+
 ]
 
 { #category : #accessing }
