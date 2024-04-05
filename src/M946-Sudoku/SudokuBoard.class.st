@@ -6,14 +6,26 @@
 		数独ボードの内部表現
 
 主なインスタンス・メソッド
-	blockAt: aNumber
-		数独ボード(9X9)よりblockNumberで指定したブロック(3X3)を返す。
+- blockAt: aNumber
+    数独ボード(9X9)よりblockNumberで指定したブロック(3X3)を返す。
+     
+- colsAt: colIndex
+    数独ボードよりcolIndexで指定した列の要素を行を串刺しにし配列にして返す
 
-	colsAt: colIndex
-		数独ボードよりcolIndexで指定した列の要素を行を串刺しにし配列にして返す
+- rowsAt: rowIndex
+    数独ボードよりrowIndexで指定した行配列を返す。
+    
+- letsme: colIndex
+    未実装
+    colIndexの列要素の配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
+    列見(れつみ) - letsme: lets'me の語呂合わせ
+     
+- gyome: rowIndex
+   未実装
+   rowIndexの行配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
+   行見(ぎょうみ) - gyome: letsme とのペア
+   
 
-	rowsAt: rowIndex
-		数独ボードよりrowIndexで指定した配列を返す。
 
 "
 Class {
