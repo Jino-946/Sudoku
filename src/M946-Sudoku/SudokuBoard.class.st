@@ -14,6 +14,9 @@
 - rowsAt: rowIndex
     数独ボードよりrowIndexで指定した行配列を返す。
     
+- put: tsumoResponse
+   SudokuBlock >> tsumoの戻値であるところの座標と数値を要素とする配列を引数にとり、ボードにセットする。
+    	
 - sujiYomi: aBlock
    対象となる他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印にしている。
    
@@ -275,6 +278,15 @@ SudokuBoard >> privateBlockAt: rowStart at: colStart [
 		at: 3 at: 3 put: (board at: rs + 2 at: cs + 2).
 
 	^ block
+]
+
+{ #category : #'instance creation' }
+SudokuBoard >> put: tsumoResponse [
+	"
+	tsumoの戻値であるところの座標と数値を要素とする配列を引数にとり、ボードにセットする。
+	"
+	self at: (tsumoResponse at:1) put: (tsumoResponse at: 2)
+
 ]
 
 { #category : #accessing }
