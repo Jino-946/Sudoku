@@ -136,6 +136,42 @@ SudokuBlock >> = aSudokuBlockken [
 	
 ]
 
+{ #category : #logic }
+SudokuBlock >> bingo [ 
+	"
+    #1)blockkenTenpaiの時に検証数値をブランクセルに入れその座標を返す。
+    #2)ブロック上のXを0にリセットする。	
+	"
+	| rowIndex colIndex boardCoordinates |
+	"#1"
+	rowIndex := 0.
+	colIndex := 0.
+	boardCoordinates := SBCoordinates new.
+	1 to: 3 do: [ :ri |
+		1 to: 3 do: [ :ci |
+			(self row: ri column: ci) = self blankCell
+			ifTrue: [	rowIndex := ri.
+						colIndex := ci.
+			]
+		]
+	].
+	self row: rowIndex  column: colIndex put: verifyNumber  .
+	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .
+	
+	"#2"
+	rowIndex := 0.
+	colIndex := 0.
+	1 to: 3 do: [ :ri |
+		1 to: 3 do: [ :ci |
+			(self row: ri column: ci) = $X
+			ifTrue: [ self row: ri column: ci put: 0 ]
+		]
+	].	
+	
+	^boardCoordinates 
+
+]
+
 { #category : #'private - helpers' }
 SudokuBlock >> blankCell [
 	"

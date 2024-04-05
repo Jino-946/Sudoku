@@ -26,6 +26,31 @@ SudokuBlockTest >> initialize [
 ]
 
 { #category : #tests }
+SudokuBlockTest >> testBingo [ 
+	"
+	bingo
+      #1)blockkenTenpaiの時に検証数値をブランクセルに入れその座標を返す。
+      #2)ブロック上のXを0にリセットする。	
+	"
+	| board block coordinates expected |
+	board := SudokuBoard new.
+	board loadExample: example0 .
+	block := SudokuBlock sudokuBoard: board  blockNumber: 9 verifyNumber: 8.
+	block row: 1 column: 2 put: $X.
+	coordinates := nil.
+	
+	block blockkenTenpai 
+	ifTrue: [ coordinates := block bingo ].
+	
+	self assert: (block row: 2 column: 1) equals: 8.
+	self assert: (block row: 1 column: 2) equals: block blankCell .
+	
+	expected  := block toBoardCoordinatesRow: 2 column: 1.
+	self assert: coordinates  equals: expected 
+
+]
+
+{ #category : #tests }
 SudokuBlockTest >> testBlockkenTenpai [
 	
 	| board block |
@@ -202,13 +227,12 @@ SudokuBlockTest >> testTsumo [
 	block := SudokuBlock sudokuBoard: board  blockNumber: 9 verifyNumber: 8.
 	block row: 1 column: 2 put: 9.
 
-	coordinates := SBCoordinates new.
+	coordinates := nil. "coordinates初期化"
 	block tenpai
-	ifTrue: [ coordinates := block tsumo ].
-	
+	ifTrue: [ coordinates := block tsumo ].	
 	self assert: (block row: 2 column: 1) equals: 8.
 	
-	expected  := SBCoordinates row: 8 column: 7.
+	expected := block toBoardCoordinatesRow: 2 column: 1.
 	self assert: coordinates  equals: expected 
 	
 	
