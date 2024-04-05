@@ -2,37 +2,39 @@
 9行X9列のセルを持つ数独ボードを表現するクラス。
 
 インスタンス変数
-	board:		<Array2D> 	
-		数独ボードの内部表現
+	board:		<Array2D>   数独ボードの内部表現
 
-主なインスタンス・メソッド
+主なインスタンス・メソッド  (logic)
 - blockAt: aNumber
-    数独ボード(9X9)よりblockNumberで指定したブロック(3X3)を返す。
+    数独ボード(9X9)よりblockNumber(1-9)で指定したブロック(3X3)を返す。
      
 - colsAt: colIndex
-    数独ボードよりcolIndexで指定した列の要素を行を串刺しにし配列にして返す
+    数独ボードよりcolIndexで指定した列の要素を行を串刺しにした配列にして返す
      
 - rowsAt: rowIndex
     数独ボードよりrowIndexで指定した行配列を返す。
     
 - sujiYomi: aBlock
-   未実装
-   他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
-   sujiは麻雀用語の「筋」と「数字」の掛け詞
-   (麻雀用語:スジヨミ)
+   対象となる他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印にしている。
+   
+   rowSuji:とcolumnSuji:を利用して検証数値が重複するブロックのセルにXを配置する。
+   ブロックにブランクセルが一つだけの時は、ボードのセルに検証数値を配置する。
+    (麻雀用語:スジ)
    
 - columnSuji: aBlock
-   columnのセル要素の配列をsuji検証する。
+   ブロック列のインデックスをボード列のインデックスに変換して,ボード列をスキャンし検証数値を探す。
+   スキャンしたボード列に検証数値があった時、ブロックのブロック列のブランクセルにXを配置する。
    (麻雀用語:スジ)
    
 - rowSuji: aBlock
-   rowのセル要素の配列をsuji検証する。
+   ブロック行のインデックスをボード行のインデックスに変換して,ボード行をスキャンし検証数値を探す。
+   スキャンしたボード行に検証数値があった時、ブロックのブロック行のブランクセルにXを配置する。   
    (麻雀用語:スジ)
-       	
+         	
 - letsme: colIndex
     未実装
     colIndexの列要素の配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
-    列見(れつみ) - letsme: lets'me の語呂合わせ
+    列見(れつみ) - letsme: lets'me  の駄洒落
      
 - gyome: rowIndex
    未実装
@@ -164,17 +166,20 @@ SudokuBoard >> colsAt: colIndex [
 SudokuBoard >> columnSuji: aBlock [
 	"
 	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
-	columnのセル要素の配列をsuji検証する。
+		
+	#1)ブロック列のインデックスをボード列のインデックスに変換して,(#2)ボード列をスキャンし検証数値を探す。
+	#3)スキャンしたボード列に検証数値があった時、(#4)ブロックのブロック列のブランクセルにXを配置する。
+
  	(麻雀用語:スジ)
 	"
 	1 to: 3 do: [ :indexOfBlock|
 		| indexOfBoard cols |
-		indexOfBoard := aBlock colsOfBoard at: indexOfBlock .
+		indexOfBoard := aBlock colsOfBoard at: indexOfBlock . "#1"
 		cols := self colsAt: indexOfBoard .
-		(cols includes: aBlock verifyNumber)
-		ifTrue: [  
+		(cols includes: aBlock verifyNumber) "#2"
+		ifTrue: [  "#3"
 			1 to: 3 do: [ :ri |
-				(aBlock row: ri  column: indexOfBlock) = aBlock blankCell 
+				(aBlock row: ri  column: indexOfBlock) = aBlock blankCell "#4"
 				ifTrue: [ aBlock row: ri  column: indexOfBlock  put: $X ]	
 			]
 		].
@@ -292,17 +297,20 @@ SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
 SudokuBoard >> rowSuji: aBlock [
 	"
 	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
-	rowのセル要素の配列をsuji検証する。
+		
+	#1)ブロック行のインデックスをボード行のインデックスに変換して,(#2)ボード行をスキャンし検証数値を探す。
+	#3)スキャンしたボード行に検証数値があった時、(#4)ブロックのブロック行のブランクセルにXを配置する。
+
  	(麻雀用語:スジ)
 	"
 	1 to: 3 do: [ :indexOfBlock|
 		| indexOfBoard row |
-		indexOfBoard := aBlock rowsOfBoard at: indexOfBlock .
-		row := self rowsAt: indexOfBoard .
-		(row includes: aBlock verifyNumber)
-		ifTrue: [  
+		indexOfBoard := aBlock rowsOfBoard at: indexOfBlock . "#1"
+		row := self rowsAt: indexOfBoard . 
+		(row includes: aBlock verifyNumber)  "#2"
+		ifTrue: [  "#3"
 			1 to: 3 do: [ :ci |
-				(aBlock row: indexOfBlock  column: ci) = aBlock blankCell 
+				(aBlock row: indexOfBlock  column: ci) = aBlock blankCell "#4"
 				ifTrue: [ aBlock row: indexOfBlock  column: ci put: $X ]	
 			]
 		].
@@ -371,12 +379,17 @@ SudokuBoard >> setExample1 [
 
 { #category : #logic }
 SudokuBoard >> sujiYomi: aBlock [
-
+	"
+	#1)rowSuji:とcolumnSuji:を利用して検証数値が重複するブロックセルにXを配置する。
+	#2)ブロックにブランクセルが一つだけか確認し、#3)その時はボードのセルに検証数値を配置する。
+	"
 	| coordinates |
+	"#1"
 	self rowSuji: aBlock.
 	self columnSuji: aBlock.
+	
 	coordinates := nil.
-	aBlock blockkenTenpai ifFalse: [ ^ self ].
-	coordinates := aBlock bingo.
-	self at: coordinates put: aBlock verifyNumber
+	aBlock blockkenTenpai ifFalse: [ ^ self ]. "#2"
+	coordinates := aBlock bingo.               "#3"
+	self at: coordinates put: aBlock verifyNumber 
 ]
