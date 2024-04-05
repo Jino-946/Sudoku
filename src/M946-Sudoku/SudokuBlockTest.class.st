@@ -123,12 +123,12 @@ SudokuBlockTest >> testSudokuBoardBlockNumberVerifyNumber [
 		row: 3 column: 2 put: 1;
 		row: 3 column: 3 put: 0.
 
-	expected boardRows
+	expected rowsOfBoard
 		at: 1 put: 4;
 		at: 2 put: 5;
 		at: 3 put: 6.
 
-	expected boardCols
+	expected colsOfBoard
 		at: 1 put: 4;
 		at: 2 put: 5;
 		at: 3 put: 6.

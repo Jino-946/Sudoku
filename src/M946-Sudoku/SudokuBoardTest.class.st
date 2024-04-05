@@ -34,12 +34,12 @@ SudokuBoardTest >> testBlockAt [
 		row: 3 column: 2 put: 1;
 		row: 3 column: 3 put: 0.
 
-	expected boardRows
+	expected rowsOfBoard
 		at: 1 put: 4;
 		at: 2 put: 5;
 		at: 3 put: 6.
 
-	expected boardCols
+	expected colsOfBoard
 		at: 1 put: 4;
 		at: 2 put: 5;
 		at: 3 put: 6.
@@ -63,12 +63,12 @@ SudokuBoardTest >> testBlockAt [
 		row: 3 column: 3 put: 1.
 
 
-	expected boardRows
+	expected rowsOfBoard
 		at: 1 put: 7;
 		at: 2 put: 8;
 		at: 3 put: 9.
 
-	expected boardCols
+	expected colsOfBoard
 		at: 1 put: 7;
 		at: 2 put: 8;
 		at: 3 put: 9.
@@ -140,12 +140,12 @@ SudokuBoardTest >> testPrivateBlockAtAt [
 		row: 3 column: 1 put: 9;
 		row: 3 column: 2 put: 1;
 		row: 3 column: 3 put: 2.
-	expected boardRows
+	expected rowsOfBoard
 		at: 1 put: 7;
 		at: 2 put: 8;
 		at: 3 put: 9.
 
-	expected boardCols
+	expected colsOfBoard
 		at: 1 put: 1;
 		at: 2 put: 2;
 		at: 3 put: 3.

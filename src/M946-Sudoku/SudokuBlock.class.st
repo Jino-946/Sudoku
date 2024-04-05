@@ -21,7 +21,6 @@
    (麻雀用語:テンパイ)
     
 - bingo
-   未実装
    blockkenTenpaiの時に検証数値をブランクセルに入れその座標を返す。
    ブロック上のXを0にリセットする。
         
@@ -74,8 +73,8 @@
 インスタンス変数
 	blockNumber:	<SmallInteger>		ブロック番号 (1-9)
 	blockA2D:	    <Array2D>			ブロック番号に対応したブロック			
-	boardCols:		<Array>				ブロック列indexに対応したボード列indexを持つ配列
-	boardRows:		<Array>				ブロック行indexに対応したボード行indexを持つ配列
+	colsOfBoard:	<Array>				ブロック列indexに対応したボード列indexを持つ配列
+	rowsOfBoard:	<Array>				ブロック行indexに対応したボード行indexを持つ配列
 	verifyNumber:	<SmallInteger>		検証する数値
 
 備考				
@@ -87,8 +86,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'blockA2D',
-		'boardRows',
-		'boardCols',
+		'rowsOfBoard',
+		'colsOfBoard',
 		'blockNumber',
 		'verifyNumber'
 	],
@@ -129,8 +128,8 @@ SudokuBlock >> = aSudokuBlockken [
 
 	^ aSudokuBlockken class == self class
 		and: [ aSudokuBlockken blockA2D = self blockA2D 
-				and: [ aSudokuBlockken boardRows = self boardRows 
-					and: [ aSudokuBlockken boardCols = self boardCols 
+				and: [ aSudokuBlockken rowsOfBoard = self rowsOfBoard 
+					and: [ aSudokuBlockken colsOfBoard = self colsOfBoard 
 						and: [ aSudokuBlockken blockNumber = self blockNumber
 							and: [aSudokuBlockken verifyNumber = self verifyNumber ] ]]]]
 	
@@ -250,15 +249,9 @@ SudokuBlock >> blockkenTenpai [
 ]
 
 { #category : #accessing }
-SudokuBlock >> boardCols [
+SudokuBlock >> colsOfBoard [
 	"blockの列のindex(1-3)に対応するSudokuBoardの列のindex配列を返す"
-	^boardCols 
-]
-
-{ #category : #accessing }
-SudokuBlock >> boardRows [
-	"blockの行のindex(1-3)に対応するSudokuBoardの行のindex配列を返す"
-	^boardRows 
+	^colsOfBoard 
 ]
 
 { #category : #logic }
@@ -277,8 +270,8 @@ SudokuBlock >> countBlank [
 { #category : #comparing }
 SudokuBlock >> hash [ 
 
-	^((((blockA2D hash bitXor: boardRows hash )
-			bitXor: boardCols hash) 
+	^((((blockA2D hash bitXor: rowsOfBoard  hash )
+			bitXor: colsOfBoard  hash) 
 				bitXor: blockNumber hash)
 					bitXor: verifyNumber  hash)
 					
@@ -290,8 +283,8 @@ SudokuBlock >> initialize [
 
 	super initialize .
 	blockA2D := Array2D new:  3 element: 0.
-	boardRows  := Array braceWith: 0 with:0  with: 0.
-	boardCols  := Array braceWith: 0 with:0  with: 0.
+	rowsOfBoard   := Array braceWith: 0 with:0  with: 0.
+	colsOfBoard   := Array braceWith: 0 with:0  with: 0.
 	blockNumber := 0.
 	verifyNumber := 0.
 	
@@ -303,9 +296,9 @@ SudokuBlock >> printOn: aStream [
 	aStream
 		nextPutAll: self blockAsString; cr;
 		nextPutAll: 'board rows: ';
-		nextPutAll: boardRows  asString;cr;
+		nextPutAll: rowsOfBoard   asString;cr;
 		nextPutAll: 'board cols: ';
-		nextPutAll: boardCols asString
+		nextPutAll: colsOfBoard  asString
 ]
 
 { #category : #accessing }
@@ -318,6 +311,12 @@ SudokuBlock >> row: rowIndex column: colIndex [
 SudokuBlock >> row: rowIndex column: colIndex put: aNumber [
 
 	^blockA2D at: rowIndex at: colIndex put: aNumber
+]
+
+{ #category : #accessing }
+SudokuBlock >> rowsOfBoard [
+	"blockの行のindex(1-3)に対応するSudokuBoardの行のindex配列を返す"
+	^rowsOfBoard  
 ]
 
 { #category : #logic }
@@ -353,8 +352,8 @@ SudokuBlock >> toBoardCoordinatesRow: blockRow column: blockCol [
 	"
 	| coord |
 	coord := SBCoordinates new.
-	coord row: (boardRows at: blockRow).
-	coord column: (boardCols at: blockCol).
+	coord row: (rowsOfBoard at: blockRow).
+	coord column: (colsOfBoard  at: blockCol).
 	
 	^coord
 ]

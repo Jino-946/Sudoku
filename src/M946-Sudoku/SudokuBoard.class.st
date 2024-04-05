@@ -191,12 +191,12 @@ SudokuBoard >> privateBlockAt: rowStart at: colStart [
 	cs := colStart.
 	block := SudokuBlock new.
 
-	block boardRows
+	block rowsOfBoard
 		at: 1 put: rs;
 		at: 2 put: rs + 1;
 		at: 3 put: rs + 2.
 
-	block boardCols
+	block colsOfBoard
 		at: 1 put: cs;
 		at: 2 put: cs + 1;
 		at: 3 put: cs + 2.
