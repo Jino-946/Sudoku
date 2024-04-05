@@ -31,8 +31,8 @@
      
 - tsumo
    tenpai確認後に実行する。
-   1-9 の範囲でブロックに欠けてる数値をブランクセルにセットする。
-   ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+   1-9 の範囲でブロックに欠けてる数値(shortNumber)をブランクセルにセットする。
+   ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換し、shortNumberと共に配列として返す。
    (麻雀用語:ツモ)
    
 - chonbo
@@ -347,7 +347,7 @@ SudokuBlock >> tsumo [
 	"
 	 tenpai確認後に実行する。
 	 1-9 の範囲でブロックに欠けてる数値(shortOfNumber)をブランクセルにセットする。
-	 ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換して返す。
+	 ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換し、shortNumberと共に配列として返す。
 	"
 	| rowIndex colIndex boardCoordinates sum shortOfNumber |
 	
@@ -366,8 +366,8 @@ SudokuBlock >> tsumo [
 	].
 	shortOfNumber := 45 - sum.
 	self row: rowIndex  column: colIndex put: shortOfNumber  .
-	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .
-	^boardCoordinates 
+	boardCoordinates := self toBoardCoordinatesRow: rowIndex  column: colIndex .	
+	^ { boardCoordinates . shortOfNumber }
 
 ]
 

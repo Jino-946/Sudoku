@@ -221,19 +221,19 @@ SudokuBlockTest >> testToBoardCoordinatesRowColumn [
 { #category : #tests }
 SudokuBlockTest >> testTsumo [
 
-	| board block coordinates expected |
+	| board block result expected |
 	board := SudokuBoard new.
 	board loadExample: example0 .
 	block := SudokuBlock sudokuBoard: board  blockNumber: 9 verifyNumber: 8.
 	block row: 1 column: 2 put: 9.
 
-	coordinates := nil. "coordinates初期化"
+	result:= nil. "result初期化"
 	block tenpai
-	ifTrue: [ coordinates := block tsumo ].	
+	ifTrue: [ result := block tsumo ].	
 	self assert: (block row: 2 column: 1) equals: 8.
 	
 	expected := block toBoardCoordinatesRow: 2 column: 1.
-	self assert: coordinates  equals: expected 
+	self assert: (result at: 1)  equals: expected 
 	
 	
 	
