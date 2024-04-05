@@ -15,6 +15,22 @@
 - rowsAt: rowIndex
     数独ボードよりrowIndexで指定した行配列を返す。
     
+- sujiYomi: aBlock
+   未実装
+   他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
+   sujiは麻雀用語の「筋」と「数字」の掛け詞
+   (麻雀用語:スジヨミ)
+   
+- columnSuji: aBlock
+   未実装
+   columnのセル要素の配列をsuji検証する。
+   (麻雀用語:スジ)
+   
+- rowSuji: aBlock
+   未実装
+   rowのセル要素の配列をsuji検証する。
+   (麻雀用語:スジ)
+       	
 - letsme: colIndex
     未実装
     colIndexの列要素の配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
@@ -229,6 +245,28 @@ SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
 	"
 
 	^board at: rowIndex at: colIndex put: aNumber
+]
+
+{ #category : #logic }
+SudokuBoard >> rowSuji: aBlock [
+	"
+	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
+	rowのセル要素の配列をsuji検証する。
+ 	(麻雀用語:スジ)
+	"
+	1 to: 3 do: [ :indexOfBlock|
+		| indexOfBoard row |
+		indexOfBoard := aBlock rowsOfBoard at: indexOfBlock .
+		row := self rowsAt: indexOfBoard .
+		(row includes: aBlock verifyNumber)
+		ifTrue: [  
+			1 to: 3 do: [ :ci |
+				(aBlock row: indexOfBlock  column: ci) = aBlock blankCell 
+				ifTrue: [ aBlock row: indexOfBlock  column: ci put: $X ]	
+			]
+		].
+	].
+
 ]
 
 { #category : #logic }
