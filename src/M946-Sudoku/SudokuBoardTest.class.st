@@ -108,6 +108,54 @@ SudokuBoardTest >> testColsAt [
 ]
 
 { #category : #tests }
+SudokuBoardTest >> testColumnSuji [
+
+	| example board block expected|
+	example := 
+#(  #(1 9 7  0 0 4  2 0 5) 
+	#(6 8 0  5 3 0  9 0 0) 
+	#(5 0 3  0 7 2  1 6 8)
+	
+	#(0 6 0  4 0 9  7 0 2) 
+	#(0 7 5  0 1 0  6 8 0) 
+	#(2 0 9  8 0 7  0 4 0) 
+	
+	#(7 5 6  3 2 0  4 0 1) 
+	#(0 0 1  0 4 5  0 2 6) 
+	#(8 0 4  1 0 0  3 5 7)).
+	
+	board := SudokuBoard new.
+	board loadExample: example .
+	
+	"Test 1"
+	block := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 2.
+	board columnSuji: block.	
+	expected := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 2.
+	expected row: 1 column: 2 put: $X.
+	expected row: 3 column: 2 put: $X.
+	expected row: 2 column: 3 put: $X.
+
+	self assert: block equals: expected.
+	
+	"Test 2"	
+	block := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 3.
+	board columnSuji: block.
+	expected := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 3.
+	expected row: 2 column: 1 put: $X.
+	expected row: 1 column: 2 put: $X.
+	expected row: 3 column: 2 put: $X.
+
+	self assert: block equals: expected.
+
+	"Test 3"
+	block := SudokuBlock sudokuBoard: board  blockNumber: 8 verifyNumber: 6.
+	board columnSuji: block.
+	expected := SudokuBlock sudokuBoard: board  blockNumber: 8 verifyNumber: 6.
+	self assert: block equals: expected.
+
+]
+
+{ #category : #tests }
 SudokuBoardTest >> testPrivateBlockAtAt [ 
 	"
 	SudokuBoard >> privateBlockAt:at: のテスト

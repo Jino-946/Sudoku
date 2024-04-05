@@ -11,7 +11,7 @@
      
 - colsAt: colIndex
     数独ボードよりcolIndexで指定した列の要素を行を串刺しにし配列にして返す
-
+     
 - rowsAt: rowIndex
     数独ボードよりrowIndexで指定した行配列を返す。
     
@@ -22,12 +22,10 @@
    (麻雀用語:スジヨミ)
    
 - columnSuji: aBlock
-   未実装
    columnのセル要素の配列をsuji検証する。
    (麻雀用語:スジ)
    
 - rowSuji: aBlock
-   未実装
    rowのセル要素の配列をsuji検証する。
    (麻雀用語:スジ)
        	
@@ -146,6 +144,28 @@ SudokuBoard >> colsAt: colIndex [
 	1 to: 9 do: [ :rowIndex | result at: rowIndex  put: (board at: rowIndex at: colIndex) ].
 	
 	^result
+]
+
+{ #category : #logic }
+SudokuBoard >> columnSuji: aBlock [
+	"
+	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
+	columnのセル要素の配列をsuji検証する。
+ 	(麻雀用語:スジ)
+	"
+	1 to: 3 do: [ :indexOfBlock|
+		| indexOfBoard cols |
+		indexOfBoard := aBlock colsOfBoard at: indexOfBlock .
+		cols := self colsAt: indexOfBoard .
+		(cols includes: aBlock verifyNumber)
+		ifTrue: [  
+			1 to: 3 do: [ :ri |
+				(aBlock row: ri  column: indexOfBlock) = aBlock blankCell 
+				ifTrue: [ aBlock row: ri  column: indexOfBlock  put: $X ]	
+			]
+		].
+	].
+
 ]
 
 { #category : #initialization }
