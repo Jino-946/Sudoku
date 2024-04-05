@@ -51,6 +51,20 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
+{ #category : #comparing }
+SudokuBoard >> = aBoard [
+
+	^ aBoard class == self class
+		and: [ aBoard board = self board ]
+
+]
+
+{ #category : #accessing }
+SudokuBoard >> at: coordinates put: anInteger [
+
+	self row: coordinates row column: coordinates column put: anInteger
+]
+
 { #category : #logic }
 SudokuBoard >> blockAt: aNumber [
 	"
@@ -146,7 +160,7 @@ SudokuBoard >> colsAt: colIndex [
 	^result
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 SudokuBoard >> columnSuji: aBlock [
 	"
 	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
@@ -166,6 +180,13 @@ SudokuBoard >> columnSuji: aBlock [
 		].
 	].
 
+]
+
+{ #category : #comparing }
+SudokuBoard >> hash [ 
+
+	^ board hash
+	
 ]
 
 { #category : #initialization }
@@ -267,7 +288,7 @@ SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
 	^board at: rowIndex at: colIndex put: aNumber
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 SudokuBoard >> rowSuji: aBlock [
 	"
 	他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印とする。
@@ -346,4 +367,16 @@ SudokuBoard >> setExample1 [
 	#(0 8 0 0 0 9 0 5 0) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
 	#(0 0 2 0 0 0 4 0 0) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
 	#(0 0 7 6 0 0 0 0 1) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+]
+
+{ #category : #logic }
+SudokuBoard >> sujiYomi: aBlock [
+
+	| coordinates |
+	self rowSuji: aBlock.
+	self columnSuji: aBlock.
+	coordinates := nil.
+	aBlock blockkenTenpai ifFalse: [ ^ self ].
+	coordinates := aBlock bingo.
+	self at: coordinates put: aBlock verifyNumber
 ]

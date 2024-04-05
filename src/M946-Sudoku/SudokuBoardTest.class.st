@@ -331,3 +331,50 @@ SudokuBoardTest >> testRowsAt [
 	
 	
 ]
+
+{ #category : #tests }
+SudokuBoardTest >> testSujiYomi [
+	| example board block expected|
+	example := 
+#(  #(1 9 7  0 0 4  2 0 5) 
+	#(6 8 0  5 3 0  9 0 0) 
+	#(5 0 3  0 7 2  1 6 8)
+	
+	#(0 6 0  4 0 9  7 0 2) 
+	#(0 7 5  0 1 0  6 8 0) 
+	#(2 0 9  8 0 7  0 4 0) 
+	
+	#(7 5 6  3 2 0  4 0 1) 
+	#(0 0 1  0 4 5  0 2 6) 
+	#(8 0 4  1 0 0  3 5 7)).
+	
+	board := SudokuBoard new.
+	board loadExample: example .
+	
+	"Test 1"
+	block := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 2.
+	board sujiYomi: block.	
+	expected := SudokuBoard new.
+	expected  loadExample: example.
+	expected row: 5 column: 4 put: block verifyNumber .
+	
+	self assert: board equals: expected.
+	
+	"Test 2"	
+	expected := board copy.
+	block := SudokuBlock sudokuBoard: board  blockNumber: 5 verifyNumber: 3.
+	board sujiYomi: block.	
+	expected row: 5 column: 6 put: block verifyNumber .
+	
+	self assert: board equals: expected.
+	
+	"Test 3"	
+	expected := board copy.
+	block := SudokuBlock sudokuBoard: board  blockNumber: 8 verifyNumber: 6.
+	board sujiYomi: block.	
+	
+	self assert: board equals: expected.
+
+
+	
+]
