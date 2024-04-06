@@ -200,6 +200,85 @@ SudokuBoard >> columnSuji: aBlock [
 
 ]
 
+{ #category : #examples }
+SudokuBoard >> executeExample [
+	| example0 example1 block localBoard |
+example0 :='
+1 9 7  0 0 4  2 0 5
+6 8 0  5 3 0  9 0 0
+5 0 3  0 7 2  1 6 8
+	
+0 6 0  4 0 9  7 0 2
+0 7 5  0 1 0  6 8 0
+2 0 9  8 0 7  0 4 0 
+	
+7 5 6  3 2 0  4 0 1
+0 0 1  0 4 5  0 2 6 
+8 0 4  1 0 0  3 5 7
+'.
+	
+example1 := '
+8	0	0		0	0	5		1	0	0	
+0	0	1		0	0	0		8	0	0	
+0	4	0		2	0	0		0	9	0	
+
+
+0	0	0		0	3	0		0	0	2	
+1	2	3		4	0	6		7	8	9	
+6	0	0		0	1	0		0	0	0	
+
+
+0	8	0		0	0	9		0	5	0	
+0	0	2		0	0	0		4	0	0	
+0	0	7		6	0	0		0	0	1	
+
+'.	
+
+	localBoard  := self class  new.
+	localBoard  loadFromString: example0.
+	Transcript clear.
+
+   
+
+	Transcript show: '問題: '; show: localBoard; cr; cr.
+	block := nil.
+	5 timesRepeat: [  
+		1 to: 9 do: [ :i |
+			1 to: 9 do: [ :j |
+				block := SudokuBlock sudokuBoard: localBoard  blockNumber: i verifyNumber: j.
+		    	localBoard sujiYomi: block.
+				block completed 
+				ifFalse: [  
+					block tenpai 
+					ifTrue: [ localBoard put: block tsumo  ]
+				].
+			].
+		].
+	
+		1 to: 9 do: [ :i |
+			localBoard letsMe: i.
+			localBoard gyoMe: i.
+	   ]
+   
+	].
+	Transcript show: '結果: ' ;show: localBoard.
+	
+ 
+]
+
+{ #category : #logic }
+SudokuBoard >> gyoMe: rowIndex [
+	"should be tested"
+	| rowArray tempRows colIndex |
+	rowArray := self rowsAt: rowIndex.
+	tempRows := rowArray select: [ :each | each > 0 ].
+	tempRows size = 8 ifTrue: [ 
+		colIndex := rowArray indexOf: 0.
+		board at: rowIndex at: colIndex put: 45 - tempRows sum
+	].
+	^ self
+]
+
 { #category : #comparing }
 SudokuBoard >> hash [ 
 
@@ -212,6 +291,19 @@ SudokuBoard >> initialize [
 	super initialize .
 	board := Array2D new:9 element: 0.
 	numberCounter := NumberCounter new.
+]
+
+{ #category : #logic }
+SudokuBoard >> letsMe: colIndex [
+    "should be tested!!!"
+	| colArray tempCols rowIndex |
+	colArray := self colsAt: colIndex.
+	tempCols := colArray select: [ :each | each > 0 ].
+	tempCols size = 8 ifTrue: [ 
+		rowIndex := colArray indexOf: 0.
+		board at: rowIndex at: colIndex put: 45 - (tempCols sum)
+	].
+	^ self
 ]
 
 { #category : #'initialization - data' }
@@ -387,15 +479,16 @@ SudokuBoard >> rowsAt: rowIndex [
 	"
 	boardよりrowIndex指定した行(列配列)を返す。
 	"
+	"
 	| result |
 	result := Array new: 9 withAll: 0.
 	
 	1 to: 9 do: [ :colIndex | result at: colIndex put: (board at: rowIndex at: colIndex)].
-	
-	^result
+	"
+	^board atRow: rowIndex
 ]
 
-{ #category : #examples }
+{ #category : #'initialization - data' }
 SudokuBoard >> setDummy [
 
 	#(1 2 3 4 5 6 7 8 9) doWithIndex:  [ :num :i | board at: 1 at: i put: num ].
@@ -411,7 +504,7 @@ SudokuBoard >> setDummy [
 	numberCounter boardOf: board .
 ]
 
-{ #category : #examples }
+{ #category : #initialization }
 SudokuBoard >> setExample0 [
 	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ 初級編動画の例題"
 
@@ -430,7 +523,7 @@ SudokuBoard >> setExample0 [
 	numberCounter boardOf: board .
 ]
 
-{ #category : #examples }
+{ #category : #'initialization - data' }
 SudokuBoard >> setExample1 [
 	" https://www.nikoli.co.jp/ja/puzzles/sudoku/ の例題"
 
@@ -451,6 +544,9 @@ SudokuBoard >> setExample1 [
 SudokuBoard >> sujiYomi: aBlock [
 
 	| coordinates |
+	(aBlock blockA2D asArray includes: aBlock verifyNumber)
+	ifTrue: [ ^self ].
+	
 	self rowSuji: aBlock.
 	self columnSuji: aBlock.
 	coordinates := nil.
