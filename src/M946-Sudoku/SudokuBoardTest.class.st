@@ -156,6 +156,47 @@ SudokuBoardTest >> testColumnSuji [
 ]
 
 { #category : #tests }
+SudokuBoardTest >> testLoadFromString [
+
+	| board1 board2 anArray aString |
+	anArray :=
+#(  #(1 9 7  0 0 4  2 0 5) 
+	#(6 8 0  5 3 0  9 0 0) 
+	#(5 0 3  0 7 2  1 6 8)
+	
+	#(0 6 0  4 0 9  7 0 2) 
+	#(0 7 5  0 1 0  6 8 0) 
+	#(2 0 9  8 0 7  0 4 0) 
+	
+	#(7 5 6  3 2 0  4 0 1) 
+	#(0 0 1  0 4 5  0 2 6) 
+	#(8 0 4  1 0 0  3 5 7)).
+	
+	board1 := SudokuBoard new.
+	board1 loadExample: anArray .
+	
+	aString := 
+'
+  1 9 7  0 0 4  2 0 5
+  6 8 0  5 3 0  9 0 0
+  5 0 3  0 7 2  1 6 8
+	
+  0 6 0  4 0 9  7 0 2 
+  0 7 5  0 1 0  6 8 0
+  2 0 9  8 0 7  0 4 0
+	
+  7 5 6  3 2 0  4 0 1
+  0 0 1  0 4 5  0 2 6 
+  8 0 4  1 0 0  3 5 7
+'.
+
+	board2 := SudokuBoard new.
+	board2 loadFromString: aString.
+	
+	self assert: board1 equals: board2  	
+]
+
+{ #category : #tests }
 SudokuBoardTest >> testPrivateBlockAtAt [ 
 	"
 	SudokuBoard >> privateBlockAt:at: のテスト

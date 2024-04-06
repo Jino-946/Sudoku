@@ -3,6 +3,14 @@
 
 インスタンス変数
 	board:		<Array2D>   数独ボードの内部表現
+			
+データ初期化メソッド
+- loadFromString: aString
+   数独問題(String)を数独ボードデータへ(Array2D)へコピーする。
+   aString は可読性を高めるためにスペース,タブ,改行を自由に使うことができる。
+   <使い方>
+   board := SudokuBoard new.
+   board loadFromString: aString.
 
 主なインスタンス・メソッド  (logic)
 - blockAt: aNumber
@@ -14,7 +22,7 @@
 - rowsAt: rowIndex
     数独ボードよりrowIndexで指定した行配列を返す。
     
-- put: tsumoResponse
+- put: returnValue 
    SudokuBlock >> tsumoの戻値であるところの座標と数値を要素とする配列を引数にとり、ボードにセットする。
     	
 - sujiYomi: aBlock
@@ -231,6 +239,41 @@ SudokuBoard >> loadExample: anArray [
 "
 ]
 
+{ #category : #'initialization - data' }
+SudokuBoard >> loadFromString: aString [
+	"
+	数独問題(String)を数独ボードデータへ(Array2D)へコピーする。
+	aString は可読性を高めるためにスペース,タブ,改行を自由に使うことができる。
+	"
+	| i j |
+
+	i := 0.
+	j := 0.
+	
+	aString asCamelCase do: [ :char |
+		board at: i // 9 + 1 at: j % 9 + 1 put: char digitValue .	
+		i := i + 1.
+		j := j + 1
+	]
+
+"
+  aString := '
+  1 9 7  0 0 4  2 0 5
+  6 8 0  5 3 0  9 0 0
+  5 0 3  0 7 2  1 6 8
+	
+  0 6 0  4 0 9  7 0 2 
+  0 7 5  0 1 0  6 8 0
+  2 0 9  8 0 7  0 4 0
+	
+  7 5 6  3 2 0  4 0 1
+  0 0 1  0 4 5  0 2 6 
+  8 0 4  1 0 0  3 5 7
+'
+
+"
+]
+
 { #category : #printing }
 SudokuBoard >> printOn: aStream [
 
@@ -280,12 +323,12 @@ SudokuBoard >> privateBlockAt: rowStart at: colStart [
 	^ block
 ]
 
-{ #category : #'instance creation' }
-SudokuBoard >> put: tsumoResponse [
+{ #category : #logic }
+SudokuBoard >> put: returnValue [
 	"
 	tsumoの戻値であるところの座標と数値を要素とする配列を引数にとり、ボードにセットする。
 	"
-	self at: (tsumoResponse at:1) put: (tsumoResponse at: 2)
+	self at: (returnValue at:1) put: (returnValue at: 2)
 
 ]
 
@@ -391,17 +434,12 @@ SudokuBoard >> setExample1 [
 
 { #category : #logic }
 SudokuBoard >> sujiYomi: aBlock [
-	"
-	#1)rowSuji:とcolumnSuji:を利用して検証数値が重複するブロックセルにXを配置する。
-	#2)ブロックにブランクセルが一つだけか確認し、#3)その時はボードのセルに検証数値を配置する。
-	"
+
 	| coordinates |
-	"#1"
 	self rowSuji: aBlock.
 	self columnSuji: aBlock.
-	
 	coordinates := nil.
-	aBlock blockkenTenpai ifFalse: [ ^ self ]. "#2"
-	coordinates := aBlock bingo.               "#3"
-	self at: coordinates put: aBlock verifyNumber 
+	aBlock blockkenTenpai ifFalse: [ ^ self ].
+	coordinates := aBlock bingo.
+	self at: coordinates put: aBlock verifyNumber
 ]
