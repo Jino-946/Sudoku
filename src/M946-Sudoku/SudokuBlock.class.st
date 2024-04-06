@@ -9,8 +9,8 @@
     7  8  9
 
 インスタンス生成
-	SudokuBlock block := aSudokuBoard blockAt: aBlockNumber.
-	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
+    *SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
+     SudokuBlock block := aSudokuBoard blockAt: aBlockNumber.
 
 
 クラス・メソッド
@@ -41,6 +41,9 @@
    1-9 の範囲でブロックに欠けてる数値(shortNumber)をブランクセルにセットする。
    ブランクセルのブロック座標をボード座標(aSBCoodinates)に変換し、shortNumberと共に配列として返す。
    (麻雀用語:ツモ)
+    
+- completed
+   ブロックの全てのセルが1-9の数字で埋まりセルの合計が45の時trueを返す。
    
 - chonbo
    未実装
@@ -249,6 +252,15 @@ SudokuBlock >> blockkenTenpai [
 SudokuBlock >> colsOfBoard [
 	"blockの列のindex(1-3)に対応するSudokuBoardの列のindex配列を返す"
 	^colsOfBoard 
+]
+
+{ #category : #logic }
+SudokuBlock >> completed [
+    "
+    ブロックの全てのセルが1-9の数字で埋まりセルの合計が45の時trueを返す
+    "
+	^((blockA2D asArray select:
+		 [ :num | num class = SmallInteger ]) select: [ :num | num > 0]) sum = 45
 ]
 
 { #category : #logic }

@@ -70,6 +70,21 @@ SudokuBlockTest >> testBlockkenTenpai [
 ]
 
 { #category : #tests }
+SudokuBlockTest >> testCompleted [
+
+	| block | 
+	block := SudokuBlock fromArray: #(1 2 3 4 5 6 7 8 9).
+	self assert: block completed equals: true.
+	
+	block := SudokuBlock fromArray: #(1 2 3 4 0 6 7 8 9).
+	self assert: block completed equals: false.
+
+	block := SudokuBlock fromArray: #(1 2 $X 4 $X 6 7 8 9).
+	self assert: block completed equals: false.
+
+]
+
+{ #category : #tests }
 SudokuBlockTest >> testCountBlank [
 
 	| board block|
