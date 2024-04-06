@@ -25,9 +25,7 @@ NumberCounterTest >> testBoardOf [
 	sb := SudokuBoard new.
 	sb loadExample: example.
 
-	
-	nc1 := NumberCounter new.
-	nc1 boardOf: sb board .
+	nc1 := sb numberCounter .
 	
 	nc2 := NumberCounter new.
 	nc2 at: 1 put: 6;
@@ -40,7 +38,20 @@ NumberCounterTest >> testBoardOf [
 		at: 8 put: 5;
 		at: 9 put: 4.
 		
-	self assert: nc1 equals: nc2 
+	self assert: nc1 equals: nc2 .
+	
+	sb setDummy .
+	nc1 := sb numberCounter .
+	nc2 at: 1 put: 9;
+		at: 2 put: 9;
+		at: 3 put: 9;
+		at: 4 put: 9;
+		at: 5 put: 9;
+		at: 6 put: 9;
+		at: 7 put: 9;
+		at: 8 put: 9;
+		at: 9 put: 9.
+	
 
 	
 ]
@@ -59,7 +70,7 @@ NumberCounterTest >> testIncompleteNumbers [
 	
 	sb := SudokuBoard new.
 	sb setDummy .
-	nc boardOf: sb board.
+	nc := sb numberCounter .
 	self assert: nc incompleteNumbers size equals: 0.	
 	
 	

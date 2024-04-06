@@ -42,15 +42,15 @@
    スキャンしたボード行に検証数値があった時、ブロックのブロック行のブランクセルにXを配置する。   
    (麻雀用語:スジ)
          	
-- letsme: colIndex
+- letsMe: colIndex
     未実装
     colIndexの列要素の配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
-    列見(れつみ) - letsme: lets'me  の駄洒落
+    列見(れつみ) - letsMe: lets'me  の駄洒落
      
-- gyome: rowIndex
+- gyoMe: rowIndex
    未実装
    rowIndexの行配列を走査しブランクセルが一つの場合ブランクセルを未使用の数字で埋める。
-   行見(ぎょうみ) - gyome: letsme とのペア
+   行見(ぎょうみ) - gyoMe: letsMe とのペア
    
 
 
@@ -59,7 +59,8 @@ Class {
 	#name : #SudokuBoard,
 	#superclass : #Object,
 	#instVars : [
-		'board'
+		'board',
+		'numberCounter'
 	],
 	#category : #'M946-Sudoku-Core'
 }
@@ -68,7 +69,8 @@ Class {
 SudokuBoard >> = aBoard [
 
 	^ aBoard class == self class
-		and: [ aBoard board = self board ]
+		and: [ aBoard board = self board 
+			and: [aBoard numberCounter = self numberCounter]] 
 
 ]
 
@@ -201,15 +203,15 @@ SudokuBoard >> columnSuji: aBlock [
 { #category : #comparing }
 SudokuBoard >> hash [ 
 
-	^ board hash
-	
+	^ (board  hash bitXor: numberCounter  hash )
 ]
 
 { #category : #initialization }
 SudokuBoard >> initialize [ 
 
 	super initialize .
-	board := Array2D new:9 element: 0
+	board := Array2D new:9 element: 0.
+	numberCounter := NumberCounter new.
 ]
 
 { #category : #'initialization - data' }
@@ -220,8 +222,8 @@ SudokuBoard >> loadExample: anArray [
 	1 to: 9 do:[ :i | |row|
 		row := anArray at:i.
 		row doWithIndex: [ :num :j | board at: i at: j put: num ]
-	]
-
+	].
+	numberCounter boardOf: board. 
 " example0
 
 #(  #(1 9 7   0 0 4   2 0 5) 
@@ -254,7 +256,8 @@ SudokuBoard >> loadFromString: aString [
 		board at: i // 9 + 1 at: j % 9 + 1 put: char digitValue .	
 		i := i + 1.
 		j := j + 1
-	]
+	].
+	numberCounter boardOf: board .
 
 "
   aString := '
@@ -272,6 +275,12 @@ SudokuBoard >> loadFromString: aString [
 '
 
 "
+]
+
+{ #category : #accessing }
+SudokuBoard >> numberCounter [
+
+	^numberCounter 
 ]
 
 { #category : #printing }
@@ -398,6 +407,8 @@ SudokuBoard >> setDummy [
 	#(7 8 9 1 2 3 4 5 6) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
 	#(8 9 1 2 3 4 5 6 7) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
 	#(9 1 2 3 4 5 6 7 8) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+	
+	numberCounter boardOf: board .
 ]
 
 { #category : #examples }
@@ -415,6 +426,8 @@ SudokuBoard >> setExample0 [
 	#(7 5 6 3 2 0 4 0 1) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
 	#(0 0 1 0 4 5 0 2 6) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
 	#(8 0 4 1 0 0 3 5 7) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+	
+	numberCounter boardOf: board .
 ]
 
 { #category : #examples }
@@ -430,6 +443,8 @@ SudokuBoard >> setExample1 [
 	#(0 8 0 0 0 9 0 5 0) doWithIndex:  [ :num :i | board at: 7 at: i put: num ].
 	#(0 0 2 0 0 0 4 0 0) doWithIndex:  [ :num :i | board at: 8 at: i put: num ].
 	#(0 0 7 6 0 0 0 0 1) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
+	
+	numberCounter boardOf: board .
 ]
 
 { #category : #logic }

@@ -10,7 +10,7 @@ Class {
 	#instVars : [
 		'board'
 	],
-	#category : #'M946-Sudoku-Solution'
+	#category : #'M946-Sudoku-Core'
 }
 
 { #category : #logic }

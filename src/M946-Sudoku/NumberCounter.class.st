@@ -1,11 +1,13 @@
 "
-SudokuBoardに配置された1から9までの数字を数字毎に数えて保持する
-
-hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
+SudokuBoardに配置された1から9までの数字を数字毎に数えた値を保持する。
 
 
     Instance Variables
 	numberCount:		<Dictionary>
+
+
+
+hash method の実装は[Overriding Equality and Hash in Pharo](https://growi.cloud/blog/3044)を参照した。
 
 "
 Class {
