@@ -12,6 +12,13 @@
 	SudokuBlock block := aSudokuBoard blockAt: aBlockNumber.
 	SudokuBlock block := SudokuBlock sudokuBoard: aSudokuBoard  blockNumber: anInt1 verifyNumber: anInt2.
 
+
+クラス・メソッド
+- sudokuBoard: board blockNumber: bNum verifyNumber: vNum
+    ブロッケン法で数独問題を解決するため、対象となる数独ボード(board)より
+    ブロック番号(bNum)を指定してブロックを取り出し、ブロックに検証数値を
+    セットする。
+    
 主なインスタンス・メソッド
 - blockkenTenpai
    (ブロッケン法におけるテンパイ)
@@ -78,11 +85,12 @@ Class {
 	#category : #'M946-Sudoku-Core'
 }
 
-{ #category : #creation }
+{ #category : #'methods for tests' }
 SudokuBlock class >> fromArray: anArray [
 	"
 	配列からSudokuBlockインスタンスを生成する。
 	注意:blockA2Dを除くインスタンス変数は初期化されたまま
+	テストメソッドの中で使われる
 	"
 	| block i j|
 
@@ -100,7 +108,12 @@ SudokuBlock class >> fromArray: anArray [
 
 { #category : #creation }
 SudokuBlock class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
+	"
+    ブロッケン法で数独問題を解決するため、対象となる数独ボード(board)より
+    ブロック番号(bNum)を指定してブロックを取り出し、ブロックに検証数値を
+    セットする。
 
+	"
 	| block |
 	block := board blockAt: bNum.
 	block verifyNumber: vNum.
