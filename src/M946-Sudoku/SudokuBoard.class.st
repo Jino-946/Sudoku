@@ -64,6 +64,71 @@ Class {
 }
 
 { #category : #'sudoku - task' }
+SudokuBoard class >> fourBeginnersTasks240331 [
+	" 
+	https://si-coding.net/
+	[過去のナンプレ(数独)問題集はこちら] 2024年03月31日 入門問題 (1-4)
+	"
+	^ #(
+'
+906  824  350
+012  030  006
+503  960  287
+
+291  300  760
+000  049  803
+380  000  000
+
+100  490  000
+620  100  005
+058  000  009
+'
+
+'
+026  350  800
+700  060  100
+849  007  603
+
+060  005  300
+000  291  507
+517  830  092
+
+601  004  038
+070  003  940
+300  982  010
+'
+
+'
+081  570  060
+400  800  010
+060  020  003
+
+009  000  305
+050  200  089
+040  007  000
+
+007  080  051
+000  000  000
+893  140  002
+'
+
+'
+004  032  000
+007  010  904
+200  005  000
+
+410  306  078
+000  000  000
+830  400  090
+
+500  070  682
+091  020  407
+008  504  030
+'
+)
+]
+
+{ #category : #'sudoku - task' }
 SudokuBoard class >> fourBeginnersTasks240407 [
 	" 
 	https://si-coding.net/
@@ -205,7 +270,8 @@ SudokuBoard >> at: coordinates put: anInteger [
 SudokuBoard >> beginnersSolution: task [
 	"
 	si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。
-	 2024年04月07日の出問では問題3を解けなかった。
+	 2024年04月07日の出問は問題3以外は解けた。
+	 2024年03月31日の出問は4問全て解けた。
 	"
 	| sudokuBoard  message |
 	sudokuBoard := self class new.
@@ -489,32 +555,9 @@ SudokuBoard >> initialize [
 
 { #category : #'sudoku - solution' }
 SudokuBoard >> intermediateSolution: task [
-
-	| sudokuBoard block message |
-	sudokuBoard := self class new.
-	sudokuBoard loadFromString: task.
-
-	Transcript clear ; show: '問題: '; show: sudokuBoard; cr; cr.
-	block := nil.
-	10 timesRepeat: [  
-		1 to: 9 do: [ :i |
-			1 to: 9 do: [ :j |
-				block := SudokuBlock sudokuBoard: sudokuBoard blockNumber: i verifyNumber: j.
-				sudokuBoard sujiYomi: block.
-				block completed ifFalse: [
-					block tenpai ifTrue: [ sudokuBoard put: block tsumo ] ] ] 
-		].
-		1 to: 9 do: [ :i |
-			sudokuBoard letsMe: i.
-			sudokuBoard gyoMe: i.
-		]
-	].
-	message := ''.
-	message := sudokuBoard completed
-		           ifTrue: [ '問題解決！！  ' ]
-		           ifFalse: [ '残念でした！  ' ].
-
-	Transcript show: '結果: '; show: message; show: sudokuBoard
+	"
+	中級レベルの問題を解く
+	"
 ]
 
 { #category : #logic }
@@ -547,7 +590,8 @@ SudokuBoard >> letsmeWay: sudokuBoard [
 { #category : #'initialization - data' }
 SudokuBoard >> loadExample: anArray [
 	"
-	2次元配列の数独問題データ(anArray)を数独ボードデータへ(Array2D)へコピーする
+	ユニットテストで使用している
+	2次元配列の数独問題データ(anArray)を数独ボードデータへ(Array2D)へコピーする.	
 	"
 	1 to: 9 do:[ :i | |row|
 		row := anArray at:i.
