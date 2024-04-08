@@ -352,28 +352,6 @@ SudokuBoard >> blockAt: aNumber [
 ]
 
 { #category : #logic }
-SudokuBoard >> blockkenWay [
-	"
-	ボード上の全てのブロックをブロッケン法を用いブランクセルを埋める。
-    ブロックにブランクセルが一つで残りのセルが数字で埋まっている場合は
-    入るべき数字が決まるのでボード上の対応するセルにその数字をセットする。
-	"
-	| block |
-	block := nil.
-	1 to: 9 do: [ :i |
-		1 to: 9 do: [ :j |
-			block := SudokuBlock
-				         sudokuBoard: self
-				         blockNumber: i
-				         verifyNumber: j.
-			self sujiYomi: block.
-			block completed ifFalse: [
-				block tenpai ifTrue: [ self put: block tsumo ] ] ] ].
-
-	
-]
-
-{ #category : #logic }
 SudokuBoard >> blockkenWay: sudokuBoard [
 	"
 	ボード上の全てのブロックをブロッケン法を用いブランクセルを埋める。
@@ -604,17 +582,6 @@ SudokuBoard >> letsMe: colIndex [
 ]
 
 { #category : #logic }
-SudokuBoard >> letsmeWay [
-	"
-	列見法により数字が決定出来る時はボードにその数字をセットする
-	"
-	1 to: 9 do: [ :i |
-		self letsMe: i.
-		self gyoMe: i.
-	]
-]
-
-{ #category : #logic }
 SudokuBoard >> letsmeWay: sudokuBoard [
 	"
 	列見法により数字が決定出来る時はボードにその数字をセットする
@@ -687,40 +654,6 @@ SudokuBoard >> loadFromString: aString [
 '
 
 "
-]
-
-{ #category : #'as yet unclassified' }
-SudokuBoard >> masumeWay [
-	"
-	ブロック上のブランクセルに注目
-	1)ブロックのゼロ以外の数字の配列を作る
-	2)セルの行インデックスに対応するボードの行のゼロ以外の数字の配列を作る
-	3)セルの列インデックスに対応するボードの列のゼロ以外の数字の配列を作る
-	4)1,2,3 を連結する
-	5)4をセットにして数字の重複をなくす
-	6)5の要素を数え8ならばブランクセルに入る数字が決定する
-	"
-	| block |
-	1 to: 9 do: [ :n | | coordBlankCells blockCells rowCells colCells set |
-		block := self blockAt: n.
-		coordBlankCells := block coordinatesOfBlankCells .
-		blockCells := block nonBlankCells.
-		coordBlankCells do: [ :coord |
-			rowCells := (self rowsAt: (block rowsOfBoard at: coord row)) select: [ :cell| cell > 0].
-			colCells := (self colsAt: (block colsOfBoard at: coord column)) select: [ :cell| cell > 0].
-
-			set := ((blockCells copyWithAll: rowCells) copyWithAll: colCells ) asSet.	
-			
-			set size = 8
-			ifTrue: [ | rIndex cIndex val |
-				rIndex :=  block rowsOfBoard at: coord row.
-				cIndex :=  block colsOfBoard at: coord column.
-				val := 45 - set sum .
-				self row: rIndex  column: cIndex  put: val.
-			].		
-	 	].
-		
-	].
 ]
 
 { #category : #'as yet unclassified' }
