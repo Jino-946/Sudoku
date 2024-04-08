@@ -85,6 +85,28 @@ SudokuBlockTest >> testCompleted [
 ]
 
 { #category : #tests }
+SudokuBlockTest >> testCoordinatesOfBlankCells [
+
+	| sudokuBoard block result expected |
+	sudokuBoard := SudokuBoard new loadFromString: (SudokuBoard beginnersTasks240407 at: 3).
+	block := sudokuBoard blockAt: 1.
+	result := block coordinatesOfBlankCells .
+	
+	expected := { 
+		SBCoordinates new row: 1 column: 2.
+		SBCoordinates new row: 1 column: 3.
+		SBCoordinates new row: 2 column: 1.
+		SBCoordinates new row: 3 column: 1.
+		SBCoordinates new row: 3 column: 2.
+		SBCoordinates new row: 3 column: 3.
+	 }.
+	
+	self assert: block coordinatesOfBlankCells equals: expected 
+	
+	
+]
+
+{ #category : #tests }
 SudokuBlockTest >> testCountBlank [
 
 	| board block|
@@ -117,6 +139,21 @@ SudokuBlockTest >> testFromArray [
 	block := board blockAt: 4.
 	
 	self assert:  block blockA2D equals: expected blockA2D
+]
+
+{ #category : #tests }
+SudokuBlockTest >> testNonBlankCells [
+	| sudokuBoard block expected |
+	sudokuBoard := SudokuBoard new.
+	sudokuBoard setExample1 .
+	block := sudokuBoard blockAt: 2.
+	
+	expected := #( 5 2 ).
+	
+	self assert: block nonBlankCells  equals: expected 
+	
+	
+	
 ]
 
 { #category : #tests }

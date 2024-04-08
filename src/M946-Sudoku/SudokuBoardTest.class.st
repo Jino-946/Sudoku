@@ -156,6 +156,46 @@ SudokuBoardTest >> testColumnSuji [
 ]
 
 { #category : #tests }
+SudokuBoardTest >> testGyoMe [
+
+	| board number |
+	board := SudokuBoard new.
+	board setDummy .
+	
+	number := board row: 6 column: 7.
+	self assert:  number equals: 3.
+	
+	board row: 6 column: 7  put: 0.
+	number := board row: 6 column: 7.
+	self assert:  number equals: 0.
+	
+	board gyoMe: 6.
+	number := board row: 6 column: 7.
+	self assert:  number equals: 3.
+
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testLetsMe [
+
+	| board number |
+	board := SudokuBoard new.
+	board setDummy .
+	
+	number := board row: 3 column: 6.
+	self assert:  number equals: 8.
+	
+	board row: 3 column: 6  put: 0.
+	number := board row: 3 column: 6.
+	self assert:  number equals: 0.
+	
+	board letsMe: 6.
+	number := board row: 3 column: 6.
+	self assert:  number equals: 8.
+
+]
+
+{ #category : #tests }
 SudokuBoardTest >> testLoadFromString [
 
 	| board1 board2 anArray aString |

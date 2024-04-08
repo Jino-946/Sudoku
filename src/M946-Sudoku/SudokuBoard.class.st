@@ -64,7 +64,7 @@ Class {
 }
 
 { #category : #'sudoku - task' }
-SudokuBoard class >> fourBeginnersTasks240331 [
+SudokuBoard class >> beginnersTasks240331 [
 	" 
 	https://si-coding.net/
 	[過去のナンプレ(数独)問題集はこちら] 2024年03月31日 入門問題 (1-4)
@@ -129,7 +129,7 @@ SudokuBoard class >> fourBeginnersTasks240331 [
 ]
 
 { #category : #'sudoku - task' }
-SudokuBoard class >> fourBeginnersTasks240407 [
+SudokuBoard class >> beginnersTasks240407 [
 	" 
 	https://si-coding.net/
 	[過去のナンプレ(数独)問題集はこちら] 2024年04月07日 入門問題 (1-4)
@@ -195,40 +195,78 @@ SudokuBoard class >> fourBeginnersTasks240407 [
 )
 ]
 
-{ #category : #'sudoku - solution' }
-SudokuBoard class >> solveTaskForBiginners: task [
+{ #category : #'as yet unclassified' }
+SudokuBoard class >> intermediateTasks [
 
-	| sudokuBoard |
-	sudokuBoard := self new.
-	sudokuBoard beginnersSolution: task.
-	
-"
-task := '
-1 9 7  0 0 4  2 0 5
-6 8 0  5 3 0  9 0 0
-5 0 3  0 7 2  1 6 8
-	
-0 6 0  4 0 9  7 0 2
-0 7 5  0 1 0  6 8 0
-2 0 9  8 0 7  0 4 0 
-	
-7 5 6  3 2 0  4 0 1
-0 0 1  0 4 5  0 2 6 
-8 0 4  1 0 0  3 5 7
-'.
+^ #(
+"20240407"
+'
+000 500 070
+000 009 003
+900 100 000
 
-SudokuBoard solveTaskForBigginers: task.
+080 406 000
+520 900 100
+004 000 000
 
-"
-	
+640 000 000
+010 083 005
+093 000 017
+'
+
+'
+200 000 000
+501 060 000
+083 900 000
+
+700 400 800
+004 500 300
+000 019 075
+
+400 000 008
+009 070 050
+000 103 007
+'
+
+
+"20240408"
+'
+005 100 030
+090 400 060
+007 800 200
+
+180 002 000
+000 000 004
+000 900 170
+
+040 070 000
+261 030 000
+000 000 092
+'
+
+'
+040 001 003
+000 000 802
+008 407 005
+
+070 040 000
+005 060 701
+090 000 000
+
+807 000 000
+600 530 000
+000 108 030
+'
+
+)
 ]
 
 { #category : #'sudoku - solution' }
-SudokuBoard class >> solveTaskForIntermediates: task [
+SudokuBoard class >> solveTask: task [
 
 	| sudokuBoard |
 	sudokuBoard := self new.
-	sudokuBoard intermediateSolution: task
+	sudokuBoard solution: task
 	
 "
 task := '
@@ -245,7 +283,7 @@ task := '
 8 0 4  1 0 0  3 5 7
 '.
 
-SudokuBoard solveTaskForBigginers: task.
+SudokuBoard solveTask: task.
 
 "
 	
@@ -264,39 +302,6 @@ SudokuBoard >> = aBoard [
 SudokuBoard >> at: coordinates put: anInteger [
 
 	self row: coordinates row column: coordinates column put: anInteger
-]
-
-{ #category : #'sudoku - solution' }
-SudokuBoard >> beginnersSolution: task [
-	"
-	si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。
-	 2024年04月07日の出問は問題3以外は解けた。
-	 2024年03月31日の出問は4問全て解けた。
-	"
-	| sudokuBoard  message |
-	sudokuBoard := self class new.
-	sudokuBoard loadFromString: task.
-	Transcript clear.
-
-	Transcript
-		show: '問題: ';
-		show: sudokuBoard;
-		cr;
-		cr.
-	5 timesRepeat: [  
-		self blockkenWay: sudokuBoard .
-		self letsmeWay: sudokuBoard .
-	].
-
-	message := ''.
-	message := sudokuBoard completed
-		           ifTrue: [ '問題解決！！  ' ]
-		           ifFalse: [ '残念でした！  ' ].
-
-	Transcript
-		show: '結果: ';
-		show: message;
-		show: sudokuBoard
 ]
 
 { #category : #logic }
@@ -344,6 +349,28 @@ SudokuBoard >> blockAt: aNumber [
 		^ (self privateBlockAt: 7 at: 4) blockNumber: aNumber ].
 	aNumber = 9 ifTrue: [
 		^ (self privateBlockAt: 7 at: 7) blockNumber: aNumber ]
+]
+
+{ #category : #logic }
+SudokuBoard >> blockkenWay [
+	"
+	ボード上の全てのブロックをブロッケン法を用いブランクセルを埋める。
+    ブロックにブランクセルが一つで残りのセルが数字で埋まっている場合は
+    入るべき数字が決まるのでボード上の対応するセルにその数字をセットする。
+	"
+	| block |
+	block := nil.
+	1 to: 9 do: [ :i |
+		1 to: 9 do: [ :j |
+			block := SudokuBlock
+				         sudokuBoard: self
+				         blockNumber: i
+				         verifyNumber: j.
+			self sujiYomi: block.
+			block completed ifFalse: [
+				block tenpai ifTrue: [ self put: block tsumo ] ] ] ].
+
+	
 ]
 
 { #category : #logic }
@@ -577,6 +604,17 @@ SudokuBoard >> letsMe: colIndex [
 ]
 
 { #category : #logic }
+SudokuBoard >> letsmeWay [
+	"
+	列見法により数字が決定出来る時はボードにその数字をセットする
+	"
+	1 to: 9 do: [ :i |
+		self letsMe: i.
+		self gyoMe: i.
+	]
+]
+
+{ #category : #logic }
 SudokuBoard >> letsmeWay: sudokuBoard [
 	"
 	列見法により数字が決定出来る時はボードにその数字をセットする
@@ -649,6 +687,74 @@ SudokuBoard >> loadFromString: aString [
 '
 
 "
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBoard >> masumeWay [
+	"
+	ブロック上のブランクセルに注目
+	1)ブロックのゼロ以外の数字の配列を作る
+	2)セルの行インデックスに対応するボードの行のゼロ以外の数字の配列を作る
+	3)セルの列インデックスに対応するボードの列のゼロ以外の数字の配列を作る
+	4)1,2,3 を連結する
+	5)4をセットにして数字の重複をなくす
+	6)5の要素を数え8ならばブランクセルに入る数字が決定する
+	"
+	| block |
+	1 to: 9 do: [ :n | | coordBlankCells blockCells rowCells colCells set |
+		block := self blockAt: n.
+		coordBlankCells := block coordinatesOfBlankCells .
+		blockCells := block nonBlankCells.
+		coordBlankCells do: [ :coord |
+			rowCells := (self rowsAt: (block rowsOfBoard at: coord row)) select: [ :cell| cell > 0].
+			colCells := (self colsAt: (block colsOfBoard at: coord column)) select: [ :cell| cell > 0].
+
+			set := ((blockCells copyWithAll: rowCells) copyWithAll: colCells ) asSet.	
+			
+			set size = 8
+			ifTrue: [ | rIndex cIndex val |
+				rIndex :=  block rowsOfBoard at: coord row.
+				cIndex :=  block colsOfBoard at: coord column.
+				val := 45 - set sum .
+				self row: rIndex  column: cIndex  put: val.
+			].		
+	 	].
+		
+	].
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBoard >> masumeWay: sudokuBoard [
+	"
+	ブロック上のブランクセルに注目
+	1)ブロックのゼロ以外の数字の配列を作る
+	2)セルの行インデックスに対応するボードの行のゼロ以外の数字の配列を作る
+	3)セルの列インデックスに対応するボードの列のゼロ以外の数字の配列を作る
+	4)1,2,3 を連結する
+	5)4をセットにして数字の重複をなくす
+	6)5の要素を数え8ならばブランクセルに入る数字が決定する
+	"
+	| block |
+	1 to: 9 do: [ :n | | coordBlankCells blockCells rowCells colCells set |
+		block := sudokuBoard  blockAt: n.
+		coordBlankCells := block coordinatesOfBlankCells .
+		blockCells := block nonBlankCells.
+		coordBlankCells do: [ :coord |
+			rowCells := (sudokuBoard  rowsAt: (block rowsOfBoard at: coord row)) select: [ :cell| cell > 0].
+			colCells := (sudokuBoard  colsAt: (block colsOfBoard at: coord column)) select: [ :cell| cell > 0].
+
+			set := ((blockCells copyWithAll: rowCells) copyWithAll: colCells ) asSet.	
+			
+			set size = 8
+			ifTrue: [ | rIndex cIndex val |
+				rIndex :=  block rowsOfBoard at: coord row.
+				cIndex :=  block colsOfBoard at: coord column.
+				val := 45 - set sum .
+				sudokuBoard  row: rIndex  column: cIndex  put: val.
+			].		
+	 	].
+		
+	].
 ]
 
 { #category : #accessing }
@@ -827,6 +933,44 @@ SudokuBoard >> setExample1 [
 	#(0 0 7 6 0 0 0 0 1) doWithIndex:  [ :num :i | board at: 9 at: i put: num ].
 	
 	numberCounter boardOf: board .
+]
+
+{ #category : #'sudoku - solution' }
+SudokuBoard >> solution: task [
+	"
+	si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。
+	 2024年04月07日の出問は4問全て解けた。
+	 2024年03月31日の出問は4問全て解けた。
+	"
+	| sudokuBoard  message |
+	sudokuBoard := self class new.
+	sudokuBoard loadFromString: task.
+	Transcript clear.
+
+	Transcript
+		show: '問題: ';
+		show: sudokuBoard;
+		cr;
+		cr.
+	9 timesRepeat: [  
+		sudokuBoard completed 
+			ifFalse: [ self blockkenWay: sudokuBoard  ].
+		sudokuBoard completed
+			ifFalse: [ self letsmeWay: sudokuBoard ].
+		
+		sudokuBoard completed 
+			ifFalse:[self masumeWay: sudokuBoard ].
+	].
+
+	message := ''.
+	message := sudokuBoard completed
+		           ifTrue: [ '問題解決！ ']
+		           ifFalse: [ '残念でした！ '].
+
+	Transcript
+		show: '結果: ';
+		show: message;
+		show: sudokuBoard
 ]
 
 { #category : #logic }

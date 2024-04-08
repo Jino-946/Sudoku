@@ -259,8 +259,30 @@ SudokuBlock >> completed [
     "
     ブロックの全てのセルが1-9の数字で埋まりセルの合計が45の時trueを返す
     "
-	^((blockA2D asArray select:
-		 [ :num | num class = SmallInteger ]) select: [ :num | num > 0]) sum = 45
+	| array |
+	array :=((blockA2D asArray select:
+		 [ :num | num class = SmallInteger ]) select: [ :num | num > 0]).
+		
+	^array size = 9
+	  and: [ array sum = 45 ]
+	
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBlock >> coordinatesOfBlankCells [
+
+	| result index|
+	result := Array new:9.
+    index := 1.
+	1 to: 3 do: [ :i |
+		1 to: 3 do:  [ :j |
+			(blockA2D at: i at: j) = 0
+			ifTrue: [ result at: index  put: (SBCoordinates new row: i column: j) ].
+			index := index + 1.
+	   ]
+	].
+
+	^ result select: [ :each | each class = SBCoordinates ]
 ]
 
 { #category : #logic }
@@ -297,6 +319,26 @@ SudokuBlock >> initialize [
 	blockNumber := 0.
 	verifyNumber := 0.
 	
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBlock >> nonBlankCells [
+	"
+	ブロック上の0以外の数字が入ったセルを配列にして返す。
+	"
+	| result index|
+	result := Array new: 9 withAll: 0.
+	
+    index := 1.
+	1 to: 3 do: [ :i |
+		1 to: 3 do:  [ :j |
+			(blockA2D at: i at: j) > 0
+			ifTrue: [ result at: index  put: (blockA2D at: i at: j) ].
+			index := index + 1.
+	   ]
+	].
+
+	^ result select: [ :each | each > 0 ]
 ]
 
 { #category : #printing }
