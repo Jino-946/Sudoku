@@ -195,10 +195,25 @@ SudokuBoard class >> beginnersTasks240407 [
 )
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'sudoku - task' }
 SudokuBoard class >> intermediateTasks [
 
 ^ #(
+" ニコリ公式 数独の解き方 中級編"
+'
+000 002 000
+070 030 800
+600 080 700
+
+083 000 012
+000 501 000
+590 000 640
+
+005 090 003
+002 050 080
+000 700 000
+'
+
 "20240407"
 '
 000 500 070
@@ -354,6 +369,9 @@ SudokuBoard >> blockAt: aNumber [
 { #category : #logic }
 SudokuBoard >> blockkenWay: sudokuBoard [
 	"
+	ブロッケン方式
+
+	
 	ボード上の全てのブロックをブロッケン法を用いブランクセルを埋める。
     ブロックにブランクセルが一つで残りのセルが数字で埋まっている場合は
     入るべき数字が決まるのでボード上の対応するセルにその数字をセットする。
@@ -447,6 +465,22 @@ SudokuBoard >> columnSuji: aBlock [
 ]
 
 { #category : #logic }
+SudokuBoard >> columnTsumo: colIndex [
+    "
+	列の9つのセルの内8つのセルに数字が入ると残ったセルに入る数字は必然的に決まるので
+	ボード上の対応するセルにその数字をセットする。
+	"
+	| colArray tempCols rowIndex |
+	colArray := self colsAt: colIndex.
+	tempCols := colArray select: [ :each | each > 0 ].
+	tempCols size = 8 ifTrue: [ 
+		rowIndex := colArray indexOf: 0.
+		board at: rowIndex at: colIndex put: 45 - (tempCols sum)
+	].
+	^ self
+]
+
+{ #category : #logic }
 SudokuBoard >> completed [ 
 	 "
 	ボード上の全てのブロックが完成している時はtrueを返す。
@@ -518,30 +552,14 @@ example1 := '
 		].
 	
 		1 to: 9 do: [ :i |
-			localBoard letsMe: i.
-			localBoard gyoMe: i.
+			localBoard columnTsumo: i.
+			localBoard rowTsumo: i.
 	   ]
    
 	].
 	Transcript show: '結果: ' ;show: localBoard.
 	
  
-]
-
-{ #category : #logic }
-SudokuBoard >> gyoMe: rowIndex [
-	"
-	行の9つのセルの内8つのセルに数字が入ると残ったセルに入る数字は必然的に決まるので
-	ボード上の対応するセルにその数字をセットする。
-	"
-	| rowArray tempRows colIndex |
-	rowArray := self rowsAt: rowIndex.
-	tempRows := rowArray select: [ :each | each > 0 ].
-	tempRows size = 8 ifTrue: [ 
-		colIndex := rowArray indexOf: 0.
-		board at: rowIndex at: colIndex put: 45 - tempRows sum
-	].
-	^ self
 ]
 
 { #category : #comparing }
@@ -558,38 +576,72 @@ SudokuBoard >> initialize [
 	numberCounter := NumberCounter new.
 ]
 
-{ #category : #'sudoku - solution' }
-SudokuBoard >> intermediateSolution: task [
-	"
-	中級レベルの問題を解く
-	"
-]
-
 { #category : #logic }
-SudokuBoard >> letsMe: colIndex [
-    "
-	列の9つのセルの内8つのセルに数字が入ると残ったセルに入る数字は必然的に決まるので
-	ボード上の対応するセルにその数字をセットする。
-	"
-	| colArray tempCols rowIndex |
-	colArray := self colsAt: colIndex.
-	tempCols := colArray select: [ :each | each > 0 ].
-	tempCols size = 8 ifTrue: [ 
-		rowIndex := colArray indexOf: 0.
-		board at: rowIndex at: colIndex put: 45 - (tempCols sum)
+SudokuBoard >> letsme: sudokuBoard block: block [
+
+
+	| colCells rowCells blankCount |
+	1 to: 3 do: [ :colIndex | 
+		colCells := sudokuBoard colsAt: (block colsOfBoard at: colIndex ).
+		(colCells includes: block verifyNumber)
+		ifFalse: [ 
+			1 to: 3 do: [ :i|
+				(colCells at: (block rowsOfBoard at: i)) = 0
+				ifTrue: [ colCells at: (block rowsOfBoard at: i) put: $X ].
+			].
+			1 to: 9 do: [ :j|
+				rowCells := sudokuBoard rowsAt: j.
+				(rowCells includes: block verifyNumber)
+				ifTrue: [ colCells at: j put: $X ]
+			].
+			blankCount := 0.
+			colCells do: [ :cell | 
+				cell = 0 ifTrue: [ blankCount := blankCount + 1 ].
+			].
+			blankCount = 1
+			ifTrue: [ |rowIndex|
+				"
+				Transcript  show: colCells; cr.
+				"
+				rowIndex := colCells indexOf: 0.
+				sudokuBoard row: rowIndex column:  (block colsOfBoard at: colIndex ) put: block verifyNumber .
+			].
+		]				
 	].
-	^ self
+		
+	
+
+	
 ]
 
 { #category : #logic }
 SudokuBoard >> letsmeWay: sudokuBoard [
 	"
-	列見法により数字が決定出来る時はボードにその数字をセットする
+	レッツミー(列見)方式
+	ボードの列の串刺し配列に注目してブランクセルに配置できない数字の配列を作る。
+	
+	1)検証するブロックに検証数字が存在する時は注目した列の串刺し配列(ブロック)のブランクセルにXを配置する。??
+	2)ボードの列串刺し配列を走査してブランクセルの時は行配列を確認し検証数字が存在する時はブランクセルにXを配置する。??
+	3) 2)の終了後、列串刺し配列にブランクセルが一つの時は、ブランクセルのボード座標に検証数字をセットする。
+	
+	??:ボードのセルには確定した数字のみを配置することが出来る。実際のボードにXを配置しないこと
+      列串刺し配列をDictionaryを要素とした配列にする？	
 	"
-	1 to: 9 do: [ :i |
-		sudokuBoard letsMe: i.
-		sudokuBoard gyoMe: i.
+	| block |
+	1 to: 9 do: [ :n |
+		block := sudokuBoard blockAt: n.
+			1 to: 9 do: [ :vNum| 
+				block verifyNumber: vNum.
+				(block blockA2D includes: vNum)
+				ifTrue: [ 
+					"
+					Transcript show: 'レツミー block: ' ;show: n ; show: ' verifyNumber: '; show: vNum ;cr.
+					"
+					self letsme: sudokuBoard block: block.
+			].	
+		]
 	]
+	
 ]
 
 { #category : #'initialization - data' }
@@ -656,13 +708,15 @@ SudokuBoard >> loadFromString: aString [
 "
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logic }
 SudokuBoard >> masumeWay: sudokuBoard [
 	"
-	ブロック上のブランクセルに注目
+	マスミ方式
+	
+	ブロック上のブランクセルに注目してブランクセルに配置できない数字の配列を作る。
 	1)ブロックのゼロ以外の数字の配列を作る
-	2)セルの行インデックスに対応するボードの行のゼロ以外の数字の配列を作る
-	3)セルの列インデックスに対応するボードの列のゼロ以外の数字の配列を作る
+	2)ブランクセルの行インデックスに対応するボードの行のゼロ以外の数字の配列を作る
+	3)ブランクセルの列インデックスに対応するボードの列のゼロ以外の数字の配列を作る
 	4)1,2,3 を連結する
 	5)4をセットにして数字の重複をなくす
 	6)5の要素を数え8ならばブランクセルに入る数字が決定する
@@ -770,6 +824,18 @@ SudokuBoard >> row: rowIndex column: colIndex put: aNumber [
 	^board at: rowIndex at: colIndex put: aNumber
 ]
 
+{ #category : #logic }
+SudokuBoard >> rowColTenpai: sudokuBoard [
+	"
+	行または列の9つのセルの内8つのセルに数字が入ると残ったセルに入る数字は必然的に決まるので
+	ボード上の対応するセルにその数字をセットする。
+	"
+	1 to: 9 do: [ :i |
+		sudokuBoard columnTsumo: i.
+		sudokuBoard rowTsumo: i.
+	]
+]
+
 { #category : #'private - logics' }
 SudokuBoard >> rowSuji: aBlock [
 	"
@@ -796,6 +862,22 @@ SudokuBoard >> rowSuji: aBlock [
 ]
 
 { #category : #logic }
+SudokuBoard >> rowTsumo: rowIndex [
+	"
+	行の9つのセルの内8つのセルに数字が入ると残ったセルに入る数字は必然的に決まるので
+	ボード上の対応するセルにその数字をセットする。
+	"
+	| rowArray tempRows colIndex |
+	rowArray := self rowsAt: rowIndex.
+	tempRows := rowArray select: [ :each | each > 0 ].
+	tempRows size = 8 ifTrue: [ 
+		colIndex := rowArray indexOf: 0.
+		board at: rowIndex at: colIndex put: 45 - tempRows sum
+	].
+	^ self
+]
+
+{ #category : #logic }
 SudokuBoard >> rowsAt: rowIndex [
 	"
 	boardよりrowIndex指定した行(列配列)を返す。
@@ -806,7 +888,7 @@ SudokuBoard >> rowsAt: rowIndex [
 	
 	1 to: 9 do: [ :colIndex | result at: colIndex put: (board at: rowIndex at: colIndex)].
 	"
-	^board atRow: rowIndex
+	^ (board atRow: rowIndex) copy
 ]
 
 { #category : #'initialization - data' }
@@ -871,9 +953,11 @@ SudokuBoard >> setExample1 [
 { #category : #'sudoku - solution' }
 SudokuBoard >> solution: task [
 	"
-	si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。
-	 2024年04月07日の出問は4問全て解けた。
-	 2024年03月31日の出問は4問全て解けた。
+	 si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。completed!!
+	 2024年04月07日の初級問題中級問題は4問全て解けた。
+	 2024年03月31日の初級問題は4問全て解けた。
+	
+	 letsmeWay:メソッドを実装することでintermediateTasks at: 5 を除く4問は解決できた。
 	"
 	| sudokuBoard  message |
 	sudokuBoard := self class new.
@@ -885,14 +969,11 @@ SudokuBoard >> solution: task [
 		show: sudokuBoard;
 		cr;
 		cr.
-	9 timesRepeat: [  
-		sudokuBoard completed 
-			ifFalse: [ self blockkenWay: sudokuBoard  ].
-		sudokuBoard completed
-			ifFalse: [ self letsmeWay: sudokuBoard ].
-		
-		sudokuBoard completed 
-			ifFalse:[self masumeWay: sudokuBoard ].
+	10 timesRepeat: [  
+			self blockkenWay: sudokuBoard.
+			self rowColTenpai: sudokuBoard.
+			self masumeWay: sudokuBoard.
+			self letsmeWay: sudokuBoard.
 	].
 
 	message := ''.

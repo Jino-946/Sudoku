@@ -156,27 +156,7 @@ SudokuBoardTest >> testColumnSuji [
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testGyoMe [
-
-	| board number |
-	board := SudokuBoard new.
-	board setDummy .
-	
-	number := board row: 6 column: 7.
-	self assert:  number equals: 3.
-	
-	board row: 6 column: 7  put: 0.
-	number := board row: 6 column: 7.
-	self assert:  number equals: 0.
-	
-	board gyoMe: 6.
-	number := board row: 6 column: 7.
-	self assert:  number equals: 3.
-
-]
-
-{ #category : #tests }
-SudokuBoardTest >> testLetsMe [
+SudokuBoardTest >> testColumnTsumo [
 
 	| board number |
 	board := SudokuBoard new.
@@ -189,10 +169,42 @@ SudokuBoardTest >> testLetsMe [
 	number := board row: 3 column: 6.
 	self assert:  number equals: 0.
 	
-	board letsMe: 6.
+	board columnTsumo: 6.
 	number := board row: 3 column: 6.
 	self assert:  number equals: 8.
 
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testLetsmeBoardBlock [
+
+	| task board block|
+	task := '
+0	4	0		0	8	1		0	7	3	
+7	0	0		0	0	0		8	4	2	
+0	0	8		4	0	7		0	0	5	
+
+
+0	7	0		8	4	0		3	0	0	
+4	8	5		0	6	0		7	0	1	
+0	9	0		7	1	0		4	0	8	
+
+
+8	3	7		0	0	0		0	0	0	
+6	0	0		5	3	0		0	8	7	
+0	0	0		1	7	8		0	3	0	
+'.
+
+board := SudokuBoard new.
+board loadFromString: task.
+block := SudokuBlock
+			sudokuBoard: board 
+		    blockNumber: 8
+			verifyNumber: 5.
+			
+board letsme: board block: block.
+
+self assert: (board row: 2 column: 5) equals: 5.
 ]
 
 { #category : #tests }
@@ -379,6 +391,26 @@ SudokuBoardTest >> testRowSuji [
 	expected row: 1 column: 3 put: $X.
 	expected row: 2 column: 1 put: $X.	
 	self assert: block equals: expected.
+
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testRowTsumo [
+
+	| board number |
+	board := SudokuBoard new.
+	board setDummy .
+	
+	number := board row: 6 column: 7.
+	self assert:  number equals: 3.
+	
+	board row: 6 column: 7  put: 0.
+	number := board row: 6 column: 7.
+	self assert:  number equals: 0.
+	
+	board rowTsumo: 6.
+	number := board row: 6 column: 7.
+	self assert:  number equals: 3.
 
 ]
 
