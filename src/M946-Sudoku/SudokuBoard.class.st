@@ -276,6 +276,75 @@ SudokuBoard class >> intermediateTasks [
 )
 ]
 
+{ #category : #'sudoku - task' }
+SudokuBoard class >> intermediateTasks240409 [
+
+^ #(
+'
+000 050 000
+000 702 130
+506 004 000
+
+008 000 010
+349 000 070
+700 006 020
+
+000 080 200
+802 000 400
+000 300 050
+'
+
+'
+090 013 020
+700 200 006
+300 900 007
+
+650 000 000
+003 000 010
+080 590 000
+
+000 057 003
+000 000 000
+000 360 904
+'
+)
+]
+
+{ #category : #'sudoku - task' }
+SudokuBoard class >> intermediateTasks240410 [
+
+^ #(
+'
+060 030 005
+000 100 700
+450 000 000
+
+502 000 000
+800 603 029
+007 090 000
+
+000 006 000
+006 400 030
+000 700 490
+'
+
+'
+300 000 208
+800 069 000
+400 050 000
+
+000 700 050
+000 008 600
+050 002 400
+
+000 910 020
+080 006 007
+003 000 000
+
+'
+)
+]
+
 { #category : #'sudoku - solution' }
 SudokuBoard class >> solveTask: task [
 
@@ -562,6 +631,55 @@ example1 := '
  
 ]
 
+{ #category : #logic }
+SudokuBoard >> gyome: sudokuBoard block: block [
+	"
+	レッツミー(列見)方式の90展開バージョン -- 行見(ギョウミ)
+	
+	ボードの列の行配列に注目してブランクセルに検証数字を配置できないセルを$Xでマークする。
+	配列のブランクセルが一つになったなら配備される数字は自動的に決定する。
+	
+	1)検証するブロックに検証数字が存在する時は注目した行配列のブロックに対応するブランクセルにXを配置する。
+	2)ボードの行配列を走査してインデックスに対応するボードの列の串刺し配列を確認し検証数字が存在する時はセルにXを配置する。
+	3) 2)の終了後、行配列にブランクセルが一つの時は、ブランクセルのボード座標に検証数字をセットする。
+	"
+
+	| colCells rowCells blankCount |
+	1 to: 3 do: [ :rowIndex | 
+		rowCells := sudokuBoard rowsAt: (block rowsOfBoard at: rowIndex ).
+		
+		(rowCells includes: block verifyNumber)
+		ifFalse: [ 
+			"1)"
+			1 to: 3 do: [ :i|
+				(rowCells at: (block colsOfBoard at: i)) = 0
+				ifTrue: [ rowCells at: (block colsOfBoard at: i) put: $X ].
+			].
+			"2)"
+			1 to: 9 do: [ :j|
+				colCells := sudokuBoard colsAt: j.
+				(colCells includes: block verifyNumber)
+				ifTrue: [ rowCells at: j put: $X ]
+			].
+		    "ブランクセルを数える"
+			blankCount := 0.
+			rowCells do: [ :cell | 
+				cell = 0 ifTrue: [ blankCount := blankCount + 1 ].
+			].
+			"3)"
+			blankCount = 1
+			ifTrue: [ |cIndex|
+				cIndex := rowCells indexOf: 0.
+				sudokuBoard row: (block rowsOfBoard at: rowIndex ) column: cIndex put: block verifyNumber .
+			].
+		]				
+	].
+		
+	
+
+	
+]
+
 { #category : #comparing }
 SudokuBoard >> hash [ 
 
@@ -578,31 +696,40 @@ SudokuBoard >> initialize [
 
 { #category : #logic }
 SudokuBoard >> letsme: sudokuBoard block: block [
-
+	"
+	レッツミー(列見)方式の中核となるメソッド
+	ボードの列の串刺し配列に注目してブランクセルに検証数字を配置できないセルを$Xでマークする。
+	配列のブランクセルが一つになったなら配備される数字は自動的に決定する。
+	
+	1)検証するブロックに検証数字が存在する時は注目した列の串刺し配列のブロックに対応するブランクセルにXを配置する。
+	2)ボードの列串刺し配列を走査してインデックスに対応するボードの行配列を確認し検証数字が存在する時はセルにXを配置する。
+	3) 2)の終了後、列串刺し配列にブランクセルが一つの時は、ブランクセルのボード座標に検証数字をセットする。
+	"
 
 	| colCells rowCells blankCount |
 	1 to: 3 do: [ :colIndex | 
 		colCells := sudokuBoard colsAt: (block colsOfBoard at: colIndex ).
 		(colCells includes: block verifyNumber)
 		ifFalse: [ 
+			"1)"
 			1 to: 3 do: [ :i|
 				(colCells at: (block rowsOfBoard at: i)) = 0
 				ifTrue: [ colCells at: (block rowsOfBoard at: i) put: $X ].
 			].
+			"2)"
 			1 to: 9 do: [ :j|
 				rowCells := sudokuBoard rowsAt: j.
 				(rowCells includes: block verifyNumber)
 				ifTrue: [ colCells at: j put: $X ]
 			].
+		    "ブランクセルを数える"
 			blankCount := 0.
 			colCells do: [ :cell | 
 				cell = 0 ifTrue: [ blankCount := blankCount + 1 ].
 			].
+			"3)"
 			blankCount = 1
 			ifTrue: [ |rowIndex|
-				"
-				Transcript  show: colCells; cr.
-				"
 				rowIndex := colCells indexOf: 0.
 				sudokuBoard row: rowIndex column:  (block colsOfBoard at: colIndex ) put: block verifyNumber .
 			].
@@ -618,15 +745,14 @@ SudokuBoard >> letsme: sudokuBoard block: block [
 SudokuBoard >> letsmeWay: sudokuBoard [
 	"
 	レッツミー(列見)方式
-	ボードの列の串刺し配列に注目してブランクセルに配置できない数字の配列を作る。
+	ボードの列の串刺し配列に注目してブランクセルに検証数字を配置できないセルを$Xでマークする。
+	配列のブランクセルが一つになったなら配備される数字は自動的に決定する。
 	
-	1)検証するブロックに検証数字が存在する時は注目した列の串刺し配列(ブロック)のブランクセルにXを配置する。??
-	2)ボードの列串刺し配列を走査してブランクセルの時は行配列を確認し検証数字が存在する時はブランクセルにXを配置する。??
+	1)検証するブロックに検証数字が存在する時は注目した列の串刺し配列のブロックに対応するブランクセルにXを配置する。
+	2)ボードの列串刺し配列を走査してインデックスに対応するボードの行配列を確認し検証数字が存在する時はセルにXを配置する
 	3) 2)の終了後、列串刺し配列にブランクセルが一つの時は、ブランクセルのボード座標に検証数字をセットする。
-	
-	??:ボードのセルには確定した数字のみを配置することが出来る。実際のボードにXを配置しないこと
-      列串刺し配列をDictionaryを要素とした配列にする？	
 	"
+	
 	| block |
 	1 to: 9 do: [ :n |
 		block := sudokuBoard blockAt: n.
@@ -958,6 +1084,7 @@ SudokuBoard >> solution: task [
 	 2024年03月31日の初級問題は4問全て解けた。
 	
 	 letsmeWay:メソッドを実装することでintermediateTasks at: 5 を除く4問は解決できた。
+	 ntermediateTasks20240409の中級問題全2問は解決できた。
 	"
 	| sudokuBoard  message |
 	sudokuBoard := self class new.
@@ -974,6 +1101,7 @@ SudokuBoard >> solution: task [
 			self rowColTenpai: sudokuBoard.
 			self masumeWay: sudokuBoard.
 			self letsmeWay: sudokuBoard.
+			self gyomeWay: sudokuBoard .
 	].
 
 	message := ''.

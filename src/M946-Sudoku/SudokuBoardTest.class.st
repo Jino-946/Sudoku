@@ -176,7 +176,49 @@ SudokuBoardTest >> testColumnTsumo [
 ]
 
 { #category : #tests }
-SudokuBoardTest >> testLetsmeBoardBlock [
+SudokuBoardTest >> testGyomeBlock [
+
+
+	| task board block|
+	task := '
+5	4	0		0	8	1		0	7	3	
+7	0	0		0	5	0		8	4	2	
+0	0	8		4	0	7		0	0	5	
+
+
+0	7	0		8	4	0		3	0	0	
+4	8	5		0	6	0		7	0	1	
+0	9	0		7	1	0		4	0	8	
+
+
+8	3	7		0	0	0		5	0	0	
+6	0	0		5	3	0		0	8	7	
+0	5	0		1	7	8		0	3	0	
+'.
+
+
+board := SudokuBoard new.
+board loadFromString: task.
+block := SudokuBlock
+			sudokuBoard: board 
+		    blockNumber: 8
+			verifyNumber: 1.
+			
+board gyome: board block: block.
+
+self assert: (board row: 7 column: 8) equals: 1.
+
+
+]
+
+{ #category : #tests }
+SudokuBoardTest >> testLetsmeBlock [
+"
+task は
+SudokuBoard >> letsmeWay: sudokuBoard 実装前の
+SudokuBoard solveTask: (SudokuBoard intermediateTasks   at: 5). の実行結果
+block=8  verifyNumber=5 の時成立することを手作業で確認済み
+"
 
 	| task board block|
 	task := '
@@ -205,6 +247,8 @@ block := SudokuBlock
 board letsme: board block: block.
 
 self assert: (board row: 2 column: 5) equals: 5.
+
+
 ]
 
 { #category : #tests }
