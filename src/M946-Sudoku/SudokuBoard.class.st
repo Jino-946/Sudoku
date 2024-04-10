@@ -680,6 +680,23 @@ SudokuBoard >> gyome: sudokuBoard block: block [
 	
 ]
 
+{ #category : #logic }
+SudokuBoard >> gyomeWay: sudokuBoard [
+
+	| block |
+	1 to: 9 do: [ :n |
+		block := sudokuBoard blockAt: n.
+			1 to: 9 do: [ :vNum| 
+				block verifyNumber: vNum.
+				(block blockA2D includes: vNum)
+				ifTrue: [ 
+					self gyome: sudokuBoard block: block.
+			].	
+		]
+	]
+	
+]
+
 { #category : #comparing }
 SudokuBoard >> hash [ 
 
