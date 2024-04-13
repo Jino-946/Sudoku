@@ -452,6 +452,42 @@ SudokuBoard class >> intermediateTasks240412 [
 )
 ]
 
+{ #category : #'sudoku - task' }
+SudokuBoard class >> intermediateTasks240413 [
+
+^ #(
+'
+900 050 008
+800 007 300
+205 004 000
+
+000 000 049
+000 001 000
+006 400 002
+
+090 000 060
+004 000 027
+500 290 000
+
+'
+
+'
+000 007 608
+200 500 000
+075 004 000
+
+020 083 004
+906 000 000
+000 050 092
+
+000 000 030
+040 172 000
+009 000 040
+
+'
+)
+]
+
 { #category : #'sudoku - solution' }
 SudokuBoard class >> solveTask: task [
 
