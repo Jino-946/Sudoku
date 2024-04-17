@@ -566,7 +566,7 @@ SudokuBoard class >> solveTask: task [
 
 	| sudokuBoard |
 	sudokuBoard := self new.
-	sudokuBoard solution: task
+	sudokuBoard solve: task
 	
 "
 task := '
@@ -1310,7 +1310,7 @@ SudokuBoard >> setExample1 [
 ]
 
 { #category : #'sudoku - solution' }
-SudokuBoard >> solution: task [
+SudokuBoard >> solve: task [
 	"
 	 si-codig.netサイトのナンプレ問題より入門問題及び初級問題4問を解くことを目指す。completed!!
 	 2024年04月07日の初級問題中級問題は4問全て解けた。
