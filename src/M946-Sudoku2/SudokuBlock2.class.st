@@ -1,3 +1,16 @@
+"
+数独ボードを9つに分けた1ブロックを表現するクラス
+
+    Instance Variables
+	blockA2D:			<Array2D>  		ブロックの内部表現
+	blockNumber:		<Smalllnteger>	ブロック番号
+	colsOnBoard:		<Array>			ボード上の列
+	rowsOnBoard:		<Array>			ボード上の行
+	verifyNumber:		<SmallInteger>	検証数字
+
+
+    Implementation Points
+"
 Class {
 	#name : #SudokuBlock2,
 	#superclass : #Object,

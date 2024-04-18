@@ -1,3 +1,12 @@
+"
+数独の盤面(ボード:9X9)全体を表現するクラス
+
+    Instance Variables
+	boardA2D:		<Array2D>  ボードの内部表現
+
+
+    Implementation Points
+"
 Class {
 	#name : #SudokuBoard2,
 	#superclass : #Object,
