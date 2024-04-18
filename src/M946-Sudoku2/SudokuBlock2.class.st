@@ -3,6 +3,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'blockA2D',
+		'rowsOnBoard',
+		'colsOnBoard',
 		'blockNumber',
 		'verifyNumber'
 	],
@@ -17,8 +19,18 @@ SudokuBlock2 >> blockA2D [
 
 { #category : #accessing }
 SudokuBlock2 >> blockNumber [ 
-
+	"
+	ブロック番号を返す
+	"
 	^blockNumber 
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> colsOnBoard [
+	"
+	ブロックの列に対応するボードの列を返す
+	"
+	^colsOnBoard 
 ]
 
 { #category : #initialization }
@@ -31,7 +43,17 @@ SudokuBlock2 >> initialize [
 ]
 
 { #category : #accessing }
-SudokuBlock2 >> verifyNumber [
+SudokuBlock2 >> rowsOnBoard [
+	"
+	ブロックの行に対応するボードの行を返す
+	"
+	^rowsOnBoard 
+]
 
+{ #category : #accessing }
+SudokuBlock2 >> verifyNumber [
+	"
+	検証数字を返す
+	"
 	^verifyNumber 
 ]
