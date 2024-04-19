@@ -25,6 +25,21 @@ Class {
 	#category : #'M946-Sudoku2-Core'
 }
 
+{ #category : #creation }
+SudokuCell class >> row: rIndex column: cIndex element: elem [
+
+	| cell |
+	cell := self new.
+	cell rowIndex:  rIndex .
+	cell colIndex:  cIndex .
+	cell element: elem.
+	
+	^ cell 
+	
+
+	
+]
+
 { #category : #comparing }
 SudokuCell >> = sudokuCell [
 
@@ -32,6 +47,19 @@ SudokuCell >> = sudokuCell [
 		and: [ sudokuCell rowIndex = self rowIndex 
 			and: [ sudokuCell colIndex  = self colIndex 
 				and: [ sudokuCell element = self element  ] ] ]
+]
+
+{ #category : #'private - printing' }
+SudokuCell >> _cellAsString [
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'SudokuCell';cr;
+			nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
+			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr;
+			nextPutAll: 'element:  '; nextPutAll: element asString.
+			
+	^ aStream contents
 ]
 
 { #category : #accessing }

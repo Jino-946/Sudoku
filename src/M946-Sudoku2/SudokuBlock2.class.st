@@ -51,6 +51,28 @@ SudokuBlock2 >> = aSudokuBlock2 [
 					and: [ aSudokuBlock2 verifyNumber = self verifyNumber  ] ] ] ]
 ]
 
+{ #category : #'private - printing' }
+SudokuBlock2 >> _blockAsString [
+	"
+	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
+	"
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
+	aStream nextPutAll: '検証数字:'; nextPutAll: verifyNumber asString;cr.
+	aStream nextPutAll: '========='; cr. 
+	(1 to: blockA2D  numberOfRows)
+		do: [ :r |
+				(blockA2D  atRow: r)
+					do: [ :each | aStream print: each ]
+					separatedBy: [ aStream tab ]]
+		separatedBy: [ aStream cr].
+	aStream cr; nextPutAll: '========='.
+	
+	^aStream contents
+
+]
+
 { #category : #accessing }
 SudokuBlock2 >> blockA2D [
 
