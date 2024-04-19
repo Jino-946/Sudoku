@@ -1,12 +1,11 @@
 "
-suudoku
+数独の解法の基底クラス
 
 
     Instance Variables
-	sudokuBoard:		<Object>
+	sudokuBoard		<SudokuBoard>	パズルを解く対象の数独ボード
 
 
-    Implementation Points
 "
 Class {
 	#name : #BasicWay,
@@ -24,14 +23,14 @@ BasicWay >> blankCell [
 ]
 
 { #category : #'as yet unclassified' }
-BasicWay >> boardRow: rowIndex column: colIndex [
+BasicWay >> boardAt: rowIndex at: colIndex [
 	"
 	ボードのrowIndex,colIndex位置のセルの値を返す
 	"
 ]
 
 { #category : #'as yet unclassified' }
-BasicWay >> boardRow: rowIndex column: colIndex put: number [
+BasicWay >> boardAt: rowIndex at: colIndex put: number [
 	"
 	ボードのrowIndex,colIndex位置のセルにnumberをセットする
 	"

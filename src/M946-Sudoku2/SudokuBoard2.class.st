@@ -2,7 +2,7 @@
 数独の盤面(ボード:9X9)全体を表現するクラス
 
     Instance Variables
-	boardA2D:		<Array2D>  ボードの内部表現
+	boardA2D		<Array2D>  ボードの内部表現
 
 
     Implementation Points
@@ -41,17 +41,28 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 	| block rs cs |
 	rs := rowStart.
 	cs := colStart.
-	block := SudokuBlock new.
+	block := SudokuBlock2 new.
 
 	block rowsOnBoard
+		at: 1 put: (SudokuRow new: rs row: (self atRow: rs));
+		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
+		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
+
+	block rowIndicesOnBoard 
 		at: 1 put: rs;
 		at: 2 put: rs + 1;
-		at: 3 put: rs + 2.
+		at: 3 put: rs + 2.	
 
 	block colsOnBoard
+		at: 1 put: (SudokuColumn new: cs column: (self atColumn: cs));
+		at: 2 put: (SudokuColumn new: cs + 1 column: (self atColumn: cs + 1));
+		at: 3 put: (SudokuColumn new: cs + 2 column: (self atColumn: cs + 2)).
+
+	block colIndicesOnBoard 
 		at: 1 put: cs;
 		at: 2 put: cs + 1;
 		at: 3 put: cs + 2.
+
 
 	block blockA2D
 		at: 1 at: 1 put: (boardA2D  at: rs at: cs);
@@ -110,10 +121,10 @@ SudokuBoard2 >> atBlock: blockNumber [
 	9 1 2  3 4 5  6 7 8	
 	
 	数独ボード(9X9)とblockNumberの位置関係	
-	ブロック 
-	 1  2  3
-	 4  5  6
-	 7  8  9	
+	ブロック(ナンバー)
+	 B1  B2  B3
+	 B4  B5  B6
+	 B7  B8  B9	
 	"
 
 	blockNumber = 1 ifTrue: [
@@ -146,7 +157,7 @@ SudokuBoard2 >> atColumn: colIndex [
 	boardよりcolIndexで指定した列を返す。
 	"
 
-	^(boardA2D atColumn: colIndex) copy
+	^ boardA2D atColumn: colIndex
 ]
 
 { #category : #accessing }
@@ -155,7 +166,7 @@ SudokuBoard2 >> atRow: rowIndex [
 	boardよりrowIndexで指定した行を返す。
 	"
 
-	^ (boardA2D  atRow: rowIndex) copy
+	^ boardA2D  atRow: rowIndex
 ]
 
 { #category : #accessing }
@@ -175,6 +186,41 @@ SudokuBoard2 >> initialize [
 
 	super initialize .
 	boardA2D  := Array2D new:9 element: 0.
+]
+
+{ #category : #'initialization - data' }
+SudokuBoard2 >> loadFromString: aString [
+	"
+	数独問題(String)を数独ボードデータへ(Array2D)へコピーする。
+	aString は可読性を高めるためにスペース,タブ,改行を自由に使うことができる。
+	"
+	| i j |
+
+	i := 0.
+	j := 0.
+	
+	aString asCamelCase do: [ :char |
+		boardA2D  at: i // 9 + 1 at: j % 9 + 1 put: char digitValue .	
+		i := i + 1.
+		j := j + 1
+	].
+
+
+"
+  aString := '
+  1 9 7  0 0 4  2 0 5
+  6 8 0  5 3 0  9 0 0
+  5 0 3  0 7 2  1 6 8
+	
+  0 6 0  4 0 9  7 0 2 
+  0 7 5  0 1 0  6 8 0
+  2 0 9  8 0 7  0 4 0
+	
+  7 5 6  3 2 0  4 0 1
+  0 0 1  0 4 5  0 2 6 
+  8 0 4  1 0 0  3 5 7
+'
+"
 ]
 
 { #category : #printing }
