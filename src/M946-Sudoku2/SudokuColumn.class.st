@@ -78,6 +78,12 @@ SudokuColumn >> hash [
 	^ (colIndex hash bitXor:  column hash)
 ]
 
+{ #category : #testing }
+SudokuColumn >> includes: anObject [
+
+	^ column includes: anObject 
+]
+
 { #category : #printing }
 SudokuColumn >> printOn: aStream [
 

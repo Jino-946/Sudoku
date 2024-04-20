@@ -56,6 +56,12 @@ SudokuRow >> hash [
 	^ (rowIndex hash bitXor: row hash)
 ]
 
+{ #category : #testing }
+SudokuRow >> includes: anObject [
+
+	^ row includes: anObject 
+]
+
 { #category : #printing }
 SudokuRow >> printOn: aStream [
 
