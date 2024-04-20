@@ -49,13 +49,12 @@ SudokuCell >> = sudokuCell [
 				and: [ sudokuCell element = self element  ] ] ]
 ]
 
-{ #category : #'private - printing' }
-SudokuCell >> _cellAsString [
+{ #category : #converting }
+SudokuCell >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'SudokuCell';cr;
-			nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
+	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
 			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr;
 			nextPutAll: 'element:  '; nextPutAll: element asString.
 			
@@ -96,7 +95,7 @@ SudokuCell >> hash [
 { #category : #printing }
 SudokuCell >> printOn: aStream [
 
-	aStream nextPutAll: self _cellAsString; cr.
+	aStream nextPutAll: self asString; cr.
 ]
 
 { #category : #accessing }

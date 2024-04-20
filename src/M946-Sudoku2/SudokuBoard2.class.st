@@ -48,20 +48,12 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
 		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
 
-	block rowIndicesOnBoard 
-		at: 1 put: rs;
-		at: 2 put: rs + 1;
-		at: 3 put: rs + 2.	
+
 
 	block colsOnBoard
 		at: 1 put: (SudokuColumn new: cs column: (self atColumn: cs));
 		at: 2 put: (SudokuColumn new: cs + 1 column: (self atColumn: cs + 1));
 		at: 3 put: (SudokuColumn new: cs + 2 column: (self atColumn: cs + 2)).
-
-	block colIndicesOnBoard 
-		at: 1 put: cs;
-		at: 2 put: cs + 1;
-		at: 3 put: cs + 2.
 
 
 	block blockA2D
@@ -79,15 +71,11 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 ]
 
 { #category : #'private - helpers' }
-SudokuBoard2 >> _boardAsString [
-	"
-	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
-	"
+SudokuBoard2 >> asString [
+
 	| aStream separateIndices |
 	separateIndices := #( 3 6 ).
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'SUDOKU Board'; cr.
-	aStream nextPutAll: '---------------------------------------';cr.
 	1 to: 9 do: [ :rowIndex |
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	
@@ -223,8 +211,18 @@ SudokuBoard2 >> loadFromString: aString [
 "
 ]
 
+{ #category : #accessing }
+SudokuBoard2 >> map:  aSudokuCell [
+	"
+	sudokuCellをボードにマッピングする。
+	"
+	boardA2D at: aSudokuCell rowIndex  at: aSudokuCell colIndex  put: aSudokuCell element 
+
+	
+]
+
 { #category : #printing }
 SudokuBoard2 >> printOn: aStream [
 
-	aStream nextPutAll: self _boardAsString 
+	aStream nextPutAll: self asString 
 ]

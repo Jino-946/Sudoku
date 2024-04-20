@@ -29,6 +29,24 @@ SudokuColumn class >> new: index column: anArray [
 	^sudokuColumn 
 ]
 
+{ #category : #comparing }
+SudokuColumn >> = sudokuColumn [
+
+	^ sudokuColumn class == self class 
+		and: [ sudokuColumn colIndex = self colIndex 
+			and: [ sudokuColumn column = self column ]  ]
+]
+
+{ #category : #converting }
+SudokuColumn >> asString [
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr;
+			 nextPutAll: column asString. 
+	^ aStream contents 
+]
+
 { #category : #accessing }
 SudokuColumn >> colIndex [
 
@@ -51,7 +69,7 @@ SudokuColumn >> column [
 SudokuColumn >> column: anArray [
 
 
-	column := anArray 
+	column := anArray copy.
 ]
 
 { #category : #comparing }
@@ -60,17 +78,43 @@ SudokuColumn >> hash [
 	^ (colIndex hash bitXor:  column hash)
 ]
 
+{ #category : #printing }
+SudokuColumn >> printOn: aStream [
+
+	aStream nextPutAll: self asString; cr.
+]
+
 { #category : #logic }
 SudokuColumn >> tenpai [ 
 	"
-	列にブランクセル１つだけの時はブランクセルの位置をボード座標に変換して返す。
+	列にブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す。
 	でなければ0を返す。
 	"
-	| result |
-	result := 0.
+	| cell |
+	cell := 0.
 	((column select: [ :val | val = 0 ]) size) = 1
-	ifTrue: [ result := SudokuCell row: (column indexOf: 0) column: colIndex element: 0 ].
+	ifTrue: [ cell := SudokuCell row: (column indexOf: 0) column: colIndex element: 0 ].
 	
-	^ result
+	^ cell
 	
+]
+
+{ #category : #logic }
+SudokuColumn >> tsumo [
+    "
+    Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
+    "
+	| cell array shortOfNumber |
+	cell := self tenpai.
+	cell class = SudokuCell 
+	ifTrue: [ 
+		array := column select: [ :e | 
+					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
+		array asSet size = 8
+		ifTrue: [ 
+			shortOfNumber := 45 - array sum.
+			cell element: shortOfNumber ]
+	].
+
+	^ cell
 ]

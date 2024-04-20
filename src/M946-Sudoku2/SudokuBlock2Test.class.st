@@ -5,6 +5,79 @@ Class {
 }
 
 { #category : #tests }
+SudokuBlock2Test >> testColsOnBoard [
+
+	| board block cols task column |
+	
+	task := '
+9	0	6		8	2	4		3	5	0	
+0	1	2		0	3	0		0	0	6	
+5	0	3		9	6	0		2	8	7	
+
+
+2	9	1		3	0	0		7	6	0	
+0	0	0		0	4	9		8	0	3	
+3	8	0		0	0	0		0	0	0	
+
+
+1	0	0		4	9	0		0	0	0	
+6	2	0		1	0	0		0	0	5	
+0	5	8		0	0	0		0	0	9		
+	'.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board atBlock: 3.
+	cols := block colsOnBoard .
+	
+	column := SudokuColumn new.
+	column colIndex: 7;
+			column: #(3 0 2 7 8 0 0 0 0).			
+	self assert: (cols at: 1) equals: column.
+ 
+	column colIndex: 9;
+			column: #(0 6 7 0 3 0 0 5 9).			
+	self assert: (cols at: 3) equals: column.
+	
+	
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testRowsOnBoard [
+
+	| board block rows row task|
+	
+	task := '
+9	0	6		8	2	4		3	5	0	
+0	1	2		0	3	0		0	0	6	
+5	0	3		9	6	0		2	8	7	
+
+
+2	9	1		3	0	0		7	6	0	
+0	0	0		0	4	9		8	0	3	
+3	8	0		0	0	0		0	0	0	
+
+
+1	0	0		4	9	0		0	0	0	
+6	2	0		1	0	0		0	0	5	
+0	5	8		0	0	0		0	0	9		
+	'.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board atBlock: 7.
+	rows := block rowsOnBoard .
+	
+	row := SudokuRow new.
+	row rowIndex: 8;
+			row: #(6 2 0 1 0 0 0 0 5).	
+						
+	self assert: (rows at: 2) equals: row.
+ 
+]
+
+{ #category : #tests }
 SudokuBlock2Test >> testTenpai [ 
 
 	| board block expected data|
@@ -26,14 +99,51 @@ SudokuBlock2Test >> testTenpai [
 	
 	'.
 	
-board := SudokuBoard2 new.
-board loadFromString: data.
-block := board atBlock: 5.
+	board := SudokuBoard2 new.
+	board loadFromString: data.
 
-expected := SudokuCell row: 6 column: 5 element: 0.
-self assert: block tenpai equals: expected.
+	"ブロック5のテンパイを確認する"
+	block := board atBlock: 5.
+	expected := SudokuCell row: 6 column: 5 element: 0.
+	self assert: block tenpai equals: expected.
 
-block := board atBlock: 9.
-expected := SudokuCell row: 8 column: 9  element: 0.
-self assert: block tenpai equals: expected .
+    "ブロック9のテンパイを確認する"
+	block := board atBlock: 9.
+	expected := SudokuCell row: 8 column: 9  element: 0.
+	self assert: block tenpai equals: expected .
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testTsumo [ 
+
+	| task board block cell |
+	task := '
+9	7	6		8	2	4		3	5	1	
+8	1	2		5	3	7		9	4	6	
+5	4	3		9	6	1		2	8	7	
+
+
+2	9	1		3	5	8		7	6	4	
+0	6	5		2	4	9		8	1	3	
+3	8	4		7	1	6		5	9	2	
+
+
+1	3	7		4	0	5		6	2	8	
+6	2	9		1	8	3		4	7	5	
+4	5	8		6	7	2		1	3	9		
+	'.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	"ブロック4のツモを確認する"
+	block := board atBlock: 4.
+	cell := block tsumo.
+	self assert: cell equals: (SudokuCell row: 5 column: 1 element: 7).
+	
+	"ブロック8のツモを確認する"
+	block := board atBlock: 8.
+	cell := block tsumo.
+	self assert: cell equals: (SudokuCell row: 7 column: 5 element: 9)
+	
 ]

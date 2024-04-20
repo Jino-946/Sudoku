@@ -6,8 +6,6 @@
 	blockNumber			<Smalllnteger>	ブロック番号
 	colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
 	rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
-	colIndicesOnBoard	<Array>			ブロックの列インデックスに対応するボードの列インデックス
-	rowIndicesOnBoard	<Array>			ブロックの行インデックスに対応するボードの行インデックス
 	verifyNumber		<SmallInteger>	検証数字
 
 
@@ -19,8 +17,6 @@ Class {
 		'blockA2D',
 		'rowsOnBoard',
 		'colsOnBoard',
-		'rowIndicesOnBoard',
-		'colIndicesOnBoard',
 		'blockNumber',
 		'verifyNumber'
 	],
@@ -52,10 +48,8 @@ SudokuBlock2 >> = aSudokuBlock2 [
 ]
 
 { #category : #'private - printing' }
-SudokuBlock2 >> _blockAsString [
-	"
-	Array2D >> printOn: による表示乱れを解消する為のヘルパーメソッド	
-	"
+SudokuBlock2 >> asString [
+
 	| aStream |
 	aStream := ReadWriteStream on: String new.
 	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
@@ -94,12 +88,6 @@ SudokuBlock2 >> blockNumber: aNumber [
 ]
 
 { #category : #accessing }
-SudokuBlock2 >> colIndicesOnBoard [
-
-	^colIndicesOnBoard 
-]
-
-{ #category : #accessing }
 SudokuBlock2 >> colsOnBoard [
 	"
 	ブロックの列に対応するボードの列を返す
@@ -122,8 +110,6 @@ SudokuBlock2 >> initialize [
 	blockA2D := Array2D new:  3 element: 0.
 	colsOnBoard := Array new: 3.
 	rowsOnBoard := Array new: 3.
-	colIndicesOnBoard := Array braceWith: 0 with:0  with: 0.
-	rowIndicesOnBoard := Array braceWith: 0 with:0  with: 0.
 	verifyNumber := 0.
 	
 ]
@@ -132,18 +118,7 @@ SudokuBlock2 >> initialize [
 SudokuBlock2 >> printOn: aStream [
 
 	aStream
-		nextPutAll: self _blockAsString; cr;
-		nextPutAll: 'row indices on board: ';
-		nextPutAll: rowIndicesOnBoard    asString;cr;
-		nextPutAll: 'col indices on board: ';
-		nextPutAll: colIndicesOnBoard   asString
-
-]
-
-{ #category : #accessing }
-SudokuBlock2 >> rowIndicesOnBoard [
-
-	^rowIndicesOnBoard 
+		nextPutAll: self asString; cr.
 ]
 
 { #category : #accessing }
@@ -157,23 +132,43 @@ SudokuBlock2 >> rowsOnBoard [
 { #category : #logic }
 SudokuBlock2 >> tenpai [ 
 	"
-	ブロックにブランクセル１つだけの時はブランクセルの位置をボード座標に変換して返す。
+	ブロックにブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す。
 	でなければ0を返す。
 	"
-	| result array |
-	result := 0.
+	| cell array |
+	cell := 0.
 	array := blockA2D asArray.
 	(array select: [ :val | val = 0 ]) size = 1
 	ifTrue: [ | blankIndex ri ci | 
 		blankIndex := array indexOf: 0 .
 		ri := (blankIndex - 1) // 3.
 		ci := (blankIndex - 1) % 3.
-		result := SudokuCell 
-			row: (rowIndicesOnBoard at: ri + 1) column: (colIndicesOnBoard at: ci + 1 ) element: 0.
+		cell := SudokuCell 
+			row: (rowsOnBoard at: ri + 1) rowIndex column: (colsOnBoard at: ci + 1 ) colIndex  element: 0.
 	].
 	
-	^ result
+	^ cell
 	
+]
+
+{ #category : #logic }
+SudokuBlock2 >> tsumo [
+    "
+    Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
+    "
+	| cell array shortOfNumber |
+	cell := self tenpai.
+	cell class = SudokuCell 
+	ifTrue: [ 
+		array := blockA2D asArray select: [ :e | 
+					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
+		array asSet size = 8
+		ifTrue: [ 
+			shortOfNumber := 45 - array sum.
+			cell element: shortOfNumber ]
+	].
+
+	^ cell
 ]
 
 { #category : #accessing }
@@ -182,4 +177,10 @@ SudokuBlock2 >> verifyNumber [
 	検証数字を返す
 	"
 	^verifyNumber 
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> verifyNumber: aNumber [
+
+	verifyNumber := aNumber
 ]
