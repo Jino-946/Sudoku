@@ -37,6 +37,12 @@ BasicWay >> boardAt: rowIndex at: colIndex put: number [
 ]
 
 { #category : #accessing }
+BasicWay >> sudokuBoard [
+
+	^sudokuBoard 
+]
+
+{ #category : #accessing }
 BasicWay >> sudokuBoard: aBoard [
 
 	sudokuBoard := aBoard 
