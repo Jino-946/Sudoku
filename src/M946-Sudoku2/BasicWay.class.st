@@ -16,6 +16,15 @@ Class {
 	#category : #'M946-Sudoku2-Core'
 }
 
+{ #category : #'instance creation' }
+BasicWay class >> new: sudokuBoard [
+
+	| way |
+	way := self new.
+	way sudokuBoard: sudokuBoard .
+	^ way
+]
+
 { #category : #'private - helpers' }
 BasicWay >> blankCell [ 
 

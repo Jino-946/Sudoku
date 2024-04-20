@@ -32,8 +32,9 @@ SudokuBlock2 class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 
 	"
 	| block |
-	block := board blockAt: bNum.
+	block := board atBlock: bNum.
 	block verifyNumber: vNum.
+	
 	^ block
 ]
 
@@ -95,6 +96,19 @@ SudokuBlock2 >> colsOnBoard [
 	^colsOnBoard 
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> completed [ 
+    "
+    ブロックの全てのセルが1-9の数字で埋まりセルの合計が45の時trueを返す
+    "
+	|array|
+	array := blockA2D asArray select: [ :num |
+		num class == SmallInteger and: [ num between: 1 and: 9 ].
+	].
+	^ array size = 9
+		and: [ array sum = 45 ]
+]
+
 { #category : #comparing }
 SudokuBlock2 >> hash [ 
 	^(((( blockA2D hash bitXor: rowsOnBoard hash )
@@ -119,6 +133,18 @@ SudokuBlock2 >> printOn: aStream [
 
 	aStream
 		nextPutAll: self asString; cr.
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> row: rIndex column: cIndex [
+
+	^blockA2D at: rIndex at: cIndex 
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> row: rIndex column: cIndex put: elem [
+
+	blockA2D at: rIndex at: cIndex put: elem
 ]
 
 { #category : #accessing }
