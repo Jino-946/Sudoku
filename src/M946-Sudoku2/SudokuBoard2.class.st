@@ -70,7 +70,7 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 	^ block
 ]
 
-{ #category : #'private - helpers' }
+{ #category : #'private - printing' }
 SudokuBoard2 >> asString [
 
 	| aStream separateIndices |
