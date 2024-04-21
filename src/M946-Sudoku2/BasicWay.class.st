@@ -42,3 +42,16 @@ BasicWay >> sudokuBoard: aBoard [
 
 	sudokuBoard := aBoard 
 ]
+
+{ #category : #creation }
+BasicWay >> sudokuColumnAt: colIndex [
+
+	^ SudokuColumn new: colIndex column: (sudokuBoard atColumn: colIndex) 
+	
+]
+
+{ #category : #accessing }
+BasicWay >> sudokuRowAt: rowIndex [
+
+	^SudokuRow new: rowIndex row: (sudokuBoard atRow: rowIndex)
+]
