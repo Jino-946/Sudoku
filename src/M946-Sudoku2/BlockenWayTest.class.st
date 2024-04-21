@@ -108,7 +108,7 @@ BlockenWayTest >> testRowSuji [
 { #category : #tests }
 BlockenWayTest >> testSujiYomi [ 
 
-	|task board block blockenWay  exBoard|
+	|task board block blockenWay cell exBoard|
 	task := '
 1 9 7  0 0 4  2 0 5
 6 8 0  5 3 0  9 0 0 
@@ -131,7 +131,8 @@ BlockenWayTest >> testSujiYomi [
 	
 	"Test 1"
 	block := SudokuBlock2 sudokuBoard: board  blockNumber: 5 verifyNumber: 2.
-	blockenWay sujiYomi: block.
+	cell := blockenWay sujiYomi: block.
+	board map: cell.
 		
 	exBoard := SudokuBoard2 new.
 	exBoard loadFromString: task.
@@ -139,20 +140,14 @@ BlockenWayTest >> testSujiYomi [
 
 	self assert: board  equals: exBoard .
 	
-"
+	"Test 2"
+	
 	block := SudokuBlock2 sudokuBoard: board  blockNumber: 5 verifyNumber: 3.
-	blockenWay  rowSuji: block.
-	exBlock  := SudokuBlock2 sudokuBoard: board  blockNumber: 5 verifyNumber: 3.
+	cell := blockenWay  sujiYomi: block.
+	board map: cell.
 	
-	self assert: block equals: exBlock .
-
+	exBoard boardA2D at: 5 at: 6 put: block verifyNumber.
 	
-	block := SudokuBlock2 sudokuBoard: board  blockNumber: 8 verifyNumber: 6.
-	blockenWay  rowSuji: block.
-	exBlock  := SudokuBlock2 sudokuBoard: board  blockNumber: 8 verifyNumber: 6.
-	exBlock row: 1 column: 3 put: $X.
-	exBlock  row: 2 column: 1 put: $X.
+	self assert: board equals: exBoard.
 	
-	self assert: block equals: exBlock .
-"
 ]

@@ -76,6 +76,7 @@ SudokuBoard2 >> asString [
 	| aStream separateIndices |
 	separateIndices := #( 3 6 ).
 	aStream := ReadWriteStream on: String new.
+	aStream cr.
 	1 to: 9 do: [ :rowIndex |
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	

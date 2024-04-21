@@ -31,20 +31,6 @@ BasicWay >> blankCell [
 	^0
 ]
 
-{ #category : #'as yet unclassified' }
-BasicWay >> boardAt: rowIndex at: colIndex [
-	"
-	ボードのrowIndex,colIndex位置のセルの値を返す
-	"
-]
-
-{ #category : #'as yet unclassified' }
-BasicWay >> boardAt: rowIndex at: colIndex put: number [
-	"
-	ボードのrowIndex,colIndex位置のセルにnumberをセットする
-	"
-]
-
 { #category : #accessing }
 BasicWay >> sudokuBoard [
 

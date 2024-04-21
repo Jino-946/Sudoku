@@ -8,6 +8,13 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#BlockenWay #example #false)) #'2024-04-21T13:13:16.105442+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1FalsePositive [
 
 	<ignoreForCoverage>

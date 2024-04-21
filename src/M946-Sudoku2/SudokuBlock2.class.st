@@ -105,7 +105,7 @@ SudokuBlock2 >> completed [
 	array := blockA2D asArray select: [ :num |
 		num class == SmallInteger and: [ num between: 1 and: 9 ].
 	].
-	^ array size = 9
+	^ array asSet size = 9
 		and: [ array sum = 45 ]
 ]
 
@@ -115,6 +115,12 @@ SudokuBlock2 >> hash [
 			bitXor: colsOnBoard hash )
 				bitXor: blockNumber hash )
 					bitXor: verifyNumber hash)
+]
+
+{ #category : #testing }
+SudokuBlock2 >> includesVerifyNumber [
+
+	^blockA2D asArray includes: verifyNumber
 ]
 
 { #category : #initialization }
@@ -170,7 +176,7 @@ SudokuBlock2 >> tenpai [
 		ri := (blankIndex - 1) // 3.
 		ci := (blankIndex - 1) % 3.
 		cell := SudokuCell 
-			row: (rowsOnBoard at: ri + 1) rowIndex column: (colsOnBoard at: ci + 1 ) colIndex  element: 0.
+			row: (rowsOnBoard at: ri + 1) rowIndex column: (colsOnBoard at: ci + 1 ) colIndex  element: verifyNumber .
 	].
 	
 	^ cell
