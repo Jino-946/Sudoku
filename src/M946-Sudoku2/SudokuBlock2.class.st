@@ -69,6 +69,27 @@ SudokuBlock2 >> asString [
 ]
 
 { #category : #accessing }
+SudokuBlock2 >> blankCellsAsArray [
+    "
+    ブロックのブランクセルをSudokuCellの配列にして返す
+    "
+    | array index |
+    array := Array new: 9.
+    index := 1.
+    1 to: 3 do: [ :i|
+        1 to: 3 do: [ :j|
+            (blockA2D at: i at: j) = 0
+            ifTrue: [ array at: index 
+						put: (SudokuCell row: (rowsOnBoard at: i) rowIndex column: ( colsOnBoard at: j ) colIndex  element: 0)
+			].
+            index := index + 1.
+        ]
+    ].
+
+    ^ array select: [ :each | each class = SudokuCell ]
+]
+
+{ #category : #accessing }
 SudokuBlock2 >> blockA2D [
 
 	^ blockA2D 
@@ -86,6 +107,24 @@ SudokuBlock2 >> blockNumber [
 SudokuBlock2 >> blockNumber: aNumber [
 
 	blockNumber := aNumber
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> cellOf: number [
+	"
+	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
+	"
+	| index cell ri ci|
+	cell := 0.
+	index := blockA2D asArray indexOf: number.
+	index = 0
+	ifFalse: [ 
+		ri := (index - 1) // 3 + 1.
+		ci := (index - 1) % 3 + 1.
+		cell := SudokuCell row: (rowsOnBoard at: ri) rowIndex column: (colsOnBoard at: ci) colIndex  element: number.
+	].
+	
+	^cell
 ]
 
 { #category : #accessing }

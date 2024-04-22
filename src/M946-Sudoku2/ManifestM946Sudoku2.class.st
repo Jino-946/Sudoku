@@ -20,3 +20,10 @@ ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1
 	<ignoreForCoverage>
 	^ #(#(#(#RGPackageDefinition #(#'M946-Sudoku2')) #'2024-04-20T20:34:12.520286+09:00') )
 ]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleToDoWithIncrementRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBlock2 #blankCellsAsArray #false)) #'2024-04-22T11:09:08.16891+09:00') )
+]

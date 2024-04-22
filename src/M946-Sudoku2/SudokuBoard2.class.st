@@ -164,6 +164,18 @@ SudokuBoard2 >> boardA2D [
 	^ boardA2D 
 ]
 
+{ #category : #logic }
+SudokuBoard2 >> completed [
+	"
+	数独問題を解けたか判定する
+	"
+	1 to: 9 do: [ :blockNumber | 
+		(self atBlock: blockNumber) completed 
+		ifFalse: [ ^false ]
+	].
+	^ true
+]
+
 { #category : #comparing }
 SudokuBoard2 >> hash [ 
 

@@ -4,9 +4,9 @@
 
 Instance Variables
 - sudokuBoard          <SudokuBoard> パズルを解く対象の数独ボード
-- relatedRowBlocks     <Dictionary> 垂直方向で関連するブロック [1-4-7][2-5-8][3-6-9]
+- relatedVertBlocks    <Dictionary> 垂直方向で関連するブロック [1-4-7][2-5-8][3-6-9]
                                     ブロック番号をキーとし他の2のブロック番号の配列を値とするDictionary
-- relatedColumnBlocks  <Dictionary> 水平方向で関連するブロック [1-2-3][4-5-6][7-8-9]
+- relatedHorBlocks     <Dictionary> 水平方向で関連するブロック [1-2-3][4-5-6][7-8-9]
                                     ブロック番号をキーとし他の2のブロック番号の配列を値とするDictionary
 
 "
@@ -15,8 +15,8 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'sudokuBoard',
-		'relatedRowBlocks',
-		'relatedColumnBlocks'
+		'relatedVertBlocks',
+		'relatedHorBlocks'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
@@ -39,8 +39,8 @@ NikoliWay >> blankCell [
 { #category : #initialization }
 NikoliWay >> initialize [ 
 	
-	relatedRowBlocks := Dictionary new.
-	relatedRowBlocks  at: 1 put: #(4 7);
+	relatedVertBlocks := Dictionary new.
+	relatedVertBlocks  at: 1 put: #(4 7);
 						at: 4 put: #(1 7);
 						at: 7 put: #(1 4);
 						at: 2 put: #(5 8);
@@ -50,8 +50,8 @@ NikoliWay >> initialize [
 						at: 6 put: #(3 9);
 						at: 9 put: #(3 6).
 						
-	relatedColumnBlocks := Dictionary new.
-	relatedColumnBlocks   at: 1 put: #(2 3);
+	relatedHorBlocks := Dictionary new.
+	relatedHorBlocks   at: 1 put: #(2 3);
 							at: 2 put: #(1 3);
 							at: 3 put: #(1 2);
 							at: 4 put: #(5 6);
