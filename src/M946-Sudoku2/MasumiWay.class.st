@@ -10,11 +10,63 @@ Class {
 	#category : #'M946-Sudoku2-Core'
 }
 
+{ #category : #examples }
+MasumiWay >> example [
+	"
+	一度のsolveの実行ではtaskを解決できないが二度実行することで解決できた
+	"
+	| task board masumiWay |
+	task := '
+1 9 7  0 0 4  2 0 5
+6 8 0  5 3 0  9 0 0 
+5 0 3  0 7 2  1 6 8
+	
+0 6 0  4 0 9  7 0 2
+0 7 5  0 1 0  6 8 0 
+2 0 9  8 0 7  0 4 0
+	
+7 5 6  3 2 0  4 0 1
+0 0 1  0 4 5  0 2 6
+8 0 4  1 0 0  3 5 7
+
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+
+
+
+	masumiWay := self class new: board.
+	masumiWay solve; solve.
+
+	board completed .  "=> true"
+
+]
+
 { #category : #logic }
 MasumiWay >> solve [
+	"
+	ブロックのブランクセルの一つに注目する。
 
-	| block |
-	1 to: 9 do: [ :n| | blankCells blockNumbers rowNumbers colNumbers set |
+	ブロックの0以外の数の配列を作る。
+	注目したブランクセルに直交する行と列の0以外の数の配列を作る。
+	3つの配列を連結し、重複を取り除く。
+	配列のサイズが8の時はブランクセルに配置する数は決定するので
+	対応するボードのセルにマップする。
+	
+	一時変数
+	block: 			検証するブロック
+	blankCell:		ブロックのブランクセルの配列(SudokuCell)
+	blockNumbers:	ブロックの数の配列(SmallInteger)
+	rowNumbers:		ブランクセルに直交する行における数の配列(SmallInteger)
+	colNumbers:		ブランクセルに直交する列における数の配列(SmallInteger)
+	set: 			重複を取り除くためのSet
+	
+	rowOnBoard:		ブランクセルに直交するボード行(SurokuRow)
+	rowOnBoard:		ブランクセルに直交するボード列(SurokuColumn)
+	"
+	| block blankCells blockNumbers rowNumbers colNumbers set |
+	1 to: 9 do: [ :n| ||
 		block := sudokuBoard atBlock: n.
 		blankCells := block blankCellsAsArray .
 		blockNumbers := block blockA2D asArray select: [ :num| num > 0 ].
