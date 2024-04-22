@@ -1,5 +1,5 @@
 "
-数独の解法の基底クラス
+ニコリのサイトで紹介されている[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-content/uploads/2023/02/sd41_rule.pdf)を実装する基底クラス
 
 
 Instance Variables
@@ -11,7 +11,7 @@ Instance Variables
 
 "
 Class {
-	#name : #BasicWay,
+	#name : #NikoliWay,
 	#superclass : #Object,
 	#instVars : [
 		'sudokuBoard',
@@ -22,7 +22,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-BasicWay class >> new: sudokuBoard [
+NikoliWay class >> new: sudokuBoard [
 
 	| way |
 	way := self new.
@@ -31,13 +31,13 @@ BasicWay class >> new: sudokuBoard [
 ]
 
 { #category : #'private - helpers' }
-BasicWay >> blankCell [ 
+NikoliWay >> blankCell [ 
 
 	^0
 ]
 
 { #category : #initialization }
-BasicWay >> initialize [ 
+NikoliWay >> initialize [ 
 	
 	relatedRowBlocks := Dictionary new.
 	relatedRowBlocks  at: 1 put: #(4 7);
@@ -65,26 +65,26 @@ BasicWay >> initialize [
 ]
 
 { #category : #accessing }
-BasicWay >> sudokuBoard [
+NikoliWay >> sudokuBoard [
 
 	^sudokuBoard 
 ]
 
 { #category : #accessing }
-BasicWay >> sudokuBoard: aBoard [
+NikoliWay >> sudokuBoard: aBoard [
 
 	sudokuBoard := aBoard 
 ]
 
 { #category : #creation }
-BasicWay >> sudokuColumnAt: colIndex [
+NikoliWay >> sudokuColumnAt: colIndex [
 
 	^ SudokuColumn new: colIndex column: (sudokuBoard atColumn: colIndex) 
 	
 ]
 
 { #category : #accessing }
-BasicWay >> sudokuRowAt: rowIndex [
+NikoliWay >> sudokuRowAt: rowIndex [
 
 	^SudokuRow new: rowIndex row: (sudokuBoard atRow: rowIndex)
 ]

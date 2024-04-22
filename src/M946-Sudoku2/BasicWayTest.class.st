@@ -24,7 +24,7 @@ BasicWayTest >> testSudokuColumnAt [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	basicWay := BasicWay new: board .
+	basicWay := NikoliWay new: board .
 	
 	sudokuColumn := basicWay sudokuColumnAt: 8.
 	array := #(0 0 6  0 8 4  0 2 5).
@@ -54,7 +54,7 @@ BasicWayTest >> testSudokuRowAt [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	basicWay := BasicWay new: board .
+	basicWay := NikoliWay new: board .
 	
 	sudokuRow := basicWay sudokuRowAt: 5.
 	array := #(0 7 5  0 1 0  6 8 0).

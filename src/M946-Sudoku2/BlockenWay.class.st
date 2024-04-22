@@ -1,7 +1,7 @@
 "
 ブロッケン方式を用い数独問題を解決する。
 
-ブロッケン方式とは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-content/uploads/2023/02/sd41_rule.pdf)で紹介されている「考え方①」の実装です。
+BlockenWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-content/uploads/2023/02/sd41_rule.pdf)で紹介されている「考え方①」の実装です。
 
 [使い方]
 BlockenWay >> example を参照してください。
@@ -9,7 +9,7 @@ BlockenWay >> example を参照してください。
 "
 Class {
 	#name : #BlockenWay,
-	#superclass : #BasicWay,
+	#superclass : #NikoliWay,
 	#category : #'M946-Sudoku2-Core'
 }
 
