@@ -7,7 +7,7 @@ LetsmeWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-cont
 Class {
 	#name : #GyomeWay,
 	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Core'
+	#category : #'M946-Sudoku2-Solution'
 }
 
 { #category : #logic }
@@ -17,41 +17,27 @@ GyomeWay >> gyome: block [
 	ブロックのセルが含まれるSudokuColumnを検査し、verifyNumberを
 	置くことが出来る時はSudokuBoardにマップする。	
 	"
+
 	| column row cell |
 	1 to: 3 do: [ :ri |
-		row := block rowsOnBoard at: ri . "<- aSudokuRow"
-		(row includes: block verifyNumber)
-		ifFalse: [
-			"verifyNumberが含まれるブロックを検証の対象としているので"
-			"ブロック内の列についてはブランクセルを全てマークすることができる"
-			1 to: 3 do: [ :i|
-				(row  at: (block colIndexOnBoard: i)) = 0
-				ifTrue: [ row  at: (block colIndexOnBoard: i)  put: $X ]
-			].
+		row := block rowsOnBoard at: ri. "<- aSudokuRow"
+		(row includes: block verifyNumber) ifFalse: [ "verifyNumberが含まれるブロックを検証の対象としているので""ブロック内の列についてはブランクセルを全てマークすることができる"
+			1 to: 3 do: [ :i |
+				(row at: (block colIndexOnBoard: i)) = 0 ifTrue: [
+					row at: (block colIndexOnBoard: i) put: $X ] ].
 
 			"ブロック内の列もスキャンしているがブロック内はマーク済みのため影響はない"
-			1 to: 9 do: [ :i|
-				column := sudokuBoard atColumn:  i. "<- anArray(SmallInteger)"
-				(column includes: block verifyNumber)
-				ifTrue: [ 
-					(row at: i) = 0
-					ifTrue: [ row at: i  put: $X ]
-				]		
-			].
-		
-			cell := row tenpai. 
-			cell class = SudokuCell 
-			ifTrue: [ 
-				cell element: block verifyNumber.
-				sudokuBoard map: cell.				
-			 ]
-		 ].
-		cell := row tsumo.
-		(cell class = SudokuColumn)
-		ifTrue: [ sudokuBoard map: cell ]	.
-	 ].
+			1 to: 9 do: [ :i |
+				column := sudokuBoard atColumn: i. "<- anArray(SmallInteger)"
+				(column includes: block verifyNumber) ifTrue: [
+					(row at: i) = 0 ifTrue: [ row at: i put: $X ] ] ].
 
-	
+			cell := row tenpai.
+			cell class = SudokuCell ifTrue: [
+				cell element: block verifyNumber.
+				sudokuBoard map: cell ] ].
+		cell := row tsumo.
+		cell class = SudokuColumn ifTrue: [ sudokuBoard map: cell ] ]
 ]
 
 { #category : #logic }
@@ -63,6 +49,7 @@ GyomeWay >> solve [
     ボード行のブランクセルで重複のため検証数字を配置できないセルは$Xでマークする。
 	配列のブランクセルが一つになったなら配備される数字は自動的に決定する。	
 	"
+
 	| block cell |
 	cell := 0.
 	block := 0.
@@ -70,13 +57,7 @@ GyomeWay >> solve [
 		1 to: 9 do: [ :vNum |
 			block := sudokuBoard atBlock: n.
 			block verifyNumber: vNum.
-			block includesVerifyNumber 
-			ifTrue: [  
-				self gyome: block.
-			]
-		].
+			block includesVerifyNumber ifTrue: [ self gyome: block ] ].
 		cell := block tsumo.
-		(cell class = SudokuCell)
-		ifTrue: [ sudokuBoard map: cell ]			
- 	].
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
 ]

@@ -10,7 +10,7 @@ BlockenWay >> example を参照してください。
 Class {
 	#name : #BlockenWay,
 	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Core'
+	#category : #'M946-Sudoku2-Solution'
 }
 
 { #category : #'private - logics' }
@@ -24,17 +24,12 @@ BlockenWay >> columnSuji: block [
 
  	(麻雀用語:スジ)
 	"
-	block colsOnBoard doWithIndex: [ :col :ci |
-		(col includes: block verifyNumber) 
-		ifTrue: [ 
-			1 to: 3 do: [ :ri|
-				(block row: ri column: ci ) = self blankCell
-				ifTrue: [ block row: ri column: ci put: $X ]
-		 	]
-		]
-	]
-	
 
+	block colsOnBoard doWithIndex: [ :col :ci |
+		(col includes: block verifyNumber) ifTrue: [
+			1 to: 3 do: [ :ri |
+				(block row: ri column: ci) = self blankCell ifTrue: [
+					block row: ri column: ci put: $X ] ] ] ]
 ]
 
 { #category : #examples }
@@ -72,15 +67,12 @@ BlockenWay >> rowSuji: block [
 
  	(麻雀用語:スジ)
 	"
-	block rowsOnBoard doWithIndex: [ :row :ri|
-		(row includes: block verifyNumber) 
-		ifTrue: [ 
-			1 to: 3 do: [ :ci|
-				(block row: ri column: ci ) = self blankCell
-				ifTrue: [ block row: ri column: ci put: $X ]
-		 	]
-		]
-	]
+
+	block rowsOnBoard doWithIndex: [ :row :ri |
+		(row includes: block verifyNumber) ifTrue: [
+			1 to: 3 do: [ :ci |
+				(block row: ri column: ci) = self blankCell ifTrue: [
+					block row: ri column: ci put: $X ] ] ] ]
 ]
 
 { #category : #logic }
@@ -92,28 +84,26 @@ BlockenWay >> solve [
     ブロックにブランクセルが一つで残りのセルが数字で埋まっている場合は
     入るべき数字が決まるのでボード上の対応するセルにその数字をセットする。
 	"
+
 	| block cell |
 	block := nil.
 	1 to: 9 do: [ :bNum |
 		1 to: 9 do: [ :vNum |
-			block := SudokuBlock2 sudokuBoard: sudokuBoard blockNumber: bNum verifyNumber: vNum.
-			block includesVerifyNumber 
-			ifFalse: [  
+			block := SudokuBlock2
+				         sudokuBoard: sudokuBoard
+				         blockNumber: bNum
+				         verifyNumber: vNum.
+			block includesVerifyNumber ifFalse: [
 				cell := self sujiYomi: block.
-				block completed ifFalse: [ 
-               	cell class = SudokuCell
-                	ifTrue: [sudokuBoard map: cell]
-             	] 
-			]
-        ] .
+				block completed ifFalse: [
+					cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ] ] ].
 		"ブロッケン方式実行した結果を反映したsudokuBoardより新なblockを生成する"
-		block := SudokuBlock2 sudokuBoard: sudokuBoard  blockNumber: bNum verifyNumber: 0.
+		block := SudokuBlock2
+			         sudokuBoard: sudokuBoard
+			         blockNumber: bNum
+			         verifyNumber: 0.
 		cell := block tsumo.
-		cell class = SudokuCell 
-		ifTrue: [ sudokuBoard map: cell ]
-    ].
-
-
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
 ]
 
 { #category : #examples }

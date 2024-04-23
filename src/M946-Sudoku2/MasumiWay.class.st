@@ -7,7 +7,7 @@ MasumiWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-cont
 Class {
 	#name : #MasumiWay,
 	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Core'
+	#category : #'M946-Sudoku2-Solution'
 }
 
 { #category : #examples }
