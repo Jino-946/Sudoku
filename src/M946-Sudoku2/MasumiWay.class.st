@@ -56,7 +56,7 @@ MasumiWay >> solve [
 	
 	一時変数
 	block: 			検証するブロック
-	blankCell:		ブロックのブランクセルの配列(SudokuCell)
+	blankCells:		ブロックのブランクセルの配列(SudokuCell)
 	blockNumbers:	ブロックの数の配列(SmallInteger)
 	rowNumbers:		ブランクセルに直交する行における数の配列(SmallInteger)
 	colNumbers:		ブランクセルに直交する列における数の配列(SmallInteger)
@@ -66,7 +66,7 @@ MasumiWay >> solve [
 	rowOnBoard:		ブランクセルに直交するボード列(SurokuColumn)
 	"
 	| block blankCells blockNumbers rowNumbers colNumbers set |
-	1 to: 9 do: [ :n| ||
+	1 to: 9 do: [ :n| 
 		block := sudokuBoard atBlock: n.
 		blankCells := block blankCellsAsArray .
 		blockNumbers := block blockA2D asArray select: [ :num| num > 0 ].

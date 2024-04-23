@@ -61,6 +61,40 @@ SudokuBlock2Test >> testCellOf [
 ]
 
 { #category : #tests }
+SudokuBlock2Test >> testColIndexOnBoard [
+
+	| board block task  |
+	
+	task := '
+9	0	6		8	2	4		3	5	0	
+0	1	2		0	3	0		0	0	6	
+5	0	3		9	6	0		2	8	7	
+
+
+2	9	1		3	0	0		7	6	0	
+0	0	0		0	4	9		8	0	3	
+3	8	0		0	0	0		0	0	0	
+
+
+1	0	0		4	9	0		0	0	0	
+6	2	0		1	0	0		0	0	5	
+0	5	8		0	0	0		0	0	9		
+	'.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	
+	block := board atBlock: 1.
+	self assert: (block colIndexOnBoard: 2) equals: 2.
+	
+	block := board atBlock: 5.
+	self assert: (block colIndexOnBoard: 2) equals: 5.
+	
+	block := board atBlock: 9.
+	self assert: (block rowIndexOnBoard: 3) equals: 9.
+]
+
+{ #category : #tests }
 SudokuBlock2Test >> testColsOnBoard [
 
 	| board block cols task column |
@@ -97,6 +131,40 @@ SudokuBlock2Test >> testColsOnBoard [
 	
 	
 
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testRowIndexOnBoard [
+
+	| board block task  |
+	
+	task := '
+9	0	6		8	2	4		3	5	0	
+0	1	2		0	3	0		0	0	6	
+5	0	3		9	6	0		2	8	7	
+
+
+2	9	1		3	0	0		7	6	0	
+0	0	0		0	4	9		8	0	3	
+3	8	0		0	0	0		0	0	0	
+
+
+1	0	0		4	9	0		0	0	0	
+6	2	0		1	0	0		0	0	5	
+0	5	8		0	0	0		0	0	9		
+	'.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	
+	block := board atBlock: 1.
+	self assert: (block rowIndexOnBoard: 2) equals: 2.
+	
+	block := board atBlock: 5.
+	self assert: (block rowIndexOnBoard: 2) equals: 5.
+	
+	block := board atBlock: 9.
+	self assert: (block rowIndexOnBoard: 2) equals: 8.
 ]
 
 { #category : #tests }

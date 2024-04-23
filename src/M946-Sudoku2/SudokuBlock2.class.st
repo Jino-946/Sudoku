@@ -127,6 +127,25 @@ SudokuBlock2 >> cellOf: number [
 	^cell
 ]
 
+{ #category : #converting }
+SudokuBlock2 >> colIndexOnBoard: index [
+	"
+	ブロックインデックスをボードインデックスに変換する
+	"
+	| start |
+	start := 0.
+	(#(1 4 7) includes: blockNumber)
+	ifTrue: [ start := 1 ].
+	
+	(#(2 5 8) includes: blockNumber)
+	ifTrue: [ start := 4 ].
+	
+	(#(3 6 9) includes: blockNumber)
+	ifTrue: [ start := 7 ].
+	
+	^start + index - 1.
+]
+
 { #category : #accessing }
 SudokuBlock2 >> colsOnBoard [
 	"
@@ -190,6 +209,21 @@ SudokuBlock2 >> row: rIndex column: cIndex [
 SudokuBlock2 >> row: rIndex column: cIndex put: elem [
 
 	blockA2D at: rIndex at: cIndex put: elem
+]
+
+{ #category : #converting }
+SudokuBlock2 >> rowIndexOnBoard: index [
+	"
+	ブロックインデックスをボードインデックスに変換する
+	"
+	| start |
+	(self blockNumber between: 1 and: 3)
+		ifTrue: [ start := 1 ]
+		ifFalse: [
+			start := (self blockNumber between: 4 and: 6)
+				         ifTrue: [ 4 ]
+				         ifFalse: [ 7 ] ].
+	^ start + index - 1
 ]
 
 { #category : #accessing }

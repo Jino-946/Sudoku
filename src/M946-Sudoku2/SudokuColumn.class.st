@@ -48,6 +48,18 @@ SudokuColumn >> asString [
 ]
 
 { #category : #accessing }
+SudokuColumn >> at: index [
+
+	^column at: index
+]
+
+{ #category : #accessing }
+SudokuColumn >> at: index put: val [
+
+	column at: index put: val 
+]
+
+{ #category : #accessing }
 SudokuColumn >> colIndex [
 
 	^colIndex 

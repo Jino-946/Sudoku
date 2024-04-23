@@ -50,6 +50,18 @@ SudokuRow >> asString [
 
 ]
 
+{ #category : #accessing }
+SudokuRow >> at: index [
+
+	^row at: index
+]
+
+{ #category : #accessing }
+SudokuRow >> at: index put: value [
+
+	row at: index put: value
+]
+
 { #category : #comparing }
 SudokuRow >> hash [ 
 

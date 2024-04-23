@@ -8,10 +8,17 @@ Class {
 }
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleAssignmentInIfTrueRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBlock2 #rowIndexOnBoard: #false)) #'2024-04-23T13:48:10.915472+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#BlockenWay #example #false)) #'2024-04-21T13:13:16.105442+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#BlockenWay #example #false)) #'2024-04-21T13:13:16.105442+09:00') #(#(#RGMethodDefinition #(#LetsmeWayTest #testLetsme #false)) #'2024-04-23T10:50:11.828391+09:00') #(#(#RGMethodDefinition #(#LetsmeWay #letsme: #false)) #'2024-04-23T11:18:34.14086+09:00') )
 ]
 
 { #category : #'code-critics' }
