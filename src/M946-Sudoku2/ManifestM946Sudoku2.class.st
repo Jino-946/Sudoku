@@ -34,3 +34,10 @@ ManifestM946Sudoku2 class >> ruleToDoWithIncrementRuleV1FalsePositive [
 	<ignoreForCoverage>
 	^ #(#(#(#RGMethodDefinition #(#SudokuBlock2 #blankCellsAsArray #false)) #'2024-04-22T11:09:08.16891+09:00') )
 ]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleUtilityMethodsRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#AwasewazaWay #solve: #false)) #'2024-04-24T11:28:18.427734+09:00') )
+]

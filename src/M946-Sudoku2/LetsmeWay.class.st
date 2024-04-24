@@ -70,9 +70,7 @@ LetsmeWay >> letsme: block [
 			cell := column tenpai.
 			cell class = SudokuCell ifTrue: [
 				cell element: block verifyNumber.
-				sudokuBoard map: cell ] ].
-		cell := column tsumo.
-		cell class = SudokuColumn ifTrue: [ sudokuBoard map: cell ] ]
+				self tsumo: cell ] ] ]
 ]
 
 { #category : #logic }

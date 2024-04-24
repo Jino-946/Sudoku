@@ -38,6 +38,28 @@ SudokuRow >> = sudokuRow [
 			and: [sudokuRow row = self row ]]
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuRow >> allGreen [
+	"
+	allGreen: 麻雀用語で緑一色のこと、 軍事用語でシステムが全て正しく作動すること
+    Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
+    "
+	| cell array shortOfNumber |
+	cell := self tenpai.
+	cell class = SudokuCell 
+	ifTrue: [ 
+		array := row select: [ :e | 
+					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
+		array asSet size = 8
+		ifTrue: [ 
+			shortOfNumber := 45 - array sum.
+			cell element: shortOfNumber ]
+	].
+
+	^ cell
+
+]
+
 { #category : #converting }
 SudokuRow >> asString [
 

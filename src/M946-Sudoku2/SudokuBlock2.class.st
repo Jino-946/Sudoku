@@ -48,6 +48,27 @@ SudokuBlock2 >> = aSudokuBlock2 [
 					and: [ aSudokuBlock2 verifyNumber = self verifyNumber  ] ] ] ]
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> allGreen [ 
+	"
+	allGreen: 麻雀用語で緑一色のこと、 軍事用語でシステムが全て正しく作動すること
+    Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
+    "
+	| cell array shortOfNumber |
+	cell := self tenpai.
+	cell class = SudokuCell 
+	ifTrue: [ 
+		array := blockA2D asArray select: [ :e | 
+					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
+		array asSet size = 8
+		ifTrue: [ 
+			shortOfNumber := 45 - array sum.
+			cell element: shortOfNumber ]
+	].
+
+	^ cell
+]
+
 { #category : #'private - printing' }
 SudokuBlock2 >> asString [
 

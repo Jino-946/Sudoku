@@ -35,9 +35,7 @@ GyomeWay >> gyome: block [
 			cell := row tenpai.
 			cell class = SudokuCell ifTrue: [
 				cell element: block verifyNumber.
-				sudokuBoard map: cell ] ].
-		cell := row tsumo.
-		cell class = SudokuColumn ifTrue: [ sudokuBoard map: cell ] ]
+				self tsumo: cell ] ] ]
 ]
 
 { #category : #logic }

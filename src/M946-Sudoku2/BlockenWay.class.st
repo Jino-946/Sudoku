@@ -102,8 +102,9 @@ BlockenWay >> solve [
 			         sudokuBoard: sudokuBoard
 			         blockNumber: bNum
 			         verifyNumber: 0.
-		cell := block tsumo.
-		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
+		cell := block tenpai.
+		self tsumo: cell. 
+	]
 ]
 
 { #category : #examples }
@@ -134,20 +135,15 @@ BlockenWay >> sujiYomi: block [
  	ブロックにブランクセルが一つだけの時は、ブランクセルのボード座標と検証数値をSudokuCellにマップし返す。
   	(麻雀用語:スジ)	
 	"
+
 	| cell |
-	
 	self rowSuji: block.
 	self columnSuji: block.
 	cell := block tenpai.
-	cell class = SudokuCell 
-	ifFalse: [ ^self ].
-	
-	cell element: block verifyNumber .
-	^ cell.
-	
-	
-	
+	cell class = SudokuCell ifFalse: [ ^ self ].
 
+	cell element: block verifyNumber.
+	^ cell
 ]
 
 { #category : #examples }
