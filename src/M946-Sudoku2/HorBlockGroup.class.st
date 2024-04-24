@@ -14,7 +14,96 @@ Class {
 	#superclass : #Object,
 	#instVars : [
 		'groupNumber',
-		'rowsOnBoard'
+		'rowsOnBoard',
+		'verifyNumber'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
+
+{ #category : #converting }
+HorBlockGroup >> asString [
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	rowsOnBoard do: [ :sudokuRow|
+		sudokuRow row doWithIndex: [ :num :index |
+			aStream nextPutAll: num asString.
+			(((index - 1) % 3 ) = 2)
+			ifTrue: [ aStream tab ]
+			ifFalse: [ aStream nextPutAll: ' ' ].
+		].
+		aStream cr.		
+	].
+
+	^aStream contents 
+]
+
+{ #category : #accessing }
+HorBlockGroup >> atBlock: number [
+
+	| startCol blockNumber block row |
+	block := SudokuBlock2 new.
+	startCol := 10.
+	blockNumber  := 0.
+	number = 1
+		ifTrue: [ startCol := 0.
+			]
+		ifFalse: [
+			number = 2
+				ifTrue: [ startCol := 3 ]
+				ifFalse: [ number = 3 ifTrue: [ startCol := 6 ] ] ].
+	1 to: 3 do: [ :i |
+		row := rowsOnBoard at: i.
+		1 to: 3 do: [ :j | block row: i column: j put: (row at: j + startCol) ] ].
+	blockNumber := (groupNumber - 1) * 3 + number.
+	block blockNumber: blockNumber; verifyNumber: verifyNumber .
+
+	^block 
+]
+
+{ #category : #accessing }
+HorBlockGroup >> groupNumber [
+
+	^groupNumber 
+]
+
+{ #category : #accessing }
+HorBlockGroup >> groupNumber: number [
+
+	groupNumber := number
+]
+
+{ #category : #initialization }
+HorBlockGroup >> initialize [ 
+
+	super initialize .
+	rowsOnBoard := Array new: 3.
+	verifyNumber := 0.
+	
+]
+
+{ #category : #printing }
+HorBlockGroup >> printOn: aStream [
+
+	aStream
+		nextPutAll: self asString; cr.
+]
+
+{ #category : #accessing }
+HorBlockGroup >> rowsOnBoard [ 
+
+	^rowsOnBoard 
+]
+
+{ #category : #accessing }
+HorBlockGroup >> verifyNumber [
+
+	^verifyNumber 
+]
+
+{ #category : #accessing }
+HorBlockGroup >> verifyNumber: number [
+
+	verifyNumber := number 
+	
+]

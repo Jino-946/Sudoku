@@ -38,7 +38,7 @@ SudokuRow >> = sudokuRow [
 			and: [sudokuRow row = self row ]]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logic }
 SudokuRow >> allGreen [
 	"
 	allGreen: 麻雀用語で緑一色のこと、 軍事用語でシステムが全て正しく作動すること

@@ -22,10 +22,24 @@ ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 ]
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleInconsistentMethodClassificationRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:32:17.066595+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1FalsePositive [
 
 	<ignoreForCoverage>
 	^ #(#(#(#RGPackageDefinition #(#'M946-Sudoku2')) #'2024-04-20T20:34:12.520286+09:00') )
+]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleStringConcatenationRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #loadFromString: #false)) #'2024-04-24T22:20:52.263951+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:31:59.12461+09:00') )
 ]
 
 { #category : #'code-critics' }

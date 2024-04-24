@@ -70,6 +70,22 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 	^ block
 ]
 
+{ #category : #'private - accessing' }
+SudokuBoard2 >> _atHorGroup: rowStart at: colStart [
+
+	| hGroup rs cs |
+	rs := rowStart.
+	cs := colStart.
+	hGroup := HorBlockGroup  new.
+
+	hGroup rowsOnBoard
+		at: 1 put: (SudokuRow new: rs row: (self atRow: rs));
+		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
+		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
+
+	^hGroup 
+]
+
 { #category : #'private - printing' }
 SudokuBoard2 >> asString [
 
@@ -80,6 +96,7 @@ SudokuBoard2 >> asString [
 	1 to: 9 do: [ :rowIndex |
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	
+			number class = Character ifTrue: [ number := '$', number asString ].
 			aStream nextPutAll: number asString; tab.
 			(separateIndices includes: colIndex)
 			ifTrue:[ aStream  tab]].
@@ -150,6 +167,42 @@ SudokuBoard2 >> atColumn: colIndex [
 ]
 
 { #category : #accessing }
+SudokuBoard2 >> atHorGroup: groupNumber [
+	"
+	数独ボード(9X9)よりgroupNumberを指定して(3X3)を取り出す。
+	
+	数独ボード
+	1 2 3  4 5 6  7 8 9
+	2 3 4  5 6 7  8 9 1 
+	3 4 5  6 7 8  9 1 2
+	
+	4 5 6  7 8 9  1 2 3
+	5 6 7  8 9 1  2 3 4
+	6 7 8  9 1 2  3 4 5
+	
+	7 8 9  1 2 3  4 5 6
+	8 9 1  2 3 4  5 6 7 
+	9 1 2  3 4 5  6 7 8	
+	
+	数独ボード(9X9)とgroupNumberの位置関係	
+	ブロック(ナンバー)
+	 G1
+	 G2
+	 G3
+	"
+
+	groupNumber = 1 ifTrue: [
+		^ (self _atHorGroup: 1 at: 1) groupNumber: groupNumber ].
+
+	groupNumber = 2 ifTrue: [
+		^ (self _atHorGroup: 4 at: 1) groupNumber: groupNumber ].
+
+	groupNumber = 3 ifTrue: [
+		^ (self _atHorGroup: 7 at: 1) groupNumber: groupNumber ].
+
+]
+
+{ #category : #accessing }
 SudokuBoard2 >> atRow: rowIndex [
 	"
 	boardよりrowIndexで指定した行を返す。
@@ -200,12 +253,11 @@ SudokuBoard2 >> loadFromString: aString [
 	i := 0.
 	j := 0.
 	
-	aString asCamelCase do: [ :char |
-		boardA2D  at: i // 9 + 1 at: j % 9 + 1 put: char digitValue .	
+	aString parseLiterals do: [ :e | 
+		boardA2D at: i // 9 + 1 at: j % 9 + 1 put: e.
 		i := i + 1.
-		j := j + 1
-	].
-
+		j := j + 1.
+ 	]
 
 "
   aString := '
