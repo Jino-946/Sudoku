@@ -61,6 +61,7 @@ SudokuBlock2 >> allGreen [
 		array := blockA2D asArray select: [ :e | 
 					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
 		array asSet size = 8
+		ifFalse: [ cell := 0 ]
 		ifTrue: [ 
 			shortOfNumber := 45 - array sum.
 			cell element: shortOfNumber ]
@@ -277,9 +278,11 @@ SudokuBlock2 >> tenpai [
 	
 ]
 
-{ #category : #logic }
+{ #category : #deprecated }
 SudokuBlock2 >> tsumo [
     "
+	Deprecated : use allGreen
+	
     Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
     "
 	| cell array shortOfNumber |
@@ -289,6 +292,7 @@ SudokuBlock2 >> tsumo [
 		array := blockA2D asArray select: [ :e | 
 					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
 		array asSet size = 8
+		ifFalse: [ cell := 0 ]
 		ifTrue: [ 
 			shortOfNumber := 45 - array sum.
 			cell element: shortOfNumber ]

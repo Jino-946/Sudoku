@@ -56,16 +56,18 @@ LetsmeWay >> letsme: block [
 	| column row cell |
 	1 to: 3 do: [ :ci |
 		column := block colsOnBoard at: ci. "<- aSudokuColumn"
-		(column includes: block verifyNumber) ifFalse: [ "verifyNumberが含まれるブロックを検証の対象としているので""ブロック内の列についてはブランクセルを全てマークすることができる"
+		(column includes: block verifyNumber) ifFalse: [ 		
+			"verifyNumberが含まれるブロックを検証の対象としているので
+			 ブロック内の列についてはブランクセルを全てマークすることができる"
 			1 to: 3 do: [ :i |
-				(column at: (block rowIndexOnBoard: i)) = 0 ifTrue: [
+				(column at: (block rowIndexOnBoard: i)) = self blankCell ifTrue: [
 					column at: (block rowIndexOnBoard: i) put: $X ] ].
 
 			"ブロック内の列もスキャンしているがブロック内はマーク済みのため影響はない"
 			1 to: 9 do: [ :i |
 				row := sudokuBoard atRow: i. "<- anArray(SmallInteger)"
 				(row includes: block verifyNumber) ifTrue: [
-					(column at: i) = 0 ifTrue: [ column at: i put: $X ] ] ].
+					(column at: i) = self blankCell ifTrue: [ column at: i put: $X ] ] ].
 
 			cell := column tenpai.
 			cell class = SudokuCell ifTrue: [
@@ -90,7 +92,41 @@ LetsmeWay >> solve [
 		1 to: 9 do: [ :vNum |
 			block := sudokuBoard atBlock: n.
 			block verifyNumber: vNum.
-			block includesVerifyNumber ifTrue: [ self letsme: block ] ].
-		cell := block tsumo.
-		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
+			block includesVerifyNumber ifTrue: [ self letsme: block. ] ].
+		block := sudokuBoard atBlock: n.
+		block verifyNumber: 0.
+		cell := block allGreen.
+		cell class = SudokuCell ifTrue: [ self tsumo: cell ]] 
+	
+"
+一度のsolveの実行ではtaskを解決できないが二度実行することで解決できた
+---------------------------------------------------------------------
+
+task := '
+1	9	7		0	0	4		2	0	5	
+6	8	0		5	3	0		9	0	0	
+5	0	3		0	7	2		1	6	8	
+
+
+0	6	0		4	0	9		7	0	2	
+0	7	5		0	1	0		6	8	0	
+2	0	9		8	0	7		0	4	0	
+
+
+7	5	6		3	2	0		4	0	1	
+0	0	1		0	4	5		0	2	6	
+8	0	4		1	0	0		3	5	7	
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+
+	letsmeWay := LetsmeWay  new: board.
+	letsmeWay
+		solve;
+		solve.
+
+	board completed.
+
+"
 ]

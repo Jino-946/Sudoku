@@ -247,13 +247,14 @@ SudokuBoard2 >> loadFromString: aString [
 	"
 	数独問題(String)を数独ボードデータへ(Array2D)へコピーする。
 	aString は可読性を高めるためにスペース,タブ,改行を自由に使うことができる。
+	parseLiterals 
 	"
 	| i j |
 
 	i := 0.
 	j := 0.
 	
-	aString parseLiterals do: [ :e | 
+	aString  parseLiterals  do: [ :e | 
 		boardA2D at: i // 9 + 1 at: j % 9 + 1 put: e.
 		i := i + 1.
 		j := j + 1.

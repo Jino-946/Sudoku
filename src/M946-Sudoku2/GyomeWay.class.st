@@ -56,6 +56,9 @@ GyomeWay >> solve [
 			block := sudokuBoard atBlock: n.
 			block verifyNumber: vNum.
 			block includesVerifyNumber ifTrue: [ self gyome: block ] ].
-		cell := block tsumo.
+		
+		block := sudokuBoard atBlock: n.
+		block verifyNumber: 0.	
+		cell := block allGreen.
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
 ]

@@ -29,7 +29,9 @@ AwasewazaWay >> solve: task [
 		letsmeWay solve.
 
 		gyomeWay := GyomeWay new: sudokuBoard.
-		gyomeWay solve ].
+		gyomeWay solve 
+
+		].
 
 	^ sudokuBoard completed
 	
@@ -45,9 +47,9 @@ tasks doWithIndex:  [ :task :i|
 	ifFalse: [ uncompleted add: i ].
 ].
 
-Transcript show: 'result is '; show: completed ; show: ' out of '; show: tasks size ; show: '.';cr.
+Transcript show: 'i solved '; show: completed ; show: ' out of '; show: tasks size ; show: ' tasks.';cr.
 (completed = tasks size ) ifFalse: [  
-	Transcript show: 'uncompleted ex: '; show: uncompleted.
+	Transcript show: 'uncompleted tasks: '; show: uncompleted.
 ]
 
 "

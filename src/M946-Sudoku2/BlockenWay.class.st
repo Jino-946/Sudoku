@@ -95,16 +95,16 @@ BlockenWay >> solve [
 				         verifyNumber: vNum.
 			block includesVerifyNumber ifFalse: [
 				cell := self sujiYomi: block.
-				block completed ifFalse: [
-					cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ] ] ].
-		"ブロッケン方式実行した結果を反映したsudokuBoardより新なblockを生成する"
+				cell class = SudokuCell ifTrue: [ sudokuBoard  map: cell ]]].
+			
 		block := SudokuBlock2
-			         sudokuBoard: sudokuBoard
-			         blockNumber: bNum
-			         verifyNumber: 0.
-		cell := block tenpai.
-		self tsumo: cell. 
-	]
+				         sudokuBoard: sudokuBoard
+				         blockNumber: bNum
+				         verifyNumber: 0.
+		cell := block allGreen .
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]
+		
+	].
 ]
 
 { #category : #examples }
