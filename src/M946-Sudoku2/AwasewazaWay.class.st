@@ -11,8 +11,22 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
+{ #category : #logic }
+AwasewazaWay >> solve [
+
+	" 
+	ダミー
+	"
+]
+
 { #category : #'sudoku - solution' }
 AwasewazaWay >> solve: task [
+
+	"
+	開発時の動作確認用のクラス
+	
+	動作確認後は NikoliWay を使う
+	"
 
 	| blockenWay masumiWay letsmeWay gyomeWay |
 	sudokuBoard := SudokuBoard2 new.
@@ -34,6 +48,7 @@ AwasewazaWay >> solve: task [
 		].
 
 	^ sudokuBoard completed
+
 	
 " 
 

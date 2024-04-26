@@ -403,6 +403,42 @@ NikoliWay >> intermediateEx [
 )
 ]
 
+{ #category : #'sudoku - solution' }
+NikoliWay >> solve: task [
+
+	sudokuBoard := SudokuBoard2 new.
+	sudokuBoard loadFromString: task.
+
+	5 timesRepeat: [ 
+		self class subclasses do: [ :subclass |  | solution |
+			solution := subclass new: sudokuBoard .
+			solution solve.	
+		]	
+	].
+
+	^ sudokuBoard completed
+
+	
+"
+
+nikoliWay := NikoliWay new.
+tasks :=  nikoliWay intermediateEx     .
+completed := 0.
+uncompleted := OrderedCollection new.
+tasks doWithIndex:  [ :task :i| 
+	(nikoliWay solve: task) 
+	ifTrue: [ completed := completed + 1]
+	ifFalse: [ uncompleted add: i ].
+].
+
+Transcript show: 'i solved  '; show: completed ; show: ' out of '; show: tasks size ; show: ' tasks.';cr.
+(completed  = tasks size ) ifFalse: [  
+	Transcript show: 'uncompleted tasks: '; show: uncompleted.
+].
+
+"
+]
+
 { #category : #accessing }
 NikoliWay >> sudokuBoard [
 
