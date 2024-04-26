@@ -21,7 +21,9 @@ GyomeWay >> gyome: block [
 	| column row cell |
 	1 to: 3 do: [ :ri |
 		row := block rowsOnBoard at: ri. "<- aSudokuRow"
-		(row includes: block verifyNumber) ifFalse: [ "verifyNumberが含まれるブロックを検証の対象としているので""ブロック内の列についてはブランクセルを全てマークすることができる"
+		(row includes: block verifyNumber) ifFalse: [ 
+			"verifyNumberが含まれるブロックを検証の対象としているので
+			ブロック内の列についてはブランクセルを全てマークすることができる"
 			1 to: 3 do: [ :i |
 				(row at: (block colIndexOnBoard: i)) = 0 ifTrue: [
 					row at: (block colIndexOnBoard: i) put: $X ] ].
@@ -53,12 +55,10 @@ GyomeWay >> solve [
 	block := 0.
 	1 to: 9 do: [ :n |
 		1 to: 9 do: [ :vNum |
-			block := sudokuBoard atBlock: n.
-			block verifyNumber: vNum.
+			block := sudokuBoard atBlock: n verifyNumber: vNum.
 			block includesVerifyNumber ifTrue: [ self gyome: block ] ].
 		
-		block := sudokuBoard atBlock: n.
-		block verifyNumber: 0.	
+		block := sudokuBoard atBlock: n verifyNumber: 0.	
 		cell := block allGreen.
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ]
 ]

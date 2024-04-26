@@ -25,11 +25,13 @@ HorBlockGroup >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: ' groupNumber: '; print: groupNumber ;cr.
 	rowsOnBoard do: [ :sudokuRow|
 		sudokuRow row doWithIndex: [ :num :index |
-			aStream nextPutAll: num asString.
+			num class = SmallInteger ifTrue: [ aStream space  ].
+			aStream print: num.
 			(((index - 1) % 3 ) = 2)
-			ifTrue: [ aStream tab ]
+			ifTrue: [ aStream tab]
 			ifFalse: [ aStream nextPutAll: ' ' ].
 		].
 		aStream cr.		

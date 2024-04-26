@@ -90,11 +90,9 @@ LetsmeWay >> solve [
 	block := 0.
 	1 to: 9 do: [ :n |
 		1 to: 9 do: [ :vNum |
-			block := sudokuBoard atBlock: n.
-			block verifyNumber: vNum.
-			block includesVerifyNumber ifTrue: [ self letsme: block. ] ].
-		block := sudokuBoard atBlock: n.
-		block verifyNumber: 0.
+			block := sudokuBoard atBlock: n verifyNumber: vNum.
+		    block includesVerifyNumber ifTrue: [ self letsme: block. ] ].
+		block := sudokuBoard atBlock: n verifyNumber: 0.
 		cell := block allGreen.
 		cell class = SudokuCell ifTrue: [ self tsumo: cell ]] 
 	

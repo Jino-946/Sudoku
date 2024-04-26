@@ -65,7 +65,7 @@ SudokuRow >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
+	aStream cr; nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
 			 nextPutAll: row asString. 
 	^ aStream contents 
 

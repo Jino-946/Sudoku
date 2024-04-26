@@ -89,18 +89,12 @@ BlockenWay >> solve [
 	block := nil.
 	1 to: 9 do: [ :bNum |
 		1 to: 9 do: [ :vNum |
-			block := SudokuBlock2
-				         sudokuBoard: sudokuBoard
-				         blockNumber: bNum
-				         verifyNumber: vNum.
+			block := sudokuBoard atBlock: bNum verifyNumber: vNum.
 			block includesVerifyNumber ifFalse: [
 				cell := self sujiYomi: block.
 				cell class = SudokuCell ifTrue: [ sudokuBoard  map: cell ]]].
 			
-		block := SudokuBlock2
-				         sudokuBoard: sudokuBoard
-				         blockNumber: bNum
-				         verifyNumber: 0.
+		block := sudokuBoard atBlock: bNum verifyNumber: 0.
 		cell := block allGreen .
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]
 		

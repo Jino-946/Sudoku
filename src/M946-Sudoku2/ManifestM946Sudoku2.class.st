@@ -39,7 +39,7 @@ ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1
 ManifestM946Sudoku2 class >> ruleStringConcatenationRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #loadFromString: #false)) #'2024-04-24T22:20:52.263951+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:31:59.12461+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #loadFromString: #false)) #'2024-04-24T22:20:52.263951+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:31:59.12461+09:00') #(#(#RGMethodDefinition #(#HorBlockGroup #asString #false)) #'2024-04-25T16:27:44.623597+09:00') )
 ]
 
 { #category : #'code-critics' }

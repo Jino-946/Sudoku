@@ -132,29 +132,38 @@ SudokuBoard2 >> atBlock: blockNumber [
 	 B4  B5  B6
 	 B7  B8  B9	
 	"
-
+	| block |
+	block := SudokuBlock2 new.
 	blockNumber = 1 ifTrue: [
-		^ (self _atBlock: 1 at: 1) blockNumber: blockNumber ].
+		block := (self _atBlock: 1 at: 1) blockNumber: blockNumber ].
 	blockNumber = 2 ifTrue: [
-		^ (self _atBlock: 1 at: 4) blockNumber: blockNumber ].
+		block := (self _atBlock: 1 at: 4) blockNumber: blockNumber ].
 	blockNumber = 3 ifTrue: [
-		^ (self _atBlock:  1 at: 7) blockNumber: blockNumber ].
-
+	 	block := (self _atBlock:  1 at: 7) blockNumber: blockNumber ].
 	blockNumber = 4 ifTrue: [
-		^ (self _atBlock: 4 at: 1) blockNumber: blockNumber ].
+		block := (self _atBlock: 4 at: 1) blockNumber: blockNumber ].
 	blockNumber = 5 ifTrue: [
-		^ (self _atBlock: 4 at: 4) blockNumber: blockNumber ].
+		block := (self _atBlock: 4 at: 4) blockNumber: blockNumber ].
 	blockNumber = 6 ifTrue: [
-		^ (self _atBlock: 4 at: 7) blockNumber: blockNumber ].
-
+		block := (self _atBlock: 4 at: 7) blockNumber: blockNumber ].
 	blockNumber = 7 ifTrue: [
-		^ (self _atBlock: 7 at: 1) blockNumber: blockNumber ].
+		block := (self _atBlock: 7 at: 1) blockNumber: blockNumber ].
 	blockNumber = 8 ifTrue: [
-		^ (self _atBlock: 7 at: 4) blockNumber: blockNumber ].
+		block :=  (self _atBlock: 7 at: 4) blockNumber: blockNumber ].
 	blockNumber = 9 ifTrue: [
-		^ (self _atBlock: 7 at: 7) blockNumber: blockNumber ]
+		block := (self _atBlock: 7 at: 7) blockNumber: blockNumber ].
+	
+	^block
 	
 
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
+
+	| block |
+	block := self atBlock: bNum.
+	^ block verifyNumber: vNum
 ]
 
 { #category : #accessing }
