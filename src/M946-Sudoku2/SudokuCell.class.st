@@ -52,11 +52,13 @@ SudokuCell >> = sudokuCell [
 { #category : #converting }
 SudokuCell >> asString [
 
-	| aStream |
+	| aStream elem |
 	aStream := ReadWriteStream on: String new.
 	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
-			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr;
-			nextPutAll: 'element:  '; nextPutAll: element asString.
+			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr.
+	elem := element.
+	element class = Character ifTrue: [ elem := '$', element asString ].
+	aStream nextPutAll: 'element:  '; nextPutAll: elem asString.
 			
 	^ aStream contents
 ]

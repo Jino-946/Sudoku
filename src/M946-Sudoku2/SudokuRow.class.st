@@ -84,6 +84,38 @@ SudokuRow >> at: index put: value [
 	row at: index put: value
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuRow >> clearMarks [
+
+	1 to: 9 do: [ :i | (row at: i) class = Character 
+							ifTrue:[row at:i put: 0]]
+
+	
+]
+
+{ #category : #logic }
+SudokuRow >> eitherCell [
+	"
+	ブロック行の中で２つのセルにどちらかに必ず同じ数字が入る時、他のブロックの
+	同じ行にはその数は入れることはできないので$Xでマークする。
+	マークしたセル情報をSudokuCellに格納し配列として返す。
+	でなければ0 を返す
+	"
+	| digitChars cells cell |
+	cells := 0.
+	digitChars  := row select: [ :c | c class = Character and: [ c between: $1 and: $9 ]].
+	(digitChars  size = 2 and: [ (digitChars  at: 1) = (digitChars  at: 2)])
+	ifTrue: [  
+		cells := OrderedCollection new.
+		1 to: 9 do: [ :i | 
+			((row at: i) = 0) ifTrue: [ 
+				row at: i put: $X .
+				cell := SudokuCell row: i column: rowIndex  element: $X.
+				cells add: cell.
+			]]].
+	 ^cells
+]
+
 { #category : #comparing }
 SudokuRow >> hash [ 
 
@@ -94,6 +126,14 @@ SudokuRow >> hash [
 SudokuRow >> includes: anObject [
 
 	^ row includes: anObject 
+]
+
+{ #category : #'private - logics' }
+SudokuRow >> markBlankCells [ 
+
+	1 to: 9 do: [ :i | 
+		 (self at: i) = 0
+			ifTrue: [ self at: i put: $X ]]
 ]
 
 { #category : #printing }

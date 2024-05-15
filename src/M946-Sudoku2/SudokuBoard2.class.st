@@ -70,20 +70,31 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 	^ block
 ]
 
-{ #category : #'private - accessing' }
-SudokuBoard2 >> _atHorGroup: rowStart at: colStart [
+{ #category : #'private - creation' }
+SudokuBoard2 >> _atHorGroup: rowStart [
 
-	| hGroup rs cs |
+	| hGroup rs  |
 	rs := rowStart.
-	cs := colStart.
-	hGroup := HorBlockGroup  new.
+	hGroup := SudokuHorGroup  new: self.
+	
+	1 to: 3 do: [ :i |
+		1 to: 9 do: [ :j |
+			hGroup 	groupA2D at: i  at: j put: (boardA2D at: rowStart + i - 1 at: j) ]].
+	
+	
+	^hGroup 
 
+	"
 	hGroup rowsOnBoard
 		at: 1 put: (SudokuRow new: rs row: (self atRow: rs));
 		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
 		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
-
-	^hGroup 
+		
+	1 to: 9 do: [ :i | 
+		hGroup colsOnBoard
+		at: i put: (SudokuColumn new: i column: (self atColumn: i)).
+	].
+	"
 ]
 
 { #category : #'private - printing' }
@@ -108,7 +119,7 @@ SudokuBoard2 >> asString [
 	^aStream contents 
 ]
 
-{ #category : #accessing }
+{ #category : #creation }
 SudokuBoard2 >> atBlock: blockNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
@@ -153,12 +164,13 @@ SudokuBoard2 >> atBlock: blockNumber [
 	blockNumber = 9 ifTrue: [
 		block := (self _atBlock: 7 at: 7) blockNumber: blockNumber ].
 	
+	self setEitherCells: block.	
 	^block
 	
 
 ]
 
-{ #category : #accessing }
+{ #category : #creation }
 SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
 
 	| block |
@@ -169,16 +181,16 @@ SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
 { #category : #accessing }
 SudokuBoard2 >> atColumn: colIndex [
 	"
-	boardよりcolIndexで指定した列を返す。
+	boardA2DよりcolIndexで指定した列を返す。
 	"
 
 	^ boardA2D atColumn: colIndex
 ]
 
-{ #category : #accessing }
+{ #category : #creation }
 SudokuBoard2 >> atHorGroup: groupNumber [
 	"
-	数独ボード(9X9)よりgroupNumberを指定して(3X3)を取り出す。
+	数独ボード(9X9)よりgroupNumberを指定して(3X9)を取り出す。
 	
 	数独ボード
 	1 2 3  4 5 6  7 8 9
@@ -201,29 +213,66 @@ SudokuBoard2 >> atHorGroup: groupNumber [
 	"
 
 	groupNumber = 1 ifTrue: [
-		^ (self _atHorGroup: 1 at: 1) groupNumber: groupNumber ].
+		^ (self _atHorGroup: 1 ) groupNumber: groupNumber ].
 
 	groupNumber = 2 ifTrue: [
-		^ (self _atHorGroup: 4 at: 1) groupNumber: groupNumber ].
+		^ (self _atHorGroup: 4 ) groupNumber: groupNumber ].
 
 	groupNumber = 3 ifTrue: [
-		^ (self _atHorGroup: 7 at: 1) groupNumber: groupNumber ].
+		^ (self _atHorGroup: 7 ) groupNumber: groupNumber ].
 
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> atHorGroup: groupNumber verifyNumber: number [
+
+	| group |
+	group := self atHorGroup: groupNumber .
+	^ group verifyNumber: number
 ]
 
 { #category : #accessing }
 SudokuBoard2 >> atRow: rowIndex [
 	"
-	boardよりrowIndexで指定した行を返す。
+	boardA2DよりrowIndexで指定した行を返す。
 	"
 
 	^ boardA2D  atRow: rowIndex
+]
+
+{ #category : #creation }
+SudokuBoard2 >> atSudokuColumn: colIndex [
+	"
+	colIndex で指定した行を SudokuColumn に変換して返す
+	"
+	^SudokuColumn new: colIndex column: (self atColumn: colIndex)
+
+]
+
+{ #category : #creation }
+SudokuBoard2 >> atSudokuRow: rowIndex [
+	"
+	rowIndex で指定した行を SudokuRow に変換して返す
+	"
+	^SudokuRow new: rowIndex row: (self atRow: rowIndex)
 ]
 
 { #category : #accessing }
 SudokuBoard2 >> boardA2D [
 
 	^ boardA2D 
+]
+
+{ #category : #logic }
+SudokuBoard2 >> clearMarks [
+	"
+	AnyWay実装に$X,$1-$9などのマークをboardA2Dに直接書き込むようになったので、
+	不要になったら消すためのメソッド
+	"
+	1 to: 9 do: [ :i |
+		1 to: 9 do: [ :j |
+			(boardA2D at: i at: j) class = Character ifTrue: [
+				boardA2D at: i at: j put: 0 ] ] ]
 ]
 
 { #category : #logic }
@@ -287,17 +336,60 @@ SudokuBoard2 >> loadFromString: aString [
 ]
 
 { #category : #accessing }
-SudokuBoard2 >> map:  aSudokuCell [
+SudokuBoard2 >> map:  sudokuItem [
 	"
-	sudokuCellをボードにマッピングする。
+	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
-	boardA2D at: aSudokuCell rowIndex  at: aSudokuCell colIndex  put: aSudokuCell element 
+	sudokuItem class = SudokuCell ifTrue: [  
+		boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element ].
+	
+	sudokuItem class = SudokuRow ifTrue: [  
+		1 to: 9 do: [ :i | 
+			boardA2D at: sudokuItem rowIndex at: i put: (sudokuItem row at: i) ]].
+
+	sudokuItem class = SudokuColumn ifTrue: [  
+		1 to: 9 do: [ :i |
+			boardA2D at: i at: sudokuItem colIndex put: (sudokuItem column at: i)]].
+	
+	sudokuItem class = SudokuBlock2 ifTrue: [ 
+		self mapSudokuBlock2: sudokuItem ]
 
 	
+]
+
+{ #category : #'accessing - private' }
+SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
+	"
+	sudokuBlock2をボードにマッピングする 
+	"
+	| rowIndex colIndex item |
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j | 
+			rowIndex := sudokuBlock rowIndexOnBoard: i.
+			colIndex := sudokuBlock colIndexOnBoard: j.
+			item := sudokuBlock row: i column: j.
+			boardA2D at: rowIndex at: colIndex put: item.
+		]	
+ 	]
 ]
 
 { #category : #printing }
 SudokuBoard2 >> printOn: aStream [
 
 	aStream nextPutAll: self asString 
+]
+
+{ #category : #initialization }
+SudokuBoard2 >> setEitherCells: block [
+
+	| charDigits |
+	charDigits := #($1 $2 $3 $4 $5 $6 $7 $8 $9).
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j | | char rowIndex colIndex |
+			char := block blockA2D at: i at: j.
+			(charDigits includes: char)	ifTrue: [ 
+				rowIndex := block rowIndexOnBoard: i.
+				colIndex := block colIndexOnBoard: j.
+				block eitherCells add: (SudokuCell row: rowIndex column: colIndex element: char )	]]]
+	
 ]

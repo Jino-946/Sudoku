@@ -6,31 +6,83 @@ Class {
 
 { #category : #tests }
 SudokuBoard2Test >> testMap [
-	| task board block cell |
+	"
+	ブロックのマッピングは別にtestMapSudokuBlock2で行う
+	"
+	| task board  cell row column |
 	task := '
-9	7	6		8	2	4		3	5	1	
-8	1	2		5	3	7		9	4	6	
-5	4	3		9	6	1		2	8	7	
+9	4	7		6	5	3		2	1	8	
+8	6	1		9	2	7		3	5	4	
+2	3	5		0	0	4		7	9	6	
 
 
-2	9	1		3	5	8		7	6	4	
-7	6	5		2	4	9		8	1	3	
-3	8	4		7	1	6		5	9	2	
+0	0	0		0	0	2		0	4	9	
+4	2	9		0	0	1		0	0	0	
+0	0	6		4	0	9		0	0	2	
 
 
-1	3	7		4	0	5		6	2	8	
-6	2	9		1	8	3		4	7	5	
-4	5	8		6	7	2		1	3	9		
+0	9	2		7	4	0		0	6	0	
+6	0	4		0	0	0		9	2	7	
+5	7	0		2	9	6		4	0	0	
+
+		
 	'.
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-
-	"ブロック8のツモを確認する"
-	block := board atBlock: 8.
-	cell := block tsumo.
-
+	
+	cell := SudokuCell row: 4 column: 5 element: $X.
 	board map: cell.	
-	self assert: (board boardA2D at: 7 at: 5) equals: 9
+	self assert: (board boardA2D at: 4 at: 5) equals: $X.
+	
+	row := board atSudokuRow: 7.
+	row at: 7 put: $X.
+	row at: 9 put: $X.
+
+	board map: row.
+	self assert: (board atSudokuRow: 7) equals: row.
+	
+	column := board atSudokuColumn: 4.
+	column at: 3 put: $X.
+	column at: 4 put: $X.
+	column at: 5 put: $X.
+	board map: column.
+	self assert: (board atSudokuColumn: 4) equals: column.
+	
+	
+	
 	 
+]
+
+{ #category : #tests }
+SudokuBoard2Test >> testMapSudokuBlock2 [
+
+	| board block task |
+	task := '
+9	4	7		6	5	3		2	1	8	
+8	6	1		9	2	7		3	5	4	
+2	3	5		0	0	4		7	9	6	
+
+
+0	0	0		0	0	2		0	4	9	
+4	2	9		0	0	1		0	0	0	
+0	0	6		4	0	9		0	0	2	
+
+
+0	9	2		7	4	0		0	6	0	
+6	0	4		0	0	0		9	2	7	
+5	7	0		2	9	6		4	0	0		
+	'.
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board atBlock: 7.
+	
+	block row: 1 column: 1 put: $X.
+	block row: 2 column: 2 put: $X.
+	block row: 3 column: 3 put: $X.
+	
+	board mapSudokuBlock2: block.
+	
+	self assert: (board atBlock: 7) blockA2D equals: block blockA2D.
+
 ]

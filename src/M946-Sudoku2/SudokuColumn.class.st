@@ -49,10 +49,12 @@ SudokuColumn >> allGreen [
 	ifTrue: [ 
 		array := column select: [ :e | 
 					e class = SmallInteger and: [ e between: 1 and: 9 ] ].
+		
 		array asSet size = 8
 		ifTrue: [ 
 			shortOfNumber := 45 - array sum.
 			cell element: shortOfNumber ]
+		ifFalse: [ cell := 0 ]
 	].
 
 	^ cell
@@ -63,8 +65,11 @@ SudokuColumn >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr;
-			 nextPutAll: column asString. 
+	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString.
+	column doWithIndex: [ :c :idx |
+			 	idx % 3 = 1 ifTrue: [ aStream cr ]. 
+				aStream print: c; cr. ].
+
 	^ aStream contents 
 ]
 
@@ -78,6 +83,15 @@ SudokuColumn >> at: index [
 SudokuColumn >> at: index put: val [
 
 	column at: index put: val 
+]
+
+{ #category : #'as yet unclassified' }
+SudokuColumn >> clearMarks [
+
+	1 to: 9 do: [ :i | (column at: i) class = Character 
+							ifTrue:[column at:i put: 0]]
+
+	
 ]
 
 { #category : #accessing }
@@ -115,6 +129,14 @@ SudokuColumn >> hash [
 SudokuColumn >> includes: anObject [
 
 	^ column includes: anObject 
+]
+
+{ #category : #'private - logics' }
+SudokuColumn >> markBlankCells [ 
+
+	1 to: 9 do: [ :i | 
+		 (self at: i) = 0
+			ifTrue: [ self at: i put: $X ]]
 ]
 
 { #category : #printing }

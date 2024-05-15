@@ -22,10 +22,31 @@ ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 ]
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#EitherWay #markEitherCellsOn: #false)) #'2024-05-15T09:29:11.579876+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:44.744762+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleInconsistentMethodClassificationRuleV1FalsePositive [
 
 	<ignoreForCoverage>
 	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:32:17.066595+09:00') )
+]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleLiteralArrayCharactersRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:37.670178+09:00') )
+]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleLongMethodsRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #atBlock: #false)) #'2024-05-15T15:48:30.405135+09:00') )
 ]
 
 { #category : #'code-critics' }
@@ -39,7 +60,7 @@ ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1
 ManifestM946Sudoku2 class >> ruleStringConcatenationRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #loadFromString: #false)) #'2024-04-24T22:20:52.263951+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:31:59.12461+09:00') #(#(#RGMethodDefinition #(#HorBlockGroup #asString #false)) #'2024-04-25T16:27:44.623597+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #loadFromString: #false)) #'2024-04-24T22:20:52.263951+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #asString #false)) #'2024-04-24T22:31:59.12461+09:00') #(#(#RGMethodDefinition #(#SudokuHorGroup #asString #false)) #'2024-04-25T16:27:44.623597+09:00') )
 ]
 
 { #category : #'code-critics' }

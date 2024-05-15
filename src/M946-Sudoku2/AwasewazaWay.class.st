@@ -28,11 +28,11 @@ AwasewazaWay >> solve: task [
 	動作確認後は NikoliWay を使う
 	"
 
-	| blockenWay masumiWay letsmeWay gyomeWay |
+	| blockenWay masumiWay letsmeWay gyomeWay eitherWay |
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: task.
 
-	5 timesRepeat: [
+	10 timesRepeat: [
 		blockenWay := BlockenWay new: sudokuBoard.
 		blockenWay solve.
 
@@ -43,9 +43,10 @@ AwasewazaWay >> solve: task [
 		letsmeWay solve.
 
 		gyomeWay := GyomeWay new: sudokuBoard.
-		gyomeWay solve 
-
-		].
+		gyomeWay solve.
+		
+		eitherWay := EitherWay new: sudokuBoard .
+		eitherWay solve].
 
 	^ sudokuBoard completed
 

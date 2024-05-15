@@ -7,8 +7,8 @@
 	colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
 	rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
 	verifyNumber		<SmallInteger>	検証数字
-
-
+	eitherCells			<EitherCells>	ブロックのブランクセルが２つになり必ずどちらかに検証数字が入るセル
+                  
 "
 Class {
 	#name : #SudokuBlock2,
@@ -18,7 +18,8 @@ Class {
 		'rowsOnBoard',
 		'colsOnBoard',
 		'blockNumber',
-		'verifyNumber'
+		'verifyNumber',
+		'eitherCells'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
@@ -189,12 +190,64 @@ SudokuBlock2 >> completed [
 		and: [ array sum = 45 ]
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuBlock2 >> countOfBlankCells [
+	"
+	ブロックのブランクセルをカウントする
+	"
+	| items |
+	items := blockA2D asArray select: [ :i | i = 0 ].
+	^ items size
+	
+]
+
+{ #category : #logic }
+SudokuBlock2 >> eishanteng [ 
+	" イーシャンテン(一向聴)
+	
+	ブロックにブランクセル2つ時(一向聴)はブランクセルのボード座標をSudokuCellにマッピングして配列にして返す。
+	でなければ0を返す。
+	"
+	| sudokuCell array result |	
+	verifyNumber = 0 ifTrue: [ self error: 'verifyNumber must no be 0.' ].
+	array := blockA2D asArray.
+	( array select: [ :e | e = 0 ]) size  = 2 ifFalse: [ ^0 ].
+	self includesVerifyNumber ifTrue: [ ^0 ].
+	result := OrderedCollection new.
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j |
+			(blockA2D  at: i at: j) = 0
+			ifTrue: [ 
+				sudokuCell := SudokuCell row: (rowsOnBoard at: i) rowIndex column: (colsOnBoard at: j) colIndex  
+																element: verifyNumber asCharacterDigit .
+				result add: sudokuCell .
+			 ]
+		]
+	].
+	
+	result isEmpty
+		ifTrue: [ ^0 ]
+		ifFalse: [ ^result asArray ]
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> eitherCells [
+
+	^eitherCells 
+]
+
 { #category : #comparing }
 SudokuBlock2 >> hash [ 
 	^(((( blockA2D hash bitXor: rowsOnBoard hash )
 			bitXor: colsOnBoard hash )
 				bitXor: blockNumber hash )
 					bitXor: verifyNumber hash)
+]
+
+{ #category : #testing }
+SudokuBlock2 >> includes: number [
+
+	^blockA2D asArray includes: number 
 ]
 
 { #category : #testing }
@@ -211,7 +264,19 @@ SudokuBlock2 >> initialize [
 	colsOnBoard := Array new: 3.
 	rowsOnBoard := Array new: 3.
 	verifyNumber := 0.
+	eitherCells := EitherCells new.
 	
+]
+
+{ #category : #'private - logics' }
+SudokuBlock2 >> markBlankCells [
+	"
+	すべてのブランクセルを$Xでマークする
+	"
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j |
+			(self row: i column: j) = 0
+				ifTrue: [ self row: i column: j put: $X ]]]
 ]
 
 { #category : #printing }
@@ -231,6 +296,17 @@ SudokuBlock2 >> row: rIndex column: cIndex [
 SudokuBlock2 >> row: rIndex column: cIndex put: elem [
 
 	blockA2D at: rIndex at: cIndex put: elem
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> rowIndexOf: number [
+	"
+	numberの行インデックスを返す
+	"
+	| index |
+	index := blockA2D asArray indexOf: number.
+	^(index - 1) // 3 + 1.
+
 ]
 
 { #category : #converting }
