@@ -190,7 +190,7 @@ SudokuBlock2 >> completed [
 		and: [ array sum = 45 ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SudokuBlock2 >> countOfBlankCells [
 	"
 	ブロックのブランクセルをカウントする
@@ -199,35 +199,6 @@ SudokuBlock2 >> countOfBlankCells [
 	items := blockA2D asArray select: [ :i | i = 0 ].
 	^ items size
 	
-]
-
-{ #category : #logic }
-SudokuBlock2 >> eishanteng [ 
-	" イーシャンテン(一向聴)
-	
-	ブロックにブランクセル2つ時(一向聴)はブランクセルのボード座標をSudokuCellにマッピングして配列にして返す。
-	でなければ0を返す。
-	"
-	| sudokuCell array result |	
-	verifyNumber = 0 ifTrue: [ self error: 'verifyNumber must no be 0.' ].
-	array := blockA2D asArray.
-	( array select: [ :e | e = 0 ]) size  = 2 ifFalse: [ ^0 ].
-	self includesVerifyNumber ifTrue: [ ^0 ].
-	result := OrderedCollection new.
-	1 to: 3 do: [ :i |
-		1 to: 3 do: [ :j |
-			(blockA2D  at: i at: j) = 0
-			ifTrue: [ 
-				sudokuCell := SudokuCell row: (rowsOnBoard at: i) rowIndex column: (colsOnBoard at: j) colIndex  
-																element: verifyNumber asCharacterDigit .
-				result add: sudokuCell .
-			 ]
-		]
-	].
-	
-	result isEmpty
-		ifTrue: [ ^0 ]
-		ifFalse: [ ^result asArray ]
 ]
 
 { #category : #accessing }

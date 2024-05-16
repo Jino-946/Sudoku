@@ -168,43 +168,6 @@ SudokuBlock2Test >> testColsOnBoard [
 ]
 
 { #category : #tests }
-SudokuBlock2Test >> testEishanteng [
-	" イーシャンテン(一向聴)
-	
-	ブロックにブランクセル2つ時(一向聴)はブランクセルのボード座標をSudokuCellにマッピングして配列にして返す。
-	でなければ0を返す。
-	"
-	| task board  block result expected cell |
-	task := '
-	9	4	7		6	5	3		2	1	8	
-	8	6	1		9	2	7		3	5	4	
-	2	3	5		0	0	4		7	9	6	
-
-	0	0	0		0	0	2		0	4	9	
-	4	2	9		0	0	1		0	0	0	
-	0	0	6		4	0	9		0	0	2	
-
-	0	9	2		7	4	0		0	6	0	
-	6	0	4		0	0	0		9	2	7	
-	5	7	0		2	9	6		4	$X	$X	
-	'.
-	
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-
-	expected := Array new: 2.
-	cell := SudokuCell row: 7 column: 7 element: 5 asCharacterDigit . 
-	expected at: 1 put: cell.
-	cell := SudokuCell row: 7 column: 9 element: 5 asCharacterDigit .
-	
-	block := board atBlock: 9.
-	block verifyNumber: 5.
-	result := block eishanteng .
-	
-
-]
-
-{ #category : #tests }
 SudokuBlock2Test >> testRowIndexOf [
 	"
 	rowIndexOf: number

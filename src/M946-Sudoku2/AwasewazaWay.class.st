@@ -32,7 +32,7 @@ AwasewazaWay >> solve: task [
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: task.
 
-	10 timesRepeat: [
+	 10 timesRepeat: [
 		blockenWay := BlockenWay new: sudokuBoard.
 		blockenWay solve.
 
@@ -45,13 +45,14 @@ AwasewazaWay >> solve: task [
 		gyomeWay := GyomeWay new: sudokuBoard.
 		gyomeWay solve.
 		
+
 		eitherWay := EitherWay new: sudokuBoard .
 		eitherWay solve].
 
 	^ sudokuBoard completed
 
 	
-" 
+" Example
 
 wazaWay := AwasewazaWay new.
 tasks :=  wazaWay intermediateEx  .
