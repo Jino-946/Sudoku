@@ -3,6 +3,24 @@
 
 AwaseWazaWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-content/uploads/2023/02/sd41_rule.pdf)で紹介されている「考え方」を組み合わせて数独問題を解きます。
 
+Example
+```
+way := AwasewazaWay new.
+tasks :=  way intermediateEx.
+completed := 0.
+uncompleted := OrderedCollection new.
+tasks doWithIndex:  [ :task :i| 
+	(way solve: task) 
+	ifTrue: [ completed := completed + 1]
+	ifFalse: [ uncompleted add: i ].
+].
+
+Transcript cr; show: 'i solved  '; show: completed ; show: ' out of '; show: tasks size ; show: ' tasks.';cr.
+(completed  = tasks size ) ifFalse: [  
+	Transcript show: 'uncompleted tasks: '; show: uncompleted.
+].
+
+```
 
 "
 Class {
