@@ -71,7 +71,7 @@ SudokuBlock2 >> allGreen [
 	^ cell
 ]
 
-{ #category : #'private - printing' }
+{ #category : #converting }
 SudokuBlock2 >> asString [
 
 	| aStream |
