@@ -12,7 +12,38 @@ EitherWayは数独のルールと解き方で紹介されている「考え方�
 他のブロックのブランクセルをマークできます。
 この際、他のブロックのブランクセルが2つだった場合、マークされなかったセルに検証数字が入ることが確定します。
 
+[【ニコリ公式】数独の解き方　上級編　その2 ]  の例題
 
+```
+task :=
+'
+ 0 9 0   0 5 0   0 3 0
+ 0 0 5   6 0 0   0 0 8
+ 3 0 0   0 0 7   6 0 0
+
+ 0 7 0   0 0 4   3 0 0
+ 8 0 0   0 9 0   0 0 1
+ 0 0 2   3 0 0   0 8 0
+
+ 0 0 1   5 0 0   0 0 6
+ 5 0 0   0 0 6   9 0 0
+ 0 4 0   0 2 0   5 7 0
+'.
+
+vNumber := 5.
+
+board := SudokuBoard2 new.
+board loadFromString: task.
+eitherWay := EitherWay  new: board.
+eitherWay markBlankCellsOnBlocks: vNumber.
+eitherWay markBlankCellsOnColumns: vNumber.
+eitherWay markBlankCellsOnRows: vNumber.
+eitherWay findCandidatesForEitherCells: vNumber.
+Transcript clear; show: board .
+eitherWay finish: vNumber.
+Transcript cr; show: '==============================================='.
+Transcript cr; show: board .
+```
 "
 Class {
 	#name : #EitherWay,
