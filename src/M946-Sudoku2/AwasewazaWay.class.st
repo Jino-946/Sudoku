@@ -63,7 +63,6 @@ AwasewazaWay >> solve: task [
 		gyomeWay := GyomeWay new: sudokuBoard.
 		gyomeWay solve.
 		
-
 		eitherWay := EitherWay new: sudokuBoard .
 		eitherWay solve].
 
