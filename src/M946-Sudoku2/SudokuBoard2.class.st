@@ -70,33 +70,6 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 	^ block
 ]
 
-{ #category : #'private - creation' }
-SudokuBoard2 >> _atHorGroup: rowStart [
-
-	| hGroup rs  |
-	rs := rowStart.
-	hGroup := SudokuHorGroup  new: self.
-	
-	1 to: 3 do: [ :i |
-		1 to: 9 do: [ :j |
-			hGroup 	groupA2D at: i  at: j put: (boardA2D at: rowStart + i - 1 at: j) ]].
-	
-	
-	^hGroup 
-
-	"
-	hGroup rowsOnBoard
-		at: 1 put: (SudokuRow new: rs row: (self atRow: rs));
-		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
-		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
-		
-	1 to: 9 do: [ :i | 
-		hGroup colsOnBoard
-		at: i put: (SudokuColumn new: i column: (self atColumn: i)).
-	].
-	"
-]
-
 { #category : #'private - printing' }
 SudokuBoard2 >> asString [
 
@@ -185,50 +158,6 @@ SudokuBoard2 >> atColumn: colIndex [
 	"
 
 	^ boardA2D atColumn: colIndex
-]
-
-{ #category : #creation }
-SudokuBoard2 >> atHorGroup: groupNumber [
-	"
-	数独ボード(9X9)よりgroupNumberを指定して(3X9)を取り出す。
-	
-	数独ボード
-	1 2 3  4 5 6  7 8 9
-	2 3 4  5 6 7  8 9 1 
-	3 4 5  6 7 8  9 1 2
-	
-	4 5 6  7 8 9  1 2 3
-	5 6 7  8 9 1  2 3 4
-	6 7 8  9 1 2  3 4 5
-	
-	7 8 9  1 2 3  4 5 6
-	8 9 1  2 3 4  5 6 7 
-	9 1 2  3 4 5  6 7 8	
-	
-	数独ボード(9X9)とgroupNumberの位置関係	
-	ブロック(ナンバー)
-	 G1
-	 G2
-	 G3
-	"
-
-	groupNumber = 1 ifTrue: [
-		^ (self _atHorGroup: 1 ) groupNumber: groupNumber ].
-
-	groupNumber = 2 ifTrue: [
-		^ (self _atHorGroup: 4 ) groupNumber: groupNumber ].
-
-	groupNumber = 3 ifTrue: [
-		^ (self _atHorGroup: 7 ) groupNumber: groupNumber ].
-
-]
-
-{ #category : #accessing }
-SudokuBoard2 >> atHorGroup: groupNumber verifyNumber: number [
-
-	| group |
-	group := self atHorGroup: groupNumber .
-	^ group verifyNumber: number
 ]
 
 { #category : #accessing }

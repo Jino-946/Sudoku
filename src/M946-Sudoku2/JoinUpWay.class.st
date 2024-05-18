@@ -38,17 +38,15 @@ JoinUpWay >> solve [
 ]
 
 { #category : #'sudoku - solution' }
-JoinUpWay >> solve: task [
+JoinUpWay >> solve: taskOfString [
 
 	"
 	開発時の動作確認用のクラス
-	
-	動作確認後は NikoliWay を使う
 	"
 
 	| blockenWay masumiWay letsmeWay gyomeWay eitherWay |
 	sudokuBoard := SudokuBoard2 new.
-	sudokuBoard loadFromString: task.
+	sudokuBoard loadFromString: taskOfString.
 
 	 10 timesRepeat: [
 		blockenWay := BlockenWay new: sudokuBoard.
@@ -62,21 +60,21 @@ JoinUpWay >> solve: task [
 
 		gyomeWay := GyomeWay new: sudokuBoard.
 		gyomeWay solve.
-		
+	
 		eitherWay := EitherWay new: sudokuBoard .
 		eitherWay solve].
 
-	^ sudokuBoard completed
+	^ sudokuBoard completed.
 
 	
 " Example
 
-wazaWay := AwasewazaWay new.
-tasks :=  wazaWay intermediateEx  .
+way := JoinUpWay new.
+tasks :=  way intermediateEx  .
 completed := 0.
 uncompleted := OrderedCollection new.
 tasks doWithIndex:  [ :task :i| 
-	(wazaWay solve: task) 
+	(way solve: task) 
 	ifTrue: [ completed := completed + 1]
 	ifFalse: [ uncompleted add: i ].
 ].
