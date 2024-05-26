@@ -1,3 +1,7 @@
+"
+Instance variables
+- sudokuBoard	<SudokuBoard> 数独ボードを表現する
+"
 Class {
 	#name : #SudokuSolver,
 	#superclass : #Object,

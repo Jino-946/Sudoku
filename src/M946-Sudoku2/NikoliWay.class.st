@@ -3,7 +3,6 @@
 
 
 Instance Variables
-- sudokuBoard          <SudokuBoard> パズルを解く対象の数独ボード
 - relatedVertBlocks    <Dictionary> 垂直方向で関連するブロック [1-4-7][2-5-8][3-6-9]
                                     ブロック番号をキーとし他の2のブロック番号の配列を値とするDictionary
 - relatedHorBlocks     <Dictionary> 水平方向で関連するブロック [1-2-3][4-5-6][7-8-9]
