@@ -361,3 +361,29 @@ SudokuBlock2 >> verifyNumber: aNumber [
 
 	verifyNumber := aNumber
 ]
+
+{ #category : #'instance creation' }
+SudokuBlock2 >> x: colIndex y: rowIndex [
+
+	self row:  rowIndex column: colIndex 
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> x: colIndex y: rowIndex put: elem [
+
+	self row: rowIndex column: colIndex  put: elem
+]
+
+{ #category : #converting }
+SudokuBlock2 >> xOnBoard: indexOnBlock [
+
+	self rowIndexOnBoard: indexOnBlock 
+
+	
+]
+
+{ #category : #converting }
+SudokuBlock2 >> yOnBoard: indexOnBlock [
+
+	self colIndexOnBoard: indexOnBlock 
+]

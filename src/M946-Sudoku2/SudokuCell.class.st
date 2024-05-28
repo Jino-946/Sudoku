@@ -111,3 +111,27 @@ SudokuCell >> rowIndex: index [
 
 	rowIndex := index
 ]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> x [
+
+^colIndex 
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> x: index [
+
+	colIndex := index
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> y [
+
+	^rowIndex 
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> y: index [
+
+	rowIndex := index
+]

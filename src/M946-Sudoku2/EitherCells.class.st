@@ -88,3 +88,15 @@ EitherCells >> rowIndex [
 		ifTrue: [ ^(cells at: 1) rowIndex]
 		ifFalse: [ ^0 ]
 ]
+
+{ #category : #'accessing - structure variables' }
+EitherCells >> x [
+
+	^self colIndex 
+]
+
+{ #category : #'accessing - structure variables' }
+EitherCells >> y [
+
+	^self rowIndex 
+]
