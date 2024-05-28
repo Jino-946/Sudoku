@@ -120,7 +120,7 @@ SudokuColumn >> column: anArray [
 ]
 
 { #category : #'private - utility' }
-SudokuColumn >> countBlankCells [
+SudokuColumn >> countOfBlankCells [
 
 	^(column select: [ :n | n = 0 ]) size
 ]

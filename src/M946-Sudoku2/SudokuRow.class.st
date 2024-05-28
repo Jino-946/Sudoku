@@ -94,7 +94,7 @@ SudokuRow >> clearMarks [
 ]
 
 { #category : #'private - utility' }
-SudokuRow >> countBlankCells [ 
+SudokuRow >> countOfBlankCells [ 
 
 	^(row select: [ :n | n = 0 ]) size
 ]
