@@ -94,9 +94,11 @@ SudokuRow >> clearMarks [
 ]
 
 { #category : #'private - utility' }
-SudokuRow >> countOfBlankCells [ 
-
-	^(row select: [ :n | n = 0 ]) size
+SudokuRow >> countOfReservedBlankCells [ 
+	"
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+	"
+	^(row select: [ :n | n class = SmallInteger and: [n < 10 and: [ n = 0 ]]]) size
 ]
 
 { #category : #logic }

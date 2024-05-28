@@ -61,7 +61,7 @@ EitherWay >> findCandidatesForEitherCells: verifyNumber [
 	1 to: 9 do: [ :n |
 		block := sudokuBoard atBlock: n verifyNumber: verifyNumber.
 		(block includesVerifyNumber) not and: [  
-			block countOfBlankCells = 2
+			block countOfReservedBlankCells = 2
 				ifTrue: [ self markEitherCellsOn: block ]]]
 	
 ]

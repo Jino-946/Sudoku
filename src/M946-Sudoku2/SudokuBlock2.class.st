@@ -191,12 +191,12 @@ SudokuBlock2 >> completed [
 ]
 
 { #category : #accessing }
-SudokuBlock2 >> countOfBlankCells [
+SudokuBlock2 >> countOfReservedBlankCells [
 	"
-	ブロックのブランクセルをカウントする
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
 	| items |
-	items := blockA2D asArray select: [ :i | i = 0 ].
+	items := blockA2D asArray select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
 	^ items size
 	
 ]

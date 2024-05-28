@@ -120,9 +120,11 @@ SudokuColumn >> column: anArray [
 ]
 
 { #category : #'private - utility' }
-SudokuColumn >> countOfBlankCells [
-
-	^(column select: [ :n | n = 0 ]) size
+SudokuColumn >> countOfReservedBlankCells [
+	"
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+	"
+	^(column select: [ :n | n class = SmallInteger and: [ n < 10  and: [ n = 0 ]]]) size
 ]
 
 { #category : #comparing }

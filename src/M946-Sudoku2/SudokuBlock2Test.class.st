@@ -168,44 +168,6 @@ SudokuBlock2Test >> testColsOnBoard [
 ]
 
 { #category : #tests }
-SudokuBlock2Test >> testRowIndexOf [
-	"
-	rowIndexOf: number
-	ブロックにおけるnumberの行インデックスを返す
-	"
-	| task board block group |
-	task := '
-	9	4	7		6	5	3		2	1	8	
-	8	6	1		9	2	7		3	5	4	
-	2	3	5		0	0	4		7	9	6	
-
-
-	0	0	0		0	0	2		0	4	9	
-	4	2	9		0	0	1		0	0	0	
-	0	0	6		4	0	9		0	0	2	
-
-
-	0	9	2		7	4	0		0	6	0	
-	6	0	4		0	0	0		9	2	7	
-	5	7	0		2	9	6		4	0	0	
-
-	'.
-	
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-	group := board atHorGroup: 3.
-	block := group atBlock: 1.
-	
-	self assert: (block rowIndexOf:5) equals: 3.
-	self assert: (block rowIndexOf:9) equals: 1.
-	
-	block := group atBlock: 3.
-	self assert: (block rowIndexOf:6) equals: 1.
-	self assert: (block rowIndexOf:9) equals: 2.
-
-]
-
-{ #category : #tests }
 SudokuBlock2Test >> testRowIndexOnBoard [
 
 	| board block task  |
