@@ -84,13 +84,19 @@ SudokuRow >> at: index put: value [
 	row at: index put: value
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - utility' }
 SudokuRow >> clearMarks [
 
 	1 to: 9 do: [ :i | (row at: i) class = Character 
 							ifTrue:[row at:i put: 0]]
 
 	
+]
+
+{ #category : #'private - utility' }
+SudokuRow >> countBlankCells [ 
+
+	^(row select: [ :n | n = 0 ]) size
 ]
 
 { #category : #logic }

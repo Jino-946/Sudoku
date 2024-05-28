@@ -85,7 +85,7 @@ SudokuColumn >> at: index put: val [
 	column at: index put: val 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - utility' }
 SudokuColumn >> clearMarks [
 
 	1 to: 9 do: [ :i | (column at: i) class = Character 
@@ -117,6 +117,12 @@ SudokuColumn >> column: anArray [
 
 
 	column := anArray copy.
+]
+
+{ #category : #'private - utility' }
+SudokuColumn >> countBlankCells [
+
+	^(column select: [ :n | n = 0 ]) size
 ]
 
 { #category : #comparing }
