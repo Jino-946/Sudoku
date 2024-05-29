@@ -19,15 +19,6 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
-{ #category : #'instance creation' }
-NikoliWay class >> new: sudokuBoard [
-
-	| way |
-	way := self new.
-	way sudokuBoard: sudokuBoard .
-	^ way
-]
-
 { #category : #initialization }
 NikoliWay >> initialize [ 
 

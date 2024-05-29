@@ -74,5 +74,5 @@ ManifestM946Sudoku2 class >> ruleToDoWithIncrementRuleV1FalsePositive [
 ManifestM946Sudoku2 class >> ruleUtilityMethodsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#JoinUpWay #solve: #false)) #'2024-04-24T11:28:18.427734+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#JoinUpWay #solve: #false)) #'2024-04-24T11:28:18.427734+09:00') #(#(#RGMethodDefinition #(#DaddyNumPreMethod #missingNumbers: #false)) #'2024-05-29T14:18:25.509602+09:00') )
 ]

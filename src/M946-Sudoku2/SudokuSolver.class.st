@@ -11,6 +11,15 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
+{ #category : #'instance creation' }
+SudokuSolver class >> new: sudokuBoard [
+
+	| way |
+	way := self new.
+	way sudokuBoard: sudokuBoard .
+	^ way
+]
+
 { #category : #exercises }
 SudokuSolver >> beginnersEx [
 
@@ -152,6 +161,8 @@ SudokuSolver >> blankCell [
 
 { #category : #initialization }
 SudokuSolver >> initialize [
+
+	super initialize 
 
 ]
 

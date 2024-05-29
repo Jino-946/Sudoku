@@ -93,23 +93,20 @@ SudokuBlock2 >> asString [
 
 { #category : #accessing }
 SudokuBlock2 >> blankCellsAsArray [
-    "
+	"
     ブロックのブランクセルをSudokuCellの配列にして返す
     "
-    | array index |
-    array := Array new: 9.
-    index := 1.
-    1 to: 3 do: [ :i|
-        1 to: 3 do: [ :j|
-            (blockA2D at: i at: j) = 0
-            ifTrue: [ array at: index 
-						put: (SudokuCell row: (rowsOnBoard at: i) rowIndex column: ( colsOnBoard at: j ) colIndex  element: 0)
-			].
-            index := index + 1.
-        ]
-    ].
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j |
+			(blockA2D at: i at: j) = 0 ifTrue: [
+				collection add: (SudokuCell
+						 row: (rowsOnBoard at: i) rowIndex
+						 column: (colsOnBoard at: j) colIndex
+						 element: 0) ] ] ].
 
-    ^ array select: [ :each | each class = SudokuCell ]
+	^ (collection select: [ :each | each class = SudokuCell ]) asArray
 ]
 
 { #category : #accessing }
