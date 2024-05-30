@@ -61,6 +61,12 @@ SudokuColumn >> allGreen [
 ]
 
 { #category : #converting }
+SudokuColumn >> asArray [
+
+	^column
+]
+
+{ #category : #converting }
 SudokuColumn >> asString [
 
 	| aStream |
@@ -83,6 +89,23 @@ SudokuColumn >> at: index [
 SudokuColumn >> at: index put: val [
 
 	column at: index put: val 
+]
+
+{ #category : #accessing }
+SudokuColumn >> blankCellsAsArray [
+	"
+    SudokuColumnのブランクセルをSudokuCellの配列にして返す
+    "
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 9 do: [ :i |
+		(column at: i ) = 0 ifTrue: [
+			collection add: (SudokuCell
+						 		row: i
+						 		column: colIndex 
+						 		element: 0)]] .
+
+	^ collection  asArray
 ]
 
 { #category : #'private - utility' }

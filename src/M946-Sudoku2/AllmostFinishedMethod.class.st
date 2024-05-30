@@ -7,7 +7,7 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> findBlocks [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満のブロックをコレクションにして返す
@@ -21,7 +21,35 @@ AllmostFinishedMethod >> findBlocks [
 
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
+AllmostFinishedMethod >> findColumns [
+	"
+	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の列をコレクションにして返す
+	"
+	| rows row  |
+	rows := OrderedCollection new.
+	1 to: 9 do:[ :n | 
+		row := (self sudokuBoard) atSudokuColumn:  n.
+		row countOfReservedBlankCells < 3 ifTrue: [ rows add: row ]].
+	^rows
+
+]
+
+{ #category : #'private - logics' }
+AllmostFinishedMethod >> findRows [
+	"
+	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の行をコレクションにして返す
+	"
+	| rows row  |
+	rows := OrderedCollection new.
+	1 to: 9 do:[ :n | 
+		row := (self sudokuBoard) atSudokuRow:  n.
+		row countOfReservedBlankCells < 3 ifTrue: [ rows add: row ]].
+	^rows
+
+]
+
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> finish1stColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -46,7 +74,7 @@ AllmostFinishedMethod >> finish1stColumn: cells [
 	^false
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> finish1stRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -71,7 +99,7 @@ AllmostFinishedMethod >> finish1stRow: cells [
 	^true
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> finish2ndColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -96,7 +124,7 @@ AllmostFinishedMethod >> finish2ndColumn: cells [
 		^false
 ]
 
-{ #category : #logic }
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> finish2ndRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -124,7 +152,7 @@ AllmostFinishedMethod >> finish2ndRow: cells [
 { #category : #logic }
 AllmostFinishedMethod >> finishBlocks [
 	"
-	ブロック内のブランクセルを特定の数字に確定できた時ボードに書き込む
+	ブロック内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
 	| blocks |
 	blocks := self findBlocks .
@@ -139,6 +167,26 @@ AllmostFinishedMethod >> finishBlocks [
 ]
 
 { #category : #logic }
+AllmostFinishedMethod >> finishColumns [
+	"
+	SudokuColumn内のブランクセルを特定の数字に確定できた時ボードに反映する
+	"
+	| columns |
+	columns := self findColumns  .
+	columns do: [ :column | | blankCells |
+		missingNumbers := self missingNumbers: column asArray.
+		blankCells := column  blankCellsAsArray .
+		blankCells size = 1 ifTrue: [ | cell |
+			cell := column tsumo.
+			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
+		blankCells size = 2 ifTrue: [ 
+			self finish1stRow: blankCells.
+			self finish2ndRow: blankCells]
+	]
+
+]
+
+{ #category : #'private - logics' }
 AllmostFinishedMethod >> finishPairCells: cells block: block [
 	"
 	finishBlocksの下請けメソッド
@@ -146,12 +194,32 @@ AllmostFinishedMethod >> finishPairCells: cells block: block [
 	"
 	| result |
 	result := false.
-	missingNumbers := self missingNumbers: block blockA2D asArray.
+	missingNumbers := self missingNumbers: block asArray.
 	(self finish1stColumn: cells) 
 		ifFalse: [ (self finish2ndColumn: cells)
 			ifFalse: [ (self finish1stRow: cells) 
 				ifFalse: [self finish2ndRow: cells]]].
 									
 	
+
+]
+
+{ #category : #logic }
+AllmostFinishedMethod >> finishRows [
+	"
+	SudokuRow内のブランクセルを特定の数字に確定できた時ボードに反映する
+	"
+	| rows |
+	rows := self findRows  .
+	rows do: [ :row | | blankCells |
+		missingNumbers := self missingNumbers: row asArray.
+		blankCells := row  blankCellsAsArray .
+		blankCells size = 1 ifTrue: [ | cell |
+			cell := row tsumo.
+			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
+		blankCells size = 2 ifTrue: [ 
+			self finish1stColumn: blankCells.
+			self finish2ndColumn: blankCells]
+	]
 
 ]

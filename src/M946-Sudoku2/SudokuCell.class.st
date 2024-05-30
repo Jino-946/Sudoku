@@ -64,6 +64,30 @@ SudokuCell >> asString [
 ]
 
 { #category : #accessing }
+SudokuCell >> blockNumber [
+
+	| number |
+	number := 0.
+	rowIndex  < 4 ifTrue: [ 
+		number := 1.
+		(colIndex between: 4 and: 6) 
+			ifTrue: [ number := 2 ] 
+			ifFalse: [ (colIndex between: 7 and: 9 ) ifTrue:[number := 3 ]]]
+	ifFalse: [ 
+		(rowIndex between: 4 and: 6) ifTrue: [ 
+			number := 4.
+			(colIndex between: 4 and: 6 )	
+				ifTrue: [ number := 5 ]
+				ifFalse: [(colIndex between: 7 and: 9) ifTrue:[number := 6]]]
+		ifFalse: [ 
+			number := 7.
+			(colIndex between: 4 and: 6)
+				ifTrue: [ number := 8 ]
+				ifFalse: [ (colIndex between: 7 and: 9) ifTrue:[ number := 9 ]]]].
+	^ number 
+]
+
+{ #category : #accessing }
 SudokuCell >> colIndex [ 
 
 	^colIndex 

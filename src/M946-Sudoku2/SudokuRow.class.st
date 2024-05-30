@@ -61,6 +61,12 @@ SudokuRow >> allGreen [
 ]
 
 { #category : #converting }
+SudokuRow >> asArray [
+
+	^row
+]
+
+{ #category : #converting }
 SudokuRow >> asString [
 
 	| aStream |
@@ -82,6 +88,23 @@ SudokuRow >> at: index [
 SudokuRow >> at: index put: value [
 
 	row at: index put: value
+]
+
+{ #category : #accessing }
+SudokuRow >> blankCellsAsArray [
+	"
+    SudokuRowのブランクセルをSudokuCellの配列にして返す
+    "
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 9 do: [ :i |
+		(row at: i ) = 0 ifTrue: [
+			collection add: (SudokuCell
+						 		row: rowIndex
+						 		column: i
+						 		element: 0)]] .
+
+	^ collection  asArray
 ]
 
 { #category : #'private - utility' }

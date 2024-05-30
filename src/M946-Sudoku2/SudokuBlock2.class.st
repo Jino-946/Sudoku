@@ -72,6 +72,12 @@ SudokuBlock2 >> allGreen [
 ]
 
 { #category : #converting }
+SudokuBlock2 >> asArray [
+
+	^blockA2D asArray
+]
+
+{ #category : #converting }
 SudokuBlock2 >> asString [
 
 	| aStream |
