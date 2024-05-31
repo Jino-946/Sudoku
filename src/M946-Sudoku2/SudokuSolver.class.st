@@ -636,18 +636,25 @@ SudokuSolver >> intermediateEx [
 )
 ]
 
+{ #category : #accessing }
+SudokuSolver >> relatedHorBlocks [
+
+	^relatedHorBlocks 
+]
+
+{ #category : #accessing }
+SudokuSolver >> relatedVertBlocks [
+
+	^relatedVertBlocks
+]
+
 { #category : #'sudoku - solution' }
 SudokuSolver >> solve: task [
 
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: task.
 
-	5 timesRepeat: [ 
-		self class subclasses do: [ :subclass |  | solution |
-			solution := subclass new: sudokuBoard .
-			solution solve.	
-		]	
-	].
+
 
 	^ sudokuBoard completed
 

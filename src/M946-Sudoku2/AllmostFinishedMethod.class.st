@@ -1,3 +1,12 @@
+"
+「空きマス少見」テクニックを実装する。
+
+行・列・ブロックでブランクセルが1または2の時を処理する
+
+- finishRows
+- finishColums
+- finishBlocks
+"
 Class {
 	#name : #AllmostFinishedMethod,
 	#superclass : #DaddyNumPreMethod,

@@ -289,6 +289,7 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
 	"
+	(self includes: aSudokuCell element) ifTrue: [ ^self ].
 	self blankCellsAsArray do: [ :blankCell | 
 		(blankCell y = aSudokuCell y) ifTrue: [ 
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
@@ -302,9 +303,11 @@ SudokuBlock2 >> markByNumberToMark: numberToMark [
 	ブランクセルに直交するSudokuRowとSudokuColumnを検査し
 	numberToMark があるときはブランクセルを$Xでマークする
 	"
+	(self includes: numberToMark) ifTrue: [ ^self ].
+	
 	self blankCellsAsArray do: [ :blankCell | 	| sudokuRow sudokuColumn |
-		sudokuRow := self rowsOnBoard at: (blankCell y).
-		sudokuColumn := self colsOnBoard at: (blankCell x).
+		sudokuRow := self rowsOnBoard  at: (self localY: blankCell y).
+		sudokuColumn := self colsOnBoard at: (self localX: blankCell x).
 		((sudokuRow includes: numberToMark) or: [ sudokuColumn includes: numberToMark  ]) ifTrue: [ 
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
 
