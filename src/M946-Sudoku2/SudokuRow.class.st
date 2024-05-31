@@ -107,6 +107,22 @@ SudokuRow >> blankCellsAsArray [
 	^ collection  asArray
 ]
 
+{ #category : #accessing }
+SudokuRow >> cellOf: number [
+	"
+	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
+	"
+	| index cell|
+	cell := 0.
+	index := self asArray indexOf: number.
+	index = 0
+	ifFalse: [ 
+		cell := SudokuCell row: rowIndex column: index element: number.
+	].
+	
+	^cell
+]
+
 { #category : #'private - utility' }
 SudokuRow >> clearMarks [
 

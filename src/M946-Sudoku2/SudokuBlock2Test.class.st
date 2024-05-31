@@ -4,6 +4,18 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
+{ #category : #running }
+SudokuBlock2Test >> setUp [
+	super setUp.
+
+	TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
+    TinyLogger default 
+        timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+]
+
 { #category : #tests }
 SudokuBlock2Test >> testAllGreen [
 
@@ -163,6 +175,145 @@ SudokuBlock2Test >> testColsOnBoard [
 			column: #(0 6 7 0 3 0 0 5 9).			
 	self assert: (cols at: 3) equals: column.
 	
+	
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testLocalX [
+
+	| board block |
+
+	board := SudokuBoard2 new.
+	
+	block := board atBlock: 2.
+	self assert: 1 equals: (block localX: 4).
+	self assert: 2 equals: (block localX: 5).
+	self assert: 3 equals: (block localX: 6).
+	
+	block := board atBlock: 4.
+	self assert: 1 equals: (block localX: 1).
+	self assert: 2 equals: (block localX: 2).
+	self assert: 3 equals: (block localX: 3).
+	
+	block := board atBlock: 9.
+	self assert: 1 equals: (block localX: 7).
+	self assert: 2 equals: (block localX: 8).
+	self assert: 3 equals: (block localX: 9).
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testLocalY [
+
+	| board block |
+
+	board := SudokuBoard2 new.
+	
+	block := board atBlock: 2.
+	self assert: 1 equals: (block localY: 1).
+	self assert: 2 equals: (block localY: 2).
+	self assert: 3 equals: (block localY: 3).
+	
+	block := board atBlock: 4.
+	self assert: 1 equals: (block localY: 4).
+	self assert: 2 equals: (block localY: 5).
+	self assert: 3 equals: (block localY: 6).
+	
+	block := board atBlock: 9.
+	self assert: 1 equals: (block localY: 7).
+	self assert: 2 equals: (block localY: 8).
+	self assert: 3 equals: (block localY: 9).
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testMarkByHorizontalCell [
+	| board solver task cells blockNumber sudokuNumber block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	solver := YokoNicoCheckMethod new: board.
+	
+	"test 1"
+	blockNumber := 1.
+	sudokuNumber  := 8.
+	cells := solver nicoCells: blockNumber  number: sudokuNumber .
+	block := board atBlock: blockNumber.
+	
+	self assert: 5 equals: (block blankCellsAsArray size).
+	
+	block markByHorizontalCell: (cells at: 1).
+	block markByHorizontalCell: (cells at: 2).
+
+	('{1}' format: {thisContext}) record.
+	('test 1 {1}' format: {block}) record.
+	
+	self assert: 2 equals: (block blankCellsAsArray size).
+	self assert: $X equals: (block row: 3 column: 1).
+	self assert: $X equals: (block row: 3 column: 2).	
+	self assert: $X equals: (block row: 3 column: 3).	
+
+
+	"test 2"
+	sudokuNumber := 5.
+	cells := solver nicoCells: blockNumber  number: sudokuNumber .
+	block := board atBlock: blockNumber.
+	
+	block markByHorizontalCell: (cells at: 1).
+	block markByHorizontalCell: (cells at: 2).
+
+	('{1}' format: {thisContext}) record.
+	('test 2 {1}' format: {block}) record.
+
+	self assert: 3 equals: (block blankCellsAsArray size).
+	self assert: $X equals: (block row: 2 column: 1).
+	self assert: $X equals: (block row: 2 column: 3).	
+
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
+
+	| task board block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board atBlock: 1.
+	
+	self assert: 5 equals: (block blankCellsAsArray size).
+	block markByNumberToMark: 8.
+	
+	('{1}' format: {thisContext}) record.
+	('{1}' format: {block}) record.	
+	
+	self assert: 1 equals: (block blankCellsAsArray size).
+	self assert: 0 equals: (block row: 2 column: 1).
 	
 
 ]

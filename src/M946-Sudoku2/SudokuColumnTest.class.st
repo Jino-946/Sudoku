@@ -35,6 +35,32 @@ SudokuColumnTest >> testAllGreen [
 ]
 
 { #category : #tests }
+SudokuColumnTest >> testCellOf [ 
+
+	| task board column cell |
+		task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	column := board atSudokuColumn: 4.
+	
+	cell := SudokuCell row: 9 column: 4  element: 7.
+	self assert: cell equals: (column cellOf: 7)
+]
+
+{ #category : #tests }
 SudokuColumnTest >> testTenpai [
 
 	|task board block cell |

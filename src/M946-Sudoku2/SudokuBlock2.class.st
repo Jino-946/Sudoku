@@ -242,6 +242,36 @@ SudokuBlock2 >> initialize [
 	
 ]
 
+{ #category : #converting }
+SudokuBlock2 >> localX: boardX [
+	"
+	ボードのX座標をブロックのX座標に変換し返す。
+	変換できない時は0を返す。
+	"
+	| localX |
+	localX := boardX.
+	(#(2 5 8) includes: blockNumber ) ifTrue: [ localX := boardX - 3 ].
+	(#(3 6 9) includes: blockNumber ) ifTrue: [ localX := boardX - 6 ].
+	(localX between: 1 and: 3) ifFalse: [ localX := 0 ].
+	
+	^localX
+]
+
+{ #category : #converting }
+SudokuBlock2 >> localY: boardY [
+	"
+	ボードのY座標をブロックのY座標に変換し返す。
+	変換できない時は0を返す。
+	"
+	| localY |
+	localY := boardY.
+	(#(4 5 6) includes: blockNumber ) ifTrue: [ localY := boardY - 3 ].
+	(#(7 8 9) includes: blockNumber ) ifTrue: [ localY := boardY - 6 ].
+	(localY between: 1 and: 3) ifFalse: [ localY := 0 ].
+	
+	^localY
+]
+
 { #category : #'private - logics' }
 SudokuBlock2 >> markBlankCells [
 	"
@@ -251,6 +281,33 @@ SudokuBlock2 >> markBlankCells [
 		1 to: 3 do: [ :j |
 			(self row: i column: j) = 0
 				ifTrue: [ self row: i column: j put: $X ]]]
+]
+
+{ #category : #logic }
+SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
+	"
+	ブランクセルのY座標と引数セルのY座標が等しい時、
+	ブロックのブランクセルを$Xでマークする。
+	"
+	self blankCellsAsArray do: [ :blankCell | 
+		(blankCell y = aSudokuCell y) ifTrue: [ 
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+
+
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBlock2 >> markByNumberToMark: numberToMark [
+	"
+	ブランクセルに直交するSudokuRowとSudokuColumnを検査し
+	numberToMark があるときはブランクセルを$Xでマークする
+	"
+	self blankCellsAsArray do: [ :blankCell | 	| sudokuRow sudokuColumn |
+		sudokuRow := self rowsOnBoard at: (blankCell y).
+		sudokuColumn := self colsOnBoard at: (blankCell x).
+		((sudokuRow includes: numberToMark) or: [ sudokuColumn includes: numberToMark  ]) ifTrue: [ 
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+
 ]
 
 { #category : #printing }

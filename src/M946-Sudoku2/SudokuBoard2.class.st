@@ -152,6 +152,12 @@ SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
 ]
 
 { #category : #accessing }
+SudokuBoard2 >> atCellRow: rowIndex cellColumn: colIndex [
+
+	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
+]
+
+{ #category : #accessing }
 SudokuBoard2 >> atColumn: colIndex [
 	"
 	boardA2DよりcolIndexで指定した列を返す。
