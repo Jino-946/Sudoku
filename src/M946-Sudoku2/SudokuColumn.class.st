@@ -71,6 +71,7 @@ SudokuColumn >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
+	aStream cr.
 	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString.
 	column doWithIndex: [ :c :idx |
 			 	idx % 3 = 1 ifTrue: [ aStream cr ]. 

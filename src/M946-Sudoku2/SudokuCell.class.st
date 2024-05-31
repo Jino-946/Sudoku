@@ -54,6 +54,7 @@ SudokuCell >> asString [
 
 	| aStream elem |
 	aStream := ReadWriteStream on: String new.
+	aStream cr.
 	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
 			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr.
 	elem := element.

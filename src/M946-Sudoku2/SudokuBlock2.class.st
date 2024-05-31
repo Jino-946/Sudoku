@@ -82,6 +82,7 @@ SudokuBlock2 >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
+	aStream cr.
 	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
 	aStream nextPutAll: '検証数字:'; nextPutAll: verifyNumber asString;cr.
 	aStream nextPutAll: '========='; cr. 
@@ -310,6 +311,20 @@ SudokuBlock2 >> markByNumberToMark: numberToMark [
 		sudokuColumn := self colsOnBoard at: (self localX: blankCell x).
 		((sudokuRow includes: numberToMark) or: [ sudokuColumn includes: numberToMark  ]) ifTrue: [ 
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+
+]
+
+{ #category : #logic }
+SudokuBlock2 >> markByVerticalCell: aSudokuCell [
+	"
+	ブランクセルのY座標と引数セルのY座標が等しい時、
+	ブロックのブランクセルを$Xでマークする。
+	"
+	(self includes: aSudokuCell element) ifTrue: [ ^self ].
+	self blankCellsAsArray do: [ :blankCell | 
+		(blankCell x = aSudokuCell x) ifTrue: [ 
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+
 
 ]
 

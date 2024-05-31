@@ -232,3 +232,11 @@ AllmostFinishedMethod >> finishRows [
 	]
 
 ]
+
+{ #category : #logic }
+AllmostFinishedMethod >> solve [
+
+	self finishBlocks .
+	self finishColumns .
+	self finishRows .
+]

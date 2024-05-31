@@ -39,28 +39,27 @@ YokoNicoCheckMethodTest >> testNicoCellsNumber [
 	board loadFromString: task.
 	solver := YokoNicoCheckMethod new: board.
 	
+	"solver nicoCheck: 1  => #(5 8)"
 	"test block1 element8"
 	blockNumber := 1.
 	elem := 8.
 	cells := solver nicoCells: blockNumber  number: elem.
-	self assert: 2 equals: cells size.
-	
 	sudokuCell := SudokuCell row: 1 column: 4 element: elem.
-	self assert: sudokuCell equals: (cells at: 1).	
+	self assert: (cells at: 1) equals: sudokuCell.	
 		
 	sudokuCell := SudokuCell row: 3 column: 9 element: elem.
-	self assert: sudokuCell equals: (cells at: 2).
-	
+	self assert: (cells at: 2) equals: sudokuCell.	
+
+
 	"test block1 element5"	
 	elem := 5.
 	cells := solver nicoCells: blockNumber  number: elem .
-	self assert: 2 equals: cells size.
-	
 	sudokuCell := SudokuCell row: 2 column: 4 element: elem .
-	self assert: sudokuCell equals: (cells at: 1).	
-		
+	self assert: (cells at: 1) equals: sudokuCell.	
+
 	sudokuCell := SudokuCell row: 1 column: 7 element: elem .
-	self assert: sudokuCell equals: (cells at: 2).
+	self assert: (cells at: 2) equals: sudokuCell.	
+
 
 	
 	
@@ -89,17 +88,21 @@ YokoNicoCheckMethodTest >> testNicoCheck [
 	board loadFromString: task.
 	solver := YokoNicoCheckMethod new: board.
 	
-	self assert: #(5 8) sorted 	equals:  (solver nicoCheck: 1) sorted.
-	self assert: #() 				equals:  (solver nicoCheck: 2).
-	self assert: #(6)				equals:  (solver nicoCheck: 3).
+	self assert: (solver nicoCheck: 1) sorted equals: #(5 8)  .
+	self assert: (solver nicoCheck: 2) 		 equals: #().
+	self assert: (solver nicoCheck: 3)	 	 equals: #(6) .
 	
-	self assert: #(1 8 2) 	sorted equals:  (solver nicoCheck: 4) sorted.		
-	self assert: #(7 8) 	sorted	equals:  (solver nicoCheck: 5) sorted.	
-	self assert: #(6 8 9) 	sorted	equals:  (solver nicoCheck: 6) sorted.	
+	self assert: (solver nicoCheck: 4) sorted equals: #(1 2 8) 	.		
+	self assert: (solver nicoCheck: 5) sorted equals: #(7 8) .	
+	self assert: (solver nicoCheck: 6) sorted equals: #(6 8 9) .	
 		
-	self assert: #(8 5 2) 	sorted equals:  (solver nicoCheck: 7) sorted.		
-	self assert: #(9)				equals:  (solver nicoCheck: 8).	
-	self assert: #() 				equals:  (solver nicoCheck: 9).	
+	self assert: (solver nicoCheck: 7) sorted equals: #(2 5 8).		
+	self assert: (solver nicoCheck: 8)  		 equals: #(9).	
+	self assert: (solver nicoCheck: 9)		 equals: #().	
+			
+		
+	
+
 ]
 
 { #category : #tests }

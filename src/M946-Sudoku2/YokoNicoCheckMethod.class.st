@@ -34,16 +34,17 @@ YokoNicoCheckMethod >> nicoCheck: targetBlockNumber [
 	検証するブロックに水平方向に関連する2つのブロックで重複する数字の配列を返す。
 	返された配列の数字を[nicoCells:number:]numberの引数として使用する
 	"
-	| values block1 block2 |
+	| values block1 block2  |
 	values := self relatedHorBlocks at: targetBlockNumber .
 	block1 := sudokuBoard atBlock: (values at: 1).
 	block2 := sudokuBoard atBlock: (values at: 2).
 	
-	^(block1 asArray select: [ :n | n > 0] ) intersection: (block2 asArray select: [ :n | n > 0])
+	^(block1 asArray select: [ :n | n > 0] ) intersection: (block2 asArray select: [ :n | n > 0]).
+
 ]
 
 { #category : #logic }
-YokoNicoCheckMethod >> solveTask [
+YokoNicoCheckMethod >> solve [
 
 	1 to: 9 do: [ :blockNumber | self targetBlock: blockNumber  ]
 ]
@@ -52,7 +53,6 @@ YokoNicoCheckMethod >> solveTask [
 YokoNicoCheckMethod >> targetBlock: blockNumber [
 
 	| nicoNumbers |
-
 	nicoNumbers := self nicoCheck: blockNumber.
 	nicoNumbers do: [ :n | | block tenpaiCell |
 		block := self sudokuBoard atBlock: blockNumber.
