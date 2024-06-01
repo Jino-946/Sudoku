@@ -244,7 +244,7 @@ SudokuBlock2Test >> testMarkByHorizontalCell [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := YokoNicoCheckMethod new: board.
+	solver := YokoNicoMethod new: board.
 	
 	"test 1"
 	blockNumber := 1.

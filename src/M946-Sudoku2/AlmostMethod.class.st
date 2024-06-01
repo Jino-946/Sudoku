@@ -1,14 +1,17 @@
 "
 「空きマス少見」テクニックを実装する。
+[初級問題の解き方](http://daddy-number-place.blog.jp/syokyu1.pdf)
 
 行・列・ブロックでブランクセルが1または2の時を処理する
 
-- finishRows
-- finishColums
-- finishBlocks
+Public methods
+- solve
+	- finishRows
+	- finishColums
+	- finishBlocks
 "
 Class {
-	#name : #AllmostFinishedMethod,
+	#name : #AlmostMethod,
 	#superclass : #DaddyNumPreMethod,
 	#instVars : [
 		'missingNumbers'
@@ -17,7 +20,7 @@ Class {
 }
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> findBlocks [
+AlmostMethod >> findBlocks [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満のブロックをコレクションにして返す
 	"
@@ -31,7 +34,7 @@ AllmostFinishedMethod >> findBlocks [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> findColumns [
+AlmostMethod >> findColumns [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の列をコレクションにして返す
 	"
@@ -45,7 +48,7 @@ AllmostFinishedMethod >> findColumns [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> findRows [
+AlmostMethod >> findRows [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の行をコレクションにして返す
 	"
@@ -59,7 +62,7 @@ AllmostFinishedMethod >> findRows [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> finish1stColumn: cells [
+AlmostMethod >> finish1stColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -84,7 +87,7 @@ AllmostFinishedMethod >> finish1stColumn: cells [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> finish1stRow: cells [
+AlmostMethod >> finish1stRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -109,7 +112,7 @@ AllmostFinishedMethod >> finish1stRow: cells [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> finish2ndColumn: cells [
+AlmostMethod >> finish2ndColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -134,7 +137,7 @@ AllmostFinishedMethod >> finish2ndColumn: cells [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> finish2ndRow: cells [
+AlmostMethod >> finish2ndRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -159,7 +162,7 @@ AllmostFinishedMethod >> finish2ndRow: cells [
 ]
 
 { #category : #logic }
-AllmostFinishedMethod >> finishBlocks [
+AlmostMethod >> finishBlocks [
 	"
 	ブロック内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
@@ -176,7 +179,7 @@ AllmostFinishedMethod >> finishBlocks [
 ]
 
 { #category : #logic }
-AllmostFinishedMethod >> finishColumns [
+AlmostMethod >> finishColumns [
 	"
 	SudokuColumn内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
@@ -196,7 +199,7 @@ AllmostFinishedMethod >> finishColumns [
 ]
 
 { #category : #'private - logics' }
-AllmostFinishedMethod >> finishPairCells: cells block: block [
+AlmostMethod >> finishPairCells: cells block: block [
 	"
 	finishBlocksの下請けメソッド
 	ブロックのブランクセルペアに2つの特定の数字(ブロックに入っていない2つの数字)が入ることを確認する
@@ -214,7 +217,7 @@ AllmostFinishedMethod >> finishPairCells: cells block: block [
 ]
 
 { #category : #logic }
-AllmostFinishedMethod >> finishRows [
+AlmostMethod >> finishRows [
 	"
 	SudokuRow内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
@@ -234,7 +237,7 @@ AllmostFinishedMethod >> finishRows [
 ]
 
 { #category : #logic }
-AllmostFinishedMethod >> solve [
+AlmostMethod >> solve [
 
 	self finishBlocks .
 	self finishColumns .

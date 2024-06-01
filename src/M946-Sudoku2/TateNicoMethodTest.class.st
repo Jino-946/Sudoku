@@ -1,11 +1,11 @@
 Class {
-	#name : #TateNicoCheckMethodTest,
+	#name : #TateNicoMethodTest,
 	#superclass : #TestCase,
 	#category : #'M946-Sudoku2-Tests'
 }
 
 { #category : #running }
-TateNicoCheckMethodTest >> setUp [
+TateNicoMethodTest >> setUp [
 	super setUp.
 	
     TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
@@ -18,7 +18,7 @@ TateNicoCheckMethodTest >> setUp [
 ]
 
 { #category : #tests }
-TateNicoCheckMethodTest >> testNicoCellsNumber [
+TateNicoMethodTest >> testNicoCellsNumber [
 
 
 	| board solver task cells sudokuCell blockNumber elem|
@@ -38,7 +38,7 @@ TateNicoCheckMethodTest >> testNicoCellsNumber [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	
 	"solver nicoCheck: 5  => #(5 7 8)"
 	"test block 5 element 5"
@@ -77,7 +77,7 @@ TateNicoCheckMethodTest >> testNicoCellsNumber [
 ]
 
 { #category : #tests }
-TateNicoCheckMethodTest >> testNicoCheck [
+TateNicoMethodTest >> testNicoCheck [
 
 	| board solver task |
 	task := '
@@ -96,7 +96,7 @@ TateNicoCheckMethodTest >> testNicoCheck [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	
 	self assert: (solver nicoCheck: 1) sorted equals: #(9)  .
 	self assert: (solver nicoCheck: 2) sorted equals: #(2 5 8).
@@ -117,7 +117,7 @@ TateNicoCheckMethodTest >> testNicoCheck [
 ]
 
 { #category : #tests }
-TateNicoCheckMethodTest >> testTargetBlock [
+TateNicoMethodTest >> testTargetBlock [
 
 	| board solver task blockNumber |
 	task := '
@@ -138,13 +138,13 @@ TateNicoCheckMethodTest >> testTargetBlock [
 	board loadFromString: task.
 
 	blockNumber := 1.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
 
 	blockNumber := 2.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 3.	
@@ -152,20 +152,20 @@ TateNicoCheckMethodTest >> testTargetBlock [
 	
 
 	blockNumber := 3.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 6.	
 	self assert: (board boardA2D at: 3 at: 7)  equals: 2.
 	
 	blockNumber := 4.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.	
 
 	blockNumber := 5.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 2.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 0.	
@@ -173,41 +173,41 @@ TateNicoCheckMethodTest >> testTargetBlock [
 	self assert: (board boardA2D at: 5 at: 4)  equals: 4.
 
 	blockNumber := 6.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.	
 	self assert: (board boardA2D at: 5 at: 9)  equals: 5.
 
 	blockNumber := 7.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.	
 
 	blockNumber := 8.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 3.	
 	self assert: (board boardA2D at: 7 at: 4)  equals: 1.
 
 	blockNumber := 9.		
-	solver := TateNicoCheckMethod new: board.
+	solver := TateNicoMethod new: board.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.	
 
 	2 timesRepeat: [  
-		solver := TateNicoCheckMethod new: board.		
+		solver := TateNicoMethod new: board.		
 		1 to: 9 do: [ :num | solver targetBlock: num ].
 		('{1}' format: {board}) record.
 
-		solver := YokoNicoCheckMethod new: board.		
+		solver := YokoNicoMethod new: board.		
 		1 to: 9 do: [ :num | solver targetBlock: num ].
 		('{1}' format: {board}) record.
 	
-		solver := AllmostFinishedMethod new: board.
+		solver := AlmostMethod new: board.
 		solver solve.
 		('{1}{2}' format: {thisContext . board}) record.]
 

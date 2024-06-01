@@ -1,11 +1,11 @@
 Class {
-	#name : #YokoNicoCheckMethodTest,
+	#name : #YokoNicoMethodTest,
 	#superclass : #TestCase,
 	#category : #'M946-Sudoku2-Tests'
 }
 
 { #category : #running }
-YokoNicoCheckMethodTest >> setUp [
+YokoNicoMethodTest >> setUp [
 	super setUp.
 
     TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
@@ -17,7 +17,7 @@ YokoNicoCheckMethodTest >> setUp [
 ]
 
 { #category : #tests }
-YokoNicoCheckMethodTest >> testNicoCellsNumber [
+YokoNicoMethodTest >> testNicoCellsNumber [
 
 
 	| board solver task cells sudokuCell blockNumber elem|
@@ -37,7 +37,7 @@ YokoNicoCheckMethodTest >> testNicoCellsNumber [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := YokoNicoCheckMethod new: board.
+	solver := YokoNicoMethod new: board.
 	
 	"solver nicoCheck: 1  => #(5 8)"
 	"test block1 element8"
@@ -67,7 +67,7 @@ YokoNicoCheckMethodTest >> testNicoCellsNumber [
 ]
 
 { #category : #tests }
-YokoNicoCheckMethodTest >> testNicoCheck [
+YokoNicoMethodTest >> testNicoCheck [
 
 	| board solver task |
 	task := '
@@ -86,7 +86,7 @@ YokoNicoCheckMethodTest >> testNicoCheck [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := YokoNicoCheckMethod new: board.
+	solver := YokoNicoMethod new: board.
 	
 	self assert: (solver nicoCheck: 1) sorted equals: #(5 8)  .
 	self assert: (solver nicoCheck: 2) 		 equals: #().
@@ -106,7 +106,7 @@ YokoNicoCheckMethodTest >> testNicoCheck [
 ]
 
 { #category : #tests }
-YokoNicoCheckMethodTest >> testTargetBlock [
+YokoNicoMethodTest >> testTargetBlock [
 
 	| board solver task blockNumber |
 	task := '
@@ -127,44 +127,44 @@ YokoNicoCheckMethodTest >> testTargetBlock [
 	board loadFromString: task.
 
 	blockNumber := 1.		
-	solver := YokoNicoCheckMethod new: board.
+	solver := YokoNicoMethod new: board.
 	solver targetBlock: blockNumber.
 	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	self assert: (board boardA2D at: 2 at: 1) equals:  8.
 	
 	
 	blockNumber := 2.
-	solver := YokoNicoCheckMethod new: board.	
+	solver := YokoNicoMethod new: board.	
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber ) blankCellsAsArray size equals: 4.	
 
 	blockNumber := 3.
-	solver := YokoNicoCheckMethod new: board.	
+	solver := YokoNicoMethod new: board.	
 	self assert:  (board atBlock: blockNumber ) blankCellsAsArray size equals:  7.
 	solver targetBlock: blockNumber .
 	self assert:  (board atBlock: blockNumber ) blankCellsAsArray size equals:  7.
 
 	blockNumber := 4.
-	solver := YokoNicoCheckMethod new: board.	
+	solver := YokoNicoMethod new: board.	
 	self assert: (board atBlock: blockNumber ) blankCellsAsArray size equals:  5.
 	solver targetBlock: 4.
 	self assert: (board atBlock: blockNumber ) blankCellsAsArray size equals:  5.
 
 	blockNumber := 5.
-	solver := YokoNicoCheckMethod new: board.		
+	solver := YokoNicoMethod new: board.		
 	self assert: (board atBlock: blockNumber ) blankCellsAsArray  size equals: 2.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray  size  equals: 0.	
 
 	blockNumber := 6.
-	solver := YokoNicoCheckMethod new: board.			
+	solver := YokoNicoMethod new: board.			
 	self assert: (board atBlock: blockNumber) blankCellsAsArray  size equals: 5.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray  size  equals: 5.	
 
 	blockNumber := 7.
-	solver := YokoNicoCheckMethod new: board.		
+	solver := YokoNicoMethod new: board.		
 	self assert: (board atBlock: blockNumber) blankCellsAsArray  size equals: 7.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray  size  equals: 5.
@@ -172,19 +172,19 @@ YokoNicoCheckMethodTest >> testTargetBlock [
 	self assert: (board boardA2D at: 7 at: 3) equals: 2.
 	
 	blockNumber := 8.
-	solver := YokoNicoCheckMethod new: board.		
+	solver := YokoNicoMethod new: board.		
 	self assert: (board atBlock: blockNumber) blankCellsAsArray  size equals: 4.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray  size  equals: 3.
 	self assert: (board boardA2D at: 8 at: 5) equals: 9.
 
 	blockNumber := 9.
-	solver := YokoNicoCheckMethod new: board.		
+	solver := YokoNicoMethod new: board.		
 	self assert: (board atBlock: blockNumber) blankCellsAsArray  size equals: 5.
 	solver targetBlock: blockNumber.
 	self assert:  (board atBlock: blockNumber) blankCellsAsArray  size  equals: 5.
 
-	solver := YokoNicoCheckMethod new: board.		
+	solver := YokoNicoMethod new: board.		
 	1 to: 9 do: [ :num | solver targetBlock: num ].
 	('{1}' format: {board}) record.
 ]

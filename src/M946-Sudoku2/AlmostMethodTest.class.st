@@ -1,17 +1,22 @@
 Class {
-	#name : #AllmostFinishedMethodTest,
+	#name : #AlmostMethodTest,
 	#superclass : #TestCase,
 	#category : #'M946-Sudoku2-Tests'
 }
 
 { #category : #running }
-AllmostFinishedMethodTest >> setUp [
+AlmostMethodTest >> setUp [
 	super setUp.
-
+    TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
+    TinyLogger default 
+        timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFindBlocks [
+AlmostMethodTest >> testFindBlocks [
 
 	| blocks solver board task|
 	
@@ -31,7 +36,7 @@ AllmostFinishedMethodTest >> testFindBlocks [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.	
+	solver := AlmostMethod new: board.	
 	blocks := solver findBlocks .
 	
 	self assert: 1 equals: blocks size.
@@ -42,7 +47,7 @@ AllmostFinishedMethodTest >> testFindBlocks [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFindColumns [
+AlmostMethodTest >> testFindColumns [
 
 	| columns solver board task|
 	
@@ -62,7 +67,7 @@ AllmostFinishedMethodTest >> testFindColumns [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.	
+	solver := AlmostMethod new: board.	
 	columns := solver findColumns .
 	
 	self assert: 2 equals: columns size.
@@ -71,7 +76,7 @@ AllmostFinishedMethodTest >> testFindColumns [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFindRows [
+AlmostMethodTest >> testFindRows [
 
 	| rows solver board task|
 	
@@ -91,7 +96,7 @@ AllmostFinishedMethodTest >> testFindRows [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.	
+	solver := AlmostMethod new: board.	
 	rows := solver findRows .
 	
 	self assert: 2 equals: rows size.
@@ -99,7 +104,7 @@ AllmostFinishedMethodTest >> testFindRows [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFinishBlocks [
+AlmostMethodTest >> testFinishBlocks [
 
 	| task board solver|
 
@@ -119,7 +124,7 @@ AllmostFinishedMethodTest >> testFinishBlocks [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.
+	solver := AlmostMethod new: board.
 	solver finishBlocks .
 	
 	self assert: 4 equals: (board boardA2D at: 5 at: 4).
@@ -129,7 +134,7 @@ AllmostFinishedMethodTest >> testFinishBlocks [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFinishBlocks2 [
+AlmostMethodTest >> testFinishBlocks2 [
 
 	| task board solver|
 
@@ -149,7 +154,7 @@ AllmostFinishedMethodTest >> testFinishBlocks2 [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.
+	solver := AlmostMethod new: board.
 	solver finishBlocks .
 	
 	self assert: 3 equals: (board boardA2D at: 4 at: 5).
@@ -159,7 +164,7 @@ AllmostFinishedMethodTest >> testFinishBlocks2 [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFinishColumns [
+AlmostMethodTest >> testFinishColumns [
 
 	| solver board task|
 	
@@ -179,7 +184,7 @@ AllmostFinishedMethodTest >> testFinishColumns [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.	
+	solver := AlmostMethod new: board.	
 	solver finishColumns .
 	
 	self assert: 0 equals: (board boardA2D at: 3 at: 4).
@@ -191,7 +196,7 @@ AllmostFinishedMethodTest >> testFinishColumns [
 ]
 
 { #category : #tests }
-AllmostFinishedMethodTest >> testFinishRows [
+AlmostMethodTest >> testFinishRows [
 
 	| task board solver|
 
@@ -211,7 +216,7 @@ AllmostFinishedMethodTest >> testFinishRows [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := AllmostFinishedMethod new: board.
+	solver := AlmostMethod new: board.
 	solver finishRows .
 	
 	self assert: 5 equals: (board boardA2D at: 4 at: 1).

@@ -1,14 +1,16 @@
 "
 タテ３列「2コ2コチェック」テクニックを実装する。
+
+[初級問題の解き方](http://daddy-number-place.blog.jp/syokyu1.pdf)
 "
 Class {
-	#name : #TateNicoCheckMethod,
+	#name : #TateNicoMethod,
 	#superclass : #DaddyNumPreMethod,
 	#category : #'M946-Sudoku2-Solution'
 }
 
 { #category : #'private - logics' }
-TateNicoCheckMethod >> nicoCells: targetBlockNumber number: anInteger [
+TateNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 	"
 	検証するブロックに垂直方向に関連する2つのブロックで重複する数字のセルをSudokuCellに変換し配列にして返す。
 	予め[nicoCheck:]を利用し同じ数字(anInteger)が2コあるものを見つけておく。
@@ -26,7 +28,7 @@ TateNicoCheckMethod >> nicoCells: targetBlockNumber number: anInteger [
 ]
 
 { #category : #'private - logics' }
-TateNicoCheckMethod >> nicoCheck: targetBlockNumber [
+TateNicoMethod >> nicoCheck: targetBlockNumber [
 	"
 	検証するブロックに垂直方向に関連する2つのブロックで重複する数字の配列を返す。
 	返された配列の数字を[nicoCells:number:]numberの引数として使用する
@@ -40,23 +42,24 @@ TateNicoCheckMethod >> nicoCheck: targetBlockNumber [
 ]
 
 { #category : #logic }
-TateNicoCheckMethod >> targetBlock: blockNumber [
+TateNicoMethod >> solve [
 
-	| nicoNumbers |
-	nicoNumbers := self nicoCheck: blockNumber.
-	nicoNumbers do: [ :n | | block tenpaiCell |
+	1 to: 9 do: [ :blockNumber |
+		self targetBlock: blockNumber ]
+]
+
+{ #category : #logic }
+TateNicoMethod >> targetBlock: blockNumber [
+
+	(self nicoCheck: blockNumber) do: [ :n | | block |
 		block := self sudokuBoard atBlock: blockNumber.
 		(self nicoCells: blockNumber  number: n) do: [ :cell |
 			block markByVerticalCell: cell ].
+
 		block markByNumberToMark: n.
 		
-		tenpaiCell := block tenpai.	
-		(tenpaiCell class = SudokuCell) ifTrue: [ | tsumoCell |
-			tsumoCell := block allGreen.
-			(tsumoCell class = SudokuCell) 
-				ifTrue: [ sudokuBoard map: tsumoCell ]
-				ifFalse: [  
-					tenpaiCell element: n.
-					sudokuBoard map: tenpaiCell.] ]]
-	
+		(block blankCellsAsArray size = 1) ifTrue: [ 
+			self finishBlock: block number: n ]]	
+		
+		" todo: ブランクセルが2つの時『2国同盟』の処理を追加する"
 ]

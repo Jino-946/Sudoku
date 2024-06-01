@@ -1,6 +1,6 @@
 "
 Instance variables
-- sudokuBoard	<SudokuBoard> 数独ボードを表現する
+- sudokuBoard	   <SudokuBoard> 	 数独ボードを表現する
 "
 Class {
 	#name : #SudokuSolver,
@@ -13,17 +13,8 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
-{ #category : #'instance creation' }
-SudokuSolver class >> new: sudokuBoard [
-
-	| way |
-	way := self new.
-	way sudokuBoard: sudokuBoard .
-	^ way
-]
-
 { #category : #exercises }
-SudokuSolver >> beginnersEx [
+SudokuSolver class >> beginnersEx [
 
 	^ #(
 '
@@ -155,45 +146,8 @@ SudokuSolver >> beginnersEx [
 )
 ]
 
-{ #category : #'private - helpers' }
-SudokuSolver >> blankCell [ 
-
-	^0
-]
-
-{ #category : #initialization }
-SudokuSolver >> initialize [
-
-	super initialize .
-	
-	relatedVertBlocks := Dictionary new.
-	relatedVertBlocks
-		at: 1 put: #( 4 7 );
-		at: 4 put: #( 1 7 );
-		at: 7 put: #( 1 4 );
-		at: 2 put: #( 5 8 );
-		at: 5 put: #( 2 8 );
-		at: 8 put: #( 2 5 );
-		at: 3 put: #( 6 9 );
-		at: 6 put: #( 3 9 );
-		at: 9 put: #( 3 6 ).
-
-	relatedHorBlocks := Dictionary new.
-	relatedHorBlocks
-		at: 1 put: #( 2 3 );
-		at: 2 put: #( 1 3 );
-		at: 3 put: #( 1 2 );
-		at: 4 put: #( 5 6 );
-		at: 5 put: #( 4 6 );
-		at: 6 put: #( 4 5 );
-		at: 7 put: #( 8 9 );
-		at: 8 put: #( 7 9 );
-		at: 9 put: #( 7 8 )
-
-]
-
 { #category : #exercises }
-SudokuSolver >> intermediateEx [
+SudokuSolver class >> intermediateEx [
 
 	^ #(
 '
@@ -634,6 +588,52 @@ SudokuSolver >> intermediateEx [
  0 0 7   0 9 0   0 3 0
 '
 )
+]
+
+{ #category : #'instance creation' }
+SudokuSolver class >> new: sudokuBoard [
+
+	| way |
+	way := self new.
+	way sudokuBoard: sudokuBoard .
+	^ way
+]
+
+{ #category : #'private - helpers' }
+SudokuSolver >> blankCell [ 
+
+	^0
+]
+
+{ #category : #initialization }
+SudokuSolver >> initialize [
+
+	super initialize .
+	
+	relatedVertBlocks := Dictionary new.
+	relatedVertBlocks
+		at: 1 put: #( 4 7 );
+		at: 4 put: #( 1 7 );
+		at: 7 put: #( 1 4 );
+		at: 2 put: #( 5 8 );
+		at: 5 put: #( 2 8 );
+		at: 8 put: #( 2 5 );
+		at: 3 put: #( 6 9 );
+		at: 6 put: #( 3 9 );
+		at: 9 put: #( 3 6 ).
+
+	relatedHorBlocks := Dictionary new.
+	relatedHorBlocks
+		at: 1 put: #( 2 3 );
+		at: 2 put: #( 1 3 );
+		at: 3 put: #( 1 2 );
+		at: 4 put: #( 5 6 );
+		at: 5 put: #( 4 6 );
+		at: 6 put: #( 4 5 );
+		at: 7 put: #( 8 9 );
+		at: 8 put: #( 7 9 );
+		at: 9 put: #( 7 8 )
+
 ]
 
 { #category : #accessing }
