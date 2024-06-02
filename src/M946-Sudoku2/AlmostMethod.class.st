@@ -171,7 +171,7 @@ AlmostMethod >> finishBlocks [
 	blocks do: [ :block | | blankCells |
 		blankCells := block blankCellsAsArray .
 		blankCells size = 1 ifTrue: [ | cell |
-			cell := block tsumo.
+			cell := block allGreen.
 			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
 		blankCells size = 2 ifTrue: [ self finishPairCells: blankCells block: block ]
 	]
@@ -189,7 +189,7 @@ AlmostMethod >> finishColumns [
 		missingNumbers := self missingNumbers: column asArray.
 		blankCells := column  blankCellsAsArray .
 		blankCells size = 1 ifTrue: [ | cell |
-			cell := column tsumo.
+			cell := column allGreen.
 			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
 		blankCells size = 2 ifTrue: [ 
 			self finish1stRow: blankCells.
@@ -227,7 +227,7 @@ AlmostMethod >> finishRows [
 		missingNumbers := self missingNumbers: row asArray.
 		blankCells := row  blankCellsAsArray .
 		blankCells size = 1 ifTrue: [ | cell |
-			cell := row tsumo.
+			cell := row allGreen.
 			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
 		blankCells size = 2 ifTrue: [ 
 			self finish1stColumn: blankCells.

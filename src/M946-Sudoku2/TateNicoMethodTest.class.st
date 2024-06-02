@@ -4,17 +4,18 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
-{ #category : #running }
-TateNicoMethodTest >> setUp [
-	super setUp.
-	
-    TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
-    TinyLogger default 
-        timestampFormatBlock: [ :aStream :timestamp |
+{ #category : #private }
+TateNicoMethodTest >> performTest [ 
+
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
             timestamp asDate yyyymmdd printOn: aStream.
             aStream << ' '.
             timestamp asTime print24: true on: aStream ].
-
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
 { #category : #tests }
@@ -111,7 +112,6 @@ TateNicoMethodTest >> testNicoCheck [
 	self assert: (solver nicoCheck: 9)		 equals: #(8).	
 			
 		
-	
 
 
 ]
@@ -133,7 +133,8 @@ TateNicoMethodTest >> testTargetBlock [
 0 0 0   2 0 4   0 8 0
 0 0 1   7 0 8   9 5 2
 '.
-
+	('{1}
+	 hi, there!!'	format: { thisContext }) record.
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 

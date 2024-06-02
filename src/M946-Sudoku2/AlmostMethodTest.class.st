@@ -4,6 +4,20 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
+{ #category : #private }
+AlmostMethodTest >> performTest [ 
+
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
+]
+
 { #category : #running }
 AlmostMethodTest >> setUp [
 	super setUp.
@@ -38,6 +52,8 @@ AlmostMethodTest >> testFindBlocks [
 	board loadFromString: task.
 	solver := AlmostMethod new: board.	
 	blocks := solver findBlocks .
+	('{1}
+	{2}' format:{ thisContext . board }) record.
 	
 	self assert: 1 equals: blocks size.
 
@@ -187,6 +203,9 @@ AlmostMethodTest >> testFinishColumns [
 	solver := AlmostMethod new: board.	
 	solver finishColumns .
 	
+	('{1}
+	{2}' format:{ thisContext . board }) record.
+	
 	self assert: 0 equals: (board boardA2D at: 3 at: 4).
 	self assert: 0 equals: (board boardA2D at: 7 at: 4).
 
@@ -218,7 +237,7 @@ AlmostMethodTest >> testFinishRows [
 	board loadFromString: task.
 	solver := AlmostMethod new: board.
 	solver finishRows .
-	
+
 	self assert: 5 equals: (board boardA2D at: 4 at: 1).
 	self assert: 4 equals: (board boardA2D at: 4 at: 7).
 	

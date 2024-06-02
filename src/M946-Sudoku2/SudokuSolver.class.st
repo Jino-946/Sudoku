@@ -593,10 +593,10 @@ SudokuSolver class >> intermediateEx [
 { #category : #'instance creation' }
 SudokuSolver class >> new: sudokuBoard [
 
-	| way |
-	way := self new.
-	way sudokuBoard: sudokuBoard .
-	^ way
+	| solver |
+	solver := self new.
+	solver sudokuBoard: sudokuBoard .
+	^ solver
 ]
 
 { #category : #'private - helpers' }
@@ -608,8 +608,9 @@ SudokuSolver >> blankCell [
 { #category : #initialization }
 SudokuSolver >> initialize [
 
-	super initialize .
-	
+	| logName |
+	super initialize.
+	logName := 'sudoku.log'.
 	relatedVertBlocks := Dictionary new.
 	relatedVertBlocks
 		at: 1 put: #( 4 7 );
@@ -621,7 +622,6 @@ SudokuSolver >> initialize [
 		at: 3 put: #( 6 9 );
 		at: 6 put: #( 3 9 );
 		at: 9 put: #( 3 6 ).
-
 	relatedHorBlocks := Dictionary new.
 	relatedHorBlocks
 		at: 1 put: #( 2 3 );
@@ -632,8 +632,17 @@ SudokuSolver >> initialize [
 		at: 6 put: #( 4 5 );
 		at: 7 put: #( 8 9 );
 		at: 8 put: #( 7 9 );
-		at: 9 put: #( 7 8 )
+		at: 9 put: #( 7 8 ).
 
+"
+	TinyLogger default
+		ensureFileLoggerNamed: 'sudokusolver.log';
+		clearLog.
+	TinyLogger default timestampFormatBlock: [ :aStream :timestamp |
+		timestamp asDate yyyymmdd printOn: aStream.
+		aStream << ' '.
+		timestamp asTime print24: true on: aStream ]
+"
 ]
 
 { #category : #accessing }
@@ -651,11 +660,30 @@ SudokuSolver >> relatedVertBlocks [
 { #category : #'sudoku - solution' }
 SudokuSolver >> solve: task [
 
+	| count |
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: task.
+	count := 0.
+	[ sudokuBoard completed or: [ count > 9 ] ]
+	whileFalse: [ 
+		"		
+		(YokoNicoMethod new: sudokuBoard ) solve.
+		(TateNicoMethod new: sudokuBoard ) solve.
+		" 
+		(AlmostMethod new: sudokuBoard ) solve.
 
+		(BlockenWay new: sudokuBoard) solve.
+		(LetsmeWay new: sudokuBoard ) solve.
+		(GyomeWay new: sudokuBoard ) solve.
+		(MasumiWay new: sudokuBoard ) solve.
+		(EitherWay new: sudokuBoard ) solve.
+		count := count + 1.	
+	].
 
-
+	('{1}{2}' format: {thisContext . sudokuBoard }) record.
+	('{1} times repeated. completed:{2}
+	' format: {count  . sudokuBoard  completed }) record.
+	
 	^ sudokuBoard completed
 
 	

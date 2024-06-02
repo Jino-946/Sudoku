@@ -4,16 +4,18 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
-{ #category : #running }
-YokoNicoMethodTest >> setUp [
-	super setUp.
+{ #category : #private }
+YokoNicoMethodTest >> performTest [ 
 
-    TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
-    TinyLogger default 
-        timestampFormatBlock: [ :aStream :timestamp |
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
             timestamp asDate yyyymmdd printOn: aStream.
             aStream << ' '.
             timestamp asTime print24: true on: aStream ].
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
 { #category : #tests }
@@ -83,6 +85,8 @@ YokoNicoMethodTest >> testNicoCheck [
 0 0 0   2 0 4   0 8 0
 0 0 1   7 0 8   9 5 2
 '.
+		('{1}
+	 hi, there!!'	format: { thisContext }) record.
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
@@ -95,7 +99,7 @@ YokoNicoMethodTest >> testNicoCheck [
 	self assert: (solver nicoCheck: 4) sorted equals: #(1 2 8) 	.		
 	self assert: (solver nicoCheck: 5) sorted equals: #(7 8) .	
 	self assert: (solver nicoCheck: 6) sorted equals: #(6 8 9) .	
-		
+
 	self assert: (solver nicoCheck: 7) sorted equals: #(2 5 8).		
 	self assert: (solver nicoCheck: 8)  		 equals: #(9).	
 	self assert: (solver nicoCheck: 9)		 equals: #().	
@@ -186,5 +190,6 @@ YokoNicoMethodTest >> testTargetBlock [
 
 	solver := YokoNicoMethod new: board.		
 	1 to: 9 do: [ :num | solver targetBlock: num ].
-	('{1}' format: {board}) record.
+	('{1}
+	{2}' format: {thisContext .board}) record.
 ]

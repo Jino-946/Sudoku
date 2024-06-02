@@ -4,6 +4,20 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
+{ #category : #private }
+LetsmeWayTest >> performTest [ 
+
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
+]
+
 { #category : #tests }
 LetsmeWayTest >> testLetsme [
 
