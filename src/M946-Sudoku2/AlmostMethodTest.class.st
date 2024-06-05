@@ -18,17 +18,6 @@ AlmostMethodTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #running }
-AlmostMethodTest >> setUp [
-	super setUp.
-    TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
-    TinyLogger default 
-        timestampFormatBlock: [ :aStream :timestamp |
-            timestamp asDate yyyymmdd printOn: aStream.
-            aStream << ' '.
-            timestamp asTime print24: true on: aStream ].
-]
-
 { #category : #tests }
 AlmostMethodTest >> testFindBlocks [
 
@@ -150,36 +139,6 @@ AlmostMethodTest >> testFinishBlocks [
 ]
 
 { #category : #tests }
-AlmostMethodTest >> testFinishBlocks2 [
-
-	| task board solver|
-
-	task := '
-3 6 9   8 0 1   5 0 0
-0 2 0   5 0 6   0 0 0
-0 0 0   0 7 0   0 0 8
-
-0 9 8   6 0 2   0 1 7
-0 0 0   4 8 7   0 0 0
-6 7 0   9 0 5   8 2 0
-
-9 0 0   0 5 0   0 0 0
-0 0 0   2 0 4   0 8 0
-0 0 1   7 0 8   9 5 2
-'.
-
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-	solver := AlmostMethod new: board.
-	solver finishBlocks .
-	
-	self assert: 3 equals: (board boardA2D at: 4 at: 5).
-	self assert: 1 equals: (board boardA2D at: 6 at: 5).
-	
-
-]
-
-{ #category : #tests }
 AlmostMethodTest >> testFinishColumns [
 
 	| solver board task|
@@ -220,17 +179,19 @@ AlmostMethodTest >> testFinishRows [
 	| task board solver|
 
 	task := '
-3 6 9   8 0 1   5 0 0
-0 2 0   5 0 6   0 0 0
-0 0 0   0 7 0   0 0 8
+2	0	0		8	5	3		6	4	9	
+9	8	4		7	6	2		1	3	5	
+5	0	6		1	9	4		7	8	2	
 
-0 9 8   6 3 2   0 1 7
-0 0 0   0 8 0   0 0 0
-6 7 0   9 1 5   8 2 0
 
-9 0 0   0 5 0   0 0 0
-0 0 0   2 0 4   0 8 0
-0 0 1   7 0 8   9 5 2
+6	2	8		0	0	7		0	1	0	
+3	4	9		2	1	8		0	7	6	
+7	0	0		0	0	6		0	2	0	
+
+
+1	9	0		4	8	5		2	6	0	
+8	0	2		6	7	1		4	9	0	
+4	6	0		3	2	9		8	5	0	
 '.
 
 	board := SudokuBoard2 new.
@@ -238,8 +199,87 @@ AlmostMethodTest >> testFinishRows [
 	solver := AlmostMethod new: board.
 	solver finishRows .
 
-	self assert: 5 equals: (board boardA2D at: 4 at: 1).
-	self assert: 4 equals: (board boardA2D at: 4 at: 7).
-	
+	self assert: (board boardA2D at: 8 at: 2) equals: 5.
+	self assert: (board boardA2D at: 8 at: 9) equals: 3.
 
+]
+
+{ #category : #tests }
+AlmostMethodTest >> testSolve [
+
+	| task board array1 array2 |
+
+	task := '
+0 0 0    0 5 0    0 0 0
+0 0 0    7 0 2    1 3 0
+5 0 6    0 0 4    0 0 0
+
+0 0 8    0 0 0    0 1 0
+3 4 9    0 0 0    0 7 0
+7 0 0    0 0 6    0 2 0
+
+0 0 0    0 8 0    2 0 0
+8 0 2    0 0 0    4 0 0
+0 0 0    3 0 0    0 5 0
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+
+	('{1}
+Initial state of SudokuBoard
+	{2}' format: {thisContext . board}) record.
+	
+	5 timesRepeat: [ 
+		(YokoNicoMethod new: board) solve.
+		(TateNicoMethod new: board) solve.
+		(LetsmeWay new: board) solve.
+		(GyomeWay new: board) solve.
+		(MasumiWay new: board) solve.
+	 ].
+	('{1}
+Performed elementary processing
+	{2}' format: {thisContext . board}) record.
+
+	(AlmostMethod new: board) finishBlocks.
+	array1 := board boardA2D copy.
+	('{1}
+Aplly AlmostMethod>>finishBlocks
+	{2}' format: {thisContext . board}) record.
+
+	"block 2"
+	self assert: (board boardA2D at: 3 at: 4)  equals: 1.
+	"block 3"
+	self assert: (board boardA2D at: 1 at: 7)  equals: 6.
+	self assert: (board boardA2D at: 1 at: 9)  equals: 9.
+	"block 8"
+	self assert: (board boardA2D at: 8 at: 6)  equals: 1.
+	
+	
+	(AlmostMethod new: board) finishColumns .
+	array2 := board boardA2D copy.
+	('{1}
+Aplly AlmostMethod>>finishColumns
+	{2}' format: {thisContext . board}) record.	
+	self assert: array1  equals: array2.
+
+		
+	(AlmostMethod new: board) finishRows  .
+	('{1}
+Aplly AlmostMethod>>finishRows
+	{2}' format: {thisContext . board}) record.		
+	"Row 3"
+	self assert: (board boardA2D at: 3 at: 2)  equals: 3.
+	"Row 5"
+	self assert: (board boardA2D at: 5 at: 7)  equals: 5.
+		
+	
+		
+		
+		
+		
+		
+		
+		
+	
 ]

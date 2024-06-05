@@ -191,5 +191,5 @@ YokoNicoMethodTest >> testTargetBlock [
 	solver := YokoNicoMethod new: board.		
 	1 to: 9 do: [ :num | solver targetBlock: num ].
 	('{1}
-	{2}' format: {thisContext .board}) record.
+	{2}' format: {thisContext . board}) record.
 ]

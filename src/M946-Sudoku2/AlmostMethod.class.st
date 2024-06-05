@@ -69,6 +69,10 @@ AlmostMethod >> finish1stColumn: cells [
 	"
 	| col1 |
 	col1  := sudokuBoard atSudokuColumn: (cells at: 1) x.
+('{1}
+missingNumbers: {2}
+col1: {3}' format: {thisContext . missingNumbers . col1}) record.
+
 	(col1  includes: (missingNumbers at: 1)) 
 		ifTrue: [
 			(cells at: 2) element: (missingNumbers at: 1).
@@ -119,6 +123,12 @@ AlmostMethod >> finish2ndColumn: cells [
 	"
 	| col2  |
 	col2  := sudokuBoard atSudokuColumn: (cells at: 2) x.
+('{1}
+missingNumbers: {2}
+col2: {3}
+
+' format: {thisContext . missingNumbers . col2}) record.
+
 	(col2  includes: (missingNumbers at: 1)) 
 		ifTrue: [
 			(cells at: 1) element: (missingNumbers at: 1).
@@ -192,8 +202,8 @@ AlmostMethod >> finishColumns [
 			cell := column allGreen.
 			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
 		blankCells size = 2 ifTrue: [ 
-			self finish1stRow: blankCells.
-			self finish2ndRow: blankCells]
+			(self finish1stRow: blankCells) ifFalse: [  
+				self finish2ndRow: blankCells]]
 	]
 
 ]
@@ -221,7 +231,7 @@ AlmostMethod >> finishRows [
 	"
 	SudokuRow内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
-	| rows |
+	| rows result |
 	rows := self findRows  .
 	rows do: [ :row | | blankCells |
 		missingNumbers := self missingNumbers: row asArray.
@@ -230,8 +240,21 @@ AlmostMethod >> finishRows [
 			cell := row allGreen.
 			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
 		blankCells size = 2 ifTrue: [ 
-			self finish1stColumn: blankCells.
-			self finish2ndColumn: blankCells]
+			
+"logger started"
+('AlmostMethod>>finishRows rowIndex: {1}' format: {row rowIndex}) record.	
+(row rowIndex = 8) ifTrue: [('{1}' format:{sudokuBoard }) record].
+"logger stoped"		
+					
+			result := self finish1stColumn: blankCells.
+			
+"logger started"
+(row rowIndex = 8) ifTrue: [('{1}' format:{sudokuBoard }) record].
+"logger stoped
+"
+
+			result ifFalse: [  
+			self finish2ndColumn: blankCells]]
 	]
 
 ]
