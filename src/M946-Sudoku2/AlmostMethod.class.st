@@ -67,11 +67,12 @@ AlmostMethod >> finish1stColumn: cells [
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
-	| col1 |
+	| col1 logger |
+	logger := M946Logger new: LogLevel debug.
 	col1  := sudokuBoard atSudokuColumn: (cells at: 1) x.
-('{1}
-missingNumbers: {2}
-col1: {3}' format: {thisContext . missingNumbers . col1}) record.
+	logger debug: thisContext;
+			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+			debug: ('col1: {1}' format: {col1}); cr.
 
 	(col1  includes: (missingNumbers at: 1)) 
 		ifTrue: [
@@ -121,13 +122,12 @@ AlmostMethod >> finish2ndColumn: cells [
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
-	| col2  |
+	| col2  logger |
+	logger := M946Logger new: LogLevel debug.
 	col2  := sudokuBoard atSudokuColumn: (cells at: 2) x.
-('{1}
-missingNumbers: {2}
-col2: {3}
-
-' format: {thisContext . missingNumbers . col2}) record.
+	logger debug: thisContext;
+			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+			debug: ('col2: {1}' format: {col2 }); cr.
 
 	(col2  includes: (missingNumbers at: 1)) 
 		ifTrue: [
@@ -209,6 +209,32 @@ AlmostMethod >> finishColumns [
 ]
 
 { #category : #'private - logics' }
+AlmostMethod >> finishCurrentRow: row [
+	"
+	finishRowsのループの中の処理
+	"
+	| blankCells result logger |
+	logger := M946Logger new: LogLevel debug.
+	
+	missingNumbers := self missingNumbers: row asArray.
+	blankCells := row blankCellsAsArray.
+	blankCells size = 1 ifTrue: [
+		| cell |
+		cell := row allGreen.
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ].
+	
+	blankCells size = 2 ifFalse: [ ^ self ].
+	logger debug: thisContext;  
+			debug:  ('rowIndex: {1}' format: {row rowIndex }); cr.
+	row rowIndex = 8 ifTrue: [
+		logger debug: ('{1}' format: { sudokuBoard }) ].
+	result := self finish1stColumn: blankCells.
+	row rowIndex = 8 ifTrue: [
+		logger debug: ('{1}' format: { sudokuBoard }) ].
+	result ifFalse: [ self finish2ndColumn: blankCells ]
+]
+
+{ #category : #'private - logics' }
 AlmostMethod >> finishPairCells: cells block: block [
 	"
 	finishBlocksの下請けメソッド
@@ -231,30 +257,11 @@ AlmostMethod >> finishRows [
 	"
 	SudokuRow内のブランクセルを特定の数字に確定できた時ボードに反映する
 	"
-	| rows result |
+	| rows  logger |
+	logger := M946Logger new: LogLevel debug.
 	rows := self findRows  .
-	rows do: [ :row | | blankCells |
-		missingNumbers := self missingNumbers: row asArray.
-		blankCells := row  blankCellsAsArray .
-		blankCells size = 1 ifTrue: [ | cell |
-			cell := row allGreen.
-			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
-		blankCells size = 2 ifTrue: [ 
-			
-"logger started"
-('AlmostMethod>>finishRows rowIndex: {1}' format: {row rowIndex}) record.	
-(row rowIndex = 8) ifTrue: [('{1}' format:{sudokuBoard }) record].
-"logger stoped"		
-					
-			result := self finish1stColumn: blankCells.
-			
-"logger started"
-(row rowIndex = 8) ifTrue: [('{1}' format:{sudokuBoard }) record].
-"logger stoped
-"
-
-			result ifFalse: [  
-			self finish2ndColumn: blankCells]]
+	rows do: [ :row | 
+		self finishCurrentRow: row.
 	]
 
 ]
