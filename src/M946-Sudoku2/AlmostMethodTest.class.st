@@ -165,11 +165,11 @@ AlmostMethodTest >> testFinishColumns [
 	('{1}
 	{2}' format:{ thisContext . board }) record.
 	
-	self assert: 0 equals: (board boardA2D at: 3 at: 4).
-	self assert: 0 equals: (board boardA2D at: 7 at: 4).
+	self assert: (board boardA2D at: 3 at: 4) equals: 0.
+	self assert: (board boardA2D at: 7 at: 4) equals: 0.
 
-	self assert: 3 equals: (board boardA2D at: 7 at: 6).
-	self assert: 9 equals: (board boardA2D at: 3 at: 6)
+	self assert: (board boardA2D at: 7 at: 6) equals: 3.
+	self assert: (board boardA2D at: 3 at: 6) equals: 9
 
 ]
 

@@ -55,8 +55,8 @@ SudokuCell >> asString [
 	| aStream elem |
 	aStream := ReadWriteStream on: String new.
 	aStream cr.
-	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
-			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr.
+	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; space; space;
+			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space; space.
 	elem := element.
 	element class = Character ifTrue: [ elem := '$', element asString ].
 	aStream nextPutAll: 'element:  '; nextPutAll: elem asString.

@@ -62,7 +62,7 @@ AlmostMethod >> findRows [
 ]
 
 { #category : #'private - logics' }
-AlmostMethod >> finish1stColumn: cells [
+AlmostMethod >> finish1stCrossingColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -92,7 +92,7 @@ AlmostMethod >> finish1stColumn: cells [
 ]
 
 { #category : #'private - logics' }
-AlmostMethod >> finish1stRow: cells [
+AlmostMethod >> finish1stCrossingRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -113,11 +113,11 @@ AlmostMethod >> finish1stRow: cells [
 				sudokuBoard map: (cells at: 1).
 				sudokuBoard map: (cells at: 2).
 				^true ]].
-	^true
+	^false
 ]
 
 { #category : #'private - logics' }
-AlmostMethod >> finish2ndColumn: cells [
+AlmostMethod >> finish2ndCrossingColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -147,7 +147,7 @@ AlmostMethod >> finish2ndColumn: cells [
 ]
 
 { #category : #'private - logics' }
-AlmostMethod >> finish2ndRow: cells [
+AlmostMethod >> finish2ndCrossingRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
@@ -195,43 +195,63 @@ AlmostMethod >> finishColumns [
 	"
 	| columns |
 	columns := self findColumns  .
-	columns do: [ :column | | blankCells |
-		missingNumbers := self missingNumbers: column asArray.
-		blankCells := column  blankCellsAsArray .
-		blankCells size = 1 ifTrue: [ | cell |
-			cell := column allGreen.
-			cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]].
-		blankCells size = 2 ifTrue: [ 
-			(self finish1stRow: blankCells) ifFalse: [  
-				self finish2ndRow: blankCells]]
-	]
+	columns do: [ :column | 
+		self finishCurrentColumn: column ]
 
+]
+
+{ #category : #'private - logics' }
+AlmostMethod >> finishCurrentColumn: column [
+
+	| blankCells completed logger | 
+	logger := M946Logger new: LogLevel debug.
+	
+	missingNumbers := self missingNumbers: column asArray.
+	blankCells := column blankCellsAsArray .
+	(blankCells size > 2 or:[ blankCells isEmpty] ) ifTrue: [ ^self ].	
+	blankCells size = 1 ifTrue: [ 
+		| cell |
+		cell := column allGreen.
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell . ^self]].
+	
+	logger debug: thisContext;  
+			debug: ('blankCells: {1}' format: {blankCells});
+			debug: sudokuBoard.
+	
+	completed := self finish1stCrossingRow: blankCells.	
+	completed ifFalse: [ completed := self finish2ndCrossingRow: blankCells ].
+	
+	completed ifTrue: [ 	logger debug: ('column {1} completed {2}' format: { column colIndex . sudokuBoard })
+ ]
+	
 ]
 
 { #category : #'private - logics' }
 AlmostMethod >> finishCurrentRow: row [
 	"
-	finishRowsのループの中の処理
+	finishRowsのループの中の処理を外出し
 	"
-	| blankCells result logger |
+	| blankCells completed logger |
 	logger := M946Logger new: LogLevel debug.
 	
 	missingNumbers := self missingNumbers: row asArray.
 	blankCells := row blankCellsAsArray.
+	(blankCells size > 2 or: [ blankCells isEmpty ]) ifTrue: [ ^self ].
 	blankCells size = 1 ifTrue: [
 		| cell |
 		cell := row allGreen.
-		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ] ].
-	
-	blankCells size = 2 ifFalse: [ ^ self ].
+		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell. ^ self] ].
+
 	logger debug: thisContext;  
-			debug:  ('rowIndex: {1}' format: {row rowIndex }); cr.
-	row rowIndex = 8 ifTrue: [
-		logger debug: ('{1}' format: { sudokuBoard }) ].
-	result := self finish1stColumn: blankCells.
-	row rowIndex = 8 ifTrue: [
-		logger debug: ('{1}' format: { sudokuBoard }) ].
-	result ifFalse: [ self finish2ndColumn: blankCells ]
+			debug: ('blankCells: {1}' format: {blankCells});
+			debug: sudokuBoard.
+			
+	completed := self finish1stCrossingColumn: blankCells.
+	completed ifFalse: [ completed := self finish2ndCrossingColumn: blankCells ].
+	
+	completed ifTrue: [ logger debug: ('row {1} completed {2}' format: { row rowIndex . sudokuBoard }) ].
+	
+
 ]
 
 { #category : #'private - logics' }
@@ -243,10 +263,10 @@ AlmostMethod >> finishPairCells: cells block: block [
 	| result |
 	result := false.
 	missingNumbers := self missingNumbers: block asArray.
-	(self finish1stColumn: cells) 
-		ifFalse: [ (self finish2ndColumn: cells)
-			ifFalse: [ (self finish1stRow: cells) 
-				ifFalse: [self finish2ndRow: cells]]].
+	(self finish1stCrossingColumn: cells) 
+		ifFalse: [ (self finish2ndCrossingColumn: cells)
+			ifFalse: [ (self finish1stCrossingRow: cells) 
+				ifFalse: [self finish2ndCrossingRow: cells]]].
 									
 	
 

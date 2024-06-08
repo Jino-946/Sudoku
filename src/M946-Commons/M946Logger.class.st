@@ -62,7 +62,7 @@ M946Logger >> clearLog [
 { #category : #printing }
 M946Logger >> cr [
 
-	Transcript cr
+	logLevel = LogLevel debug ifTrue: [ Transcript cr ]
 ]
 
 { #category : #private }
@@ -97,12 +97,11 @@ M946Logger >> record: anObject [
 { #category : #printing }
 M946Logger >> space [
 
-	Transcript space
+	logLevel = LogLevel debug  ifTrue:[Transcript space]
 ]
 
 { #category : #printing }
 M946Logger >> tab [
 
-	Transcript tab.
-	^self
+	logLevel = LogLevel debug  ifTrue:[Transcript tab]
 ]
