@@ -68,7 +68,7 @@ AlmostMethod >> finish1stCrossingColumn: cells [
 	ブランクセルペアの最初のセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
 	| col1 logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	col1  := sudokuBoard atSudokuColumn: (cells at: 1) x.
 	logger debug: thisContext;
 			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
@@ -97,8 +97,13 @@ AlmostMethod >> finish1stCrossingRow: cells [
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの最初のセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
-	| row1 |
+	| row1 logger |
+	logger := M946Logger new: LogLevel info.
 	row1  := sudokuBoard atSudokuRow: (cells at: 1) y.
+	logger debug: thisContext;
+			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+			debug: ('row: {1}' format: {row1}); cr.
+
 	(row1 includes: (missingNumbers at: 1)) 
 		ifTrue: [
 			(cells at: 2) element: (missingNumbers at: 1).
@@ -123,7 +128,7 @@ AlmostMethod >> finish2ndCrossingColumn: cells [
 	ブランクセルペアの2番目ののセルに直交する列をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
 	| col2  logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	col2  := sudokuBoard atSudokuColumn: (cells at: 2) x.
 	logger debug: thisContext;
 			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
@@ -152,8 +157,13 @@ AlmostMethod >> finish2ndCrossingRow: cells [
 	finishPairCells:block: の下請けメソッド
 	ブランクセルペアの2番目ののセルに直交する行をスキャンしブランクセルに入る数字が確定した時はボードに反映する
 	"
-	| row2  |
+	| row2  logger |
+	logger := M946Logger new: LogLevel info.
 	row2  := sudokuBoard atSudokuRow: (cells at: 2) y.
+	logger debug: thisContext;
+			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+			debug: ('row2: {1}' format: {row2}); cr.
+
 	(row2   includes: (missingNumbers at: 1)) 
 		ifTrue: [
 			(cells at: 1) element: (missingNumbers at: 1).
@@ -204,7 +214,7 @@ AlmostMethod >> finishColumns [
 AlmostMethod >> finishCurrentColumn: column [
 
 	| blankCells completed logger | 
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	
 	missingNumbers := self missingNumbers: column asArray.
 	blankCells := column blankCellsAsArray .
@@ -232,7 +242,7 @@ AlmostMethod >> finishCurrentRow: row [
 	finishRowsのループの中の処理を外出し
 	"
 	| blankCells completed logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	
 	missingNumbers := self missingNumbers: row asArray.
 	blankCells := row blankCellsAsArray.
