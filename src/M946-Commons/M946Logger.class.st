@@ -67,13 +67,14 @@ M946Logger >> cr [
 
 { #category : #private }
 M946Logger >> debug: anObject [
-	(logLevel = LogLevel debug ) ifTrue:[self record: anObject]
+
+	logLevel = LogLevel debug ifTrue: [ self record: anObject ]
 ]
 
 { #category : #'accessing - structure variables' }
 M946Logger >> info: anObject [
 
-	self record: anObject 
+	logLevel = LogLevel info ifTrue: [ self record: anObject ]
 ]
 
 { #category : #accessing }
