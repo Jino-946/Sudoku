@@ -132,6 +132,12 @@ SudokuRow >> clearMarks [
 	
 ]
 
+{ #category : #logic }
+SudokuRow >> completed [ 
+
+	^(#(1 2 3 4 5 6 7 8 9) difference: row) isEmpty
+]
+
 { #category : #'private - utility' }
 SudokuRow >> countOfReservedBlankCells [ 
 	"
@@ -181,6 +187,12 @@ SudokuRow >> markBlankCells [
 	1 to: 9 do: [ :i | 
 		 (self at: i) = 0
 			ifTrue: [ self at: i put: $X ]]
+]
+
+{ #category : #'private - utility' }
+SudokuRow >> missingNumbers [
+
+	^#(1 2 3 4 5 6 7 8 9) difference: row
 ]
 
 { #category : #printing }

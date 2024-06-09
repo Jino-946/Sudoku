@@ -44,7 +44,10 @@ DaddyNumPreMethod >> beginnerSolutions: board [
 
 { #category : #'private - logics' }
 DaddyNumPreMethod >> finishBlock: block number: n [
-
+	"
+    aBlock allGreenとはブロックのブランクセルが1つで残り8つのセルは1-9までの数字で埋まっている状態を表す。
+    aBlock tenpaiとはブロックのブランクセルが1つで残り8つのセルは1-9までの数字でまたは$Xで埋まっている状態を表す。
+	"
 	| cell |
 	cell := block allGreen.
 	cell class = SudokuCell ifTrue: [
@@ -58,6 +61,8 @@ DaddyNumPreMethod >> finishBlock: block number: n [
 
 { #category : #utilities }
 DaddyNumPreMethod >> missingNumbers: anArray [
-
+	"
+    ブロック、行、列を配列に変換して引数とし(1-9)の中で足りない数字を配列にして返す。
+    "
 	^#(1 2 3 4 5 6 7 8 9) difference: (anArray select: [ :n | n class = SmallInteger and:[n > 0]])
 ]

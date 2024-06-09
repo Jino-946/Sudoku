@@ -31,8 +31,10 @@ YokoNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 { #category : #'private - logics' }
 YokoNicoMethod >> nicoCheck: targetBlockNumber [
 	"
-	検証するブロックに水平方向に関連する2つのブロックで重複する数字の配列を返す。
-	返された配列の数字を[nicoCells:number:]numberの引数として使用する
+	検証するブロックに水平方向に関連する2つのブロックのどちらにもある数字を配列にして返す。
+	返された数字を YokoNicoMethod>>nicoCells:number: の引数として使用する。
+	水平方向に関連するブロックとは 1->(2 3), 2->(1 3), 3->(1 2) など9通りあり、
+    SudokuSolver>>initializeの中でrelatedHorBlocks<Dictionary>として初期化されている。    
 	"
 	| values block1 block2  |
 	values := self relatedHorBlocks at: targetBlockNumber .

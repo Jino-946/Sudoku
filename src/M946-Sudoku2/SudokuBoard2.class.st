@@ -1,11 +1,22 @@
 "
 数独の盤面(ボード:9X9)全体を表現するクラス
 
-    Instance Variables
+Instance Variables
 	boardA2D		<Array2D>  ボードの内部表現
 
-
-    Implementation Points
+   主なAPI
+   セルのあるブロックを得る
+```
+   aSudokuBlock := aSudokuBoard atBlock: aSudokuCell blockNumber
+```		
+   セルのある行を得る
+```
+   aSudokuRow := aSudokuBoard atSudokuRow: aSudokuCell rowIndex
+```
+   セルのある列を得る
+```
+   aSudokuColumn := aSudokuBoard atSudokuColumn: aSudokuCell colIndex
+```
 "
 Class {
 	#name : #SudokuBoard2,
@@ -86,7 +97,7 @@ SudokuBoard2 >> asString [
 			ifTrue:[ aStream  tab]].
 		aStream cr.
 		(separateIndices includes: rowIndex )
-		ifTrue: [ aStream  cr;cr ]
+		ifTrue: [ aStream  cr]
 	].
 	
 	^aStream contents 
@@ -215,9 +226,13 @@ SudokuBoard2 >> completed [
 	"
 	数独問題を解けたか判定する
 	"
-	1 to: 9 do: [ :blockNumber | 
-		(self atBlock: blockNumber) completed 
-		ifFalse: [ ^false ]
+	1 to: 9 do: [ :number | 
+		(self atBlock: number) completed 
+		ifFalse: [ ^false ].
+		(self atSudokuColumn:  number) completed 
+		ifFalse: [ ^false ].
+		(self atSudokuRow:  number) completed 
+		ifFalse: [ ^false ].	
 	].
 	^ true
 ]

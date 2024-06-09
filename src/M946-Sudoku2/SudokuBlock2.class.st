@@ -1,14 +1,29 @@
 "
 数独ボードを9つに分けた1ブロックを表現するクラス
 
-    Instance Variables
-	blockA2D			<Array2D>  		ブロックの内部表現
-	blockNumber			<Smalllnteger>	ブロック番号
-	colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
-	rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
-	verifyNumber		<SmallInteger>	検証数字
-	eitherCells			<EitherCells>	ブロックのブランクセルが２つになり必ずどちらかに検証数字が入るセル
-                  
+Instance Variables
+blockA2D			<Array2D>  		ブロックの内部表現
+blockNumber			<Smalllnteger>	ブロック番号
+colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
+rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
+verifyNumber		<SmallInteger>	検証数字
+eitherCells			<EitherCells>	ブロックのブランクセルが２つになり必ずどちらかに検証数字が入るセル
+	
+					
+主なAPI
+allGreen                  1つのブランクセル以外の8つのセルが1-9までの数字で埋まっている時
+                          足りない数字をSudokuCellに格納して返す、でなければ0を返す
+colsOnBoard               ブロックの列インデックスに対応するボードの列(SudokuColumnの配列)を返す
+countOfReservedBlankCells ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+localX:                   ボードのX座標をブロックのX座標に変換し返す
+localY:                   ボードのY座標をブロックのY座標に変換し返す
+markBlankCells            すべてのブランクセルを$Xでマークする
+markByHorizontalCell:     ブランクセルのY座標と引数セルのY座標が等しい時ブランクセルを$Xでマークする
+rowsOnBoard               ブロックの行に対応するボードの行(SudokuRowの配列)を返す
+tenpai                    ブロックにブランクセル１つだけの時はブランクセルのボード座標をSudokuCellに
+                          マッピングして返す、でなければ0を返す(allGreenと異なり$Xなどの混在可)
+xOnBoard:                 ボードインデックスをブロックインデックスに変換する
+yOnBoard:                 ボードインデックスをブロックインデックスに変換する
 "
 Class {
 	#name : #SudokuBlock2,
@@ -288,7 +303,7 @@ SudokuBlock2 >> markBlankCells [
 SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	"
 	ブランクセルのY座標と引数セルのY座標が等しい時、
-	ブロックのブランクセルを$Xでマークする。
+	ブランクセルを$Xでマークする。
 	"
 	(self includes: aSudokuCell element) ifTrue: [ ^self ].
 	self blankCellsAsArray do: [ :blankCell | 
@@ -326,6 +341,12 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
 
 
+]
+
+{ #category : #'private - utility' }
+SudokuBlock2 >> missingNumbers [ 
+
+	^#(1 2 3 4 5 6 7 8 9) difference:  blockA2D asArray
 ]
 
 { #category : #printing }

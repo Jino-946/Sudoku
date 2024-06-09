@@ -609,9 +609,7 @@ SudokuSolver >> blankCell [
 { #category : #initialization }
 SudokuSolver >> initialize [
 
-	| logName |
 	super initialize.
-	logName := 'sudoku.log'.
 	relatedVertBlocks := Dictionary new.
 	relatedVertBlocks
 		at: 1 put: #( 4 7 );
@@ -635,15 +633,7 @@ SudokuSolver >> initialize [
 		at: 8 put: #( 7 9 );
 		at: 9 put: #( 7 8 ).
 
-"
-	TinyLogger default
-		ensureFileLoggerNamed: 'sudokusolver.log';
-		clearLog.
-	TinyLogger default timestampFormatBlock: [ :aStream :timestamp |
-		timestamp asDate yyyymmdd printOn: aStream.
-		aStream << ' '.
-		timestamp asTime print24: true on: aStream ]
-"
+
 ]
 
 { #category : #accessing }

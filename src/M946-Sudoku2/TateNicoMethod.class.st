@@ -30,8 +30,10 @@ TateNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 { #category : #'private - logics' }
 TateNicoMethod >> nicoCheck: targetBlockNumber [
 	"
-	検証するブロックに垂直方向に関連する2つのブロックで重複する数字の配列を返す。
-	返された配列の数字を[nicoCells:number:]numberの引数として使用する
+	検証するブロックに垂直方向に関連する2つのブロックのどちらにもある数字を配列にして返す。
+	返された数字を TateNicoMethod>>nicoCells:number: の引数として使用する。
+	垂直方向に関連するブロックとは 1->(4 7), 4->(1 7), 7->(1 4) など9通りあり、
+    SudokuSolver>>initializeの中でrelatedVertBlocks<Dictionary>として初期化されている。    
 	"
 	| values block1 block2 |
 	values := self relatedVertBlocks  at: targetBlockNumber .

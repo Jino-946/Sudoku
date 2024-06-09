@@ -69,9 +69,11 @@ AlmostMethod >> finish1stCrossingColumn: cells [
 	"
 	| col1 logger |
 	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+		
 	col1  := sudokuBoard atSudokuColumn: (cells at: 1) x.
-	logger debug: thisContext;
-			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+
+	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('col1: {1}' format: {col1}); cr.
 
 	(col1  includes: (missingNumbers at: 1)) 
@@ -99,9 +101,10 @@ AlmostMethod >> finish1stCrossingRow: cells [
 	"
 	| row1 logger |
 	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	
 	row1  := sudokuBoard atSudokuRow: (cells at: 1) y.
-	logger debug: thisContext;
-			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('row: {1}' format: {row1}); cr.
 
 	(row1 includes: (missingNumbers at: 1)) 
@@ -129,9 +132,11 @@ AlmostMethod >> finish2ndCrossingColumn: cells [
 	"
 	| col2  logger |
 	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	
 	col2  := sudokuBoard atSudokuColumn: (cells at: 2) x.
-	logger debug: thisContext;
-			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+	
+	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('col2: {1}' format: {col2 }); cr.
 
 	(col2  includes: (missingNumbers at: 1)) 
@@ -159,9 +164,11 @@ AlmostMethod >> finish2ndCrossingRow: cells [
 	"
 	| row2  logger |
 	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	
 	row2  := sudokuBoard atSudokuRow: (cells at: 2) y.
-	logger debug: thisContext;
-			debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
+
+	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('row2: {1}' format: {row2}); cr.
 
 	(row2   includes: (missingNumbers at: 1)) 
@@ -215,7 +222,8 @@ AlmostMethod >> finishCurrentColumn: column [
 
 	| blankCells completed logger | 
 	logger := M946Logger new: LogLevel info.
-	
+	logger debug: thisContext.
+		
 	missingNumbers := self missingNumbers: column asArray.
 	blankCells := column blankCellsAsArray .
 	(blankCells size > 2 or:[ blankCells isEmpty] ) ifTrue: [ ^self ].	
@@ -224,9 +232,9 @@ AlmostMethod >> finishCurrentColumn: column [
 		cell := column allGreen.
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell . ^self]].
 	
-	logger debug: thisContext;  
-			debug: ('blankCells: {1}' format: {blankCells});
-			debug: sudokuBoard.
+
+		logger debug: ('blankCells: {1}' format: {blankCells});
+				debug: sudokuBoard.
 	
 	completed := self finish1stCrossingRow: blankCells.	
 	completed ifFalse: [ completed := self finish2ndCrossingRow: blankCells ].
@@ -243,7 +251,8 @@ AlmostMethod >> finishCurrentRow: row [
 	"
 	| blankCells completed logger |
 	logger := M946Logger new: LogLevel info.
-	
+	logger debug: thisContext.
+
 	missingNumbers := self missingNumbers: row asArray.
 	blankCells := row blankCellsAsArray.
 	(blankCells size > 2 or: [ blankCells isEmpty ]) ifTrue: [ ^self ].
@@ -252,9 +261,8 @@ AlmostMethod >> finishCurrentRow: row [
 		cell := row allGreen.
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell. ^ self] ].
 
-	logger debug: thisContext;  
-			debug: ('blankCells: {1}' format: {blankCells});
-			debug: sudokuBoard.
+	logger	debug: ('blankCells: {1}' format: {blankCells});
+			debug: sudokuBoard;cr;cr.
 			
 	completed := self finish1stCrossingColumn: blankCells.
 	completed ifFalse: [ completed := self finish2ndCrossingColumn: blankCells ].

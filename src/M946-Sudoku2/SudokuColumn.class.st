@@ -158,6 +158,12 @@ SudokuColumn >> column: anArray [
 	column := anArray copy.
 ]
 
+{ #category : #logic }
+SudokuColumn >> completed [ 
+
+	^(#(1 2 3 4 5 6 7 8 9) difference: column) isEmpty
+]
+
 { #category : #'private - utility' }
 SudokuColumn >> countOfReservedBlankCells [
 	"
@@ -184,6 +190,12 @@ SudokuColumn >> markBlankCells [
 	1 to: 9 do: [ :i | 
 		 (self at: i) = 0
 			ifTrue: [ self at: i put: $X ]]
+]
+
+{ #category : #'private - utility' }
+SudokuColumn >> missingNumbers [ 
+
+	^#(1 2 3 4 5 6 7 8 9) difference:  column
 ]
 
 { #category : #printing }
