@@ -92,9 +92,9 @@ SudokuBoard2 >> asString [
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	
 			number class = Character ifTrue: [ number := '$', number asString ].
-			aStream nextPutAll: number asString; tab.
+			aStream nextPutAll: number asString; space.
 			(separateIndices includes: colIndex)
-			ifTrue:[ aStream  tab]].
+			ifTrue:[ aStream space; space; space]].
 		aStream cr.
 		(separateIndices includes: rowIndex )
 		ifTrue: [ aStream  cr]

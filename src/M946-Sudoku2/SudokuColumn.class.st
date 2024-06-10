@@ -1,9 +1,18 @@
 "
 数独ボードの列を表現するクラス
 
-    Instance Variables
-	column		<Array>			列の9つのセルの配列
-	colIndex	<SmallInteger>	ボード上の列インデックス
+Instance Variables
+column		<Array>			列の9つのセルの配列
+colIndex	<SmallInteger>	ボード上の列インデックス
+		
+主なAPI
+- allGreen               1つのブランクセル以外の8つのセルが1-9までの数字で埋まっている時
+                         足りない数字をSudokuCellに格納して返す、でなければ0を返す
+- blankCellsAsArray      SudokuColumnのブランクセルをSudokuCellの配列にして返す
+- cellOf:                number(値)の座標をSudokuCell にマップして返す, 見つからないときは0を返す
+- countOfReservedBlankCells ブランクセル以外のセルが1-9の数字で埋まっている時のブランクセルの数を返す
+- tenpai                 列にブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す
+                         ブランクセルが複数のときは0を返す。
 
 
 

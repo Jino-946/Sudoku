@@ -19,11 +19,12 @@ localX:                   ボードのX座標をブロックのX座標に変換�
 localY:                   ボードのY座標をブロックのY座標に変換し返す
 markBlankCells            すべてのブランクセルを$Xでマークする
 markByHorizontalCell:     ブランクセルのY座標と引数セルのY座標が等しい時ブランクセルを$Xでマークする
+markByVerticalCell:       ブランクセルのX座標と引数セルのX座標が等しい時ブランクセルを$Xでマークする
 rowsOnBoard               ブロックの行に対応するボードの行(SudokuRowの配列)を返す
 tenpai                    ブロックにブランクセル１つだけの時はブランクセルのボード座標をSudokuCellに
                           マッピングして返す、でなければ0を返す(allGreenと異なり$Xなどの混在可)
-xOnBoard:                 ボードインデックスをブロックインデックスに変換する
-yOnBoard:                 ボードインデックスをブロックインデックスに変換する
+xOnBoard:                 ブロックのX座標をボードX座標に変換し返す
+yOnBoard:                 ブロックのX座標をボードY座標に変換し返す
 "
 Class {
 	#name : #SudokuBlock2,

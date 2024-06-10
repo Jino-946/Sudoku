@@ -651,49 +651,62 @@ SudokuSolver >> relatedVertBlocks [
 { #category : #'sudoku - solution' }
 SudokuSolver >> solve: task [
 
-	| count |
+	| count logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: task.
 	count := 0.
 	[ sudokuBoard completed or: [ count > 9 ] ]
 	whileFalse: [ 
-		"		
+		
 		(YokoNicoMethod new: sudokuBoard ) solve.
 		(TateNicoMethod new: sudokuBoard ) solve.
-		" 
 		(AlmostMethod new: sudokuBoard ) solve.
+		
+		"これよりNikoriWay"
+		(LetsmeWay new: sudokuBoard ) solve.
+		(GyomeWay new: sudokuBoard ) solve.
+		(MasumiWay new: sudokuBoard ) solve.
+		(BlockenWay new: sudokuBoard) solve.
+		(EitherWay new: sudokuBoard ) solve.
 
+
+		"
 		(BlockenWay new: sudokuBoard) solve.
 		(LetsmeWay new: sudokuBoard ) solve.
 		(GyomeWay new: sudokuBoard ) solve.
 		(MasumiWay new: sudokuBoard ) solve.
 		(EitherWay new: sudokuBoard ) solve.
+		"
 		count := count + 1.	
 	].
 
-	('{1}{2}' format: {thisContext . sudokuBoard }) record.
+	logger debug: 
 	('{1} times repeated. completed:{2}
-	' format: {count  . sudokuBoard  completed }) record.
+	' format: {count  . sudokuBoard  completed }).
 	
-	^ sudokuBoard completed
+	 ^ sudokuBoard completed
 
 	
 "
 
-nikoliWay := NikoliWay new.
-tasks :=  nikoliWay intermediateEx     .
+Transcript clear.
+solver := DaddyNumPreMethod  new.
+tasks :=  SudokuSolver  beginnersEx  .
 completed := 0.
 uncompleted := OrderedCollection new.
 tasks doWithIndex:  [ :task :i| 
-	(nikoliWay solve: task) 
+	(solver solve: task) 
 	ifTrue: [ completed := completed + 1]
 	ifFalse: [ uncompleted add: i ].
 ].
 
-Transcript show: 'i solved  '; show: completed ; show: ' out of '; show: tasks size ; show: ' tasks.';cr.
-(completed  = tasks size ) ifFalse: [  
+Transcript show: 'i solved '; show: completed ; show: ' out of '; show: tasks size ; show: ' tasks.';cr.
+(completed = tasks size ) ifFalse: [  
 	Transcript show: 'uncompleted tasks: '; show: uncompleted.
-].
+]
+
 
 "
 ]
