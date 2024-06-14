@@ -186,6 +186,14 @@ SudokuBoard2 >> atRow: rowIndex [
 	^ boardA2D  atRow: rowIndex
 ]
 
+{ #category : #accessing }
+SudokuBoard2 >> atSudokuCell: aPoint [
+
+	
+	^ self atCellRow: aPoint y cellColumn: aPoint x.
+
+]
+
 { #category : #creation }
 SudokuBoard2 >> atSudokuColumn: colIndex [
 	"

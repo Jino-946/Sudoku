@@ -43,7 +43,7 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 { #category : #comparing }
 SudokuCell >> = sudokuCell [
 
-	^ sudokuCell class == self class
+	^ sudokuCell class = self class
 		and: [ sudokuCell rowIndex = self rowIndex 
 			and: [ sudokuCell colIndex  = self colIndex 
 				and: [ sudokuCell element = self element  ] ] ]
