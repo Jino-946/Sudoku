@@ -1,23 +1,33 @@
 "
-SudokuOnePair及びSudokuTwoPairの基底クラス
+2個で一組のセルを表すクラス
+
+ 
 
 Instance Variables
 thisCell         <SudokuCell>  
 otherCell        <SudokuCell>
+pairOfNumbers    <OrderedCollection>
+pairKinds        <PairKindsEnum>        ペアの種類を表す(onePair twoPair isolated)
 
+
+Instance methods
+isHorizontal     2つのセルが水平に並んでいる(同一行にある)時true
+isVertical       2つのセルが垂直に並んでいる(同一列にある)時true
 "
 Class {
 	#name : #SudokuPairCells,
 	#superclass : #Object,
 	#instVars : [
 		'thisCell',
-		'otherCell'
+		'otherCell',
+		'pairOfNumbers',
+		'pairKinds'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
 
 { #category : #creating }
-SudokuPairCells class >> pairOf: aSudokuCell and: aSudokuCell2 [
+SudokuPairCells class >> thisCell: aSudokuCell otherCell: aSudokuCell2 [
 
 	| sdPairCells |
 	sdPairCells := self new.
@@ -29,6 +39,13 @@ SudokuPairCells class >> pairOf: aSudokuCell and: aSudokuCell2 [
 	^sdPairCells 
 	
 	
+]
+
+{ #category : #initialization }
+SudokuPairCells >> initialize [ 
+
+	super initialize .
+	pairOfNumbers := OrderedCollection new.
 ]
 
 { #category : #'as yet unclassified' }
@@ -56,6 +73,24 @@ SudokuPairCells >> otherCell: aSudokuCell [
 
 	otherCell := aSudokuCell 
 	
+]
+
+{ #category : #accessing }
+SudokuPairCells >> pairKinds [
+
+	^pairKinds 
+]
+
+{ #category : #accessing }
+SudokuPairCells >> pairKinds: aPairKinds [
+
+	pairKinds := aPairKinds 
+]
+
+{ #category : #accessing }
+SudokuPairCells >> pairOfNumbers [ 
+
+	^pairOfNumbers 
 ]
 
 { #category : #accessing }

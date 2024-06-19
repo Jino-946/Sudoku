@@ -314,7 +314,7 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'private - logics' }
 SudokuBlock2 >> markByNumberToMark: numberToMark [
 	"
 	ブランクセルに直交するSudokuRowとSudokuColumnを検査し

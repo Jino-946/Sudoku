@@ -62,7 +62,10 @@ YokoNicoMethod >> targetBlock: blockNumber [
 		block markByNumberToMark: n.
 		
 		(block blankCellsAsArray size = 1) ifTrue: [ 
-			self finishBlock: block number: n ]]
+			self finishBlock: block number: n ].
+			^self ].
 		
-		" todo: ブランクセルが2つの時『2国同盟』の処理を追加する"
+		" todo: ブランクセルが2つの時『2国同盟』の処理を追加する
+		^block はどうだろう?
+		"
 ]
