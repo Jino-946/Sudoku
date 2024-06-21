@@ -49,7 +49,7 @@ SudokuBlock2 class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 
 	"
 	| block |
-	block := board atBlock: bNum.
+	block := board getBlock: bNum.
 	block verifyNumber: vNum.
 	
 	^ block

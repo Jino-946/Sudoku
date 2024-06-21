@@ -36,7 +36,7 @@ SudokuBoard2 >> = sudokuBoard [
 ]
 
 { #category : #'private - accessing' }
-SudokuBoard2 >> _atBlock: rowStart at: colStart [
+SudokuBoard2 >> _getBlock: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
 	ブロック(3X3)を取り出す。
@@ -103,71 +103,6 @@ SudokuBoard2 >> asString [
 	^aStream contents 
 ]
 
-{ #category : #creation }
-SudokuBoard2 >> atBlock: blockNumber [
-	"
-	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
-	
-	数独ボード
-	1 2 3  4 5 6  7 8 9
-	2 3 4  5 6 7  8 9 1 
-	3 4 5  6 7 8  9 1 2
-	
-	4 5 6  7 8 9  1 2 3
-	5 6 7  8 9 1  2 3 4
-	6 7 8  9 1 2  3 4 5
-	
-	7 8 9  1 2 3  4 5 6
-	8 9 1  2 3 4  5 6 7 
-	9 1 2  3 4 5  6 7 8	
-	
-	数独ボード(9X9)とblockNumberの位置関係	
-	ブロック(ナンバー)
-	 B1  B2  B3
-	 B4  B5  B6
-	 B7  B8  B9	
-	"
-	| block |
-	block := SudokuBlock2 new.
-	blockNumber = 1 ifTrue: [
-		block := (self _atBlock: 1 at: 1) blockNumber: blockNumber ].
-	blockNumber = 2 ifTrue: [
-		block := (self _atBlock: 1 at: 4) blockNumber: blockNumber ].
-	blockNumber = 3 ifTrue: [
-	 	block := (self _atBlock:  1 at: 7) blockNumber: blockNumber ].
-	blockNumber = 4 ifTrue: [
-		block := (self _atBlock: 4 at: 1) blockNumber: blockNumber ].
-	blockNumber = 5 ifTrue: [
-		block := (self _atBlock: 4 at: 4) blockNumber: blockNumber ].
-	blockNumber = 6 ifTrue: [
-		block := (self _atBlock: 4 at: 7) blockNumber: blockNumber ].
-	blockNumber = 7 ifTrue: [
-		block := (self _atBlock: 7 at: 1) blockNumber: blockNumber ].
-	blockNumber = 8 ifTrue: [
-		block :=  (self _atBlock: 7 at: 4) blockNumber: blockNumber ].
-	blockNumber = 9 ifTrue: [
-		block := (self _atBlock: 7 at: 7) blockNumber: blockNumber ].
-	
-	self setEitherCells: block.	
-	^block
-	
-
-]
-
-{ #category : #creation }
-SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
-
-	| block |
-	block := self atBlock: bNum.
-	^ block verifyNumber: vNum
-]
-
-{ #category : #accessing }
-SudokuBoard2 >> atCellRow: rowIndex cellColumn: colIndex [
-
-	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
-]
-
 { #category : #accessing }
 SudokuBoard2 >> atColumn: colIndex [
 	"
@@ -184,31 +119,6 @@ SudokuBoard2 >> atRow: rowIndex [
 	"
 
 	^ boardA2D  atRow: rowIndex
-]
-
-{ #category : #accessing }
-SudokuBoard2 >> atSudokuCell: aPoint [
-
-	
-	^ self atCellRow: aPoint y cellColumn: aPoint x.
-
-]
-
-{ #category : #creation }
-SudokuBoard2 >> atSudokuColumn: colIndex [
-	"
-	colIndex で指定した行を SudokuColumn に変換して返す
-	"
-	^SudokuColumn new: colIndex column: (self atColumn: colIndex)
-
-]
-
-{ #category : #creation }
-SudokuBoard2 >> atSudokuRow: rowIndex [
-	"
-	rowIndex で指定した行を SudokuRow に変換して返す
-	"
-	^SudokuRow new: rowIndex row: (self atRow: rowIndex)
 ]
 
 { #category : #accessing }
@@ -235,14 +145,104 @@ SudokuBoard2 >> completed [
 	数独問題を解けたか判定する
 	"
 	1 to: 9 do: [ :number | 
-		(self atBlock: number) completed 
+		(self getBlock: number) completed 
 		ifFalse: [ ^false ].
-		(self atSudokuColumn:  number) completed 
+		(self getSudokuColumn:  number) completed 
 		ifFalse: [ ^false ].
-		(self atSudokuRow:  number) completed 
+		(self getSudokuRow:  number) completed 
 		ifFalse: [ ^false ].	
 	].
 	^ true
+]
+
+{ #category : #creation }
+SudokuBoard2 >> getBlock: blockNumber [
+	"
+	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
+	
+	数独ボード
+	1 2 3  4 5 6  7 8 9
+	2 3 4  5 6 7  8 9 1 
+	3 4 5  6 7 8  9 1 2
+	
+	4 5 6  7 8 9  1 2 3
+	5 6 7  8 9 1  2 3 4
+	6 7 8  9 1 2  3 4 5
+	
+	7 8 9  1 2 3  4 5 6
+	8 9 1  2 3 4  5 6 7 
+	9 1 2  3 4 5  6 7 8	
+	
+	数独ボード(9X9)とblockNumberの位置関係	
+	ブロック(ナンバー)
+	 B1  B2  B3
+	 B4  B5  B6
+	 B7  B8  B9	
+	"
+	| block |
+	block := SudokuBlock2 new.
+	blockNumber = 1 ifTrue: [
+		block := (self _getBlock: 1 at: 1) blockNumber: blockNumber ].
+	blockNumber = 2 ifTrue: [
+		block := (self _getBlock: 1 at: 4) blockNumber: blockNumber ].
+	blockNumber = 3 ifTrue: [
+	 	block := (self _getBlock:  1 at: 7) blockNumber: blockNumber ].
+	blockNumber = 4 ifTrue: [
+		block := (self _getBlock: 4 at: 1) blockNumber: blockNumber ].
+	blockNumber = 5 ifTrue: [
+		block := (self _getBlock: 4 at: 4) blockNumber: blockNumber ].
+	blockNumber = 6 ifTrue: [
+		block := (self _getBlock: 4 at: 7) blockNumber: blockNumber ].
+	blockNumber = 7 ifTrue: [
+		block := (self _getBlock: 7 at: 1) blockNumber: blockNumber ].
+	blockNumber = 8 ifTrue: [
+		block :=  (self _getBlock: 7 at: 4) blockNumber: blockNumber ].
+	blockNumber = 9 ifTrue: [
+		block := (self _getBlock: 7 at: 7) blockNumber: blockNumber ].
+	
+	self setEitherCells: block.	
+	^block
+	
+
+]
+
+{ #category : #creation }
+SudokuBoard2 >> getBlock: bNum verifyNumber: vNum [
+
+	| block |
+	block := self getBlock: bNum.
+	^ block verifyNumber: vNum
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> getCellRow: rowIndex cellColumn: colIndex [
+
+	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> getSudokuCell: aPoint [
+
+	
+	^ self getCellRow: aPoint y cellColumn: aPoint x.
+
+]
+
+{ #category : #creation }
+SudokuBoard2 >> getSudokuColumn: colIndex [
+	"
+	colIndex で指定した行を SudokuColumn に変換して返す
+	"
+	^SudokuColumn new: colIndex column: (self atColumn: colIndex)
+
+]
+
+{ #category : #creation }
+SudokuBoard2 >> getSudokuRow: rowIndex [
+	"
+	rowIndex で指定した行を SudokuRow に変換して返す
+	"
+	^SudokuRow new: rowIndex row: (self atRow: rowIndex)
 ]
 
 { #category : #comparing }

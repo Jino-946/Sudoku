@@ -140,64 +140,64 @@ TateNicoMethodTest >> testTargetBlock [
 
 	blockNumber := 1.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 
 	blockNumber := 2.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 3.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 3.	
 	self assert: (board boardA2D at: 1 at: 5)  equals: 2.
 	
 
 	blockNumber := 3.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 7.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 6.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 6.	
 	self assert: (board boardA2D at: 3 at: 7)  equals: 2.
 	
 	blockNumber := 4.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.	
 
 	blockNumber := 5.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 2.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 2.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 0.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 0.	
 	self assert: (board boardA2D at: 5 at: 6)  equals: 7.
 	self assert: (board boardA2D at: 5 at: 4)  equals: 4.
 
 	blockNumber := 6.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 4.	
 	self assert: (board boardA2D at: 5 at: 9)  equals: 5.
 
 	blockNumber := 7.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 7.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 7.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 7.	
 
 	blockNumber := 8.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 4.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 4.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 3.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 3.	
 	self assert: (board boardA2D at: 7 at: 4)  equals: 1.
 
 	blockNumber := 9.		
 	solver := TateNicoMethod new: board.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
-	self assert: (board atBlock: blockNumber) blankCellsAsArray size  equals: 5.	
+	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.	
 
 	2 timesRepeat: [  
 		solver := TateNicoMethod new: board.		

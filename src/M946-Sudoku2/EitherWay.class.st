@@ -59,7 +59,7 @@ EitherWay >> findCandidatesForEitherCells: verifyNumber [
 	"
 	| block |
 	1 to: 9 do: [ :n |
-		block := sudokuBoard atBlock: n verifyNumber: verifyNumber.
+		block := sudokuBoard getBlock: n verifyNumber: verifyNumber.
 		(block includesVerifyNumber) not and: [  
 			block countOfReservedBlankCells = 2
 				ifTrue: [ self markEitherCellsOn: block ]]]
@@ -70,7 +70,7 @@ EitherWay >> findCandidatesForEitherCells: verifyNumber [
 EitherWay >> finish: verifyNumber [
 
 	1 to: 9 do: [ :n | | block eitherCells |
-		block := sudokuBoard atBlock: n verifyNumber: verifyNumber.
+		block := sudokuBoard getBlock: n verifyNumber: verifyNumber.
 		eitherCells := block eitherCells .
 		eitherCells isNotEmpty ifTrue: [ 
 			eitherCells colIndex > 0 ifTrue: [ self verticalProcessing: block colIndex: eitherCells colIndex ].	
@@ -115,7 +115,7 @@ EitherWay >> horizontalProcessing: block rowIndex: rowIndex [
 	| relatedBlockNumbers |
 	relatedBlockNumbers := relatedHorBlocks at: block blockNumber .
 	relatedBlockNumbers do: [ :num | | relatedBlock eitherCells |
-		relatedBlock := sudokuBoard atBlock: num verifyNumber: block verifyNumber .
+		relatedBlock := sudokuBoard getBlock: num verifyNumber: block verifyNumber .
 		eitherCells := relatedBlock eitherCells .
 		eitherCells isNotEmpty ifTrue: [ | cell1 cell2 |			
 			cell1 := eitherCells at: 1.
@@ -139,7 +139,7 @@ EitherWay >> markBlankCellsOnBlocks: verifyNumber [
 	"
 	||
 	1 to: 9 do: [ :n | | block |
-		block := sudokuBoard atBlock: n verifyNumber: verifyNumber .
+		block := sudokuBoard getBlock: n verifyNumber: verifyNumber .
 		block includesVerifyNumber 
 			ifTrue: [  
 				block markBlankCells .
@@ -153,7 +153,7 @@ EitherWay >> markBlankCellsOnColumns: verifyNumber [
 	検証数字のある列の全てのブランクセルを$Xでマークする
 	"
 	1 to: 9 do: [ :i | | columnCells |
-		columnCells := sudokuBoard atSudokuColumn: i.
+		columnCells := sudokuBoard getSudokuColumn: i.
 		(columnCells includes: verifyNumber )
 			ifTrue: [ 
 				columnCells markBlankCells.
@@ -167,7 +167,7 @@ EitherWay >> markBlankCellsOnRows: verifyNumber [
 	検証数字のある行の全てのブランクセルを$Xでマークする
 	"
 	1 to: 9 do: [ :i | | rowCells |
-		rowCells := sudokuBoard atSudokuRow: i.
+		rowCells := sudokuBoard getSudokuRow: i.
 		(rowCells includes: verifyNumber )
 			ifTrue: [ 
 				rowCells markBlankCells.
@@ -255,7 +255,7 @@ EitherWay >> verticalProcessing: block colIndex: colIndex [
 	| relatedBlockNumbers |
 	relatedBlockNumbers := relatedVertBlocks  at: block blockNumber .
 	relatedBlockNumbers do: [ :num | | relatedBlock eitherCells |
-		relatedBlock := sudokuBoard atBlock: num verifyNumber: block verifyNumber .
+		relatedBlock := sudokuBoard getBlock: num verifyNumber: block verifyNumber .
 		eitherCells := relatedBlock eitherCells .
 		eitherCells isNotEmpty ifTrue: [ | cell1 cell2 |
 	

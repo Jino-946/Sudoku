@@ -49,19 +49,19 @@ SudokuBoard2Test >> testMap [
 	board map: cell.	
 	self assert: (board boardA2D at: 4 at: 5) equals: $X.
 	
-	row := board atSudokuRow: 7.
+	row := board getSudokuRow: 7.
 	row at: 7 put: $X.
 	row at: 9 put: $X.
 
 	board map: row.
-	self assert: (board atSudokuRow: 7) equals: row.
+	self assert: (board getSudokuRow: 7) equals: row.
 	
-	column := board atSudokuColumn: 4.
+	column := board getSudokuColumn: 4.
 	column at: 3 put: $X.
 	column at: 4 put: $X.
 	column at: 5 put: $X.
 	board map: column.
-	self assert: (board atSudokuColumn: 4) equals: column.
+	self assert: (board getSudokuColumn: 4) equals: column.
 	
 	
 	
@@ -89,7 +89,7 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 	'.
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	block row: 1 column: 1 put: $X.
 	block row: 2 column: 2 put: $X.
@@ -97,6 +97,6 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 	
 	board mapSudokuBlock2: block.
 	
-	self assert: (board atBlock: 7) blockA2D equals: block blockA2D.
+	self assert: (board getBlock: 7) blockA2D equals: block blockA2D.
 
 ]

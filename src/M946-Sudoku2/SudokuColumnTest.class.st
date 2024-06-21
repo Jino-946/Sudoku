@@ -40,7 +40,7 @@ SudokuColumnTest >> testAllGreen [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	
@@ -68,7 +68,7 @@ SudokuColumnTest >> testCellOf [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	column := board atSudokuColumn: 4.
+	column := board getSudokuColumn: 4.
 	
 	cell := SudokuCell row: 9 column: 4  element: 7.
 	self assert: cell equals: (column cellOf: 7)
@@ -96,7 +96,7 @@ SudokuColumnTest >> testTenpai [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	
@@ -127,7 +127,7 @@ SudokuColumnTest >> testTsumo [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	

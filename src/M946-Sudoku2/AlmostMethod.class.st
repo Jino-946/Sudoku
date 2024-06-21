@@ -27,7 +27,7 @@ AlmostMethod >> findBlocks [
 	| blocks aBlock |
 	blocks := OrderedCollection new.
 	1 to: 9 do:[ :n | 
-		aBlock := (self sudokuBoard) atBlock: n.
+		aBlock := (self sudokuBoard) getBlock: n.
 		aBlock countOfReservedBlankCells < 3 ifTrue: [ blocks add: aBlock ]].
 	^blocks
 
@@ -41,7 +41,7 @@ AlmostMethod >> findColumns [
 	| rows row  |
 	rows := OrderedCollection new.
 	1 to: 9 do:[ :n | 
-		row := (self sudokuBoard) atSudokuColumn:  n.
+		row := (self sudokuBoard) getSudokuColumn:  n.
 		row countOfReservedBlankCells < 3 ifTrue: [ rows add: row ]].
 	^rows
 
@@ -55,7 +55,7 @@ AlmostMethod >> findRows [
 	| rows row  |
 	rows := OrderedCollection new.
 	1 to: 9 do:[ :n | 
-		row := (self sudokuBoard) atSudokuRow:  n.
+		row := (self sudokuBoard) getSudokuRow:  n.
 		row countOfReservedBlankCells < 3 ifTrue: [ rows add: row ]].
 	^rows
 
@@ -71,7 +71,7 @@ AlmostMethod >> finish1stCrossingColumn: cells [
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 		
-	col1  := sudokuBoard atSudokuColumn: (cells at: 1) x.
+	col1  := sudokuBoard getSudokuColumn: (cells at: 1) x.
 
 	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('col1: {1}' format: {col1}); cr.
@@ -103,7 +103,7 @@ AlmostMethod >> finish1stCrossingRow: cells [
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 	
-	row1  := sudokuBoard atSudokuRow: (cells at: 1) y.
+	row1  := sudokuBoard getSudokuRow: (cells at: 1) y.
 	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('row: {1}' format: {row1}); cr.
 
@@ -134,7 +134,7 @@ AlmostMethod >> finish2ndCrossingColumn: cells [
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 	
-	col2  := sudokuBoard atSudokuColumn: (cells at: 2) x.
+	col2  := sudokuBoard getSudokuColumn: (cells at: 2) x.
 	
 	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('col2: {1}' format: {col2 }); cr.
@@ -166,7 +166,7 @@ AlmostMethod >> finish2ndCrossingRow: cells [
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 	
-	row2  := sudokuBoard atSudokuRow: (cells at: 2) y.
+	row2  := sudokuBoard getSudokuRow: (cells at: 2) y.
 
 	logger	debug: ('missingNumbers: {1}' format: {missingNumbers } ); 
 			debug: ('row2: {1}' format: {row2}); cr.

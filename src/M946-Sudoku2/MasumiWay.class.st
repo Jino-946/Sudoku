@@ -67,7 +67,7 @@ MasumiWay >> solve [
 	"
 	| block blankCells blockNumbers rowNumbers colNumbers set |
 	1 to: 9 do: [ :n| 
-		block := sudokuBoard atBlock: n.
+		block := sudokuBoard getBlock: n.
 		blankCells := block blankCellsAsArray .
 		blockNumbers := block blockA2D asArray select: [ :num| num > 0 ].
 		blankCells do: [ :bCell | | rowOnBoard colOnBoard |

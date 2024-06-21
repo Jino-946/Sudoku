@@ -76,7 +76,7 @@ AlmostMethodTest >> testFindColumns [
 	columns := solver findColumns .
 	
 	self assert: 2 equals: columns size.
-	self assert: (board atSudokuColumn: 4) equals: (columns at: 1)
+	self assert: (board getSudokuColumn: 4) equals: (columns at: 1)
 
 ]
 

@@ -19,8 +19,8 @@ YokoNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 	| blockNumbers block1 block2 cells |
 	cells := Array new: 2.
 	blockNumbers := self relatedHorBlocks at: targetBlockNumber .
-	block1 := sudokuBoard atBlock: (blockNumbers at: 1).
-	block2 := sudokuBoard atBlock: (blockNumbers at: 2).
+	block1 := sudokuBoard getBlock: (blockNumbers at: 1).
+	block2 := sudokuBoard getBlock: (blockNumbers at: 2).
 	
 	cells at: 1 put: (block1 cellOf: anInteger).
 	cells at: 2 put: (block2 cellOf: anInteger).
@@ -38,8 +38,8 @@ YokoNicoMethod >> nicoCheck: targetBlockNumber [
 	"
 	| values block1 block2  |
 	values := self relatedHorBlocks at: targetBlockNumber .
-	block1 := sudokuBoard atBlock: (values at: 1).
-	block2 := sudokuBoard atBlock: (values at: 2).
+	block1 := sudokuBoard getBlock: (values at: 1).
+	block2 := sudokuBoard getBlock: (values at: 2).
 	
 	^(block1 asArray select: [ :n | n > 0] ) intersection: (block2 asArray select: [ :n | n > 0]).
 
@@ -55,7 +55,7 @@ YokoNicoMethod >> solve [
 YokoNicoMethod >> targetBlock: blockNumber [
 
 	(self nicoCheck: blockNumber) do: [ :n | | block |
-		block := self sudokuBoard atBlock: blockNumber.
+		block := self sudokuBoard getBlock: blockNumber.
 		(self nicoCells: blockNumber  number: n) do: [ :cell |
 			block markByHorizontalCell: cell ].
 
