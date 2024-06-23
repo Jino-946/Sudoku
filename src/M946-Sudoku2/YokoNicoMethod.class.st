@@ -54,16 +54,21 @@ YokoNicoMethod >> solve [
 { #category : #logic }
 YokoNicoMethod >> targetBlock: blockNumber [
 
+	| logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
 	(self nicoCheck: blockNumber) do: [ :n | | block |
 		block := self sudokuBoard getBlock: blockNumber.
+		"
 		(self nicoCells: blockNumber  number: n) do: [ :cell |
 			block markByHorizontalCell: cell ].
-
+		"
 		block markByNumberToMark: n.
 		
+	
+		
 		(block blankCellsAsArray size = 1) ifTrue: [ 
-			self finishBlock: block number: n ].
-			^self ].
+			self finishBlock: block number: n ]].
 		
 		" todo: ブランクセルが2つの時『2国同盟』の処理を追加する
 		^block はどうだろう?

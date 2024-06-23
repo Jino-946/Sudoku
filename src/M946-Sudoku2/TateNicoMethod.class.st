@@ -35,12 +35,17 @@ TateNicoMethod >> nicoCheck: targetBlockNumber [
 	垂直方向に関連するブロックとは 1->(4 7), 4->(1 7), 7->(1 4) など9通りあり、
     SudokuSolver>>initializeの中でrelatedVertBlocks<Dictionary>として初期化されている。    
 	"
-	| values block1 block2 |
-	values := self relatedVertBlocks  at: targetBlockNumber .
-	block1 := sudokuBoard getBlock: (values at: 1).
-	block2 := sudokuBoard getBlock: (values at: 2).
+	| relBlocks block1 block2 logger result |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
 	
-	^(block1 asArray select: [ :n | n > 0] ) intersection: (block2 asArray select: [ :n | n > 0])
+	relBlocks := self relatedVertBlocks  at: targetBlockNumber .
+	block1 := sudokuBoard getBlock: (relBlocks at: 1).
+	block2 := sudokuBoard getBlock: (relBlocks at: 2).
+	
+	result := (block1 asArray select: [ :n | n > 0] ) intersection: (block2 asArray select: [ :n | n > 0]).
+	logger debug: result.
+	^result
 ]
 
 { #category : #logic }
@@ -53,16 +58,22 @@ TateNicoMethod >> solve [
 { #category : #logic }
 TateNicoMethod >> targetBlock: blockNumber [
 
+	| logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	
 	(self nicoCheck: blockNumber) do: [ :n | | block |
 		block := self sudokuBoard getBlock: blockNumber.
+		"
 		(self nicoCells: blockNumber  number: n) do: [ :cell |
+			logger debug: cell.
 			block markByVerticalCell: cell ].
-
+		"
 		block markByNumberToMark: n.
+		logger debug: block.
 		
 		(block blankCellsAsArray size = 1) ifTrue: [ 
-			self finishBlock: block number: n ].
-			^self]	.
+			self finishBlock: block number: n ]]	
 		
 		" todo: ブランクセルが2つの時『2国同盟』の処理を追加する
 		^block はどうだろう?

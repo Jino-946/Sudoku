@@ -25,7 +25,7 @@ ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#EitherWay #markEitherCellsOn: #false)) #'2024-05-15T09:29:11.579876+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:44.744762+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#EitherWay #markEitherCellsOn: #false)) #'2024-05-15T09:29:11.579876+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:44.744762+09:00') #(#(#RGClassDefinition #(#SudokuBlock2)) #'2024-06-23T14:55:59.141132+09:00') )
 ]
 
 { #category : #'code-critics' }

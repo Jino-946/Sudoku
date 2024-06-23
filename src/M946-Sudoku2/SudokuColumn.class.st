@@ -193,6 +193,12 @@ SudokuColumn >> includes: anObject [
 	^ column includes: anObject 
 ]
 
+{ #category : #accessing }
+SudokuColumn >> indexOf: anObject [
+
+	^column indexOf: anObject 
+]
+
 { #category : #'private - logics' }
 SudokuColumn >> markBlankCells [ 
 

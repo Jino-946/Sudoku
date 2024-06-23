@@ -54,7 +54,6 @@ SudokuCell >> asString [
 
 	| aStream elem |
 	aStream := ReadWriteStream on: String new.
-	aStream cr.
 	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; space; space;
 			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space; space.
 	elem := element.
@@ -137,6 +136,12 @@ SudokuCell >> rowIndex [
 SudokuCell >> rowIndex: index [
 
 	rowIndex := index
+]
+
+{ #category : #comparing }
+SudokuCell >> sameCoordinates: aSudokuCell [
+
+	^self x = aSudokuCell x and: [ self y = aSudokuCell y ]
 ]
 
 { #category : #'accessing - structure variables' }

@@ -469,9 +469,30 @@ SudokuBlock2 >> x: colIndex y: rowIndex [
 ]
 
 { #category : #accessing }
-SudokuBlock2 >> x: colIndex y: rowIndex put: elem [
+SudokuBlock2 >> x: colIndex y: rowIndex put: anObject [
 
-	self row: rowIndex column: colIndex  put: elem
+	(anObject class = Array and: [ (anObject at: 1) class = SudokuCell ]) 
+		ifTrue: [ 
+			self x: colIndex  y: rowIndex   putPairCell: anObject ]
+		ifFalse: [ 
+			self row: rowIndex column: colIndex  put: anObject ]
+]
+
+{ #category : #'private - logics' }
+SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
+
+	| cell1 cell2 pairCell |
+	
+	cell1 := anArrayOfCell at:1.
+	cell2 := anArrayOfCell at: 2.
+	pairCell := SudokuPairCell thisCell: cell1 otherCell: cell2.
+	(colIndex = (self localX: cell2 x) and: [ rowIndex = (self localY:  cell2 y)])
+	 	ifFalse: [ pairCell := SudokuPairCell thisCell: cell2 otherCell: cell1 ].
+	pairCell pairKinds: PairKinds onePair.
+	pairCell pairOfNumbers add: self verifyNumber .
+
+	self row: rowIndex column: colIndex  put: pairCell .
+	^pairCell
 ]
 
 { #category : #converting }

@@ -141,13 +141,16 @@ TateNicoMethodTest >> testTargetBlock [
 	blockNumber := 1.		
 	solver := TateNicoMethod new: board.
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
+
 	solver targetBlock: blockNumber.
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 
 	blockNumber := 2.		
 	solver := TateNicoMethod new: board.
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 4.
+	('{1}' format: {(board getBlock: blockNumber) asString}) record.
 	solver targetBlock: blockNumber.
+	('{1}' format: {(board getBlock: blockNumber) asString}) record.
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 3.	
 	self assert: (board boardA2D at: 1 at: 5)  equals: 2.
 	
@@ -198,25 +201,6 @@ TateNicoMethodTest >> testTargetBlock [
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.
 	solver targetBlock: blockNumber.
 	self assert: (board getBlock: blockNumber) blankCellsAsArray size  equals: 5.	
-
-	2 timesRepeat: [  
-		solver := TateNicoMethod new: board.		
-		1 to: 9 do: [ :num | solver targetBlock: num ].
-		('{1}' format: {board}) record.
-
-		solver := YokoNicoMethod new: board.		
-		1 to: 9 do: [ :num | solver targetBlock: num ].
-		('{1}' format: {board}) record.
-	
-		solver := AlmostMethod new: board.
-		solver solve.
-		('{1}{2}' format: {thisContext . board}) record.]
-
-
-
-
-
-
 
 
 

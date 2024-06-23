@@ -28,19 +28,19 @@ Class {
 }
 
 { #category : #creating }
-PairKinds class >> isolated [
-
-	^self new value: #isolated
-]
-
-{ #category : #creating }
 PairKinds class >> onePair [
 
 	^self new value: #onePair
 ]
 
 { #category : #creating }
-PairKinds class >> twoPair [
+PairKinds class >> twoPairs [
 
-	^self new value: #twoPair 
+	^self new value: #twoPairs 
+]
+
+{ #category : #creating }
+PairKinds class >> unknown [
+
+	^self new value: #unknown
 ]

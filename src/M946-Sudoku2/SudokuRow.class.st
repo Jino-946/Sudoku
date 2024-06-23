@@ -189,6 +189,12 @@ SudokuRow >> includes: anObject [
 	^ row includes: anObject 
 ]
 
+{ #category : #accessing }
+SudokuRow >> indexOf: anObject [
+
+	^row indexOf: anObject 
+]
+
 { #category : #'private - logics' }
 SudokuRow >> markBlankCells [ 
 

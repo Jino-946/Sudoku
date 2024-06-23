@@ -25,35 +25,35 @@ SudokuCellTest >> testBlockNumber [
 	1 to: 3 do: [ :y |
 		1 to: 3 do: [ :x |
 			cell := SudokuCell	row: y column: x  element: 0 .
-			self assert: 1 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 1 ].
 		4 to: 6 do: [ :x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 2 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 2 ].
 		7 to: 9 do: [ : x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 3 equals: cell blockNumber ]].
+			self assert: cell blockNumber equals: 3 ]].
 	
 	4 to: 6 do: [ :y |
 		1 to: 3 do: [ :x |
 			cell := SudokuCell	row: y column: x  element: 0 .
-			self assert: 4 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 4  ].
 		4 to: 6 do: [ :x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 5 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 5 ].
 		7 to: 9 do: [ : x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 6 equals: cell blockNumber ]].		
+			self assert: cell blockNumber equals: 6 ]].		
 		
 	7 to: 9 do: [ :y |
 		1 to: 3 do: [ :x |
 			cell := SudokuCell	row: y column: x  element: 0 .
-			self assert: 7 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 7 ].
 		4 to: 6 do: [ :x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 8 equals: cell blockNumber ].
+			self assert: cell blockNumber equals: 8 ].
 		7 to: 9 do: [ : x |
 			cell := SudokuCell row: y column: x element: 0.
-			self assert: 9 equals: cell blockNumber ]].		
+			self assert: cell blockNumber equals: 9 ]].		
 		
 		
 		

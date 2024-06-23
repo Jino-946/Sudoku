@@ -92,7 +92,8 @@ SudokuBoard2 >> asString [
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	
 			number class = Character ifTrue: [ number := '$', number asString ].
-			aStream nextPutAll: number asString; space.
+			number class = SudokuPairCell ifTrue: [ number := number asSpecialString  ].
+			aStream nextPutAll: number asString; tab.
 			(separateIndices includes: colIndex)
 			ifTrue:[ aStream space; space; space]].
 		aStream cr.
@@ -310,7 +311,10 @@ SudokuBoard2 >> map:  sudokuItem [
 			boardA2D at: i at: sudokuItem colIndex put: (sudokuItem column at: i)]].
 	
 	sudokuItem class = SudokuBlock2 ifTrue: [ 
-		self mapSudokuBlock2: sudokuItem ]
+		self mapSudokuBlock2: sudokuItem ].
+	
+	sudokuItem class = SudokuPairCell ifTrue: [ 
+		self mapSudokuPairCell: sudokuItem ]
 
 	
 ]
@@ -329,6 +333,15 @@ SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
 			boardA2D at: rowIndex at: colIndex put: item.
 		]	
  	]
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> mapSudokuPairCell: aPairCell [
+
+	| rowIndex colIndex |
+	rowIndex := aPairCell thisCell rowIndex.
+	colIndex := aPairCell thisCell colIndex.
+	boardA2D at: rowIndex at: colIndex put: aPairCell 
 ]
 
 { #category : #printing }
