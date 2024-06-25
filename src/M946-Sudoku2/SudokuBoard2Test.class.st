@@ -105,9 +105,9 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 SudokuBoard2Test >> testMapSudokuCell [
 
 	| task board block logger cell solver |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	logger clearLog.
-	logger debug: thisContext.
+	logger info: thisContext.
 	
 	task := '
 8	9	0	   0	6	0	   0	2	3	
@@ -126,22 +126,26 @@ SudokuBoard2Test >> testMapSudokuCell [
 	board loadFromString: task.
 	solver := TwoNationAlliance new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
-	logger debug: board.
+	logger info: board.
 	solver setAlliance: block.
+	logger info: board.
+	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.
 	cell := SudokuCell row: 4 column: 7 element: 2.
 	board mapSudokuCell: cell.
-	logger debug: board.
+	logger info: board.
 	self assert: (board boardA2D at: 6 at: 7) equals: 1.
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	solver := TwoNationAlliance new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
-	logger debug: board.
+	logger info: board.
 	solver setAlliance: block.
+	logger info: board.
+	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.	
 	cell := SudokuCell row: 6 column: 7 element: 2.
 	board mapSudokuCell: cell.
-	logger debug: board.
+	logger info: board.
 	self assert: (board boardA2D at: 4 at: 7) equals: 1.
 	
 ]

@@ -71,7 +71,7 @@ TwoNationAlliance >> setAlliance: aBlock [
 							putPairCell: blankCells.
 	sudokuBoard map: pairCell1 ; map: pairCell2 .
 	"
-	このような条件に遭遇することはレアケース,このレアな機会を適切に使っていく
+	上級問題でこのような条件に遭遇することはレアケース,このレアな機会を適切に使っていく
 	のが数独解法のテクニックかもしれない
 	setAlliance をうまく利用し再帰呼び出し処理するべきかな
 	"
