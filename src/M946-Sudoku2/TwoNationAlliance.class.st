@@ -53,16 +53,27 @@ TwoNationAlliance >> rowMarking: aBlock [
 { #category : #initialization }
 TwoNationAlliance >> setAlliance: aBlock [
 
-	| blankCells x1 y1 x2 y2 pairCell1 pairCell2 |
+	| blankCells pairCell1 pairCell2 |	
+	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
 	blankCells := self getBlankCellsAfterMark: aBlock.
-	x1 := aBlock localX: (blankCells at: 1) colIndex.
-	y1 := aBlock localY: (blankCells at: 1) rowIndex.
-	x2 := aBlock localX: (blankCells at: 2) colIndex.
-	y2 := aBlock localY: (blankCells at: 2) rowIndex.
+	blankCells size = 1 ifTrue:[ 
+		(blankCells at: 1) element: aBlock verifyNumber.
+		sudokuBoard map: (blankCells at: 1).
+		^self
+	].
+	blankCells size = 2 ifFalse: [ ^self ].
 
-	pairCell1 := aBlock x: x1 y: y1 putPairCell: blankCells.
-	pairCell2 := aBlock x: x2 y: y2 putPairCell: blankCells.
-	
+	pairCell1 := aBlock	x: (aBlock localX: (blankCells at: 1) colIndex)
+							y: (aBlock localY: (blankCells at: 1) rowIndex)
+							putPairCell: blankCells.
+	pairCell2 := aBlock	x: (aBlock localX: (blankCells at: 2) colIndex)
+							y: (aBlock localY: (blankCells at: 2) rowIndex)
+							putPairCell: blankCells.
 	sudokuBoard map: pairCell1 ; map: pairCell2 .
-	
+	"
+	このような条件に遭遇することはレアケース,このレアな機会を適切に使っていく
+	のが数独解法のテクニックかもしれない
+	setAlliance をうまく利用し再帰呼び出し処理するべきかな
+	"
+
 ]

@@ -102,9 +102,11 @@ TwoNationAllianceTest >> testSetAlliance [
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	solver := TwoNationAlliance new: board.
-	block := board getBlock: 6 verifyNumber: 1.
-	blankCells := solver setAlliance: block.	
-	logger debug: block.
-	logger debug: board
+	1 to: 9 do: [ :i | 
+		block := board getBlock: i verifyNumber: 1.
+		blankCells := solver setAlliance: block.	
+		logger debug: block.
+		logger debug: board.
+	]
 
 ]

@@ -100,3 +100,48 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 	self assert: (board getBlock: 7) blockA2D equals: block blockA2D.
 
 ]
+
+{ #category : #tests }
+SudokuBoard2Test >> testMapSudokuCell [
+
+	| task board block logger cell solver |
+	logger := M946Logger new: LogLevel debug.
+	logger clearLog.
+	logger debug: thisContext.
+	
+	task := '
+8	9	0	   0	6	0	   0	2	3	
+4	0	0	   1	0	3	   0	0	8	
+0	0	0	   0	0	0	   0	0	0	
+
+0	2	0	   0	0	0	   0	4	0	
+1	0	0	   0	0	0	   0	0	5	
+0	7	0	   0	0	0	   0	6	0	
+
+0	0	0	   0	0	0	   0	0	0	
+5	0	0	   3	0	4	   0	0	1	
+9	4	0	   0	2	0	   0	8	6		
+'.
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	solver := TwoNationAlliance new: board.	
+	block := board getBlock: 6 verifyNumber: 1.
+	logger debug: board.
+	solver setAlliance: block.
+	cell := SudokuCell row: 4 column: 7 element: 2.
+	board mapSudokuCell: cell.
+	logger debug: board.
+	self assert: (board boardA2D at: 6 at: 7) equals: 1.
+	
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	solver := TwoNationAlliance new: board.	
+	block := board getBlock: 6 verifyNumber: 1.
+	logger debug: board.
+	solver setAlliance: block.
+	cell := SudokuCell row: 6 column: 7 element: 2.
+	board mapSudokuCell: cell.
+	logger debug: board.
+	self assert: (board boardA2D at: 4 at: 7) equals: 1.
+	
+]

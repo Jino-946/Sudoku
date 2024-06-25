@@ -299,8 +299,12 @@ SudokuBoard2 >> map:  sudokuItem [
 	"
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
+	"
 	sudokuItem class = SudokuCell ifTrue: [  
 		boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element ].
+	"
+	sudokuItem class = SudokuCell ifTrue: [ 
+		self mapSudokuCell: sudokuItem ].
 	
 	sudokuItem class = SudokuRow ifTrue: [  
 		1 to: 9 do: [ :i | 
@@ -333,6 +337,30 @@ SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
 			boardA2D at: rowIndex at: colIndex put: item.
 		]	
  	]
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> mapSudokuCell: sudokuCell [
+	"
+	sudokuCellの座標で示されるセル値のクラスがSudokuPairCellの時、片方のペアの数字が決まると
+	もう一方の数字が自動的に決定する動作を実装した。
+	"
+	| pairCell rIndex cIndex logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	logger debug: (boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class.
+	(boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class= SudokuPairCell ifTrue: [ 
+		pairCell := boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex.
+		rIndex := pairCell otherCell rowIndex.
+		cIndex := pairCell otherCell colIndex.
+		boardA2D at: rIndex at: cIndex put: (pairCell pairOfNumbers at: 1)].
+	
+	boardA2D
+		at: sudokuCell rowIndex
+		at: sudokuCell colIndex
+		put: sudokuCell element.
+
+
 ]
 
 { #category : #accessing }
