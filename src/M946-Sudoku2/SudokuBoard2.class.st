@@ -140,6 +140,15 @@ SudokuBoard2 >> clearMarks [
 				boardA2D at: i at: j put: 0 ] ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuBoard2 >> clearPairCells [
+
+	1 to: 9 do: [ :i |
+		1 to: 9 do: [ :j |
+			(boardA2D at: i at: j) class = SudokuPairCell  ifTrue: [
+				boardA2D at: i at: j put: 0 ] ] ]
+]
+
 { #category : #logic }
 SudokuBoard2 >> completed [
 	"

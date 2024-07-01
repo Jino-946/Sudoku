@@ -105,7 +105,12 @@ SudokuBlock2 >> asString [
 	(1 to: blockA2D  numberOfRows)
 		do: [ :r |
 				(blockA2D  atRow: r)
-					do: [ :each | aStream print: each ]
+					do: [ :each | 
+						each class = SudokuPairCell
+							ifTrue: [ 
+								aStream nextPutAll: each asSpecialString ]
+						 	ifFalse: [  
+								aStream nextPutAll: each asString ]]
 					separatedBy: [ aStream tab ]]
 		separatedBy: [ aStream cr].
 	aStream cr; nextPutAll: '========='.
@@ -117,19 +122,25 @@ SudokuBlock2 >> asString [
 { #category : #accessing }
 SudokuBlock2 >> blankCellsAsArray [
 	"
-    ブロックのブランクセルをSudokuCellの配列にして返す
+    ブロックのブランクセルをSudokuCellの配列にして返す。
+	SudokuPairCellでPairKind onePairの時もブランクセルとして扱い配列に追加する
     "
 	| collection |
 	collection := OrderedCollection new.
 	1 to: 3 do: [ :i |
-		1 to: 3 do: [ :j |
-			(blockA2D at: i at: j) = 0 ifTrue: [
+		1 to: 3 do: [ :j | | cellItem |
+			cellItem := blockA2D at:i at: j.
+			(cellItem class = SmallInteger and: [ cellItem = 0 ]) ifTrue: [
 				collection add: (SudokuCell
 						 row: (rowsOnBoard at: i) rowIndex
 						 column: (colsOnBoard at: j) colIndex
-						 element: 0) ] ] ].
+						 element: 0) ].
+			(cellItem class = SudokuPairCell 
+						and: [cellItem pairOfNumbers includes: 0]) ifTrue: [ 
+				collection add: cellItem]] ].
+			
 
-	^ (collection select: [ :each | each class = SudokuCell ]) asArray
+	^ collection asArray
 ]
 
 { #category : #accessing }
@@ -227,6 +238,25 @@ SudokuBlock2 >> eitherCells [
 	^eitherCells 
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuBlock2 >> getPairCells: blankCells [
+
+	| pairCell1 pairCell2 pairCells |
+	pairCells := Array new: 2.
+	pairCell1 := self	x: (self localX: (blankCells at: 1) colIndex)
+						y: (self localY: (blankCells at: 1) rowIndex)
+						putPairCell: blankCells.
+	pairCell2 := self	x: (self localX: (blankCells at: 2) colIndex)
+						y: (self localY: (blankCells at: 2) rowIndex)
+						putPairCell: blankCells.
+	pairCells at: 1 put: pairCell1 .
+	pairCells at: 2 put: pairCell2 .
+	
+	^pairCells 
+
+
+]
+
 { #category : #comparing }
 SudokuBlock2 >> hash [ 
 	^(((( blockA2D hash bitXor: rowsOnBoard hash )
@@ -238,7 +268,16 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-	^blockA2D asArray includes: number 
+	| pairCells logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
+	pairCells := blockA2D asArray select: [ :item |
+		             item class = SudokuPairCell ].
+	pairCells isEmpty ifTrue: [ ^ blockA2D asArray includes: number ].
+	logger debug: self.
+	logger debug: pairCells .
+	^ pairCells anySatisfy: [ :cell |
+		  cell pairOfNumbers includes: number ]
 ]
 
 { #category : #testing }
@@ -465,7 +504,7 @@ SudokuBlock2 >> verifyNumber: aNumber [
 { #category : #'instance creation' }
 SudokuBlock2 >> x: colIndex y: rowIndex [
 
-	self row:  rowIndex column: colIndex 
+	^self row:  rowIndex column: colIndex 
 ]
 
 { #category : #accessing }
@@ -490,6 +529,7 @@ SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
 	 	ifFalse: [ pairCell := SudokuPairCell thisCell: cell2 otherCell: cell1 ].
 	pairCell pairKinds: PairKinds onePair.
 	pairCell pairOfNumbers add: self verifyNumber .
+	pairCell pairOfNumbers add: 0.
 
 	self row: rowIndex column: colIndex  put: pairCell .
 	^pairCell

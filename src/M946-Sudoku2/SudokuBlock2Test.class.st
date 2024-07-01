@@ -66,7 +66,13 @@ SudokuBlock2Test >> testAllGreen [
 
 { #category : #tests }
 SudokuBlock2Test >> testBlankCellsAsArray [
-	|task board block cells|
+	|task board block cells logger solver |
+	logger := M946Logger new: LogLevel info.
+	logger clearLog.
+	logger info: thisContext.
+	"
+	ブランクセルが0の場合のテスト
+	"
 	task := '
 1 9 7  0 0 4  2 0 5
 6 8 0  5 3 0  9 0 0 
@@ -90,6 +96,37 @@ SudokuBlock2Test >> testBlankCellsAsArray [
 	cells at: 2 put: (SudokuCell row: 8 column: 7 element: 0).
 	
 	self assert: block blankCellsAsArray  equals: cells.
+	
+	"
+	SudokuPairCellのインスタンスでPairKind onePairの時もブランクセルとして扱うテスト
+	"
+	task := '
+8 9 0   0 6 0   0 2 3
+4 0 0   1 0 3   0 0 8
+0 0 0   0 0 0   0 0 0
+
+0 2 0   0 0 0   0 4 0
+1 0 0   0 0 0   0 0 5
+0 7 0   0 0 0   0 6 0
+
+0 0 0   0 0 0   0 0 0
+5 0 0   3 0 4   0 0 1
+9 4 0   0 2 0   0 8 6	
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	solver := TwoNationAlliance new: board.
+	block := board getBlock: 6 verifyNumber: 1.
+	solver setAlliance: block.
+	logger info: block.	
+	logger info: block blankCellsAsArray.
+	
+	self assert: block blankCellsAsArray size equals: 2.
+	self assert: (block x: 1 y: 1) class equals: SudokuPairCell .
+	self assert: (block x: 1 y: 3) class equals: SudokuPairCell .
+	
+	
 	
 ]
 

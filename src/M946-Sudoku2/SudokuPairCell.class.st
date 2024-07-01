@@ -43,16 +43,14 @@ SudokuPairCell class >> thisCell: aSudokuCell otherCell: aSudokuCell2 [
 
 { #category : #converting }
 SudokuPairCell >> asSpecialString [	
-
+	"
+	SudokuBoard2>>asStringでSudokuPairCellを見やすく表示するために使用するメソッド
+	"
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	pairKinds = PairKinds onePair 
-		ifTrue: [ aStream nextPutAll: '$'; nextPutAll: (pairOfNumbers at: 1) asString]
-		ifFalse: [  
-			pairKinds = PairKinds twoPairs 
-				ifTrue: [ aStream nextPutAll: (pairOfNumbers at: 1) asString;
-				 			nextPutAll: (pairOfNumbers at: 2) asString ]
-			ifFalse: [ aStream nextPutAll: '???' ]].
+	aStream nextPutAll: (pairOfNumbers at: 1) asString;
+				 			nextPutAll: (pairOfNumbers at: 2) asString .
+
 	^aStream contents 
 			
 
