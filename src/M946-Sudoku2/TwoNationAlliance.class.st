@@ -24,10 +24,7 @@ TwoNationAlliance >> columnMarking: aBlock [
 { #category : #'as yet unclassified' }
 TwoNationAlliance >> findNextBlock: aBlock pairCell: aPairCell [
 
-	|  logger sudokuCell |
-	logger := M946Logger new: LogLevel debug.
-	logger debug: thisContext.
-	
+	|  sudokuCell |
 	sudokuCell := aPairCell thisCell copy.
 	sudokuCell element: aBlock verifyNumber.
 	aPairCell isVertical 
@@ -51,7 +48,7 @@ TwoNationAlliance >> findNextBlock: aBlock pairCell: aPairCell [
 TwoNationAlliance >> findNextBlock: aBlock singleCell: cell [
 
 	| logger resultBlock |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 	resultBlock := self horizontalBlockFinding: aBlock sudokuCell: cell.
 	resultBlock class = SudokuBlock2 ifTrue: [
@@ -66,15 +63,31 @@ TwoNationAlliance >> findNextBlock: aBlock singleCell: cell [
 ]
 
 { #category : #'as yet unclassified' }
-TwoNationAlliance >> getBlankCellsAfterMark: aBlock [
+TwoNationAlliance >> getAllianceCellsAfterMark: aBlock [
 	"
-	aBlockの中での2国同盟を探す
+	aBlockの中での2国同盟,3国同盟を探す。
+	ブランクセルが1つの時、またはブランクセルが2つあるいは3つ
+	で垂直方向または水平方向にブランクセルが並んでいる時、
+	セルの配列を返す。
 	"
+	| logger blankCells |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	self rowMarking: aBlock.
 	self columnMarking: aBlock.
-	
-	^aBlock blankCellsAsArray .
-
+	blankCells := aBlock blankCellsAsArray .
+	blankCells size = 1 ifTrue: [ ^blankCells ].
+	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
+										or: [(blankCells at: 1) y = (blankCells at: 2) y])
+											ifTrue: [ ^blankCells ]].
+	blankCells size = 3 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x 	
+											and: [ (blankCells at: 2) x = (blankCells at: 3) x])
+										ifTrue:[^blankCells].
+									 ((blankCells at: 1) y = (blankCells at: 2) y 
+											and: [ (blankCells at: 2) y = (blankCells at: 3) y])
+										ifTrue:[^blankCells]].
+	^#()
+		
 
 
 	
@@ -124,14 +137,21 @@ TwoNationAlliance >> setAlliance: aBlock [
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.	
 	logger debug: aBlock.
+	logger debug: ('block inculudes {1} => {2)' format: { aBlock verifyNumber .(aBlock includes: aBlock verifyNumber)}).
+	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
-	blankCells := self getBlankCellsAfterMark: aBlock.
-	logger debug: aBlock .
+	blankCells := self getAllianceCellsAfterMark: aBlock.
+
 	blankCells size = 1 ifTrue:[ 
+		logger debug: 'block has one blank cell.'.
+		
 		(blankCells at: 1) element: aBlock verifyNumber.
 		sudokuBoard map: (blankCells at: 1).
 		nextBlock := self findNextBlock: aBlock singleCell: (blankCells at: 1).
+		
+		logger debug: 'next block is ...'.
 		logger debug: nextBlock .
+		
 		nextBlock class = SudokuBlock2 ifTrue: [ 
 			self setAlliance: nextBlock.
 			^self]].
@@ -139,21 +159,13 @@ TwoNationAlliance >> setAlliance: aBlock [
 	pairCells := aBlock getPairCells: blankCells.
 	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
 	
-	"
-	pairCell1 := aBlock	x: (aBlock localX: (blankCells at: 1) colIndex)
-							y: (aBlock localY: (blankCells at: 1) rowIndex)
-							putPairCell: blankCells.
-	pairCell2 := aBlock	x: (aBlock localX: (blankCells at: 2) colIndex)
-							y: (aBlock localY: (blankCells at: 2) rowIndex)
-							putPairCell: blankCells.
-	sudokuBoard map: pairCell1 ; map: pairCell2 .
-	"
-	"
-	上級問題でこのような条件が成立する場面に遭遇することはレアケース,このレアな機会を適切に使っていく
-	のが数独解法のテクニックかもしれない
-	setAlliance をうまく利用し再帰呼び出し処理するべきかな
-	"
+	logger debug: 'block has two blank cells.'.
+	
 	nextBlock := self findNextBlock: aBlock pairCell: (pairCells at: 1) .
+	
+	logger debug: 'next block is....'.
+	logger debug: nextBlock.
+	
 	nextBlock class = SudokuBlock2 ifTrue: [  
 		self setAlliance: nextBlock]
 ]
@@ -163,7 +175,7 @@ TwoNationAlliance >> setAllianceForTest: aBlock [
 
 	| blankCells pairCell1 pairCell2  |	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
-	blankCells := self getBlankCellsAfterMark: aBlock.
+	blankCells := self getAllianceCellsAfterMark: aBlock.
 	blankCells size = 1 ifTrue:[ 
 		(blankCells at: 1) element: aBlock verifyNumber.
 		sudokuBoard map: (blankCells at: 1).
@@ -187,7 +199,7 @@ TwoNationAlliance >> setAllianceForTest: aBlock [
 TwoNationAlliance >> verticalBlockFinding: aBlock sudokuCell: cell [
 
 	| bNumber1 bNumber2 block1 block2 logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
 	bNumber1 := (self relatedVertBlocks at: aBlock blockNumber) at: 1.
 	bNumber2 := (self relatedVertBlocks at: aBlock blockNumber) at: 2.

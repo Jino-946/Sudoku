@@ -66,12 +66,17 @@ SudokuBlock2Test >> testAllGreen [
 
 { #category : #tests }
 SudokuBlock2Test >> testBlankCellsAsArray [
+	"
+	 1)ブランクセルが0(SmallInteger)の場合のテスト
+	 2)SudokuPairCellのインスタンスでPairKind onePairの時もブランクセルとして扱うテスト
+	"
+
 	|task board block cells logger solver |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog.
 	logger info: thisContext.
 	"
-	ブランクセルが0の場合のテスト
+	1)ブランクセルが0の場合のテスト
 	"
 	task := '
 1 9 7  0 0 4  2 0 5
@@ -98,7 +103,7 @@ SudokuBlock2Test >> testBlankCellsAsArray [
 	self assert: block blankCellsAsArray  equals: cells.
 	
 	"
-	SudokuPairCellのインスタンスでPairKind onePairの時もブランクセルとして扱うテスト
+	2)SudokuPairCellのインスタンスでPairKind onePairの時もブランクセルとして扱うテスト
 	"
 	task := '
 8 9 0   0 6 0   0 2 3

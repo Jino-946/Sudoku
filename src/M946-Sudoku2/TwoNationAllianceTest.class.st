@@ -40,7 +40,7 @@ TwoNationAllianceTest >> testFindNextBlockPairCell [
 ]
 
 { #category : #tests }
-TwoNationAllianceTest >> testGetBlankCellsAfterMark [
+TwoNationAllianceTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
 	logger := M946Logger new: LogLevel debug.
@@ -65,49 +65,49 @@ TwoNationAllianceTest >> testGetBlankCellsAfterMark [
 	board loadFromString: task.
 	solver := TwoNationAlliance new: board.
 	block := board getBlock: 1 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
-	self assert: blankCells size equals: 3.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 2 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
-	self assert: blankCells size equals: 6.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 3 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
-	self assert: blankCells size equals: 3.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 4 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
-	self assert: blankCells size equals: 6.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 5 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
-	self assert: blankCells size equals: 4.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 6 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.	
 	self assert: blankCells size equals: 2.
 
 	block := board getBlock: 7 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.	
-	self assert: blankCells size equals: 3.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 8 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.	
-	self assert: blankCells size equals: 3.
+	self assert: blankCells size equals: 0.
 
 	block := board getBlock: 9 verifyNumber: 1.
-	blankCells := solver getBlankCellsAfterMark: block.	
+	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.	
-	self assert: blankCells size equals: 6.
+	self assert: blankCells size equals: 0.
 
 
 ]
@@ -139,7 +139,9 @@ TwoNationAllianceTest >> testSetAlliance [
 	solver := TwoNationAlliance new: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	solver setAlliance: block.
+	logger info: block.
 	logger info: board.
+	
 	
 	block := board getBlock: 2 verifyNumber: 2.
 	solver setAlliance: block.
@@ -152,6 +154,28 @@ TwoNationAllianceTest >> testSetAlliance [
 	block := board getBlock: 4 verifyNumber: 4.
 	solver setAlliance: block.
 	logger info: board.
+
+	block := board getBlock: 3 verifyNumber: 4.
+	solver setAlliance: block.
+	logger info: board.
+
+
+	board serializeToFileNamed: 'verifyNumber4.fuel'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

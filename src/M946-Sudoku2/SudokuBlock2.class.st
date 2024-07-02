@@ -276,8 +276,8 @@ SudokuBlock2 >> includes: number [
 	pairCells isEmpty ifTrue: [ ^ blockA2D asArray includes: number ].
 	logger debug: self.
 	logger debug: pairCells .
-	^ pairCells anySatisfy: [ :cell |
-		  cell pairOfNumbers includes: number ]
+	^ (pairCells anySatisfy: [ :cell | cell pairOfNumbers includes: number ])
+		or: [  blockA2D asArray includes: number  ]
 ]
 
 { #category : #testing }
@@ -375,9 +375,13 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
 	"
+	| logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
 	(self includes: aSudokuCell element) ifTrue: [ ^self ].
 	self blankCellsAsArray do: [ :blankCell | 
 		(blankCell x = aSudokuCell x) ifTrue: [ 
+			logger debug: blankCell .			
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
 
 

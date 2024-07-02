@@ -160,15 +160,14 @@ SudokuPairCell >> thisCell: aSudokuCell [
 { #category : #'accessing - structure variables' }
 SudokuPairCell >> x [
 
-	self isVertical  ifTrue: [ ^thisCell x].
-	^0
+	 ^thisCell x
 	
 ]
 
 { #category : #'accessing - structure variables' }
 SudokuPairCell >> y [
 
-	self isHorizontal ifTrue: [ ^ thisCell y ].
-	^ 0
+	 ^ thisCell y
+
 	
 ]
