@@ -159,8 +159,10 @@ TwoNationAllianceTest >> testSetAlliance [
 	solver setAlliance: block.
 	logger info: board.
 
+	block := board getBlock: 9 verifyNumber: 4.
+	solver setAlliance: block.
+	logger info: board.
 
-	board serializeToFileNamed: 'verifyNumber4.fuel'
 
 
 
@@ -182,35 +184,20 @@ TwoNationAllianceTest >> testSetAlliance [
 ]
 
 { #category : #tests }
-TwoNationAllianceTest >> testSetAlliance2 [
+TwoNationAllianceTest >> testSetAlliance5 [
 
-	| logger task board solver block |
+	| logger  board solver block |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
+
+	board := FLMaterializer new 
+        filePath: 'fuel/testSetAlliance.fuel';
+        materializeRoot .
 	
-	task := '
-8 9 0   0 6 0   0 2 3
-4 0 0   1 0 3   0 0 8
-0 0 0   0 0 0   0 0 0
-
-0 2 0   0 0 0   0 4 0
-1 0 0   0 0 0   0 0 5
-0 7 0   0 0 0   0 6 0
-
-0 0 0   0 0 0   0 0 0
-5 0 0   3 0 4   0 0 1
-9 4 0   0 2 0   0 8 6	
-'.
-
-	board := SudokuBoard2 new.
-	board loadFromString: task.
 	solver := TwoNationAlliance new: board.
+	block := board getBlock: 4 verifyNumber: 5.
+	solver setAlliance: block.
 	
-	1 to: 9 do: [ :verifyNumber |
-		1 to: 9 do: [ :blockNumber |
-			block := board getBlock: blockNumber  verifyNumber: verifyNumber .
-			solver setAlliance: block].
-		board clearPairCells .
-		logger info: board]
+	logger debug: board.
 ]
