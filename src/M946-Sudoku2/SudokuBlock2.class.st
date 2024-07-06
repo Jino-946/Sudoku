@@ -106,7 +106,7 @@ SudokuBlock2 >> asString [
 		do: [ :r |
 				(blockA2D  atRow: r)
 					do: [ :each | 
-						each class = SudokuPairCell
+						each class = SudokuCell
 							ifTrue: [ 
 								aStream nextPutAll: each asSpecialString ]
 						 	ifFalse: [  
@@ -123,7 +123,6 @@ SudokuBlock2 >> asString [
 SudokuBlock2 >> blankCellsAsArray [
 	"
     ブロックのブランクセルをSudokuCellの配列にして返す。
-	SudokuPairCellでPairKind onePairの時もブランクセルとして扱い配列に追加する
     "
 	| collection |
 	collection := OrderedCollection new.
@@ -135,11 +134,7 @@ SudokuBlock2 >> blankCellsAsArray [
 						 row: (rowsOnBoard at: i) rowIndex
 						 column: (colsOnBoard at: j) colIndex
 						 element: 0) ].
-			(cellItem class = SudokuPairCell 
-						and: [cellItem pairOfNumbers includes: 0]) ifTrue: [ 
-				collection add: cellItem]] ].
-			
-
+			cellItem class = SudokuCell ifTrue: [ collection add: cellItem ]]].
 	^ collection asArray
 ]
 
@@ -238,23 +233,106 @@ SudokuBlock2 >> eitherCells [
 	^eitherCells 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 SudokuBlock2 >> getPairCells: blankCells [
 
+		| pairCell1 pairCell2 pairCells |
+	pairCells := Array new: 2.
+	pairCell1 := (blankCells at: 1) copy.
+	(pairCell1 possibleNumbers includes: self verifyNumber )
+		ifFalse: [ pairCell1 possibleNumbers add: self verifyNumber].
+	pairCell2 := (blankCells at: 2) copy.
+	(pairCell2 possibleNumbers includes: self verifyNumber )
+		ifFalse: [ pairCell2 possibleNumbers add: self verifyNumber].
+	pairCells at: 1 put: pairCell1 .
+	pairCells at: 2 put: pairCell2 .
+	^ pairCells.
+	
+	"
+	pairCell1 := self	x: (self localX: (blankCells   at: 1) colIndex)
+						y: (self localY: (blankCells   at: 1) rowIndex)
+						putPairCell: blankCells .
+	pairCell2 := self	x: (self localX: (blankCells  at: 2) colIndex)
+						y: (self localY: (blankCells  at: 2) rowIndex)
+						putPairCell: blankCells .
+	pairCells at: 1 put: pairCell1 .
+	pairCells at: 2 put: pairCell2 .
+	
+	^pairCells 
+	"
+	"
+	((blankCells at: 1) class = SudokuCell 
+		and: [(blankCells at: 2) class = SudokuCell])
+		ifTrue: [ ^self getPairCellsFromCells: blankCells ].
+		
+	((blankCells at: 1) class = SudokuPairCell 
+		and: [(blankCells at: 2) class = SudokuPairCell])
+		ifTrue: [ ^self getPairCellsFromPairCells: blankCells ].
+		
+	^self getPairCellsFromDifferentCells: blankCells 
+	"
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromCells: pairOfSudokuCell [
+	"
+	2つのブランクセルがSudokuCellのインスタンスの時の処理
+	"
 	| pairCell1 pairCell2 pairCells |
 	pairCells := Array new: 2.
-	pairCell1 := self	x: (self localX: (blankCells at: 1) colIndex)
-						y: (self localY: (blankCells at: 1) rowIndex)
-						putPairCell: blankCells.
-	pairCell2 := self	x: (self localX: (blankCells at: 2) colIndex)
-						y: (self localY: (blankCells at: 2) rowIndex)
-						putPairCell: blankCells.
+	pairCell1 := self	x: (self localX: (pairOfSudokuCell  at: 1) colIndex)
+						y: (self localY: (pairOfSudokuCell  at: 1) rowIndex)
+						putPairCell: pairOfSudokuCell .
+	pairCell2 := self	x: (self localX: (pairOfSudokuCell  at: 2) colIndex)
+						y: (self localY: (pairOfSudokuCell  at: 2) rowIndex)
+						putPairCell: pairOfSudokuCell .
 	pairCells at: 1 put: pairCell1 .
 	pairCells at: 2 put: pairCell2 .
 	
 	^pairCells 
 
 
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromDifferentCells: blankCells [
+	"
+	2つのブランクセルがSudokuPairCellとSudokuCellのインスタンスが混在している時の処理
+	"
+	| cell pairCell resultArray pairCell2 logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	resultArray := Array new: 2.
+	(blankCells at: 1) class = SudokuPairCell 
+		ifTrue: [ 
+			pairCell := blankCells at: 1.
+			cell := blankCells at: 2]
+		ifFalse: [ 
+			pairCell := blankCells at: 2.
+			cell := blankCells at: 1].
+	pairCell pairOfNumbers remove: 0.
+	pairCell pairOfNumbers add: self verifyNumber.
+
+	pairCell2 := self x: (self localX: cell colIndex)
+							  y: (self localY: cell rowIndex)
+							  putPairCell: { pairCell otherCell . cell}.
+	logger debug: ('pairCell => {1}' format: {pairCell}).
+	logger debug: ('pairCell2 => {1}' format: {pairCell2}).
+							
+							
+	resultArray at: 1 put: pairCell  .
+	resultArray at: 2 put: pairCell2 .
+	^resultArray 
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromPairCells: pairOfSudokuPairCells [
+	"
+	2つのブランクセルがSudokuPairCellのインスタンスの時の処理
+	"
+	(pairOfSudokuPairCells at: 1) pairOfNumbers add: self verifyNumber .
+	(pairOfSudokuPairCells at: 2) pairOfNumbers add: self verifyNumber.
+	^pairOfSudokuPairCells 
 ]
 
 { #category : #comparing }

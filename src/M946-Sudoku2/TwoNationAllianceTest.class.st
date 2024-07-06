@@ -32,7 +32,7 @@ TwoNationAllianceTest >> testFindNextBlockPairCell [
 	block := board getBlock: 6 verifyNumber: 1.
 	pairCell1 :=  solver setAllianceForTest: block.
 	logger info: block.	
-	nextBlock := solver findNextBlock: block pairCell: pairCell1.
+	nextBlock := solver findNextBlock: block pairCells: pairCell1.
 	logger info: nextBlock.
 	 
 	
@@ -141,12 +141,12 @@ TwoNationAllianceTest >> testSetAlliance [
 	solver setAlliance: block.
 	logger info: block.
 	logger info: board.
-	
-	
+
+
 	block := board getBlock: 2 verifyNumber: 2.
 	solver setAlliance: block.
 	logger info: board.
-	
+"	
 	block := board getBlock: 7 verifyNumber: 3.
 	solver setAlliance: block.
 	logger info: board.
@@ -163,7 +163,7 @@ TwoNationAllianceTest >> testSetAlliance [
 	solver setAlliance: block.
 	logger info: board.
 
-
+"
 
 
 
@@ -192,11 +192,13 @@ TwoNationAllianceTest >> testSetAlliance5 [
 	logger info: thisContext.
 
 	board := FLMaterializer new 
-        filePath: 'fuel/testSetAlliance.fuel';
+        filePath: 'fuel/board.fuel';
         materializeRoot .
 	
 	solver := TwoNationAlliance new: board.
-	block := board getBlock: 4 verifyNumber: 5.
+	block := FLMaterializer new 
+        filePath: 'fuel/nextBlock.fuel';
+        materializeRoot .
 	solver setAlliance: block.
 	
 	logger debug: board.

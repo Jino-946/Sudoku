@@ -22,26 +22,19 @@ TwoNationAlliance >> columnMarking: aBlock [
 ]
 
 { #category : #'as yet unclassified' }
-TwoNationAlliance >> findNextBlock: aBlock pairCell: aPairCell [
+TwoNationAlliance >> findNextBlock: aBlock pairCells: pairCells [
 
-	|  sudokuCell |
-	sudokuCell := aPairCell thisCell copy.
-	sudokuCell element: aBlock verifyNumber.
-	aPairCell isVertical 
-		ifTrue: [ 
-			^self verticalBlockFinding: aBlock sudokuCell: sudokuCell]
-		ifFalse: [ 
-			^self horizontalBlockFinding: aBlock sudokuCell: sudokuCell]
-
-		
-			
+	| cell cellDirection |
+	cell := (pairCells at: 1)  copy.
+	cell element: aBlock verifyNumber.
 	
-	
-	
-	
-
-	
-
+	cellDirection := (pairCells at: 1) direction: (pairCells at: 2).
+	cellDirection = CellDirection diagonal ifTrue: [ ^self ].
+	cellDirection = CellDirection  vertical 
+		ifTrue: [
+		^ self verticalBlockFinding: aBlock sudokuCell: cell ]
+		ifFalse: [
+		^ self horizontalBlockFinding: aBlock sudokuCell: cell ]
 ]
 
 { #category : #'as yet unclassified' }
@@ -76,6 +69,7 @@ TwoNationAlliance >> getAllianceCellsAfterMark: aBlock [
 	self rowMarking: aBlock.
 	self columnMarking: aBlock.
 	blankCells := aBlock blankCellsAsArray .
+	logger debug: aBlock .
 	blankCells size = 1 ifTrue: [ ^blankCells ].
 	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
 										or: [(blankCells at: 1) y = (blankCells at: 2) y])
@@ -130,7 +124,7 @@ TwoNationAlliance >> rowMarking: aBlock [
 			aBlock markByHorizontalCell: cell.]].
 ]
 
-{ #category : #initialization }
+{ #category : #logic }
 TwoNationAlliance >> setAlliance: aBlock [
 
 	| blankCells pairCells nextBlock logger |	
@@ -141,6 +135,8 @@ TwoNationAlliance >> setAlliance: aBlock [
 	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
 	blankCells := self getAllianceCellsAfterMark: aBlock.
+	logger debug: ('
+{1}' format: {blankCells} ).
 
 	blankCells size = 1 ifTrue:[ 
 		logger debug: 'block has one blank cell.'.
@@ -153,21 +149,26 @@ TwoNationAlliance >> setAlliance: aBlock [
 		logger debug: nextBlock .
 		
 		nextBlock class = SudokuBlock2 ifTrue: [ 
-			self setAlliance: nextBlock.
-			^self]].
+			self setAlliance: nextBlock]].
+
 	blankCells size = 2 ifFalse: [ ^self ].
+
 	pairCells := aBlock getPairCells: blankCells.
+	logger debug: pairCells .
 	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
-	
+	logger debug: sudokuBoard .
+
 	logger debug: 'block has two blank cells.'.
-	
-	nextBlock := self findNextBlock: aBlock pairCell: (pairCells at: 1) .
-	
+
+	nextBlock := self findNextBlock: aBlock pairCells: pairCells .
+
 	logger debug: 'next block is....'.
 	logger debug: nextBlock.
 	
+
 	nextBlock class = SudokuBlock2 ifTrue: [  
 		self setAlliance: nextBlock]
+
 ]
 
 { #category : #initialization }
@@ -210,10 +211,14 @@ TwoNationAlliance >> verticalBlockFinding: aBlock sudokuCell: cell [
 		          getBlock: bNumber2
 		          verifyNumber: aBlock verifyNumber.
 	(block1 includes: aBlock verifyNumber) ifFalse: [
+		
 		block1 markByVerticalCell: cell.
+		
 		logger debug: cell.
 		^ block1 ].
 	(block2 includes: aBlock verifyNumber) ifTrue: [ ^ self ].
+	
 	block2 markByVerticalCell: cell.
+	
 	^ block2
 ]

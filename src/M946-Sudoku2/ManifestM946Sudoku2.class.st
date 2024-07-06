@@ -46,7 +46,7 @@ ManifestM946Sudoku2 class >> ruleLiteralArrayCharactersRuleV1FalsePositive [
 ManifestM946Sudoku2 class >> ruleLongMethodsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #getBlock: #false)) #'2024-05-15T15:48:30.405135+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #getBlock: #false)) #'2024-05-15T15:48:30.405135+09:00') #(#(#RGMethodDefinition #(#TwoNationAlliance #setAlliance: #false)) #'2024-07-06T17:02:05.610881+09:00') )
 ]
 
 { #category : #'code-critics' }

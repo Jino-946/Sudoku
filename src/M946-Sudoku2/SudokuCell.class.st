@@ -2,10 +2,10 @@
 数独ボードの一つのセルを表現するクラス
 
     Instance Variables
-	rowIndex	<SmallInteger>	ボードの行インデックス
-	colIndex	<SmallInteger>	ボードの列インデックス
-	element		<Object>		セルの要素
-				
+	rowIndex        <SmallInteger>	  ボードの行インデックス
+	colIndex        <SmallInteger>	  ボードの列インデックス
+	element	         <Object>		      セルの要素
+	possibleNumbers <OrderedCollection> セルに入る可能性がある数
 				
 想定する使いみち
 - ボードの指定座標に要素をセットする
@@ -20,7 +20,8 @@ Class {
 	#instVars : [
 		'rowIndex',
 		'colIndex',
-		'element'
+		'element',
+		'possibleNumbers'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
@@ -33,7 +34,7 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 	cell rowIndex:  rIndex .
 	cell colIndex:  cIndex .
 	cell element: elem.
-	
+	cell possibleNumbers: OrderedCollection new.
 	^ cell 
 	
 
@@ -49,17 +50,35 @@ SudokuCell >> = sudokuCell [
 				and: [ sudokuCell element = self element  ] ] ]
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuCell >> asSpecialString [	
+	"
+	SudokuBoard2>>asStringでSudokuCellを見やすく表示するために使用するメソッド
+	"
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: '$'.
+	possibleNumbers do: [ :num |
+		aStream nextPutAll: num asString].
+
+	^aStream contents 
+			
+
+]
+
 { #category : #converting }
 SudokuCell >> asString [
 
 	| aStream elem |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; space; space;
-			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space; space.
+	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; space;
+			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space.
 	elem := element.
 	element class = Character ifTrue: [ elem := '$', element asString ].
 	aStream nextPutAll: 'element:  '; nextPutAll: elem asString.
-			
+	aStream nextPutAll: ' possibleNumbers:( '.
+	possibleNumbers do: [ :num |  aStream  nextPutAll: num asString; space].	
+	aStream nextPutAll: ')'.
 	^ aStream contents
 ]
 
@@ -102,6 +121,14 @@ SudokuCell >> colIndex: index [
 ]
 
 { #category : #accessing }
+SudokuCell >> direction: anotherCell [
+
+	self colIndex = anotherCell colIndex ifTrue: [ ^CellDirection vertical ].
+	self rowIndex = anotherCell rowIndex ifTrue: [ ^CellDirection horizontal ].
+	^CellDirection diagonal 
+]
+
+{ #category : #accessing }
 SudokuCell >> element [
 
 	^element 
@@ -118,6 +145,18 @@ SudokuCell >> hash [
 
 	^ ((( rowIndex hash bitXor: colIndex hash)
 			bitXor:  element hash))
+]
+
+{ #category : #accessing }
+SudokuCell >> possibleNumbers [
+
+	^possibleNumbers 
+]
+
+{ #category : #accessing }
+SudokuCell >> possibleNumbers: anOrderedCollection [
+
+	possibleNumbers := anOrderedCollection 
 ]
 
 { #category : #printing }
