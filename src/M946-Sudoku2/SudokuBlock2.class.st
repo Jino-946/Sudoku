@@ -233,10 +233,20 @@ SudokuBlock2 >> eitherCells [
 	^eitherCells 
 ]
 
-{ #category : #accessing }
-SudokuBlock2 >> getPairCells: blankCells [
+{ #category : #'as yet unclassified' }
+SudokuBlock2 >> findNextBlock: aBlock trioCells: trioCells [
 
-		| pairCell1 pairCell2 pairCells |
+	| cell |
+	cell := (trioCells at: 1) copy.
+	cell element: aBlock verifyNumber.
+	
+	(trioCells at: 1) 
+]
+
+{ #category : #converting }
+SudokuBlock2 >> get2Allies: blankCells [
+
+	| pairCell1 pairCell2 pairCells |
 	pairCells := Array new: 2.
 	pairCell1 := (blankCells at: 1) copy.
 	(pairCell1 possibleNumbers includes: self verifyNumber )
@@ -247,30 +257,30 @@ SudokuBlock2 >> getPairCells: blankCells [
 	pairCells at: 1 put: pairCell1 .
 	pairCells at: 2 put: pairCell2 .
 	^ pairCells.
+
+]
+
+{ #category : #converting }
+SudokuBlock2 >> get3Allies: blankCells [	
 	
-	"
-	pairCell1 := self	x: (self localX: (blankCells   at: 1) colIndex)
-						y: (self localY: (blankCells   at: 1) rowIndex)
-						putPairCell: blankCells .
-	pairCell2 := self	x: (self localX: (blankCells  at: 2) colIndex)
-						y: (self localY: (blankCells  at: 2) rowIndex)
-						putPairCell: blankCells .
-	pairCells at: 1 put: pairCell1 .
-	pairCells at: 2 put: pairCell2 .
+	| cell1 cell2 cell3 cellAllies |
+	cellAllies := Array new: 3.
+	cell1 := (blankCells at: 1) copy.
+	(cell1 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell1 possibleNumbers add: self verifyNumber  ].
+	cell2 := (blankCells at: 2) copy.
+	(cell2 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell2 possibleNumbers add: self verifyNumber  ].
+	cell3 := (blankCells at: 3) copy.
+	(cell3 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell3 possibleNumbers add: self verifyNumber  ].
+		
+	cellAllies at: 1 put: cell1.
+	cellAllies at: 2 put: cell2.
+	cellAllies at: 3 put: cell3.
 	
-	^pairCells 
-	"
-	"
-	((blankCells at: 1) class = SudokuCell 
-		and: [(blankCells at: 2) class = SudokuCell])
-		ifTrue: [ ^self getPairCellsFromCells: blankCells ].
-		
-	((blankCells at: 1) class = SudokuPairCell 
-		and: [(blankCells at: 2) class = SudokuPairCell])
-		ifTrue: [ ^self getPairCellsFromPairCells: blankCells ].
-		
-	^self getPairCellsFromDifferentCells: blankCells 
-	"
+	^cellAllies 
+
 ]
 
 { #category : #deprecated }
@@ -346,15 +356,15 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-	| pairCells logger |
+	| sudokuCells logger |
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
-	pairCells := blockA2D asArray select: [ :item |
-		             item class = SudokuPairCell ].
-	pairCells isEmpty ifTrue: [ ^ blockA2D asArray includes: number ].
+	sudokuCells := blockA2D asArray select: [ :item |
+		             item class = SudokuCell ].
+	sudokuCells isEmpty ifTrue: [ ^ blockA2D asArray includes: number ].
 	logger debug: self.
-	logger debug: pairCells .
-	^ (pairCells anySatisfy: [ :cell | cell pairOfNumbers includes: number ])
+	logger debug: sudokuCells .
+	^ (sudokuCells anySatisfy: [ :cell | cell possibleNumbers includes: number ])
 		or: [  blockA2D asArray includes: number  ]
 ]
 

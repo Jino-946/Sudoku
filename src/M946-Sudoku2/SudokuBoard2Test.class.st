@@ -124,7 +124,7 @@ SudokuBoard2Test >> testMapSudokuCell [
 '.
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.	
+	solver := OttiezTactics new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
 	logger info: board.
 	solver setAlliance: block.
@@ -137,7 +137,7 @@ SudokuBoard2Test >> testMapSudokuCell [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.	
+	solver := OttiezTactics new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
 	logger info: board.
 	solver setAlliance: block.

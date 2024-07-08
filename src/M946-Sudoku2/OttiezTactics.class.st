@@ -4,25 +4,32 @@
 [BOXの２ペアを探す2国同盟で数独なんて簡単さ！]( https://www.youtube.com/watch?v=H1aZ7jiz6Yo )
 "
 Class {
-	#name : #TwoNationAlliance,
+	#name : #OttiezTactics,
 	#superclass : #SudokuSolver,
 	#category : #'M946-Sudoku2-Solution'
 }
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> columnMarking: aBlock [
+{ #category : #logic }
+OttiezTactics >> columnMarking: aBlock [
 
+	| logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	aBlock colsOnBoard do: [ :sudokuColumn |
 		(sudokuColumn includes: aBlock verifyNumber) ifTrue: [ 
 			| x y cell |
+			logger debug: sudokuColumn asSimpleString.
 			x := sudokuColumn colIndex .
 			y := sudokuColumn indexOf: aBlock verifyNumber.
+			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
+			(x = 0 or: [ y = 0 ]) ifTrue: [ ^self ].
 			cell := sudokuBoard getCellRow: y cellColumn: x.
-			aBlock markByVerticalCell: cell.]].
+			aBlock markByVerticalCell: cell.
+			logger debug: aBlock ]].
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> findNextBlock: aBlock pairCells: pairCells [
+{ #category : #logic }
+OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 
 	| cell cellDirection |
 	cell := (pairCells at: 1)  copy.
@@ -37,11 +44,11 @@ TwoNationAlliance >> findNextBlock: aBlock pairCells: pairCells [
 		^ self horizontalBlockFinding: aBlock sudokuCell: cell ]
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> findNextBlock: aBlock singleCell: cell [
+{ #category : #logic }
+OttiezTactics >> findNextBlock: aBlock singleCell: cell [
 
 	| logger resultBlock |
-	logger := M946Logger new: LogLevel info.
+	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
 	resultBlock := self horizontalBlockFinding: aBlock sudokuCell: cell.
 	resultBlock class = SudokuBlock2 ifTrue: [
@@ -55,8 +62,23 @@ TwoNationAlliance >> findNextBlock: aBlock singleCell: cell [
 	^ resultBlock
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> getAllianceCellsAfterMark: aBlock [
+{ #category : #logic }
+OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
+
+	| cell |
+	cell := (trioCells at: 1) copy.
+	cell element: aBlock verifyNumber .
+	((trioCells at: 1) x = (trioCells at: 2) x and: [(trioCells at: 2) x = (trioCells at:3 ) x ])
+		ifTrue: [ ^ self verticalBlockFinding: aBlock sudokuCell: cell  ].
+		
+	((trioCells at: 1) y = (trioCells at: 2) y and: [(trioCells at: 2) y = (trioCells at:3 ) y ])
+		ifTrue: [ ^ self horizontalBlockFinding: aBlock sudokuCell: cell  ].
+	
+	
+]
+
+{ #category : #logic }
+OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	"
 	aBlockの中での2国同盟,3国同盟を探す。
 	ブランクセルが1つの時、またはブランクセルが2つあるいは3つ
@@ -89,11 +111,69 @@ TwoNationAlliance >> getAllianceCellsAfterMark: aBlock [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> horizontalBlockFinding: aBlock sudokuCell: cell [
+{ #category : #logic }
+OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
+	"
+	入る数字が決まったセルをsudokuBoardにマップし、
+	次の検証対象となるsudokuBlockを返す。
+	"
+	| nextBlock logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	
+	aCell element: aBlock verifyNumber.
+	aCell clearPossibleNumbers .
+	sudokuBoard map: aCell.
+	nextBlock := self findNextBlock: aBlock singleCell: aCell.
+	logger debug: 'next block is ....'.
+	logger debug: nextBlock.
+	^nextBlock.
+]
+
+{ #category : #logic }
+OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
+	"
+	2国同盟が決まったセルをsudokuBoardにマップし、
+	次の検証対象となるsudokuBlockを返す。
+	"
+	| logger pairCells nextBlock |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	
+	pairCells := aBlock get2Allies: blankCells .
+	logger debug: pairCells.
+	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
+	logger debug: sudokuBoard .
+	
+	nextBlock := self findNextBlock: aBlock pairCells: pairCells .
+	logger debug: 'next block is ....'.
+	logger debug: nextBlock.
+	
+	^nextBlock 
+]
+
+{ #category : #logic }
+OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
+
+	| logger trioCells nextBlock |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	
+	trioCells := aBlock get3Allies: blankCells .
+	sudokuBoard map: (trioCells at: 1); map: (trioCells at: 2); map: (trioCells at: 3).
+	logger debug: sudokuBoard .
+	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
+	logger debug: 'next block is ....'.
+	logger debug: nextBlock.
+	
+	^nextBlock 
+]
+
+{ #category : #logic }
+OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 
 	| bNumber1 bNumber2 block1 block2 logger |
-	logger := M946Logger new: LogLevel info.
+	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
 	bNumber1 := (self relatedHorBlocks at: aBlock blockNumber) at: 1.
 	bNumber2 := (self relatedHorBlocks at: aBlock blockNumber) at: 2.
@@ -112,22 +192,28 @@ TwoNationAlliance >> horizontalBlockFinding: aBlock sudokuCell: cell [
 	^ block2
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> rowMarking: aBlock [
-
+{ #category : #logic }
+OttiezTactics >> rowMarking: aBlock [
+	| logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	aBlock rowsOnBoard do: [ :sudokuRow |
 		(sudokuRow includes: aBlock verifyNumber) ifTrue: [ 
 			| x y cell |
+			logger debug: sudokuRow asSimpleString .
 			x := sudokuRow indexOf: aBlock verifyNumber.
 			y := sudokuRow rowIndex .
+			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
+			(x = 0 or: [ y = 0 ]) ifTrue: [ ^self ].
 			cell := sudokuBoard getCellRow: y cellColumn: x.
-			aBlock markByHorizontalCell: cell.]].
+			aBlock markByHorizontalCell: cell.
+			logger debug: aBlock]].
 ]
 
 { #category : #logic }
-TwoNationAlliance >> setAlliance: aBlock [
+OttiezTactics >> setAlliance: aBlock [
 
-	| blankCells pairCells nextBlock logger |	
+	| blankCells  nextBlock logger |	
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.	
 	logger debug: aBlock.
@@ -138,41 +224,23 @@ TwoNationAlliance >> setAlliance: aBlock [
 	logger debug: ('
 {1}' format: {blankCells} ).
 
+	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
+	nextBlock := self.
 	blankCells size = 1 ifTrue:[ 
-		logger debug: 'block has one blank cell.'.
-		
-		(blankCells at: 1) element: aBlock verifyNumber.
-		sudokuBoard map: (blankCells at: 1).
-		nextBlock := self findNextBlock: aBlock singleCell: (blankCells at: 1).
-		
-		logger debug: 'next block is ...'.
-		logger debug: nextBlock .
-		
-		nextBlock class = SudokuBlock2 ifTrue: [ 
-			self setAlliance: nextBlock]].
+		nextBlock := self getNextBlcokOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
 
-	blankCells size = 2 ifFalse: [ ^self ].
-
-	pairCells := aBlock getPairCells: blankCells.
-	logger debug: pairCells .
-	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
-	logger debug: sudokuBoard .
-
-	logger debug: 'block has two blank cells.'.
-
-	nextBlock := self findNextBlock: aBlock pairCells: pairCells .
-
-	logger debug: 'next block is....'.
-	logger debug: nextBlock.
+	blankCells size = 2 ifTrue: [ 
+		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
+	blankCells size = 3 ifTrue: [ 
+		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
 	
-
 	nextBlock class = SudokuBlock2 ifTrue: [  
-		self setAlliance: nextBlock]
+	self setAlliance: nextBlock]	
 
 ]
 
 { #category : #initialization }
-TwoNationAlliance >> setAllianceForTest: aBlock [
+OttiezTactics >> setAllianceForTest: aBlock [
 
 	| blankCells pairCell1 pairCell2  |	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
@@ -196,8 +264,8 @@ TwoNationAlliance >> setAllianceForTest: aBlock [
 	
 ]
 
-{ #category : #'as yet unclassified' }
-TwoNationAlliance >> verticalBlockFinding: aBlock sudokuCell: cell [
+{ #category : #logic }
+OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 
 	| bNumber1 bNumber2 block1 block2 logger |
 	logger := M946Logger new: LogLevel info.

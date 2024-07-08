@@ -76,6 +76,22 @@ SudokuColumn >> asArray [
 ]
 
 { #category : #converting }
+SudokuColumn >> asSimpleString [
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'aSudokuColumn ('.
+	column doWithIndex: [ :c :idx |
+			 	idx % 3 = 1 ifTrue: [ aStream tab ]. 
+				c class = SudokuCell 
+					ifTrue: [ aStream nextPutAll: c asSpecialString ; space ]
+					ifFalse:[	aStream print: c; space ]].
+	aStream nextPutAll: ' )'.
+
+	^ aStream contents 
+]
+
+{ #category : #converting }
 SudokuColumn >> asString [
 
 	| aStream |
@@ -188,15 +204,28 @@ SudokuColumn >> hash [
 ]
 
 { #category : #testing }
-SudokuColumn >> includes: anObject [
+SudokuColumn >> includes: number [
 
-	^ column includes: anObject 
+	| sudokuCells |
+	sudokuCells := column select: [ :item | item class = SudokuCell ].
+	sudokuCells isEmpty ifTrue: [ ^column includes: number ].
+	
+	^(sudokuCells anySatisfy: [ :cell | cell possibleNumbers includes: number ])
+		or: [  column includes: number ]
 ]
 
 { #category : #accessing }
-SudokuColumn >> indexOf: anObject [
+SudokuColumn >> indexOf: number [
 
-	^column indexOf: anObject 
+	| cells sudokuCells |
+	cells := column select: [ :cell | cell class = SmallInteger].
+	(cells includes: number) ifTrue: [ ^column indexOf: number ].
+	
+	sudokuCells := column select: [ :cell | cell class = SudokuCell ].
+	cells := sudokuCells select: [ :cell | cell possibleNumbers includes: number ].
+	cells size > 1 ifFalse: [ ^0 ].
+	^column indexOf: (cells at: 1)
+	
 ]
 
 { #category : #'private - logics' }

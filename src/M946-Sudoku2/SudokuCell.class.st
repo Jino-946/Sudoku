@@ -108,6 +108,12 @@ SudokuCell >> blockNumber [
 	^ number
 ]
 
+{ #category : #'as yet unclassified' }
+SudokuCell >> clearPossibleNumbers [	
+
+	self possibleNumbers: OrderedCollection new.
+]
+
 { #category : #accessing }
 SudokuCell >> colIndex [ 
 

@@ -121,7 +121,7 @@ SudokuBlock2Test >> testBlankCellsAsArray [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.
+	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	solver setAlliance: block.
 	logger info: block.	

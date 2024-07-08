@@ -1,11 +1,11 @@
 Class {
-	#name : #TwoNationAllianceTest,
+	#name : #OttiezTacticsTest,
 	#superclass : #TestCase,
 	#category : #'M946-Sudoku2-Tests'
 }
 
 { #category : #tests }
-TwoNationAllianceTest >> testFindNextBlockPairCell [
+OttiezTacticsTest >> testFindNextBlockPairCell [
 
 	| logger task board solver block pairCell1 nextBlock |
 	logger := M946Logger new: LogLevel info.
@@ -28,7 +28,7 @@ TwoNationAllianceTest >> testFindNextBlockPairCell [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.
+	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	pairCell1 :=  solver setAllianceForTest: block.
 	logger info: block.	
@@ -40,7 +40,7 @@ TwoNationAllianceTest >> testFindNextBlockPairCell [
 ]
 
 { #category : #tests }
-TwoNationAllianceTest >> testGetAllianceCellsAfterMark [
+OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
 	logger := M946Logger new: LogLevel debug.
@@ -63,7 +63,7 @@ TwoNationAllianceTest >> testGetAllianceCellsAfterMark [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.
+	solver := OttiezTactics new: board.
 	block := board getBlock: 1 verifyNumber: 1.
 	blankCells := solver getAllianceCellsAfterMark: block.	
 	logger debug: block.
@@ -113,7 +113,7 @@ TwoNationAllianceTest >> testGetAllianceCellsAfterMark [
 ]
 
 { #category : #tests }
-TwoNationAllianceTest >> testSetAlliance [
+OttiezTacticsTest >> testSetAlliance [
 
 	| logger task board solver block |
 	logger := M946Logger new: LogLevel info.
@@ -136,7 +136,7 @@ TwoNationAllianceTest >> testSetAlliance [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := TwoNationAlliance new: board.
+	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	solver setAlliance: block.
 	logger info: block.
@@ -146,8 +146,13 @@ TwoNationAllianceTest >> testSetAlliance [
 	block := board getBlock: 2 verifyNumber: 2.
 	solver setAlliance: block.
 	logger info: board.
-"	
+	
+	
+
 	block := board getBlock: 7 verifyNumber: 3.
+	solver setAlliance: block.
+	logger info: board.
+	block := board getBlock: 9 verifyNumber: 4.
 	solver setAlliance: block.
 	logger info: board.
 	
@@ -155,15 +160,16 @@ TwoNationAllianceTest >> testSetAlliance [
 	solver setAlliance: block.
 	logger info: board.
 
-	block := board getBlock: 3 verifyNumber: 4.
+	block := board getBlock: 4 verifyNumber: 5.
 	solver setAlliance: block.
-	logger info: board.
 
-	block := board getBlock: 9 verifyNumber: 4.
+	block := board getBlock: 3 verifyNumber: 6.
 	solver setAlliance: block.
-	logger info: board.
 
-"
+
+	board serializeToFileNamed: 'fuel/number6done.fuel'.
+	
+
 
 
 
@@ -184,7 +190,7 @@ TwoNationAllianceTest >> testSetAlliance [
 ]
 
 { #category : #tests }
-TwoNationAllianceTest >> testSetAlliance5 [
+OttiezTacticsTest >> testSetAlliancePartOfWay [
 
 	| logger  board solver block |
 	logger := M946Logger new: LogLevel info.
@@ -192,14 +198,15 @@ TwoNationAllianceTest >> testSetAlliance5 [
 	logger info: thisContext.
 
 	board := FLMaterializer new 
-        filePath: 'fuel/board.fuel';
+        filePath: 'fuel/number6done.fuel';
         materializeRoot .
+	logger info: board .
 	
-	solver := TwoNationAlliance new: board.
-	block := FLMaterializer new 
-        filePath: 'fuel/nextBlock.fuel';
-        materializeRoot .
+	solver := OttiezTactics new: board.
+	
+	block := board getBlock: 7 verifyNumber: 7.
 	solver setAlliance: block.
-	
-	logger debug: board.
+
+		
+	logger info: board.
 ]
