@@ -126,7 +126,8 @@ SudokuRow >> blankCellsAsArray [
 			collection add: (SudokuCell
 						 		row: rowIndex
 						 		column: i
-						 		element: 0)]] .
+						 		element: 0)].
+		(row at: i)	 class = SudokuCell ifTrue: [ collection add: (row at: i) ]	] .
 
 	^ collection  asArray
 ]

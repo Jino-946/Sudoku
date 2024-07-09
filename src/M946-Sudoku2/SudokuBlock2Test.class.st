@@ -123,7 +123,7 @@ SudokuBlock2Test >> testBlankCellsAsArray [
 	board loadFromString: task.
 	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
-	solver setAlliance: block.
+	solver formBilateralAlliance: block.
 	logger info: block.	
 	logger info: block blankCellsAsArray.
 	

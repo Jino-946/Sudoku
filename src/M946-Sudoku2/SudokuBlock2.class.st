@@ -233,16 +233,6 @@ SudokuBlock2 >> eitherCells [
 	^eitherCells 
 ]
 
-{ #category : #'as yet unclassified' }
-SudokuBlock2 >> findNextBlock: aBlock trioCells: trioCells [
-
-	| cell |
-	cell := (trioCells at: 1) copy.
-	cell element: aBlock verifyNumber.
-	
-	(trioCells at: 1) 
-]
-
 { #category : #converting }
 SudokuBlock2 >> get2Allies: blankCells [
 

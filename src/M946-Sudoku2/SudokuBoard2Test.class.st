@@ -127,7 +127,7 @@ SudokuBoard2Test >> testMapSudokuCell [
 	solver := OttiezTactics new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
 	logger info: board.
-	solver setAlliance: block.
+	solver formBilateralAlliance: block.
 	logger info: board.
 	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.
 	cell := SudokuCell row: 4 column: 7 element: 2.
@@ -140,7 +140,7 @@ SudokuBoard2Test >> testMapSudokuCell [
 	solver := OttiezTactics new: board.	
 	block := board getBlock: 6 verifyNumber: 1.
 	logger info: board.
-	solver setAlliance: block.
+	solver formBilateralAlliance: block.
 	logger info: board.
 	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.	
 	cell := SudokuCell row: 6 column: 7 element: 2.

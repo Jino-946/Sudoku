@@ -29,6 +29,33 @@ OttiezTactics >> columnMarking: aBlock [
 ]
 
 { #category : #logic }
+OttiezTactics >> fillOneBlankCellOfColumn: column [
+
+	| cell |
+	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
+	cell := column cellOf: 0.
+	cell class = SudokuCell ifFalse: [ ^ self ].
+	cell element: (column missingNumbers at: 1).
+	sudokuBoard map: cell
+]
+
+{ #category : #logic }
+OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
+
+	| missingNumbers bingo |
+	sudokuColumn countOfReservedBlankCells = 2 ifFalse: [ ^ self ].
+	missingNumbers := sudokuColumn missingNumbers.
+	bingo := #().
+	sudokuColumn column doWithIndex: [ :num :i | | sudokuRow |
+		sudokuRow := sudokuBoard getSudokuRow: i.
+		num = 0 ifTrue: [  
+			bingo := missingNumbers difference: (sudokuRow row intersection: missingNumbers).
+			bingo size = 1 ifTrue: [ sudokuColumn at: i put: (bingo at: 1) ].
+			sudokuBoard map: sudokuColumn]].
+	bingo size = 1 ifTrue: [ self fillOneBlankCellOfColumn: sudokuColumn ]
+]
+
+{ #category : #logic }
 OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 
 	| cell cellDirection |
@@ -75,6 +102,47 @@ OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
 		ifTrue: [ ^ self horizontalBlockFinding: aBlock sudokuCell: cell  ].
 	
 	
+]
+
+{ #category : #logic }
+OttiezTactics >> formBilateralAlliance: aBlock [
+	"
+	2国同盟方式の中核メソッド
+	
+	対象ブロックのブランクセルについて、検証数字が入らないセルをマークし
+	残ったブランクセルが3以下の時に処理する。
+	1)ブランクセルが1の時、検証数字が入るセルと確定するのでボードに検証数字をマップし
+  	  次の対象ブロックを探し、setAlliance:を再帰呼び出しする。
+	2)ブランクセルが2の時、2国同盟と呼びSudokuCellのインスタンスのpossibleNumbersに
+ 	  検証数字を追加しボードにマップする。
+  	  1)の時と同様に次の対象ブロックを探し、setAlliance:を再帰呼び出しする。
+  	  対象ブロックの検索方法: ブランクセルが同一行にある時は水平方向に並ぶブロックが対象になり
+      ブランクセルが同一列にある時は垂直方向に並ぶブロックが対象となる。
+	3)ブランクセルが3の時は、2の時に準じて処理する。
+	"
+	| blankCells  nextBlock logger |	
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.	
+	logger debug: aBlock.
+	logger debug: ('block inculudes {1} => {2)' format: { aBlock verifyNumber .(aBlock includes: aBlock verifyNumber)}).
+	
+	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
+	blankCells := self getAllianceCellsAfterMark: aBlock.
+	logger debug: ('
+{1}' format: {blankCells} ).
+
+	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
+	nextBlock := self.
+	blankCells size = 1 ifTrue:[ 
+		nextBlock := self getNextBlcokOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
+	blankCells size = 2 ifTrue: [ 
+		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
+	blankCells size = 3 ifTrue: [ 
+		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
+	
+	nextBlock class = SudokuBlock2 ifTrue: [  
+	self formBilateralAlliance: nextBlock]	
+
 ]
 
 { #category : #logic }
@@ -192,6 +260,18 @@ OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 	^ block2
 ]
 
+{ #category : #'as yet unclassified' }
+OttiezTactics >> letsRetsme [
+
+	1 to: 9 do: [ :i | | column |
+		column := sudokuBoard getSudokuColumn: i.
+		column countOfReservedBlankCells = 1 ifTrue:[
+			self fillOneBlankCellOfColumn: column].
+		column countOfReservedBlankCells = 2 ifTrue: [ 
+			self fillTwoBlankCellsOfColumn: column]]
+
+]
+
 { #category : #logic }
 OttiezTactics >> rowMarking: aBlock [
 	| logger |
@@ -208,60 +288,6 @@ OttiezTactics >> rowMarking: aBlock [
 			cell := sudokuBoard getCellRow: y cellColumn: x.
 			aBlock markByHorizontalCell: cell.
 			logger debug: aBlock]].
-]
-
-{ #category : #logic }
-OttiezTactics >> setAlliance: aBlock [
-
-	| blankCells  nextBlock logger |	
-	logger := M946Logger new: LogLevel debug.
-	logger debug: thisContext.	
-	logger debug: aBlock.
-	logger debug: ('block inculudes {1} => {2)' format: { aBlock verifyNumber .(aBlock includes: aBlock verifyNumber)}).
-	
-	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
-	blankCells := self getAllianceCellsAfterMark: aBlock.
-	logger debug: ('
-{1}' format: {blankCells} ).
-
-	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
-	nextBlock := self.
-	blankCells size = 1 ifTrue:[ 
-		nextBlock := self getNextBlcokOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
-
-	blankCells size = 2 ifTrue: [ 
-		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
-	blankCells size = 3 ifTrue: [ 
-		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
-	
-	nextBlock class = SudokuBlock2 ifTrue: [  
-	self setAlliance: nextBlock]	
-
-]
-
-{ #category : #initialization }
-OttiezTactics >> setAllianceForTest: aBlock [
-
-	| blankCells pairCell1 pairCell2  |	
-	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
-	blankCells := self getAllianceCellsAfterMark: aBlock.
-	blankCells size = 1 ifTrue:[ 
-		(blankCells at: 1) element: aBlock verifyNumber.
-		sudokuBoard map: (blankCells at: 1).
-		^self
-	].
-	blankCells size = 2 ifFalse: [ ^self ].
-
-	pairCell1 := aBlock	x: (aBlock localX: (blankCells at: 1) colIndex)
-							y: (aBlock localY: (blankCells at: 1) rowIndex)
-							putPairCell: blankCells.
-	pairCell2 := aBlock	x: (aBlock localX: (blankCells at: 2) colIndex)
-							y: (aBlock localY: (blankCells at: 2) rowIndex)
-							putPairCell: blankCells.
-	sudokuBoard map: pairCell1 ; map: pairCell2 .
-	^pairCell1 
-	
-	
 ]
 
 { #category : #logic }
