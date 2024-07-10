@@ -79,9 +79,12 @@ SudokuRow >> asSimpleString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'aSudokuRow ('.
+	aStream nextPutAll: 'aSudokuRow #';
+			nextPutAll: rowIndex asString;
+			nextPutAll: '('.
 	row doWithIndex: [ :c :idx |
-			 	idx % 3 = 1 ifTrue: [ aStream tab ]. 
+				idx = 1 ifTrue: [ aStream space ].
+			 	(idx > 1 and: [idx % 3 = 1]) ifTrue: [ aStream tab ].
 				c class = SudokuCell 
 					ifTrue: [ aStream nextPutAll: c asSpecialString ; space ]
 					ifFalse:[	aStream print: c; space ]].

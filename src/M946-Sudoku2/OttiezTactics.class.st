@@ -226,7 +226,6 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	| logger trioCells nextBlock |
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
-	
 	trioCells := aBlock get3Allies: blankCells .
 	sudokuBoard map: (trioCells at: 1); map: (trioCells at: 2); map: (trioCells at: 3).
 	logger debug: sudokuBoard .
@@ -260,9 +259,12 @@ OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 	^ block2
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logic }
 OttiezTactics >> letsRetsme [
 
+	| logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	1 to: 9 do: [ :i | | column |
 		column := sudokuBoard getSudokuColumn: i.
 		column countOfReservedBlankCells = 1 ifTrue:[

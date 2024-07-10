@@ -6,8 +6,11 @@ Class {
 
 { #category : #tests }
 OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
-
-	| logger  board solver block sudokuColumn |
+	"
+	ブロック7検証番号7でformBilateralAlliance 実行後の
+	第1列の２つのブランクセルを埋める
+	"
+	| logger  board solver block sudokuColumn column |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
@@ -19,11 +22,13 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	
 	block := board getBlock: 7 verifyNumber: 7.
 	solver formBilateralAlliance: block.
-
-	sudokuColumn := board getSudokuColumn: 1.
 	logger info: board.
-	solver fillTwoBlankCellsOfColumn: sudokuColumn .
 	
+	sudokuColumn := board getSudokuColumn: 1.
+	solver fillTwoBlankCellsOfColumn: sudokuColumn .
+	column := board getSudokuColumn: 1.
+	self assert: (column column at: 4) equals: 6.
+	self assert: (column column at: 6) equals: 3.
 	logger info: board.
 ]
 
@@ -112,7 +117,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAlliancePartOfWay [
 
-	| logger  board solver block sudokuRow |
+	| logger  board solver block |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
@@ -128,10 +133,7 @@ OttiezTacticsTest >> testFormBilateralAlliancePartOfWay [
 	solver formBilateralAlliance: block.
 
 	logger info: board.
-	
-	sudokuRow := board getSudokuRow: 6.
-	
-	logger info: ( #(3 6) difference: (sudokuRow  row intersection: #(3 6))) 
+
 ]
 
 { #category : #tests }
@@ -210,7 +212,7 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 { #category : #tests }
 OttiezTacticsTest >> testLetsRetsme [
 
-	| logger  board solver block sudokuColumn |
+	| logger  board solver block  |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.

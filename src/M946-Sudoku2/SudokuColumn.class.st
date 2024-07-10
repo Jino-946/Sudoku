@@ -80,9 +80,12 @@ SudokuColumn >> asSimpleString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'aSudokuColumn ('.
+	aStream nextPutAll: 'aSudokuColumn #';
+			nextPutAll: colIndex asString;
+			nextPutAll: '('.
 	column doWithIndex: [ :c :idx |
-			 	idx % 3 = 1 ifTrue: [ aStream tab ]. 
+				idx = 1 ifTrue: [ aStream space ].
+			 	(idx > 1 and: [idx % 3 = 1]) ifTrue: [ aStream tab ]. 
 				c class = SudokuCell 
 					ifTrue: [ aStream nextPutAll: c asSpecialString ; space ]
 					ifFalse:[	aStream print: c; space ]].
