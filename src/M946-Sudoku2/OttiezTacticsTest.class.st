@@ -61,7 +61,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	logger info: (board getSudokuCell: 7@4).
-"
+
 	block := board getBlock: 2 verifyNumber: 2.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -82,10 +82,12 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	block := board getBlock: 4 verifyNumber: 5.
 	solver formBilateralAlliance: block.
 	logger info: board.
+	board serializeToFileNamed: 'fuel/number5done.fuel'.
 	
 	block := board getBlock: 3 verifyNumber: 6.
 	solver formBilateralAlliance: block.
 	logger info: board.
+	board serializeToFileNamed: 'fuel/number6done.fuel'.
 	
 	block := board getBlock: 7 verifyNumber: 7.
 	solver formBilateralAlliance: block.
@@ -94,7 +96,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
 
-"
+
 
 
 
@@ -265,6 +267,13 @@ OttiezTacticsTest >> testLetsRetsme [
 	solver letsRetsme: 1  .
 	solver letsRetsme: 2.
 	solver letsRetsme: 3.
+	logger info: board.
 	board serializeToFileNamed: 'fuel/forRemovePossibleNumbers.fuel'.
+	solver letsRetsme: 4.
+	solver letsRetsme: 5.
+	solver letsRetsme: 6.
+	solver letsRetsme: 7.
+	solver letsRetsme: 8.
+	solver letsRetsme: 9.	
 	logger info: board.
 ]

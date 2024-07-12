@@ -108,7 +108,7 @@ SudokuBlock2 >> asString [
 					do: [ :each | 
 						each class = SudokuCell
 							ifTrue: [ 
-								aStream nextPutAll: each asSpecialString ]
+								aStream nextPutAll: each asSimpleString ]
 						 	ifFalse: [  
 								aStream nextPutAll: each asString ]]
 					separatedBy: [ aStream tab ]]
@@ -372,7 +372,7 @@ SudokuBlock2 >> initialize [
 	colsOnBoard := Array new: 3.
 	rowsOnBoard := Array new: 3.
 	verifyNumber := 0.
-	eitherCells := EitherCells new.
+	eitherCells := EitherCell new.
 	
 ]
 

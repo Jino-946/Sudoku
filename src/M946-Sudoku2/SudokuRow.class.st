@@ -86,7 +86,7 @@ SudokuRow >> asSimpleString [
 				idx = 1 ifTrue: [ aStream space ].
 			 	(idx > 1 and: [idx % 3 = 1]) ifTrue: [ aStream tab ].
 				c class = SudokuCell 
-					ifTrue: [ aStream nextPutAll: c asSpecialString ; space ]
+					ifTrue: [ aStream nextPutAll: c asSimpleString ; space ]
 					ifFalse:[	aStream print: c; space ]].
 	aStream nextPutAll: ' )'.
 

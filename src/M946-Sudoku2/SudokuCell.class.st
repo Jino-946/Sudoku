@@ -51,7 +51,7 @@ SudokuCell >> = sudokuCell [
 ]
 
 { #category : #'as yet unclassified' }
-SudokuCell >> asSpecialString [	
+SudokuCell >> asSimpleString [	
 	"
 	SudokuBoard2>>asStringでSudokuCellを見やすく表示するために使用するメソッド
 	"

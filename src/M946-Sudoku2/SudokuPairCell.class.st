@@ -44,7 +44,7 @@ SudokuPairCell class >> thisCell: aSudokuCell otherCell: aSudokuCell2 [
 ]
 
 { #category : #converting }
-SudokuPairCell >> asSpecialString [	
+SudokuPairCell >> asSimpleString [	
 	"
 	SudokuBoard2>>asStringでSudokuPairCellを見やすく表示するために使用するメソッド
 	"

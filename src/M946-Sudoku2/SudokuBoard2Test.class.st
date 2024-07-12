@@ -117,12 +117,10 @@ SudokuBoard2Test >> testRemovePossibleNumbersOfRowAndCol [
 
 	logger info: board.
 	
-	logger info: (board getSudokuCell: 4@3).
+	self assert: (board getSudokuCell: 4@3) asSimpleString  equals: '$2'.
+	self assert: (board getSudokuCell: 6@5) asSimpleString  equals: '$2'.
 	
-	self assert: (board getSudokuCell: 4@3) asSpecialString  equals: '$2'.
-	self assert: (board getSudokuCell: 6@5) asSpecialString  equals: '$2'.
-	
-	
+	"セルに入る数字が確定したと仮定する"
 	cell := SudokuCell row: 3 column: 6 element: 2.
 	board map: cell.
 	
