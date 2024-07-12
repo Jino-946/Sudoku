@@ -25,7 +25,7 @@ ManifestM946Sudoku2 class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#EitherWay #markEitherCellsOn: #false)) #'2024-05-15T09:29:11.579876+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:44.744762+09:00') #(#(#RGClassDefinition #(#SudokuBlock2)) #'2024-06-23T14:55:59.141132+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#EitherWay #markEitherCellsOn: #false)) #'2024-05-15T09:29:11.579876+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #setEitherCells: #false)) #'2024-05-15T15:46:44.744762+09:00') #(#(#RGClassDefinition #(#SudokuBlock2)) #'2024-06-23T14:55:59.141132+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #removePossibleNumbersOfRowAndCol: #false)) #'2024-07-12T13:32:54.446319+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #removePossibleNumbersOfRow: #false)) #'2024-07-12T14:17:21.598967+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #removePossibleNumbersOfCol: #false)) #'2024-07-12T14:20:20.374272+09:00') )
 ]
 
 { #category : #'code-critics' }
@@ -54,6 +54,13 @@ ManifestM946Sudoku2 class >> ruleReTestClassNotInPackageWithTestEndingNameRuleV1
 
 	<ignoreForCoverage>
 	^ #(#(#(#RGPackageDefinition #(#'M946-Sudoku2')) #'2024-04-20T20:34:12.520286+09:00') )
+]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleRefersToClassRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuCell #element: #false)) #'2024-07-12T16:56:42.304518+09:00') )
 ]
 
 { #category : #'code-critics' }

@@ -102,50 +102,34 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 ]
 
 { #category : #tests }
-SudokuBoard2Test >> testMapSudokuCell [
-
-	| task board block logger cell solver |
+SudokuBoard2Test >> testRemovePossibleNumbersOfRowAndCol [
+	"
+	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
+	"
+	| logger  board  cell |
 	logger := M946Logger new: LogLevel info.
-	logger clearLog.
+	logger clearLog .
 	logger info: thisContext.
-	
-	task := '
-8	9	0	   0	6	0	   0	2	3	
-4	0	0	   1	0	3	   0	0	8	
-0	0	0	   0	0	0	   0	0	0	
 
-0	2	0	   0	0	0	   0	4	0	
-1	0	0	   0	0	0	   0	0	5	
-0	7	0	   0	0	0	   0	6	0	
+	board := FLMaterializer new 
+        filePath: 'fuel/forRemovePossibleNumbers.fuel';
+        materializeRoot .
 
-0	0	0	   0	0	0	   0	0	0	
-5	0	0	   3	0	4	   0	0	1	
-9	4	0	   0	2	0	   0	8	6		
-'.
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-	solver := OttiezTactics new: board.	
-	block := board getBlock: 6 verifyNumber: 1.
 	logger info: board.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.
-	cell := SudokuCell row: 4 column: 7 element: 2.
-	board mapSudokuCell: cell.
-	logger info: board.
-	self assert: (board boardA2D at: 6 at: 7) equals: 1.
 	
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-	solver := OttiezTactics new: board.	
-	block := board getBlock: 6 verifyNumber: 1.
+	logger info: (board getSudokuCell: 4@3).
+	
+	self assert: (board getSudokuCell: 4@3) asSpecialString  equals: '$2'.
+	self assert: (board getSudokuCell: 6@5) asSpecialString  equals: '$2'.
+	
+	
+	cell := SudokuCell row: 3 column: 6 element: 2.
+	board map: cell.
+	
 	logger info: board.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	logger info: '片方のペアの数字が決まるともう一方の数字が自動的に決定する動作を実装した。'.	
-	cell := SudokuCell row: 6 column: 7 element: 2.
-	board mapSudokuCell: cell.
-	logger info: board.
-	self assert: (board boardA2D at: 4 at: 7) equals: 1.
+	
+	self assert: (board boardA2D at: 3 at: 4)  equals: 0.
+	self assert: (board boardA2D at: 5 at: 6)  equals: 0.
+
 	
 ]

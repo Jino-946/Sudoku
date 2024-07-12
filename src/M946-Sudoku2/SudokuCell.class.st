@@ -143,6 +143,7 @@ SudokuCell >> element [
 { #category : #accessing }
 SudokuCell >> element: elem [
 
+	elem class = SudokuCell ifTrue: [ self error: 'SudokuCell object not allowed!' ].
 	element := elem
 ]
 

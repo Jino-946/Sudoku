@@ -145,10 +145,8 @@ SudokuColumn >> cellOf: number [
 	| index cell|
 	cell := 0.
 	index := self asArray indexOf: number.
-	index = 0
-	ifFalse: [ 
-		cell := SudokuCell row: index column: colIndex element: number.
-	].
+	index = 0 ifFalse: [ 
+		cell := SudokuCell row: index column: colIndex element: number].
 	
 	^cell
 ]
@@ -198,7 +196,7 @@ SudokuColumn >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
-	^(column select: [ :n | n class = SmallInteger and: [ n < 10  and: [ n = 0 ]]]) size
+	^9 - (column select: [ :n | n class = SmallInteger and: [ n < 10  and: [ n > 0 ]]]) size
 ]
 
 { #category : #comparing }

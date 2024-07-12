@@ -59,10 +59,9 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	solver formBilateralAlliance: block.
-	logger info: block.
 	logger info: board.
-
-
+	logger info: (board getSudokuCell: 7@4).
+"
 	block := board getBlock: 2 verifyNumber: 2.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -95,7 +94,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
 
-
+"
 
 
 
@@ -210,22 +209,62 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
+
+	| logger task board solver block blankCells nextBlock|
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+	
+	task := '
+8 9 0   0 6 0   0 2 3
+4 0 0   1 0 3   0 0 8
+0 0 0   0 0 0   0 0 0
+
+0 2 0   0 0 0   0 4 0
+1 0 0   0 0 0   0 0 5
+0 7 0   0 0 0   0 6 0
+
+0 0 0   0 0 0   0 0 0
+5 0 0   3 0 4   0 0 1
+9 4 0   0 2 0   0 8 6	
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	solver := OttiezTactics new: board.
+	block := board getBlock: 6 verifyNumber: 1.
+	blankCells := solver getAllianceCellsAfterMark: block.	
+	self assert: blankCells size equals: 2.
+	logger info: (blankCells at: 1) asString.
+	logger info: (blankCells at: 2) asString.
+	
+	nextBlock := solver getNextBlockOfPairBlankCells: block cells: blankCells.
+	logger info: board .
+
+	logger info: (board getSudokuCell: 7@4) asString.
+
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testLetsRetsme [
 
-	| logger  board solver block  |
+	| logger  board solver  |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
 	board := FLMaterializer new 
-        filePath: 'fuel/number6done.fuel';
+        filePath: 'fuel/number7done.fuel';
         materializeRoot .
 	solver := OttiezTactics new: board.
 	
-	block := board getBlock: 7 verifyNumber: 7.
-	solver formBilateralAlliance: block.
+	logger info: board.
+	logger info: (board getSudokuCell: 4@3).
 	
-	solver letsRetsme  .
-	
+	solver letsRetsme: 1  .
+	solver letsRetsme: 2.
+	solver letsRetsme: 3.
+	board serializeToFileNamed: 'fuel/forRemovePossibleNumbers.fuel'.
 	logger info: board.
 ]

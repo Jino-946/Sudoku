@@ -31,7 +31,10 @@ OttiezTactics >> columnMarking: aBlock [
 { #category : #logic }
 OttiezTactics >> fillOneBlankCellOfColumn: column [
 
-	| cell |
+	| cell logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	logger debug: column asSimpleString .
 	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
 	cell := column cellOf: 0.
 	cell class = SudokuCell ifFalse: [ ^ self ].
@@ -42,17 +45,22 @@ OttiezTactics >> fillOneBlankCellOfColumn: column [
 { #category : #logic }
 OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
-	| missingNumbers bingo |
+	| missingNumbers bingo logger  |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	logger debug: sudokuColumn asSimpleString  .
 	sudokuColumn countOfReservedBlankCells = 2 ifFalse: [ ^ self ].
 	missingNumbers := sudokuColumn missingNumbers.
 	bingo := #().
 	sudokuColumn column doWithIndex: [ :num :i | | sudokuRow |
 		sudokuRow := sudokuBoard getSudokuRow: i.
-		num = 0 ifTrue: [  
+		(num = 0  or: [num class = SudokuCell ])ifTrue: [  
 			bingo := missingNumbers difference: (sudokuRow row intersection: missingNumbers).
-			bingo size = 1 ifTrue: [ sudokuColumn at: i put: (bingo at: 1) ].
-			sudokuBoard map: sudokuColumn]].
-	bingo size = 1 ifTrue: [ self fillOneBlankCellOfColumn: sudokuColumn ]
+			bingo size = 1 ifTrue: [ 
+				sudokuColumn at: i put: (bingo at: 1).
+				sudokuBoard map: sudokuColumn.
+				 self fillOneBlankCellOfColumn: sudokuColumn ]]].
+
 ]
 
 { #category : #logic }
@@ -267,11 +275,39 @@ OttiezTactics >> letsRetsme [
 	logger debug: thisContext.
 	1 to: 9 do: [ :i | | column |
 		column := sudokuBoard getSudokuColumn: i.
+		logger debug: column asSimpleString .
 		column countOfReservedBlankCells = 1 ifTrue:[
-			self fillOneBlankCellOfColumn: column].
+			self fillOneBlankCellOfColumn: column.
+			].
 		column countOfReservedBlankCells = 2 ifTrue: [ 
-			self fillTwoBlankCellsOfColumn: column]]
+			self fillTwoBlankCellsOfColumn: column.
+			logger debug: column asSimpleString .
+			]]
 
+]
+
+{ #category : #logic }
+OttiezTactics >> letsRetsme: colNumber [
+	"
+	letsRetsme  動作検証用メソッド
+	"
+	| logger column countOfBlankCell |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	column := sudokuBoard getSudokuColumn: colNumber.
+	logger debug: column asSimpleString.
+	countOfBlankCell := column countOfReservedBlankCells.
+	logger debug: ('count of blank cell: {1}' format: { countOfBlankCell  } ).
+	countOfBlankCell  = 1 ifTrue: [
+		self fillOneBlankCellOfColumn: column.
+		column := sudokuBoard getSudokuColumn: colNumber.
+		logger debug:
+			('count of blank cell: 1 ... {1}' format: { column asSimpleString }) ].
+	countOfBlankCell  = 2 ifFalse: [ ^ self ].
+	self fillTwoBlankCellsOfColumn: column.
+	column := sudokuBoard getSudokuColumn: colNumber.
+	logger debug:
+		('count of blank cell: 2 ... {1}' format: { column asSimpleString })
 ]
 
 { #category : #logic }

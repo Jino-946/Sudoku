@@ -227,6 +227,7 @@ SudokuBoard2 >> getBlock: bNum verifyNumber: vNum [
 { #category : #accessing }
 SudokuBoard2 >> getCellRow: rowIndex cellColumn: colIndex [
 
+	(boardA2D at: rowIndex at: colIndex) class = SudokuCell ifTrue: [ ^boardA2D at: rowIndex at: colIndex ].
 	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
 ]
 
@@ -308,14 +309,11 @@ SudokuBoard2 >> map:  sudokuItem [
 	"
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
-	"
-	sudokuItem class = SudokuCell ifTrue: [  
-		boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element ].
-	"
 	sudokuItem class = SudokuCell ifTrue: [ 
 		sudokuItem possibleNumbers isEmpty 
 			ifTrue: [  
-				boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element]
+				boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element.
+				self removePossibleNumbersOfRowAndCol: sudokuItem]
 			ifFalse: [  
 				 boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem ]].
 	
@@ -389,6 +387,55 @@ SudokuBoard2 >> mapSudokuPairCell: aPairCell [
 SudokuBoard2 >> printOn: aStream [
 
 	aStream nextPutAll: self asString 
+]
+
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
+	"
+	引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
+	possibleNumbersが空になったらあらためて0をセットする。
+	"
+	| sudokuCol |
+	sudokuCol := self getSudokuColumn: sudokuCell x.
+	sudokuCol column do: [ :cell |
+		cell class = SudokuCell 
+			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [
+						cell possibleNumbers remove: (sudokuCell element). 
+						cell possibleNumbers isEmpty ifTrue: [ 
+							boardA2D at: cell y at: cell x put: 0]]]].
+			
+			
+]
+
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
+	"
+	引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
+	possibleNumbersが空になったらあらためて0をセットする。
+	"
+	|sudokuRow |
+	sudokuRow := self getSudokuRow: sudokuCell y.
+	sudokuRow row do: [ :cell |
+		cell class = SudokuCell 
+			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [
+						cell possibleNumbers remove: (sudokuCell element). 
+						cell possibleNumbers isEmpty ifTrue: [ 
+							boardA2D at: cell y at: cell x put: 0]]]].
+			
+			
+
+]
+
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfRowAndCol: sudokuCell [
+	"
+	センダーはSudokuBoard2>>map:
+	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
+	"
+	self removePossibleNumbersOfRow: sudokuCell.
+	self removePossibleNumbersOfCol: sudokuCell
 ]
 
 { #category : #initialization }
