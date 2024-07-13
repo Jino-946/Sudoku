@@ -22,8 +22,11 @@ OttiezTactics >> columnMarking: aBlock [
 			x := sudokuColumn colIndex .
 			y := sudokuColumn indexOf: aBlock verifyNumber.
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
-			(x = 0 or: [ y = 0 ]) ifTrue: [ ^self ].
+			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
 			cell := sudokuBoard getCellRow: y cellColumn: x.
+			"予約セルが入っている場合があるため改めて数をセット"
+			cell element: aBlock verifyNumber.
+			cell possibleNumbers: OrderedCollection new.
 			aBlock markByVerticalCell: cell.
 			logger debug: aBlock ]].
 ]
@@ -136,7 +139,7 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
 	blankCells := self getAllianceCellsAfterMark: aBlock.
-	logger debug: ('
+	logger debug: (' blank cells:
 {1}' format: {blankCells} ).
 
 	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
@@ -322,8 +325,11 @@ OttiezTactics >> rowMarking: aBlock [
 			x := sudokuRow indexOf: aBlock verifyNumber.
 			y := sudokuRow rowIndex .
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
-			(x = 0 or: [ y = 0 ]) ifTrue: [ ^self ].
+			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
 			cell := sudokuBoard getCellRow: y cellColumn: x.
+			"予約セルが入っている場合があるため改めて数をセット"
+			cell element: aBlock verifyNumber.
+			cell possibleNumbers: OrderedCollection new.
 			aBlock markByHorizontalCell: cell.
 			logger debug: aBlock]].
 ]
