@@ -349,13 +349,12 @@ SudokuBlock2 >> includes: number [
 	| sudokuCells logger |
 	logger := M946Logger new: LogLevel info.
 	logger debug: thisContext.
-	sudokuCells := blockA2D asArray select: [ :item |
-		             item class = SudokuCell ].
-	sudokuCells isEmpty ifTrue: [ ^ blockA2D asArray includes: number ].
-	logger debug: self.
-	logger debug: sudokuCells .
-	^ (sudokuCells anySatisfy: [ :cell | cell possibleNumbers includes: number ])
-		or: [  blockA2D asArray includes: number  ]
+    (blockA2D asArray includes: number) ifTrue: [ ^true].
+    sudokuCells := blockA2D asArray select: [ :item |
+        item class = SudokuCell and: [ item possibleNumbers includes: number]].
+    sudokuCells size > 1 ifTrue: [ ^true ].
+    ^false
+
 ]
 
 { #category : #testing }
@@ -372,7 +371,7 @@ SudokuBlock2 >> initialize [
 	colsOnBoard := Array new: 3.
 	rowsOnBoard := Array new: 3.
 	verifyNumber := 0.
-	eitherCells := EitherCell new.
+	eitherCells := OrderedCollection new.
 	
 ]
 

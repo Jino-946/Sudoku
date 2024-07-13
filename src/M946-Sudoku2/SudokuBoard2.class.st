@@ -209,8 +209,7 @@ SudokuBoard2 >> getBlock: blockNumber [
 		block :=  (self _getBlock: 7 at: 4) blockNumber: blockNumber ].
 	blockNumber = 9 ifTrue: [
 		block := (self _getBlock: 7 at: 7) blockNumber: blockNumber ].
-	
-	self setEitherCells: block.	
+
 	^block
 	
 
@@ -436,19 +435,4 @@ SudokuBoard2 >> removePossibleNumbersOfRowAndCol: sudokuCell [
 	"
 	self removePossibleNumbersOfRow: sudokuCell.
 	self removePossibleNumbersOfCol: sudokuCell
-]
-
-{ #category : #initialization }
-SudokuBoard2 >> setEitherCells: block [
-
-	| charDigits |
-	charDigits := #($1 $2 $3 $4 $5 $6 $7 $8 $9).
-	1 to: 3 do: [ :i |
-		1 to: 3 do: [ :j | | char rowIndex colIndex |
-			char := block blockA2D at: i at: j.
-			(charDigits includes: char)	ifTrue: [ 
-				rowIndex := block rowIndexOnBoard: i.
-				colIndex := block colIndexOnBoard: j.
-				block eitherCells add: (SudokuCell row: rowIndex column: colIndex element: char )	]]]
-	
 ]

@@ -61,6 +61,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	logger info: (board getSudokuCell: 7@4).
+	
 
 	block := board getBlock: 2 verifyNumber: 2.
 	solver formBilateralAlliance: block.
@@ -124,13 +125,13 @@ OttiezTacticsTest >> testFormBilateralAlliancePartOfWay [
 	logger info: thisContext.
 
 	board := FLMaterializer new 
-        filePath: 'fuel/number6done.fuel';
+        filePath: 'fuel/forRemovePossibleNumbers.fuel';
         materializeRoot .
 	logger info: board .
 	
 	solver := OttiezTactics new: board.
 	
-	block := board getBlock: 7 verifyNumber: 7.
+	block := board getBlock: 1 verifyNumber: 3.
 	solver formBilateralAlliance: block.
 
 	logger info: board.

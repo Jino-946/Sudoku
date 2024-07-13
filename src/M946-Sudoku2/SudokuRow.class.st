@@ -206,12 +206,12 @@ SudokuRow >> hash [
 { #category : #testing }
 SudokuRow >> includes: number [
 
-	| sudokuCells |
-	sudokuCells := row select: [ :item | item class = SudokuCell ].
-	sudokuCells isEmpty ifTrue: [ ^row includes: number ].
+	| sudokuCells  |
+	(row includes: number) ifTrue: [ ^true ].
 	
-	^(sudokuCells anySatisfy: [ :cell | cell possibleNumbers includes: number ])
-		or: [  row includes: number ]
+	sudokuCells := row select: [ :item | item class = SudokuCell and: [ item possibleNumbers includes: number ] ].
+	sudokuCells size > 1 ifTrue: [ ^true ].
+	^false
 ]
 
 { #category : #accessing }

@@ -209,11 +209,12 @@ SudokuColumn >> hash [
 SudokuColumn >> includes: number [
 
 	| sudokuCells |
-	sudokuCells := column select: [ :item | item class = SudokuCell ].
-	sudokuCells isEmpty ifTrue: [ ^column includes: number ].
+	(column includes: number) ifTrue: [ ^true ].
 	
-	^(sudokuCells anySatisfy: [ :cell | cell possibleNumbers includes: number ])
-		or: [  column includes: number ]
+	sudokuCells := column select: [ :item | item class = SudokuCell and: [ item possibleNumbers includes: number ] ].
+	sudokuCells size > 1 ifTrue: [ ^true ].
+	^false
+
 ]
 
 { #category : #accessing }
