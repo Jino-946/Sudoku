@@ -5,56 +5,61 @@
 SudokuBlock2オブジェクトのインスタンス変数として生成される。
 
 Instance variables
-  commonNumbers      OrderedCollection<SmallInteger>    セルに入る数
-- 数が1つ: 1ペア     片方のセルに要素が入るともう一方のセルは 0 になる。
-- 数が2つ: 2ペア     片方のセルに1つの要素が入るともう一方のセルは自動的に決まる．
+thisCell       <SudokuCell>    セルに入る数が確定したSudokuCell
+otherCell      <SudokuCell>    thisCellで確定したことでセルに入る数が自動的に決まる可能性があるSudokuCell
 
-  cells              OrderedCollection<SudokuCell>      ボード上のセルを表現するSudokuCellオブジェクト
 "
 Class {
 	#name : #EitherCell,
 	#superclass : #Object,
 	#instVars : [
-		'commonNumbers',
-		'cells'
+		'thisCell',
+		'otherCell'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
 
-{ #category : #adding }
-EitherCell >> add: cell [
-
-	cell class = SudokuCell ifFalse:[ self error: 'a SudokuCell object expected.' ].
-	cells size >= 2 ifTrue: [ self error: 'too many SudokuCell objects' ].
-	(cells at: 1) element = cell element ifFalse: [ self error: 'same number required.' ].
-	cells add: cell
+{ #category : #creating }
+EitherCell class >> thisCell: cell1 otherCell: cell2 [
+	
+	| etherCell |
+	etherCell := self new.
+	etherCell thisCell: cell1.
+	etherCell otherCell: cell2.
+	^etherCell 
+	
 ]
 
-{ #category : #converting }
-EitherCell >> asString [
+{ #category : #'as yet unclassified' }
+EitherCell >> determineTheNumber [
 
-	| aStream |
-	aStream := ReadWriteStream on: String new.
-	aStream  nextPutAll: 'anEitherCells ('; cr;
-			 nextPutAll: (cells at: 1) asSimpleString; cr;
-			 nextPutAll: (cells at: 2) asSimpleString; cr; 
-			 nextPutAll: ')'; cr.
+	(thisCell possibleNumbers isEmpty or: [ otherCell possibleNumbers isEmpty ])
+		ifTrue: [ ^self ].
+	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers  size = 1])
+		ifTrue: [ 
+			thisCell possibleNumbers = otherCell possibleNumbers 
+				ifTrue: [ 
+					otherCell element: 0.
+					otherCell clearPossibleNumbers ].
+			^otherCell].
+	(thisCell possibleNumbers size = 2 and: [ otherCell possibleNumbers  size = 2])
+		ifTrue: [ 
+			thisCell possibleNumbers asBag = otherCell possibleNumbers asBag
+				ifTrue: [ 
+					otherCell possibleNumbers remove: (thisCell element).
+					otherCell element: (otherCell possibleNumbers at: 1).
+					otherCell clearPossibleNumbers ].
+			^otherCell].
 	
-	^aStream contents .
+	
 
 ]
 
 { #category : #accessing }
-EitherCell >> cells [
+EitherCell >> otherCell: sudokuCell [
 
-	^cells
-]
-
-{ #category : #initialization }
-EitherCell >> initialize [ 
-	super initialize .
-	commonNumbers := OrderedCollection new.
-	cells := OrderedCollection new.
+	otherCell := sudokuCell 
+	
 ]
 
 { #category : #printing }
@@ -62,4 +67,11 @@ EitherCell >> printOn: aStream [
 
 	aStream
 		nextPutAll: self asString; cr.
+]
+
+{ #category : #accessing }
+EitherCell >> thisCell: sudokuCell [
+
+	thisCell := sudokuCell 
+	
 ]

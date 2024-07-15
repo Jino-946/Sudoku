@@ -154,6 +154,20 @@ SudokuCell >> hash [
 			bitXor:  element hash))
 ]
 
+{ #category : #testing }
+SudokuCell >> isPairCell: otherCell [
+
+	(self pairNumbers: otherCell ) isEmpty ifFalse: [ ^true ].
+	^false
+]
+
+{ #category : #'as yet unclassified' }
+SudokuCell >> pairNumbers: otherCell [
+
+	^self possibleNumbers intersection: otherCell possibleNumbers
+
+]
+
 { #category : #accessing }
 SudokuCell >> possibleNumbers [
 

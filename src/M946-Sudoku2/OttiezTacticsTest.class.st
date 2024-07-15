@@ -212,6 +212,65 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testGetAlliedCellForMappingCell [
+
+	| board block cell22 aCell logger solver|
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	
+	board := FLMaterializer new 
+		filePath: 'fuel/board-getAlliedCellForMapping.fuel';
+		materializeRoot .
+	logger info: board .
+	
+	solver := OttiezTactics new: board.
+	
+	block := board getBlock: 1 verifyNumber: 3.
+	logger info: block.
+	
+	aCell := board boardA2D at: 2 at: 2.
+	
+	cell22 := solver getAlliedCellForMapping: block cell: aCell.
+	logger info: cell22.
+	
+	logger info: (board boardA2D at: 7 at: 3).
+
+"  これより getAlliedCellForMapping:cell: のコード  
+	cells := block blockA2D asArray select: [ :item |
+						item class = SudokuCell and: [ item x ~= aCell x or: [ item y ~= aCell y ] ]].
+	cells size = 1 ifFalse: [ logger info: 'cells size not 1' ].
+	candidateCell := cells at: 1.
+	pairNumbers := aCell pairNumbers: candidateCell .	
+	pairNumbers size = 1 ifFalse: [ logger info: 'not pair cell' ].
+	candidateCell element: (pairNumbers at: 1).
+	candidateCell clearPairCells .
+"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	| logger task board solver block blankCells nextBlock|
@@ -269,6 +328,7 @@ OttiezTacticsTest >> testLetsRetsme [
 	solver letsRetsme: 2.
 	solver letsRetsme: 3.
 	logger info: board.
+	"SudokuBoard>>removePossibleNumbersOfRowAndCol: のテスト用にboardをシリアライズ"
 	board serializeToFileNamed: 'fuel/forRemovePossibleNumbers.fuel'.
 	solver letsRetsme: 4.
 	solver letsRetsme: 5.

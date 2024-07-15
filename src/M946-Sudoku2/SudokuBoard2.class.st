@@ -394,13 +394,16 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 	引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
 	possibleNumbersが空になったらあらためて0をセットする。
 	"
-	| sudokuCol |
+	| sudokuCol logger |
+	logger := M946Logger new: LogLevel info.
+	logger debug: thisContext.
 	sudokuCol := self getSudokuColumn: sudokuCell x.
 	sudokuCol column do: [ :cell |
 		cell class = SudokuCell 
 			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
 						cell possibleNumbers remove: (sudokuCell element). 
+						logger debug: cell.
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			
@@ -413,7 +416,7 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 	引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
 	possibleNumbersが空になったらあらためて0をセットする。
 	"
-	|sudokuRow |
+	| sudokuRow  |
 	sudokuRow := self getSudokuRow: sudokuCell y.
 	sudokuRow row do: [ :cell |
 		cell class = SudokuCell 

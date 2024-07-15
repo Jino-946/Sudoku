@@ -23,11 +23,16 @@ OttiezTactics >> columnMarking: aBlock [
 			y := sudokuColumn indexOf: aBlock verifyNumber.
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
 			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
-			cell := sudokuBoard getCellRow: y cellColumn: x.
+			cell := (sudokuBoard getCellRow: y cellColumn: x) copy.
 			"予約セルが入っている場合があるため改めて数をセット"
 			cell element: aBlock verifyNumber.
-			cell possibleNumbers: OrderedCollection new.
+			cell clearPossibleNumbers.
 			aBlock markByVerticalCell: cell.
+			"
+			aBlock blockNumber = 1 ifTrue: [ 
+				sudokuBoard  serializeToFileNamed: 'fuel/board-getAlliedCellForMapping.fuel'.
+				 ].	
+			"
 			logger debug: aBlock ]].
 ]
 
@@ -171,6 +176,7 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	self columnMarking: aBlock.
 	blankCells := aBlock blankCellsAsArray .
 	logger debug: aBlock .
+	logger debug: sudokuBoard .
 	blankCells size = 1 ifTrue: [ ^blankCells ].
 	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
 										or: [(blankCells at: 1) y = (blankCells at: 2) y])
@@ -191,18 +197,40 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 ]
 
 { #category : #logic }
+OttiezTactics >> getAlliedCellForMapping: aBlock cell: aCell [
+
+	"
+    aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
+    配置可能な時はSudokuCellオブジェクとして返す。	
+	"
+	| cells candidateCell pairNumbers |
+	cells := aBlock blockA2D asArray select: [ :item |
+						item class = SudokuCell and: [ item ~= aCell ]].
+	cells size = 1 ifFalse: [ ^self ].
+	candidateCell := cells at: 1.
+	pairNumbers := aCell pairNumbers: candidateCell.
+	pairNumbers size = 1 ifFalse: [ ^self ].
+	candidateCell element: (pairNumbers at: 1).
+	^candidateCell clearPossibleNumbers 
+]
+
+{ #category : #logic }
 OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	"
 	入る数字が決まったセルをsudokuBoardにマップし、
 	次の検証対象となるsudokuBlockを返す。
 	"
-	| nextBlock logger |
+	| nextBlock logger alliedCell |
 	logger := M946Logger new: LogLevel debug.
-	logger debug: thisContext.
-	
+	logger debug: thisContext.	
 	aCell element: aBlock verifyNumber.
+	alliedCell := self getAlliedCellForMapping: aBlock cell: aCell.
 	aCell clearPossibleNumbers .
+	logger debug: aCell.
 	sudokuBoard map: aCell.
+	"
+	alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
+	"
 	nextBlock := self findNextBlock: aBlock singleCell: aCell.
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.
@@ -326,10 +354,10 @@ OttiezTactics >> rowMarking: aBlock [
 			y := sudokuRow rowIndex .
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
 			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
-			cell := sudokuBoard getCellRow: y cellColumn: x.
+			cell := (sudokuBoard getCellRow: y cellColumn: x) copy.
 			"予約セルが入っている場合があるため改めて数をセット"
 			cell element: aBlock verifyNumber.
-			cell possibleNumbers: OrderedCollection new.
+			cell clearPossibleNumbers.
 			aBlock markByHorizontalCell: cell.
 			logger debug: aBlock]].
 ]
