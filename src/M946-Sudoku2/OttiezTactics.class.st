@@ -261,13 +261,17 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 
 { #category : #logic }
 OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
-
+	"
+	トリオセルはSudokuBoardにマップはせず、次の対象ブロックの検索に使用する。
+	"
 	| logger trioCells nextBlock |
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
 	trioCells := aBlock get3Allies: blankCells .
+	logger debug: trioCells .
+	"
 	sudokuBoard map: (trioCells at: 1); map: (trioCells at: 2); map: (trioCells at: 3).
-	logger debug: sudokuBoard .
+	"
 	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.

@@ -16,7 +16,7 @@ Class {
 		'thisCell',
 		'otherCell'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : #'M946-Sudoku2-Solution'
 }
 
 { #category : #creating }
@@ -30,26 +30,20 @@ EitherCell class >> thisCell: cell1 otherCell: cell2 [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logic }
 EitherCell >> determineTheNumber [
 
 	(thisCell possibleNumbers isEmpty or: [ otherCell possibleNumbers isEmpty ])
 		ifTrue: [ ^self ].
 	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers  size = 1])
-		ifTrue: [ 
-			thisCell possibleNumbers = otherCell possibleNumbers 
-				ifTrue: [ 
-					otherCell element: 0.
-					otherCell clearPossibleNumbers ].
-			^otherCell].
+		ifTrue: [ ^self treatAsOnePair ].
 	(thisCell possibleNumbers size = 2 and: [ otherCell possibleNumbers  size = 2])
-		ifTrue: [ 
-			thisCell possibleNumbers asBag = otherCell possibleNumbers asBag
-				ifTrue: [ 
-					otherCell possibleNumbers remove: (thisCell element).
-					otherCell element: (otherCell possibleNumbers at: 1).
-					otherCell clearPossibleNumbers ].
-			^otherCell].
+		ifTrue: [ ^self treatAsTwoPairs ].
+	(thisCell possibleNumbers size = 2 and: [ otherCell possibleNumbers size = 1])
+		ifTrue: [ ^self treatAsAsymmetricPair1 ].
+	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers size = 2])
+		ifTrue: [ ^self treatAsAsymmetricPair2 ].
+	
 	
 	
 
@@ -62,16 +56,57 @@ EitherCell >> otherCell: sudokuCell [
 	
 ]
 
-{ #category : #printing }
-EitherCell >> printOn: aStream [
-
-	aStream
-		nextPutAll: self asString; cr.
-]
-
 { #category : #accessing }
 EitherCell >> thisCell: sudokuCell [
 
 	thisCell := sudokuCell 
 	
+]
+
+{ #category : #logic }
+EitherCell >> treatAsAsymmetricPair1 [
+
+	(thisCell possibleNumbers intersection: otherCell possibleNumbers ) isEmpty
+		ifTrue: [ ^self ].
+	
+	(otherCell possibleNumbers includes: thisCell element)
+		ifFalse: [ otherCell element: (otherCell possibleNumbers at: 1)]
+		ifTrue: [ otherCell element: 0].
+	otherCell clearPossibleNumbers .
+	^otherCell 
+]
+
+{ #category : #logic }
+EitherCell >> treatAsAsymmetricPair2 [
+
+	(thisCell possibleNumbers intersection: otherCell possibleNumbers)
+		isEmpty ifTrue: [ ^ self ].
+
+	(otherCell possibleNumbers includes: thisCell element) ifFalse: [
+		^ self ].
+	otherCell possibleNumbers remove: thisCell element.
+	^ otherCell
+]
+
+{ #category : #logic }
+EitherCell >> treatAsOnePair [
+
+	thisCell possibleNumbers = otherCell possibleNumbers 
+		ifTrue: [ 
+			otherCell element: 0.
+			otherCell clearPossibleNumbers.
+			^otherCell].
+	^self
+]
+
+{ #category : #logic }
+EitherCell >> treatAsTwoPairs [
+
+	thisCell possibleNumbers asBag = otherCell possibleNumbers asBag
+		ifTrue: [ 
+			otherCell possibleNumbers remove: (thisCell element).
+			otherCell element: (otherCell possibleNumbers at: 1).
+			otherCell clearPossibleNumbers.
+			^otherCell].
+	^self
 ]

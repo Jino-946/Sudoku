@@ -117,28 +117,6 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 ]
 
 { #category : #tests }
-OttiezTacticsTest >> testFormBilateralAlliancePartOfWay [
-
-	| logger  board solver block |
-	logger := M946Logger new: LogLevel info.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/forRemovePossibleNumbers.fuel';
-        materializeRoot .
-	logger info: board .
-	
-	solver := OttiezTactics new: board.
-	
-	block := board getBlock: 1 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-
-	logger info: board.
-
-]
-
-{ #category : #tests }
 OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
@@ -337,4 +315,26 @@ OttiezTacticsTest >> testLetsRetsme [
 	solver letsRetsme: 8.
 	solver letsRetsme: 9.	
 	logger info: board.
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testN3Block1AutoFillPair5 [
+
+	| logger  board solver block |
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+
+	board := FLMaterializer new 
+        filePath: 'fuel/forRemovePossibleNumbers.fuel';
+        materializeRoot .
+	logger info: board .
+	
+	solver := OttiezTactics new: board.
+	
+	block := board getBlock: 1 verifyNumber: 3.
+	solver formBilateralAlliance: block.
+
+	logger info: board.
+
 ]
