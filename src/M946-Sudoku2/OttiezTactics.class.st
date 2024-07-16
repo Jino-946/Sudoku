@@ -128,10 +128,10 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	対象ブロックのブランクセルについて、検証数字が入らないセルをマークし
 	残ったブランクセルが3以下の時に処理する。
 	1)ブランクセルが1の時、検証数字が入るセルと確定するのでボードに検証数字をマップし
-  	  次の対象ブロックを探し、setAlliance:を再帰呼び出しする。
+  	  次の対象ブロックを探し、formBilateralAlliance:を再帰呼び出しする。
 	2)ブランクセルが2の時、2国同盟と呼びSudokuCellのインスタンスのpossibleNumbersに
  	  検証数字を追加しボードにマップする。
-  	  1)の時と同様に次の対象ブロックを探し、setAlliance:を再帰呼び出しする。
+  	  1)の時と同様に次の対象ブロックを探し、formBilateralAlliance:を再帰呼び出しする。
   	  対象ブロックの検索方法: ブランクセルが同一行にある時は水平方向に並ぶブロックが対象になり
       ブランクセルが同一列にある時は垂直方向に並ぶブロックが対象となる。
 	3)ブランクセルが3の時は、2の時に準じて処理する。
@@ -198,39 +198,54 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 
 { #category : #logic }
 OttiezTactics >> getAlliedCellForMapping: aBlock cell: aCell [
-
 	"
-    aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
+	aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
     配置可能な時はSudokuCellオブジェクとして返す。	
 	"
-	| cells candidateCell pairNumbers |
+	| cells logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	cells := aBlock blockA2D asArray select: [ :item |
-						item class = SudokuCell and: [ item ~= aCell ]].
+		item class = SudokuCell and: [ 
+			item ~= aCell and:[
+				(item possibleNumbers intersection: aCell possibleNumbers ) isNotEmpty]]
+		
+		].
+	logger debug: cells.
 	cells size = 1 ifFalse: [ ^self ].
-	candidateCell := cells at: 1.
-	pairNumbers := aCell pairNumbers: candidateCell.
-	pairNumbers size = 1 ifFalse: [ ^self ].
-	candidateCell element: (pairNumbers at: 1).
-	^candidateCell clearPossibleNumbers 
+	^cells at: 1.
+	
+
 ]
 
 { #category : #logic }
 OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	"
-	入る数字が決まったセルをsudokuBoardにマップし、
+	入る数字が決まったセルをsudokuBoardにマップする。
+	入る数字が決まったセルが2国同盟で、かつもう一方のセルに入る数が
+    決まった時はsudokuBoardにマップする。
 	次の検証対象となるsudokuBlockを返す。
 	"
-	| nextBlock logger alliedCell |
+	| nextBlock logger alliedCell otherCell actualBlock|
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.	
 	aCell element: aBlock verifyNumber.
-	alliedCell := self getAlliedCellForMapping: aBlock cell: aCell.
+	"現在のsudokuBoardのブロックを再取得する"
+	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
+	"ペアセル取得"
+	otherCell  := self getAlliedCellForMapping: actualBlock  cell: aCell.
+	otherCell class = SudokuCell ifFalse: [ ^self ].
+	"ペアセルに入る数を確定する"
+	alliedCell := (EitherCell thisCell: aCell otherCell: otherCell) determineTheNumber .
+	"
+	ペアセルに入る数を決めるにはaCellのpossibleNumbersが必要なため
+	aCellのpossibleNumbersをクリアするのはalliedCellを取得後でなければならない。
+	順番を厳守!!
+	"
 	aCell clearPossibleNumbers .
-	logger debug: aCell.
 	sudokuBoard map: aCell.
-	"
 	alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
-	"
+	
 	nextBlock := self findNextBlock: aBlock singleCell: aCell.
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.

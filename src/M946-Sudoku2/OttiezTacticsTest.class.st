@@ -213,19 +213,6 @@ OttiezTacticsTest >> testGetAlliedCellForMappingCell [
 	
 	logger info: (board boardA2D at: 7 at: 3).
 
-"  これより getAlliedCellForMapping:cell: のコード  
-	cells := block blockA2D asArray select: [ :item |
-						item class = SudokuCell and: [ item x ~= aCell x or: [ item y ~= aCell y ] ]].
-	cells size = 1 ifFalse: [ logger info: 'cells size not 1' ].
-	candidateCell := cells at: 1.
-	pairNumbers := aCell pairNumbers: candidateCell .	
-	pairNumbers size = 1 ifFalse: [ logger info: 'not pair cell' ].
-	candidateCell element: (pairNumbers at: 1).
-	candidateCell clearPairCells .
-"
-
-
-
 
 
 
