@@ -236,7 +236,7 @@ OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	otherCell  := self getAlliedCellForMapping: actualBlock  cell: aCell.
 	otherCell class = SudokuCell ifFalse: [ ^self ].
 	"ペアセルに入る数を確定する"
-	alliedCell := (EitherCell thisCell: aCell otherCell: otherCell) determineTheNumber .
+	alliedCell := (BilateralAlliance thisCell: aCell otherCell: otherCell) determineTheNumber .
 	"
 	ペアセルに入る数を決めるにはaCellのpossibleNumbersが必要なため
 	aCellのpossibleNumbersをクリアするのはalliedCellを取得後でなければならない。
@@ -277,16 +277,13 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 { #category : #logic }
 OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	"
-	トリオセルはSudokuBoardにマップはせず、次の対象ブロックの検索に使用する。
+	トリオセルはSudokuBoardにマップはせず、次の対象ブロックの検索にのみ使用する。
 	"
 	| logger trioCells nextBlock |
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
 	trioCells := aBlock get3Allies: blankCells .
 	logger debug: trioCells .
-	"
-	sudokuBoard map: (trioCells at: 1); map: (trioCells at: 2); map: (trioCells at: 3).
-	"
 	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.

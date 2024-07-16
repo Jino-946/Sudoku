@@ -322,6 +322,8 @@ OttiezTacticsTest >> testN3Block1AutoFillPair5 [
 	block := board getBlock: 1 verifyNumber: 3.
 	solver formBilateralAlliance: block.
 
+	self assert: (board boardA2D at: 3 at: 2 ) equals: 3. 
+	self assert: (board boardA2D at: 2 at: 2 ) equals: 5. 
 	logger info: board.
 
 ]

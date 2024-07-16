@@ -10,7 +10,7 @@ otherCell      <SudokuCell>    thisCellで確定したことでセルに入る�
 
 "
 Class {
-	#name : #EitherCell,
+	#name : #BilateralAlliance,
 	#superclass : #Object,
 	#instVars : [
 		'thisCell',
@@ -20,7 +20,7 @@ Class {
 }
 
 { #category : #creating }
-EitherCell class >> thisCell: cell1 otherCell: cell2 [
+BilateralAlliance class >> thisCell: cell1 otherCell: cell2 [
 	
 	| etherCell |
 	etherCell := self new.
@@ -31,7 +31,7 @@ EitherCell class >> thisCell: cell1 otherCell: cell2 [
 ]
 
 { #category : #logic }
-EitherCell >> determineTheNumber [
+BilateralAlliance >> determineTheNumber [
 
 	(thisCell possibleNumbers isEmpty or: [ otherCell possibleNumbers isEmpty ])
 		ifTrue: [ ^self ].
@@ -50,21 +50,21 @@ EitherCell >> determineTheNumber [
 ]
 
 { #category : #accessing }
-EitherCell >> otherCell: sudokuCell [
+BilateralAlliance >> otherCell: sudokuCell [
 
 	otherCell := sudokuCell 
 	
 ]
 
 { #category : #accessing }
-EitherCell >> thisCell: sudokuCell [
+BilateralAlliance >> thisCell: sudokuCell [
 
 	thisCell := sudokuCell 
 	
 ]
 
 { #category : #logic }
-EitherCell >> treatAsAsymmetricPair1 [
+BilateralAlliance >> treatAsAsymmetricPair1 [
 
 	(thisCell possibleNumbers intersection: otherCell possibleNumbers ) isEmpty
 		ifTrue: [ ^self ].
@@ -77,7 +77,7 @@ EitherCell >> treatAsAsymmetricPair1 [
 ]
 
 { #category : #logic }
-EitherCell >> treatAsAsymmetricPair2 [
+BilateralAlliance >> treatAsAsymmetricPair2 [
 
 	(thisCell possibleNumbers intersection: otherCell possibleNumbers)
 		isEmpty ifTrue: [ ^ self ].
@@ -89,7 +89,7 @@ EitherCell >> treatAsAsymmetricPair2 [
 ]
 
 { #category : #logic }
-EitherCell >> treatAsOnePair [
+BilateralAlliance >> treatAsOnePair [
 
 	thisCell possibleNumbers = otherCell possibleNumbers 
 		ifTrue: [ 
@@ -100,7 +100,7 @@ EitherCell >> treatAsOnePair [
 ]
 
 { #category : #logic }
-EitherCell >> treatAsTwoPairs [
+BilateralAlliance >> treatAsTwoPairs [
 
 	thisCell possibleNumbers asBag = otherCell possibleNumbers asBag
 		ifTrue: [ 

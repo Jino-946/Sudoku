@@ -21,7 +21,7 @@ EitherCellTest >> testDeterminTheNumber [
 	thisCell := board boardA2D at: 4 at: 5.
 	thisCell element: 1.
 	otherCell := board boardA2D at: 6 at: 5.
-	eitherCell := EitherCell thisCell: thisCell otherCell: otherCell.
+	eitherCell := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	resultCell := eitherCell determineTheNumber .
 	self assert: resultCell element equals: 0.
 
@@ -29,7 +29,7 @@ EitherCellTest >> testDeterminTheNumber [
 	thisCell := board boardA2D at: 7 at: 3.
 	thisCell element: 7.
 	otherCell := board boardA2D at: 9 at: 3.
-	eitherCell := EitherCell thisCell: thisCell otherCell: otherCell.
+	eitherCell := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	resultCell := eitherCell determineTheNumber .
 	self assert: resultCell element equals: 3.
 
@@ -53,7 +53,7 @@ EitherCellTest >> testDeterminTheNumber2 [
 	thisCell := board boardA2D at: 3 at: 2.
 	thisCell element: 3.
 	otherCell := board boardA2D at: 2 at: 2.
-	eitherCell := EitherCell thisCell: thisCell otherCell: otherCell.
+	eitherCell := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	resultCell := eitherCell determineTheNumber .
 	self assert: resultCell element equals: 5.
 	self assert: resultCell possibleNumbers isEmpty equals: true.
@@ -78,7 +78,7 @@ EitherCellTest >> testDeterminTheNumber3 [
 	thisCell := board boardA2D at: 3 at: 2.
 	thisCell element: 5.
 	otherCell := board boardA2D at: 2 at: 2.
-	eitherCell := EitherCell thisCell: thisCell otherCell: otherCell.
+	eitherCell := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	resultCell := eitherCell determineTheNumber .
 	self assert: resultCell element equals: 0.
 	self assert: resultCell possibleNumbers isEmpty equals: true.
@@ -104,7 +104,7 @@ EitherCellTest >> testDeterminTheNumber4 [
 	thisCell := board boardA2D at: 2 at: 2.
 	thisCell element: 5.
 	otherCell := board boardA2D at: 3 at: 2.
-	eitherCell := EitherCell thisCell: thisCell otherCell: otherCell.
+	eitherCell := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	resultCell := eitherCell determineTheNumber .
 	self assert: resultCell element equals: 0.
 	self assert: resultCell possibleNumbers size equals: 1.
