@@ -191,12 +191,15 @@ SudokuColumn >> completed [
 	^(#(1 2 3 4 5 6 7 8 9) difference: column) isEmpty
 ]
 
-{ #category : #'private - utility' }
+{ #category : #accessing }
 SudokuColumn >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
-	^9 - (column select: [ :n | n class = SmallInteger and: [ n < 10  and: [ n > 0 ]]]) size
+	| items |
+	items := column select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
+	^ items size
+	
 ]
 
 { #category : #comparing }

@@ -5,6 +5,26 @@ Class {
 }
 
 { #category : #tests }
+OttiezTacticsTest >> test2PairTenpai [
+	| logger  board solver block  tsumoCell |
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+
+	board := FLMaterializer new 
+        filePath: 'fuel/2pairTenpai.fuel';
+        materializeRoot .
+	logger info: board .
+	solver := OttiezTactics new: board.
+	block := board getBlock: 7.
+	logger info: block.
+	
+	tsumoCell := block twoPairsTenpai .
+	logger info: tsumoCell.
+	
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	"
 	ブロック7検証番号7でformBilateralAlliance 実行後の
@@ -321,9 +341,42 @@ OttiezTacticsTest >> testN3Block1AutoFillPair5 [
 	
 	block := board getBlock: 1 verifyNumber: 3.
 	solver formBilateralAlliance: block.
-
+	
 	self assert: (board boardA2D at: 3 at: 2 ) equals: 3. 
 	self assert: (board boardA2D at: 2 at: 2 ) equals: 5. 
 	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/n3Block1AutoFillPair5.fuel'.
+	
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testN3Block5OnePair3 [
+	"
+	6分26秒から
+	"
+	| logger  board solver block |
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+
+	board := FLMaterializer new 
+        filePath: 'fuel/n3Block1AutoFillPair5.fuel';
+        materializeRoot .
+	logger info: board .
+	solver := OttiezTactics new: board.
+	
+	block := board getBlock: 5 verifyNumber: 3.
+	solver formBilateralAlliance: block.
+	
+	block := board getBlock: 7 verifyNumber: 6.
+	solver formBilateralAlliance: block.
+
+	
+	block := board getBlock: 5 verifyNumber: 6.
+	solver formBilateralAlliance: block.
+	logger info: board.
+
+
 
 ]

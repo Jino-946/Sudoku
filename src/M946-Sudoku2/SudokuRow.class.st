@@ -166,12 +166,15 @@ SudokuRow >> completed [
 	^(#(1 2 3 4 5 6 7 8 9) difference: row) isEmpty
 ]
 
-{ #category : #'private - utility' }
-SudokuRow >> countOfReservedBlankCells [ 
+{ #category : #accessing }
+SudokuRow >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
-	^(row select: [ :n | n class = SmallInteger and: [n < 10 and: [ n = 0 ]]]) size
+	| items |
+	items := row select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
+	^ items size
+	
 ]
 
 { #category : #logic }

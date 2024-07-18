@@ -10,6 +10,62 @@ Class {
 }
 
 { #category : #logic }
+OttiezTactics >> checkBlockTenpai: aBlock [
+
+	| reloadBlock tsumoCell |
+	reloadBlock := sudokuBoard
+		               getBlock: aBlock blockNumber
+		               verifyNumber: aBlock verifyNumber.
+	reloadBlock countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
+	tsumoCell := reloadBlock allGreen.
+	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
+]
+
+{ #category : #logic }
+OttiezTactics >> checkColumnTenpai: aCell [
+
+	| column tsumoCell |
+	column := sudokuBoard getSudokuColumn: aCell colIndex.
+
+	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
+	tsumoCell := column tsumo.
+	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
+	^ self
+]
+
+{ #category : #'as yet unclassified' }
+OttiezTactics >> checkRowTenpai: aCell [
+
+	| row tsumoCell |
+	row := sudokuBoard getSudokuRow: aCell colIndex.
+
+	row countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
+	tsumoCell := row tsumo.
+	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
+	^ self
+]
+
+{ #category : #logic }
+OttiezTactics >> checkTenpai: aBlock cell: aCell [
+
+	self checkBlockTenpai: aBlock.
+	self checkTwoPairsTenpai: aBlock .
+	self checkColumnTenpai: aCell.
+	self checkRowTenpai: aCell.
+]
+
+{ #category : #'as yet unclassified' }
+OttiezTactics >> checkTwoPairsTenpai: aBlock [
+
+	| reloadBlock tsumoCell |
+	reloadBlock := sudokuBoard
+		               getBlock: aBlock blockNumber
+		               verifyNumber: aBlock verifyNumber.
+	tsumoCell := reloadBlock twoPairsTenpai .
+	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
+]
+
+{ #category : #logic }
 OttiezTactics >> columnMarking: aBlock [
 
 	| logger |
@@ -234,9 +290,10 @@ OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
 	"ペアセル取得"
 	otherCell  := self getAlliedCellForMapping: actualBlock  cell: aCell.
-	otherCell class = SudokuCell ifFalse: [ ^self ].
-	"ペアセルに入る数を確定する"
-	alliedCell := (BilateralAlliance thisCell: aCell otherCell: otherCell) determineTheNumber .
+	alliedCell := nil.
+	otherCell class = SudokuCell ifTrue: [ 
+		"ペアセルに入る数を確定する"
+		alliedCell := (BilateralAlliance thisCell: aCell otherCell: otherCell) determineTheNumber ].
 	"
 	ペアセルに入る数を決めるにはaCellのpossibleNumbersが必要なため
 	aCellのpossibleNumbersをクリアするのはalliedCellを取得後でなければならない。
@@ -245,7 +302,7 @@ OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	aCell clearPossibleNumbers .
 	sudokuBoard map: aCell.
 	alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
-	
+	self checkTenpai: aBlock cell: aCell.
 	nextBlock := self findNextBlock: aBlock singleCell: aCell.
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.
@@ -266,7 +323,7 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 	logger debug: pairCells.
 	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
 	logger debug: sudokuBoard .
-	
+	self checkBlockTenpai: aBlock.
 	nextBlock := self findNextBlock: aBlock pairCells: pairCells .
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.

@@ -568,6 +568,27 @@ SudokuBlock2 >> tsumo [
 	^ cell
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> twoPairsTenpai [
+	"
+	ブロックにブランクセル１つと1組のツーペアが残った場合ブランクセルに数をセットした
+	SudokuCellのインスタンスを返す。
+	"
+	| blankCells array result twoPairs sum |
+	blankCells := self blankCellsAsArray .
+	blankCells size = 3 ifFalse: [ ^self ].
+	array := blankCells select: [ :cell | cell possibleNumbers isEmpty ].
+	(array isEmpty or: [ array size ~= 1 ] )ifTrue: [ ^self ].
+	result := array at: 1.
+	twoPairs := blankCells select: [ :cell | cell possibleNumbers isNotEmpty ].
+	(twoPairs at: 1) possibleNumbers asBag = (twoPairs at: 2) possibleNumbers asBag 
+		ifFalse: [ ^self ].
+	sum := (self blockA2D asArray select: [ :n | n class = SmallInteger ]) sum.
+	sum := sum + (twoPairs at: 1) possibleNumbers sum.
+	^result element: 45 - sum
+	
+]
+
 { #category : #accessing }
 SudokuBlock2 >> verifyNumber [
 	"
