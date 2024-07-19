@@ -73,14 +73,17 @@ OttiezTactics >> checkTenpai: aBlock cell: aCell [
 	self checkRowTenpai: aCell.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #logic }
 OttiezTactics >> checkTwoPairsTenpai: aBlock [
 
-	| reloadBlock tsumoCell |
+	| reloadBlock tsumoCell logger |
+	logger :=M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	reloadBlock := sudokuBoard
 		               getBlock: aBlock blockNumber
 		               verifyNumber: aBlock verifyNumber.
 	tsumoCell := reloadBlock twoPairsTenpai .
+	logger debug: tsumoCell .
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
 ]
 
