@@ -47,7 +47,8 @@ SudokuCell >> = sudokuCell [
 	^ sudokuCell class = self class
 		and: [ sudokuCell rowIndex = self rowIndex 
 			and: [ sudokuCell colIndex  = self colIndex 
-				and: [ sudokuCell element = self element  ] ] ]
+				and: [ sudokuCell element = self element 
+					and: [ sudokuCell possibleNumbers = self possibleNumbers ] ] ] ]
 ]
 
 { #category : #'as yet unclassified' }

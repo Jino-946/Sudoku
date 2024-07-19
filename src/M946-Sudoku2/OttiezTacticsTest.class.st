@@ -25,6 +25,34 @@ OttiezTacticsTest >> test2PairTenpai [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testCheckForTwoPairs [
+
+	| logger  board solver block  newBlankCells expected |
+	logger := M946Logger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+
+	board := FLMaterializer new 
+        filePath: 'fuel/checkForTwoPairsBlankCells.fuel';
+        materializeRoot .
+	logger info: board .
+	solver := OttiezTactics new: board.
+	
+	block := board getBlock: 6 verifyNumber: 3.
+	solver getAllianceCellsAfterMark: block.
+	newBlankCells := solver checkForTwoPairs: block .
+	logger info: newBlankCells .
+	
+	expected := Array new: 2.
+	expected at: 1 put: (SudokuCell row: 5 column: 7 element: 0).
+	expected at: 2 put: (SudokuCell row: 5 column: 8 element: 0).
+	
+	
+	self assert: newBlankCells  equals: expected .
+	
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	"
 	ブロック7検証番号7でformBilateralAlliance 実行後の
@@ -377,6 +405,22 @@ OttiezTacticsTest >> testN3Block5OnePair3 [
 	solver formBilateralAlliance: block.
 	logger info: board.
 
-
-
+	block := board getBlock: 6 verifyNumber: 3.
+	solver formBilateralAlliance: block.
+	logger info: board.
+	
+	block := board getBlock: 5 verifyNumber: 6.
+	solver formBilateralAlliance: block.
+	logger info: board.
+	
+	block := board getBlock: 6 verifyNumber: 8.
+	solver formBilateralAlliance: block.
+	logger info: board.
+	board serializeToFileNamed: 'fuel/checkForTwoPairsBlankCells.fuel'.
+	
+	block := board getBlock: 6 verifyNumber: 3.
+	solver formBilateralAlliance: block.
+	logger info: board.
+	
+	
 ]

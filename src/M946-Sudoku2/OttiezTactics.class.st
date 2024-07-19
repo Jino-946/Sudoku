@@ -33,6 +33,25 @@ OttiezTactics >> checkColumnTenpai: aCell [
 	^ self
 ]
 
+{ #category : #logic }
+OttiezTactics >> checkForTwoPairs: aBlock [ 
+
+	| reloadBlock twoPairs logger blankCells |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
+	logger debug: aBlock .
+	reloadBlock := sudokuBoard getBlock:  (aBlock blockNumber) verifyNumber: (aBlock verifyNumber).
+	twoPairs := reloadBlock blockA2D asArray select: [ :item |
+		item class = SudokuCell and: [ item possibleNumbers isNotEmpty ]].
+	twoPairs size = 2 ifFalse: [ ^self ].	
+	((twoPairs at: 1) possibleNumbers size = 2 and: [(twoPairs at: 2) possibleNumbers size = 2 ])
+		ifFalse: [ ^self ].
+	(twoPairs at: 1) possibleNumbers asBag = (twoPairs at: 2) possibleNumbers asBag 
+		ifFalse: [ ^self ].
+	blankCells := aBlock blankCellsAsArray .
+	^(blankCells select: [ :cell | cell ~= (twoPairs at: 1) ]) select: [ :cell | cell ~=  (twoPairs at: 2) ]
+]
+
 { #category : #'as yet unclassified' }
 OttiezTactics >> checkRowTenpai: aCell [
 
@@ -192,7 +211,7 @@ OttiezTactics >> formBilateralAlliance: aBlock [
       ブランクセルが同一列にある時は垂直方向に並ぶブロックが対象となる。
 	3)ブランクセルが3の時は、2の時に準じて処理する。
 	"
-	| blankCells  nextBlock logger |	
+	| blankCells  nextBlock logger checkResult |	
 	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.	
 	logger debug: aBlock.
@@ -202,7 +221,8 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	blankCells := self getAllianceCellsAfterMark: aBlock.
 	logger debug: (' blank cells:
 {1}' format: {blankCells} ).
-
+	checkResult := self checkForTwoPairs: aBlock.
+	checkResult = self ifFalse: [ blankCells := checkResult ].
 	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
 	nextBlock := self.
 	blankCells size = 1 ifTrue:[ 
