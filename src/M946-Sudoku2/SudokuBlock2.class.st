@@ -346,13 +346,19 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-	| sudokuCells logger |
-	logger := M946Logger new: LogLevel info.
+	| logger |
+	logger := M946Logger new: LogLevel debug.
 	logger debug: thisContext.
+	logger debug: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'.
     (blockA2D asArray includes: number) ifTrue: [ ^true].
+"
     sudokuCells := blockA2D asArray select: [ :item |
         item class = SudokuCell and: [ item possibleNumbers includes: number]].
-    sudokuCells size > 1 ifTrue: [ ^true ].
+    sudokuCells size > 1 ifTrue: [ 
+		logger debug: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'.
+		logger debug: sudokuCells .
+		^true ].
+"
     ^false
 
 ]

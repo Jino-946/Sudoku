@@ -239,48 +239,37 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 { #category : #tests }
 OttiezTacticsTest >> testGetAlliedCellForMappingCell [
-
-	| board block cell22 aCell logger solver|
+	| logger  solver board cell1 cell2 cell3  block candidates |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
-	
+	logger info: thisContext.
+
 	board := FLMaterializer new 
-		filePath: 'fuel/board-getAlliedCellForMapping.fuel';
-		materializeRoot .
+        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        materializeRoot .
 	logger info: board .
-	
 	solver := OttiezTactics new: board.
+	cell1  := SudokuCell row: 4 column: 5 element: 3.
+	cell1 possibleNumbers add: 1.
+	cell1 possibleNumbers add: 3. 
+	board boardA2D at: 4 at: 5 put: cell1 copy.
+	cell2 := SudokuCell row: 6 column: 5 element: 0.
+	cell2 possibleNumbers add: 1.
+	board boardA2D at: 6 at: 5 put: cell2 copy.
+	cell3 := SudokuCell row: 5 column: 5 element: 0.
+	cell3 possibleNumbers add: 3.
+	board boardA2D at: 5 at: 5 put: cell3 copy.
+	logger info: board.
 	
-	block := board getBlock: 1 verifyNumber: 3.
-	logger info: block.
+	block := board getBlock: 5 verifyNumber: 3.
+	candidates := solver getAlliedCellForMapping: block cell: cell1.
+	logger info: candidates .
+	self assert: candidates size equals: 2.
+	self assert: (candidates at: 1) equals: cell3.
+	self assert: (candidates at: 2) equals: cell2.
 	
-	aCell := board boardA2D at: 2 at: 2.
 	
-	cell22 := solver getAlliedCellForMapping: block cell: aCell.
-	logger info: cell22.
 	
-	logger info: (board boardA2D at: 7 at: 3).
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ]
 
 { #category : #tests }
@@ -408,11 +397,14 @@ OttiezTacticsTest >> testN3Block5OnePair3 [
 	block := board getBlock: 6 verifyNumber: 3.
 	solver formBilateralAlliance: block.
 	logger info: board.
+
+	
 	
 	block := board getBlock: 5 verifyNumber: 6.
 	solver formBilateralAlliance: block.
 	logger info: board.
-	
+
+
 	block := board getBlock: 6 verifyNumber: 8.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -421,6 +413,11 @@ OttiezTacticsTest >> testN3Block5OnePair3 [
 	block := board getBlock: 6 verifyNumber: 3.
 	solver formBilateralAlliance: block.
 	logger info: board.
-	
+	board serializeToFileNamed: 'fuel/N3Block5_OnePair3_OnePair1.fuel'.		
+"	
+	block := board getBlock: 5 verifyNumber: 3.
+	solver formBilateralAlliance: block.
+	logger info: board.
+"
 	
 ]

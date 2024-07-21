@@ -1,13 +1,20 @@
 "
-ブロックにおけるブランクセルが２つになりどちらかのセルに必ず同一の数字が入る場合,
-２つのセルの座標をSudokuCellのインスタンスとしてcellsに保持する。
+2国同盟のワンペア,ツーペア,非対称ペアを構成する2つのセルで
+どちらか片方のセルに入る数字が決まったときもう一方のセルに入る
+数字を自動的に決めるロジックを表現するクラス。
 
-SudokuBlock2オブジェクトのインスタンス変数として生成される。
 
 Instance variables
 thisCell       <SudokuCell>    セルに入る数が確定したSudokuCell
 otherCell      <SudokuCell>    thisCellで確定したことでセルに入る数が自動的に決まる可能性があるSudokuCell
 
+otherCell は OttiezTactics>>getAlliedCellForMapping: aBlock cell: thisCell を使って取得する。
+
+- ワンペア   1つの数字が2つのセルのどちらか一方に必ず入る状態
+
+- ツーペア   2つの数字が2つのセルのどちらか一方に必ず入る状態
+
+- 非対称ペア ワンペアを構成し,かつどちらかのセルにもう一つ入る可能性がある数字がある状態
 "
 Class {
 	#name : #BilateralAlliance,
@@ -66,6 +73,9 @@ BilateralAlliance >> thisCell: sudokuCell [
 { #category : #logic }
 BilateralAlliance >> treatAsAsymmetricPair1 [
 
+	| logger |
+	logger := M946Logger new: LogLevel debug.
+	logger debug: thisContext.
 	(thisCell possibleNumbers intersection: otherCell possibleNumbers ) isEmpty
 		ifTrue: [ ^self ].
 	

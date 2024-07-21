@@ -309,7 +309,7 @@ SudokuBoard2 >> map:  sudokuItem [
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
 	sudokuItem class = SudokuCell ifTrue: [ 
-		sudokuItem possibleNumbers isEmpty 
+		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
 			ifTrue: [  
 				boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element.
 				self removePossibleNumbersOfRowAndCol: sudokuItem]
@@ -353,7 +353,7 @@ SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
 SudokuBoard2 >> mapSudokuCell: sudokuCell [
 	"
 	sudokuCellの座標で示されるセル値のクラスがSudokuPairCellの時、片方のペアの数字が決まると
-	もう一方の数字が自動的に決定する動作を実装した。
+	もう一方の数字が自動的に決定する動作を実装する。
 	"
 	| pairCell rIndex cIndex logger |
 	logger := M946Logger new: LogLevel info.

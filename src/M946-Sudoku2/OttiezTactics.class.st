@@ -102,15 +102,10 @@ OttiezTactics >> columnMarking: aBlock [
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
 			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
 			cell := (sudokuBoard getCellRow: y cellColumn: x) copy.
-			"予約セルが入っている場合があるため改めて数をセット"
-			cell element: aBlock verifyNumber.
-			cell clearPossibleNumbers.
-			aBlock markByVerticalCell: cell.
-			"
-			aBlock blockNumber = 1 ifTrue: [ 
-				sudokuBoard  serializeToFileNamed: 'fuel/board-getAlliedCellForMapping.fuel'.
-				 ].	
-			"
+			cell blockNumber = aBlock blockNumber ifFalse: [  
+				cell element: aBlock verifyNumber.
+				cell clearPossibleNumbers.
+				aBlock markByVerticalCell: cell].
 			logger debug: aBlock ]].
 ]
 
@@ -279,7 +274,7 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 OttiezTactics >> getAlliedCellForMapping: aBlock cell: aCell [
 	"
 	aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
-    配置可能な時はSudokuCellオブジェクとして返す。	
+    配置可能かもしれない時はSudokuCellオブジェクトの配列として返す。	
 	"
 	| cells logger |
 	logger := M946Logger new: LogLevel debug.
@@ -291,10 +286,11 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: aCell [
 		
 		].
 	logger debug: cells.
+	^cells
+	"
 	cells size = 1 ifFalse: [ ^self ].
 	^cells at: 1.
-	
-
+	"
 ]
 
 { #category : #logic }
@@ -314,6 +310,7 @@ OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
 	"ペアセル取得"
 	otherCell  := self getAlliedCellForMapping: actualBlock  cell: aCell.
 	alliedCell := nil.
+	logger debug: ('aCell     => {1}' format: {aCell asSimpleString}).
 	otherCell class = SudokuCell ifTrue: [ 
 		"ペアセルに入る数を確定する"
 		alliedCell := (BilateralAlliance thisCell: aCell otherCell: otherCell) determineTheNumber ].
@@ -451,11 +448,11 @@ OttiezTactics >> rowMarking: aBlock [
 			logger debug: ('x={1} y={2} verifyNumber={3}' format: {x . y . aBlock verifyNumber}).
 			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
 			cell := (sudokuBoard getCellRow: y cellColumn: x) copy.
-			"予約セルが入っている場合があるため改めて数をセット"
-			cell element: aBlock verifyNumber.
-			cell clearPossibleNumbers.
-			aBlock markByHorizontalCell: cell.
-			logger debug: aBlock]].
+			cell blockNumber = aBlock blockNumber ifFalse: [  
+				cell element: aBlock verifyNumber.
+				cell clearPossibleNumbers.
+				aBlock markByHorizontalCell: cell].		
+		logger debug: aBlock]].
 ]
 
 { #category : #logic }
