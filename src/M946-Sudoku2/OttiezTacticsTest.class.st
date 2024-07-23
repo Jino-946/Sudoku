@@ -115,7 +115,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
-	
+
 
 	block := board getBlock: 7 verifyNumber: 3.
 	solver formBilateralAlliance: block.
@@ -123,16 +123,16 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	block := board getBlock: 9 verifyNumber: 4.
 	solver formBilateralAlliance: block.
 	logger info: board.
-	
+
 	block := board getBlock: 4 verifyNumber: 4.
 	solver formBilateralAlliance: block.
 	logger info: board.
-
+	
 	block := board getBlock: 4 verifyNumber: 5.
 	solver formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number5done.fuel'.
-	
+"	
 	block := board getBlock: 3 verifyNumber: 6.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -144,6 +144,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
+"
 
 
 

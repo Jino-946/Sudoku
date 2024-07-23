@@ -13,3 +13,10 @@ ManifestM946Commons class >> ruleCodeCruftLeftInMethodsRuleV1FalsePositive [
 	<ignoreForCoverage>
 	^ #(#(#(#RGClassDefinition #(#M946Logger)) #'2024-06-07T13:31:15.892153+09:00') )
 ]
+
+{ #category : #'code-critics' }
+ManifestM946Commons class >> ruleSendsDifferentSuperRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#'M946FileLogger class' #named: #true)) #'2024-07-23T10:13:48.187847+09:00') )
+]

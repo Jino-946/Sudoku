@@ -103,7 +103,9 @@ BilateralAlliance >> treatAsOnePair [
 
 	thisCell possibleNumbers = otherCell possibleNumbers 
 		ifTrue: [ 
-			otherCell element: 0.
+			thisCell element = (thisCell possibleNumbers at: 1)
+				ifTrue: [ otherCell element: 0]
+				ifFalse: [ otherCell element: (thisCell possibleNumbers at: 1)].
 			otherCell clearPossibleNumbers.
 			^otherCell].
 	^self
