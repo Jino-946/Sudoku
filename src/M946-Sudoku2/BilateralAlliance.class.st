@@ -74,7 +74,7 @@ BilateralAlliance >> thisCell: sudokuCell [
 BilateralAlliance >> treatAsAsymmetricPair1 [
 
 	| logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946FileLogger new.
 	logger debug: thisContext.
 	(thisCell possibleNumbers intersection: otherCell possibleNumbers ) isEmpty
 		ifTrue: [ ^self ].

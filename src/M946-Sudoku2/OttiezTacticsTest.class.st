@@ -84,7 +84,8 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board solver block |
-	logger := M946Logger new: LogLevel info.
+
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 	
@@ -115,7 +116,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
-
+	"
 
 	block := board getBlock: 7 verifyNumber: 3.
 	solver formBilateralAlliance: block.
@@ -123,6 +124,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	block := board getBlock: 9 verifyNumber: 4.
 	solver formBilateralAlliance: block.
 	logger info: board.
+	
 
 	block := board getBlock: 4 verifyNumber: 4.
 	solver formBilateralAlliance: block.
@@ -132,7 +134,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number5done.fuel'.
-"	
+
 	block := board getBlock: 3 verifyNumber: 6.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -144,7 +146,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
-"
+	"
 
 
 
@@ -374,10 +376,11 @@ OttiezTacticsTest >> testN3Block5OnePair3 [
 	6分26秒から
 	"
 	| logger  board solver block |
+	M946FileLogger clearLog.
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
-
+	(M946FileLogger new) clearLog.
 	board := FLMaterializer new 
         filePath: 'fuel/n3Block1AutoFillPair5.fuel';
         materializeRoot .

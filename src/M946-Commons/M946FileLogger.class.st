@@ -28,6 +28,14 @@ Class {
 	#category : #'M946-Commons-Logger'
 }
 
+{ #category : #logging }
+M946FileLogger class >> clearLog [ 
+
+	| logger |
+	logger := self new.
+	logger clearLog.
+]
+
 { #category : #'instance creation' }
 M946FileLogger class >> named: pathToLogFile [
 

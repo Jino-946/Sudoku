@@ -300,7 +300,7 @@ SudokuBlock2 >> getPairCellsFromDifferentCells: blankCells [
 	2つのブランクセルがSudokuPairCellとSudokuCellのインスタンスが混在している時の処理
 	"
 	| cell pairCell resultArray pairCell2 logger |
-	logger := M946Logger new: LogLevel debug.
+	logger := M946FileLogger new.
 	logger debug: thisContext.
 	resultArray := Array new: 2.
 	(blankCells at: 1) class = SudokuPairCell 
@@ -346,19 +346,8 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-	| logger |
-	logger := M946Logger new: LogLevel debug.
-	logger debug: thisContext.
-	logger debug: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'.
     (blockA2D asArray includes: number) ifTrue: [ ^true].
-"
-    sudokuCells := blockA2D asArray select: [ :item |
-        item class = SudokuCell and: [ item possibleNumbers includes: number]].
-    sudokuCells size > 1 ifTrue: [ 
-		logger debug: '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'.
-		logger debug: sudokuCells .
-		^true ].
-"
+
     ^false
 
 ]
@@ -458,13 +447,9 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
 	"
-	| logger |
-	logger := M946Logger new: LogLevel info.
-	logger debug: thisContext.
 	(self includes: aSudokuCell element) ifTrue: [ ^self ].
 	self blankCellsAsArray do: [ :blankCell | 
-		(blankCell x = aSudokuCell x) ifTrue: [ 
-			logger debug: blankCell .			
+		(blankCell x = aSudokuCell x) ifTrue: [ 		
 			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
 
 

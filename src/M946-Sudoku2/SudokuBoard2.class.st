@@ -95,7 +95,7 @@ SudokuBoard2 >> asString [
 			number class = SudokuCell ifTrue: [ number := number asSimpleString  ].
 			aStream nextPutAll: number asString; tab.
 			(separateIndices includes: colIndex)
-			ifTrue:[ aStream space; space; space]].
+			ifTrue:[ aStream tab "space; space; space"]].
 		aStream cr.
 		(separateIndices includes: rowIndex )
 		ifTrue: [ aStream  cr]
@@ -394,8 +394,8 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 	引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
 	possibleNumbersが空になったらあらためて0をセットする。
 	"
-	| sudokuCol logger |
-	logger := M946Logger new: LogLevel info.
+	| sudokuCol logger|
+	logger := M946FileLogger new.
 	logger debug: thisContext.
 	sudokuCol := self getSudokuColumn: sudokuCell x.
 	sudokuCol column do: [ :cell |
