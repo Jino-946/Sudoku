@@ -146,6 +146,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
 	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(9  4  5)"
 	| logger  solver board thisCell cell1 cell2 cell3  block candidates |
+	M946FileLogger clearLog.
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
@@ -186,7 +187,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2#($13 $3 $1) -> #(3 0 1)"
 	| logger  solver board thisCell cell2 cell3 allies block candidates |
-	logger := M946Logger new: LogLevel info.
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -208,6 +209,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2 [
 	cell3 possibleNumbers add: 3.
 	board boardA2D at: 5 at: 5 put: cell3.
 	logger info: board .
+	board serializeToFileNamed: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel'.
 	
 	"ブロック5 列2  検証数字3  #($13 $3 $1) -> #(3 0 1)"
 	block := board getBlock: 5 verifyNumber: 3.

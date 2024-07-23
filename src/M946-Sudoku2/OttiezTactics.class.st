@@ -224,7 +224,7 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
 	nextBlock := self.
 	blankCells size = 1 ifTrue:[ 
-		nextBlock := self getNextBlcokOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
+		nextBlock := self getNextBlockOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
 	blankCells size = 2 ifTrue: [ 
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
@@ -294,36 +294,27 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: aCell [
 ]
 
 { #category : #logic }
-OttiezTactics >> getNextBlcokOfSingleBlankCell: aBlock cell: aCell [
+OttiezTactics >> getNextBlockOfAsymmetricPair: aBlock thisCell: thisCell cells: otherCells [
 	"
-	入る数字が決まったセルをsudokuBoardにマップする。
-	入る数字が決まったセルが2国同盟で、かつもう一方のセルに入る数が
-    決まった時はsudokuBoardにマップする。
+
 	次の検証対象となるsudokuBlockを返す。
 	"
-	| nextBlock logger alliedCell otherCell actualBlock|
+	| nextBlock logger alliedCell |
 	logger := M946FileLogger new.
 	logger debug: thisContext.	
-	aCell element: aBlock verifyNumber.
-	"現在のsudokuBoardのブロックを再取得する"
-	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
-	"ペアセル取得"
-	otherCell  := self getAlliedCellForMapping: actualBlock  cell: aCell.
+	logger debug: ('thisCell => {1}' format: {thisCell} ).	
 	alliedCell := nil.
-	logger debug: ('aCell     => {1}' format: {aCell asSimpleString}).
-	otherCell class = SudokuCell ifTrue: [ 
-		"ペアセルに入る数を確定する"
-		alliedCell := (BilateralAlliance thisCell: aCell otherCell: otherCell) determineTheNumber ].
-	"
-	ペアセルに入る数を決めるにはaCellのpossibleNumbersが必要なため
-	aCellのpossibleNumbersをクリアするのはalliedCellを取得後でなければならない。
-	順番を厳守!!
-	"
-	aCell clearPossibleNumbers .
-	sudokuBoard map: aCell.
-	alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
-	self checkTenpai: aBlock cell: aCell.
-	nextBlock := self findNextBlock: aBlock singleCell: aCell.
+	otherCells do: [ :otherCell |
+		otherCell class = SudokuCell ifTrue: [ 
+			"ペアセルに入る数を確定する"
+			logger debug: ('otherCell => {1}' format: {otherCell} ).
+			alliedCell := (BilateralAlliance thisCell: thisCell  otherCell: otherCell) determineTheNumber ].
+			logger debug: ('alliedCell => {1}' format: {alliedCell} ).
+			alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ]].
+	thisCell clearPossibleNumbers .
+	sudokuBoard map: thisCell.
+	self checkTenpai: aBlock cell: thisCell.
+	nextBlock := self findNextBlock: aBlock singleCell: thisCell.
 	logger debug: 'next block is ....'.
 	logger debug: nextBlock.
 	^nextBlock.
@@ -349,6 +340,42 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 	logger debug: nextBlock.
 	
 	^nextBlock 
+]
+
+{ #category : #logic }
+OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
+	"
+	入る数字が決まったセルをsudokuBoardにマップする。
+	1)入る数字が決まったセルが2国同盟で、かつもう一方のセルに入る数が
+      決まった時はsudokuBoardにマップする。
+    2)入る数字が決まったセルが非対称ペアで、getNextBlockOfAsymmetricPair:thisCell:cells: により
+      セルに入る数が決まった時はsudokuBoardにマップする。
+	次の検証対象となるsudokuBlockを返す。
+	"
+	| nextBlock logger alliedCell otherCells actualBlock  |
+	logger := M946FileLogger new.
+	logger debug: thisContext.	
+	aCell element: aBlock verifyNumber.
+	"現在のsudokuBoardのブロックを再取得する"
+	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
+	"ペアセル取得"
+	otherCells  := self getAlliedCellForMapping: actualBlock  cell: aCell.
+	otherCells size = 2 ifTrue: [ 
+		nextBlock := self getNextBlockOfAsymmetricPair: aBlock thisCell: aCell cells: otherCells.
+		nextBlock class = SudokuBlock2 ifTrue: [ ^nextBlock ]
+	].	
+	alliedCell := nil.
+	(otherCells size = 1 and: [ (otherCells at: 1) class = SudokuCell]) ifTrue: [ 
+		"ペアセルに入る数を確定する"
+		alliedCell := (BilateralAlliance thisCell: aCell otherCell: (otherCells at: 1)) determineTheNumber ].
+		alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
+	aCell clearPossibleNumbers .
+	sudokuBoard map: aCell.
+	self checkTenpai: aBlock cell: aCell.
+	nextBlock := self findNextBlock: aBlock singleCell: aCell.
+	logger debug: 'next block is ....'.
+	logger debug: nextBlock.
+	^nextBlock.
 ]
 
 { #category : #logic }

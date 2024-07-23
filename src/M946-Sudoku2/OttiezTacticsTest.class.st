@@ -276,6 +276,36 @@ OttiezTacticsTest >> testGetAlliedCellForMappingCell [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
+	"
+	BilateralAllianceTest>>testDetermineTheNumberBlock5Col2に対応する結合テスト
+	"
+	| logger solver board block blankCells thisCell |
+	logger := M946FileLogger new: LogLevel info.
+	logger clearLog .
+	logger info: thisContext.
+	
+	board := FLMaterializer new 
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
+        materializeRoot .
+	logger info: board.
+	solver := OttiezTactics new: board .
+	thisCell  := SudokuCell row: 4 column: 5 element: 3.
+	thisCell possibleNumbers add: 1.
+	thisCell possibleNumbers add: 3. 
+	
+	block := board getBlock: 5 verifyNumber: 3.
+	blankCells := solver getAlliedCellForMapping: block cell: thisCell.
+	solver getNextBlockOfAsymmetricPair: block thisCell: thisCell  cells: blankCells .
+	logger info: board.
+	
+	self assert: (board boardA2D at: 5 at: 5 ) equals: 0.
+	self assert: (board boardA2D at: 5 at: 5 ) equals: 0.
+	self assert: (board boardA2D at: 6 at: 5 ) equals: 1.
+
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	| logger task board solver block blankCells nextBlock|
