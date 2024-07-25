@@ -299,7 +299,7 @@ OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
 	solver getNextBlockOfAsymmetricPair: block thisCell: thisCell  cells: blankCells .
 	logger info: board.
 	
-	self assert: (board boardA2D at: 5 at: 5 ) equals: 0.
+	self assert: (board boardA2D at: 4 at: 5 ) equals: 3.
 	self assert: (board boardA2D at: 5 at: 5 ) equals: 0.
 	self assert: (board boardA2D at: 6 at: 5 ) equals: 1.
 

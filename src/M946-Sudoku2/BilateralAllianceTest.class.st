@@ -8,29 +8,16 @@ Class {
 BilateralAllianceTest >> testDetermineTheNumberBlock2Row3 [
 	"ワンペアで片方のセルに入る数字が決まったケース"
 	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
-	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates expected |
-	logger := M946Logger new: LogLevel info.
+	| logger  solver board thisCell  allies block candidates expected |
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
-
-	"ボードの初期化"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
+	logger info: board.
 	solver := OttiezTactics new: board.
-	cell1  := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1 .
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-	logger info: board .
+
 	
 	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
 	thisCell := board boardA2D at: 3 at: 4.
@@ -53,29 +40,16 @@ BilateralAllianceTest >> testDetermineTheNumberBlock2Row3 [
 BilateralAllianceTest >> testDetermineTheNumberBlock4Col3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
-	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates expected |
-	logger := M946Logger new: LogLevel info.
+	| logger  solver board thisCell  allies block candidates expected |
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
-	"ボードの初期化   他のテストと盤面を統一するためブロック5を修正"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
+	logger info: board.
 	solver := OttiezTactics new: board.
-	cell1  := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1 .
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-	logger info: board .
 	
 	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
 	thisCell := board boardA2D at: 5 at: 3.
@@ -100,7 +74,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
 	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates expected |
-	logger := M946Logger new: LogLevel info.
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -145,29 +119,17 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
 BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
 	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(9  4  5)"
-	| logger  solver board thisCell cell1 cell2 cell3  block candidates |
+	| logger  solver board thisCell  block candidates |
 	M946FileLogger clearLog.
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
-	"ボードの初期化  他のテストと盤面を統一するためブロック5を修正"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
+	logger info: board.	
 	solver := OttiezTactics new: board.
-	cell1  := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1 .
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
 
 	"ブロック4 列3#($5 $4 $45) -> #(9  4  5)"
 	thisCell := board boardA2D at: 4 at: 3.
@@ -232,25 +194,15 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2 [
 BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
-	| logger  solver board thisCell cell2 cell3 allies block candidates |
+	| logger  solver board thisCell  allies block candidates |
 	logger := M946Logger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
-	"ボードの初期化 他のテストと盤面を統一するためブロック5を修正"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
-	solver := OttiezTactics new: board.
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-
+	logger info: board.
 	
 	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
 	thisCell  := SudokuCell row: 4 column: 5 element: 1	.
@@ -258,7 +210,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
 	thisCell possibleNumbers add: 3. 
 	board boardA2D at: 4 at: 5 put: thisCell .
 	logger info: board .
-	
+	solver := OttiezTactics new: board.
 
 	
 	block := board getBlock: 5 verifyNumber: 1.
@@ -281,30 +233,22 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
 BilateralAllianceTest >> testDetermineTheNumberBlock5Row2 [
 	"ツーペアで1つのセルに入る数字が決まったケース"
 	"ブロック5 行2#($26 $3 $26) -> #(6 $3 2)"
-	| logger  solver board thisCell cell2 cell3 allies block candidates |
-	logger := M946Logger new: LogLevel info.
+	| logger  solver board thisCell allies block candidates |
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
 	"ボードの初期化  他のテストと盤面を統一するためブロック5を修正"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
+	logger info: board.
+	
 	solver := OttiezTactics new: board.
 	thisCell  := SudokuCell row: 4 column: 5 element: 3.
 	thisCell possibleNumbers add: 1.
 	thisCell possibleNumbers add: 3. 
 	board boardA2D at: 4 at: 5 put: thisCell .
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-	logger info: board .
-	
 	
 	"ブロック5 行2#($26 0 $26) -> #(6 0 2)"
 	thisCell := board boardA2D at: 5 at: 6.
@@ -329,30 +273,16 @@ BilateralAllianceTest >> testDetermineTheNumberBlock9Row1 [
 	 行1は4のワンペアだが3@1セルに9が入ったと仮定すると
     1@1セルは4が入ることが確定する。
 	ブロック9 行1#($4  0  $4) -> #(4  0  9)"
-	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates |
-	logger := M946Logger new: LogLevel info.
+	| logger  solver board thisCell  allies block candidates |
+	logger := M946FileLogger new: LogLevel info.
 	logger clearLog .
 	logger info: thisContext.
 
-	"ボードの初期化  他のテストと盤面を統一するためブロック5を修正"
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
-        materializeRoot .
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
+    materializeRoot .
+	logger info: board.
 	solver := OttiezTactics new: board.
-	cell1   := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1.
-	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-	logger info: board .
-	
 	
 	"ブロック9 行1#($4  0  $4) -> #(4  0  9)"
 	thisCell := board boardA2D at: 7 at: 9.
