@@ -40,6 +40,9 @@ BilateralAlliance class >> thisCell: cell1 otherCell: cell2 [
 { #category : #logic }
 BilateralAlliance >> determineTheNumber [
 
+	| logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 	(thisCell possibleNumbers isEmpty or: [ otherCell possibleNumbers isEmpty ])
 		ifTrue: [ ^self ].
 	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers  size = 1])

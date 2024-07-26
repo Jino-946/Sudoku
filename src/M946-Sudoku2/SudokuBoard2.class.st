@@ -165,6 +165,27 @@ SudokuBoard2 >> completed [
 	^ true
 ]
 
+{ #category : #logic }
+SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
+	"
+	同一ブロックにsudokuCellのワンペアのもう一方のセル
+	がある場合はもう一方のセルの値を確定させる。
+	"
+	| block cells pairCell logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
+	logger debug: sudokuCell.
+	block := self getBlock: sudokuCell blockNumber .
+	cells := block blockA2D asArray select: [ :cell |
+		 cell class = SudokuCell 
+			and: [ cell ~= sudokuCell
+				and: [ cell possibleNumbers size = 1
+					and: [  cell possibleNumbers = sudokuCell possibleNumbers]]]] .
+	cells size = 1 ifFalse: [ ^self ].
+	pairCell := cells at: 1.
+	self boardA2D at: pairCell y at: pairCell x put: (pairCell possibleNumbers at: 1 ).
+]
+
 { #category : #creation }
 SudokuBoard2 >> getBlock: blockNumber [
 	"
@@ -308,6 +329,9 @@ SudokuBoard2 >> map:  sudokuItem [
 	"
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
+	| logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 	sudokuItem class = SudokuCell ifTrue: [ 
 		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
 			ifTrue: [  
@@ -391,8 +415,10 @@ SudokuBoard2 >> printOn: aStream [
 { #category : #removing }
 SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 	"
-	引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
-	possibleNumbersが空になったらあらためて0をセットする。
+	1)引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
+	  possibleNumbersが空になったらあらためて0をセットする。
+	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
+      がある場合はもう一方のセルの値を確定させる。 
 	"
 	| sudokuCol logger|
 	logger := M946FileLogger new.
@@ -402,8 +428,8 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 		cell class = SudokuCell 
 			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
-						cell possibleNumbers remove: (sudokuCell element). 
-						logger debug: cell.
+				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
+				"1)"	cell possibleNumbers remove: (sudokuCell element). 
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			
@@ -413,8 +439,10 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 { #category : #removing }
 SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 	"
-	引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
-	possibleNumbersが空になったらあらためて0をセットする。
+	1)引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
+	  possibleNumbersが空になったらあらためて0をセットする。
+	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
+     がある場合はもう一方のセルの値を確定させる。 	
 	"
 	| sudokuRow  |
 	sudokuRow := self getSudokuRow: sudokuCell y.
@@ -422,7 +450,8 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 		cell class = SudokuCell 
 			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
-						cell possibleNumbers remove: (sudokuCell element). 
+				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
+			    "1)"	cell possibleNumbers remove: (sudokuCell element). 
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			
