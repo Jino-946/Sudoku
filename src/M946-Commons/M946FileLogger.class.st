@@ -22,18 +22,29 @@ logger debug: thisContext.
 Class {
 	#name : #M946FileLogger,
 	#superclass : #TinyLogger,
-	#instVars : [
+	#classVars : [
 		'logLevel'
 	],
 	#category : #'M946-Commons-Logger'
 }
 
-{ #category : #logging }
-M946FileLogger class >> clearLog [ 
+{ #category : #'class initialization' }
+M946FileLogger class >> initialize [ 
 
-	| logger |
-	logger := self new.
-	logger clearLog.
+	logLevel := LogLevel debug 
+	
+]
+
+{ #category : #accessing }
+M946FileLogger class >> logLevel [
+
+	^logLevel 
+]
+
+{ #category : #logging }
+M946FileLogger class >> logLevel: level [
+
+	logLevel := level.
 ]
 
 { #category : #'instance creation' }
@@ -48,18 +59,8 @@ M946FileLogger class >> named: pathToLogFile [
 		aStream << ' '.
 		timestamp asTime print24: true on: aStream ].
 	
-	logger logLevel: LogLevel debug.
 	
 	^ logger 
-]
-
-{ #category : #'instance creation' }
-M946FileLogger class >> named: pathToLogFile logLevel: level [
-
-	| logger |
-	logger := self named: pathToLogFile .
-	logger logLevel: level.
-	^logger
 ]
 
 { #category : #'instance creation' }
@@ -71,35 +72,34 @@ M946FileLogger class >> new [
 ]
 
 { #category : #'instance creation' }
-M946FileLogger class >> new: aLogLevel [
+M946FileLogger class >> new: fileName [
 
 	| logger |
-	logger := self new.
-	logger logLevel: aLogLevel.
-	
+	logger := self named: fileName.
 	^logger
 ]
 
 { #category : #private }
 M946FileLogger >> debug: anObject [
 
-	logLevel = LogLevel debug ifTrue: [ self record: ('debug: {1}' format: {anObject})]
+	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
+		ifTrue: [ self record: ('debug: {1}' format: {anObject})]
 ]
 
 { #category : #'accessing - structure variables' }
 M946FileLogger >> info: anObject [
 
-	logLevel = LogLevel info ifTrue: [ self record: ('info: {1}' format: {anObject})]
+	self logLevel ~= LogLevel off ifTrue: [ self record: ('info: {1}' format: {anObject})]
 ]
 
 { #category : #accessing }
 M946FileLogger >> logLevel [
 
-	^logLevel
+	^self class  logLevel
 ]
 
-{ #category : #logging }
-M946FileLogger >> logLevel: aLogLevel [
+{ #category : #tracing }
+M946FileLogger >> trace: anObject [
 
-	logLevel := aLogLevel 
+	self logLevel = LogLevel trace ifTrue: [ self record: ('trace: {1}' format: {anObject})]
 ]

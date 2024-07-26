@@ -29,14 +29,26 @@ Class {
 	#category : #'M946-Commons-Enum'
 }
 
-{ #category : #debugging }
+{ #category : #'instance creation' }
 LogLevel class >> debug [
 
 	^self new value: #debug
 ]
 
-{ #category : #accessing }
+{ #category : #'instance creation' }
 LogLevel class >> info [
 
 	^self new value: #info
+]
+
+{ #category : #'instance creation' }
+LogLevel class >> off [
+
+	^self new value: #off
+]
+
+{ #category : #'instance creation' }
+LogLevel class >> trace [
+
+	self new value: #trace
 ]

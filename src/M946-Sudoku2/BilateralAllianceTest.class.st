@@ -9,7 +9,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock2Row3 [
 	"ワンペアで片方のセルに入る数字が決まったケース"
 	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
 	| logger  solver board thisCell  allies block candidates expected |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 	board := FLMaterializer new 
@@ -41,7 +43,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
 	| logger  solver board thisCell  allies block candidates expected |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -74,7 +78,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
 	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates expected |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -120,8 +126,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
 	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(9  4  5)"
 	| logger  solver board thisCell  block candidates |
-	M946FileLogger clearLog.
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946Logger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -149,7 +156,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2#($13 $3 $1) -> #(3 0 1)"
 	| logger  solver board thisCell cell2 cell3 allies block candidates |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -195,7 +204,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
 	| logger  solver board thisCell  allies block candidates |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -231,10 +242,19 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
 
 { #category : #tests }
 BilateralAllianceTest >> testDetermineTheNumberBlock5Row2 [
-	"ツーペアで1つのセルに入る数字が決まったケース"
-	"ブロック5 行2#($26 $3 $26) -> #(6 $3 2)"
+	"ツーペアで1つのセルに入る数字が決まったケース
+	 ブロック5 セル3@2に2が入ったと仮定する
+	
+	 求める結果
+	 --------------------------------------
+	 ブロック5 行2#($26 $3 $26) -> #(6 $3 2)
+	 ブロック2 行3#($2  0  $2)  -> #(2 0  0)
+	 ブロック8 行3#($6  0  $6)  -> #(0 0  6)	 
+	"
 	| logger  solver board thisCell allies block candidates |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -261,6 +281,13 @@ BilateralAllianceTest >> testDetermineTheNumberBlock5Row2 [
 	board map: allies.
 	thisCell clearPossibleNumbers .
 	board map: thisCell.
+	self assert: (board boardA2D at: 5 at: 6) equals: 2.
+	self assert: (board boardA2D at: 5 at: 4) equals: 6.
+	self assert: (board boardA2D at: 3 at: 6) equals: 0.
+	self assert: (board boardA2D at: 3 at: 4) equals: 2.
+	self assert: (board boardA2D at: 7 at: 6) equals: 6.
+	self assert: (board boardA2D at: 7 at: 4) equals: 0.
+	
 	logger info: board.
 	
 		
@@ -274,7 +301,9 @@ BilateralAllianceTest >> testDetermineTheNumberBlock9Row1 [
     1@1セルは4が入ることが確定する。
 	ブロック9 行1#($4  0  $4) -> #(4  0  9)"
 	| logger  solver board thisCell  allies block candidates |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 

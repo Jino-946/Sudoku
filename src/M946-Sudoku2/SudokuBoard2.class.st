@@ -380,7 +380,7 @@ SudokuBoard2 >> mapSudokuCell: sudokuCell [
 	もう一方の数字が自動的に決定する動作を実装する。
 	"
 	| pairCell rIndex cIndex logger |
-	logger := M946Logger new: LogLevel info.
+	logger := M946FileLogger new.
 	logger debug: thisContext.
 	logger debug: (boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class.
 	(boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class= SudokuPairCell ifTrue: [ 

@@ -7,7 +7,8 @@ Class {
 { #category : #tests }
 OttiezTacticsTest >> test2PairTenpai [
 	| logger  board solver block  tsumoCell |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -28,7 +29,8 @@ OttiezTacticsTest >> test2PairTenpai [
 OttiezTacticsTest >> testCheckForTwoPairs [
 
 	| logger  board solver block  newBlankCells expected |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -59,7 +61,9 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	第1列の２つのブランクセルを埋める
 	"
 	| logger  board solver block sudokuColumn column |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -84,8 +88,9 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board solver block |
+	M946FileLogger logLevel: LogLevel debug.
 
-	logger := M946FileLogger new: LogLevel info.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 	
@@ -171,7 +176,9 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
-	logger := M946Logger new: LogLevel debug.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger debug: thisContext.
 	
@@ -243,7 +250,9 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 { #category : #tests }
 OttiezTacticsTest >> testGetAlliedCellForMappingCell [
 	| logger  solver board cell1 cell2 cell3  block candidates |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -281,7 +290,8 @@ OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
 	BilateralAllianceTest>>testDetermineTheNumberBlock5Col2に対応する結合テスト
 	"
 	| logger solver board block blankCells thisCell |
-	logger := M946FileLogger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 	
@@ -309,7 +319,9 @@ OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
 OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	| logger task board solver block blankCells nextBlock|
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 	
@@ -347,7 +359,9 @@ OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 OttiezTacticsTest >> testLetsRetsme [
 
 	| logger  board solver  |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -378,7 +392,9 @@ OttiezTacticsTest >> testLetsRetsme [
 OttiezTacticsTest >> testN3Block1AutoFillPair5 [
 
 	| logger  board solver block |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -406,8 +422,9 @@ OttiezTacticsTest >> testN3Block5OnePair3 [
 	6分26秒から
 	"
 	| logger  board solver block |
-	M946FileLogger clearLog.
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 	(M946FileLogger new) clearLog.
