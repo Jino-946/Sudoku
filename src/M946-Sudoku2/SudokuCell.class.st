@@ -163,6 +163,12 @@ SudokuCell >> isPairCell: otherCell [
 ]
 
 { #category : #'as yet unclassified' }
+SudokuCell >> notSameCoordinates: aSudokuCell [
+
+	^self x ~= aSudokuCell x or: [ self y ~= aSudokuCell y ]
+]
+
+{ #category : #'as yet unclassified' }
 SudokuCell >> pairNumbers: otherCell [
 
 	^self possibleNumbers intersection: otherCell possibleNumbers
