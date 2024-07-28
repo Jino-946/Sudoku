@@ -62,7 +62,6 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	"
 	| logger  board solver block sudokuColumn column |
 	M946FileLogger logLevel: LogLevel debug.
-
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
@@ -88,7 +87,7 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board solver block |
-	M946FileLogger logLevel: LogLevel debug.
+	M946FileLogger logLevel: LogLevel off.
 
 	logger := M946FileLogger new.
 	logger clearLog .
@@ -121,7 +120,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
-	"
+	
 
 	block := board getBlock: 7 verifyNumber: 3.
 	solver formBilateralAlliance: block.
@@ -129,8 +128,9 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	block := board getBlock: 9 verifyNumber: 4.
 	solver formBilateralAlliance: block.
 	logger info: board.
-	
 
+
+"
 	block := board getBlock: 4 verifyNumber: 4.
 	solver formBilateralAlliance: block.
 	logger info: board.
@@ -151,8 +151,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
-	"
-
+"
 
 
 
@@ -249,39 +248,90 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 { #category : #tests }
 OttiezTacticsTest >> testGetAlliedCellForMappingCell [
-	| logger  solver board cell1 cell2 cell3  block candidates |
+	"ブロック4列3における非対称ペアのテスト"
+	| logger  solver board thisCell cell1 cell2  block candidates |
 	M946FileLogger logLevel: LogLevel debug.
-
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
+
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
-	logger info: board .
 	solver := OttiezTactics new: board.
-	cell1  := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1 copy.
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2 copy.
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3 copy.
 	logger info: board.
 	
-	block := board getBlock: 5 verifyNumber: 3.
-	candidates := solver getAlliedCellForMapping: block cell: cell1.
+	cell1 := nil.
+	cell2 := nil.
+	
+	logger info: 'テスト1 セル3@4 => 5 '.
+	thisCell := board getCellRow: 4 cellColumn: 3.
+	thisCell element: 5.
+	
+	block := board getBlock: 4 verifyNumber: 5.
+	candidates := solver getAlliedCellForMapping: block cell: thisCell.
+	logger info: candidates .
+	self assert: candidates size equals: 1.
+	cell1 := board getCellRow: 6 cellColumn: 3.
+	self assert: (candidates at: 1) equals: cell1.
+	
+	logger info: 'テスト2 セル3@5 => 4 '.	
+	thisCell := board getCellRow: 5 cellColumn: 3.
+	thisCell element: 4.
+	
+	block := board getBlock: 4 verifyNumber: 4.
+	candidates := solver getAlliedCellForMapping: block cell: thisCell.
+	logger info: candidates .
+	self assert: candidates size equals: 1.
+	cell1 := board getCellRow: 6 cellColumn: 3.
+	self assert: (candidates at: 1) equals: cell1.
+		
+	logger info: 'テスト3 セル3@6 => 4 '.
+	" テスト3 セル 3@6 => 4  "
+	thisCell := board getCellRow: 6 cellColumn: 3.
+	thisCell element: 4.
+	
+	block := board getBlock: 4 verifyNumber: 4.
+	candidates := solver getAlliedCellForMapping: block cell: thisCell.
 	logger info: candidates .
 	self assert: candidates size equals: 2.
-	self assert: (candidates at: 1) equals: cell3.
-	self assert: (candidates at: 2) equals: cell2.
+
+	cell1 := board getCellRow: 4 cellColumn: 3. 
+	self assert: (candidates at: 1) equals: cell1.	
+	cell2 := board getCellRow: 5 cellColumn: 3. 
+	self assert: (candidates at: 2) equals: cell2.	
+
+	logger info: 'テスト4 セル3@6 => 5 '.	 
+	thisCell := board getCellRow: 6 cellColumn: 3.
+	thisCell element: 5.
 	
+	block := board getBlock: 4 verifyNumber: 4.
+	candidates := solver getAlliedCellForMapping: block cell: thisCell.
+	logger info: candidates .
+	self assert: candidates size equals: 2.
+
+	cell1 := board getCellRow: 4 cellColumn: 3. 
+	self assert: (candidates at: 1) equals: cell1.	
+	cell2 := board getCellRow: 5 cellColumn: 3. 
+	self assert: (candidates at: 2) equals: cell2.	
+
+	logger info: 'テスト5 セル3@4 => 9'.	 
+	thisCell := board getCellRow: 4 cellColumn: 3.
+	thisCell element: 9.
 	
+	block := board getBlock: 4 verifyNumber: 9.
+	candidates := solver getAlliedCellForMapping: block cell: thisCell.
+	logger info: candidates .
+	self assert: candidates size equals: 2.
+
+	cell1 := board getCellRow: 5 cellColumn: 3. 
+	self assert: (candidates at: 1) equals: cell1.	
+	cell2 := board getCellRow: 6 cellColumn: 3. 
+	self assert: (candidates at: 2) equals: cell2.	
+	 						
 	
+
 ]
 
 { #category : #tests }

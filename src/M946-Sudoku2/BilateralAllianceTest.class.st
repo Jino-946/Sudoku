@@ -75,33 +75,24 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3 [
 
 { #category : #tests }
 BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
-	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
-	"ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
-	| logger  solver board thisCell cell1 cell2 cell3 allies block candidates expected |
+	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース
+	 ブロック4 セル3@1 => 5
+	 ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
+	| logger  solver board thisCell  allies block candidates expected |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
-	"ボードの初期化  他のテストと盤面を統一するためブロック5を修正"
+
 	board := FLMaterializer new 
-        filePath: 'fuel/N3Block5_OnePair3_OnePair1.fuel';
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
 	solver := OttiezTactics new: board.
-	cell1  := SudokuCell row: 4 column: 5 element: 3.
-	cell1 possibleNumbers add: 1.
-	cell1 possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: cell1 .
+	logger info: board.
 	
-	cell2 := SudokuCell row: 6 column: 5 element: 0.
-	cell2 possibleNumbers add: 1.
-	board boardA2D at: 6 at: 5 put: cell2.
-	
-	cell3 := SudokuCell row: 5 column: 5 element: 0.
-	cell3 possibleNumbers add: 3.
-	board boardA2D at: 5 at: 5 put: cell3.
-	logger info: board .
+
 
 	"ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
 	thisCell := board boardA2D at: 4 at: 3.
@@ -128,7 +119,7 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
 	| logger  solver board thisCell  block candidates |
 	M946FileLogger logLevel: LogLevel debug.
 
-	logger := M946Logger new.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
@@ -137,18 +128,19 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
         materializeRoot .
 	logger info: board.	
 	solver := OttiezTactics new: board.
+	logger info: board .	
+	
 
 	"ブロック4 列3#($5 $4 $45) -> #(9  4  5)"
 	thisCell := board boardA2D at: 4 at: 3.
 	thisCell element: 9.
-	logger info: board .	
-	
 	block := board getBlock: 4 verifyNumber: 9.
-	candidates :=  solver getAllianceCellsAfterMark: block.
-	
+	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
 	logger info: candidates.
+
+	self assert: candidates size equals: 2.
 	
-	self error: 'not completed!!'
+
 ]
 
 { #category : #tests }
