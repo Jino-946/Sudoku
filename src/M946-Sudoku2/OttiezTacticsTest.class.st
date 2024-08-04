@@ -335,6 +335,46 @@ OttiezTacticsTest >> testGetAlliedCellForMappingCell [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testGetAlliedCellForMappingNoPairNumberCell [
+	| logger  ottie board thisCell  block candidates |
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+
+
+	board := FLMaterializer new 
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 4 verifyNumber: 9.
+	logger info: block .
+	thisCell := (board getCellRow: 5 cellColumn: 3) copy.
+	thisCell element: 9.
+	candidates := ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
+	thisCell clearPossibleNumbers .
+	logger info: candidates.
+	self assert: (candidates at: 1) equals: thisCell.
+	self assert: (candidates at: 2) equals: (SudokuCell row: 6  column: 3 element: 4).
+	self assert: (candidates at: 3) equals: (SudokuCell row: 4  column: 3 element: 5).
+	
+	logger info: board.
+	block := board getBlock: 4 verifyNumber: 9.
+	logger info: block .	
+	thisCell := (board getCellRow: 6 cellColumn: 3) copy.
+	thisCell element: 9.
+	candidates := ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
+	thisCell clearPossibleNumbers .
+	logger info: candidates.
+	self assert: (candidates at: 1) equals: thisCell.
+	self assert: (candidates at: 2) equals: (SudokuCell row: 4  column: 3 element: 5).
+	self assert: (candidates at: 3) equals: (SudokuCell row: 5  column: 3 element: 4).
+
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
 	"
 	BilateralAllianceTest>>testDetermineTheNumberBlock5Col2に対応する結合テスト

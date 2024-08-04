@@ -115,8 +115,8 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
 { #category : #tests }
 BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
-	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(9  4  5)"
-	| logger  solver board thisCell  block candidates |
+	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(5  9  4)"
+	| logger  ottie board thisCell  block candidates |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -127,18 +127,18 @@ BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
         filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
         materializeRoot .
 	logger info: board.	
-	solver := OttiezTactics new: board.
+	ottie := OttiezTactics new: board.
 	logger info: board .	
 	
 
-	"ブロック4 列3#($5 $4 $45) -> #(9  4  5)"
-	thisCell := board boardA2D at: 4 at: 3.
+	"ブロック4 列3#($5 $4 $45) -> #(5  9  4)"
+	thisCell := board boardA2D at: 5 at: 3.
 	thisCell element: 9.
 	block := board getBlock: 4 verifyNumber: 9.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
+	candidates :=  ottie getAlliedCellForMapping: block cell: thisCell.
 	logger info: candidates.
 
-	self assert: candidates size equals: 2.
+	self assert: candidates size equals: 3.
 	
 
 ]

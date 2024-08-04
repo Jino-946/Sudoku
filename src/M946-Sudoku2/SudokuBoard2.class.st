@@ -68,15 +68,15 @@ SudokuBoard2 >> _getBlock: rowStart at: colStart [
 
 
 	block blockA2D
-		at: 1 at: 1 put: (boardA2D  at: rs at: cs);
-		at: 1 at: 2 put: (boardA2D  at: rs at: cs + 1);
-		at: 1 at: 3 put: (boardA2D  at: rs at: cs + 2);
-		at: 2 at: 1 put: (boardA2D  at: rs + 1 at: cs);
-		at: 2 at: 2 put: (boardA2D  at: rs + 1 at: cs + 1);
-		at: 2 at: 3 put: (boardA2D  at: rs + 1 at: cs + 2);
-		at: 3 at: 1 put: (boardA2D  at: rs + 2 at: cs);
-		at: 3 at: 2 put: (boardA2D  at: rs + 2 at: cs + 1);
-		at: 3 at: 3 put: (boardA2D  at: rs + 2 at: cs + 2).
+		at: 1 at: 1 put: (boardA2D  at: rs at: cs) copy;
+		at: 1 at: 2 put: (boardA2D  at: rs at: cs + 1) copy;
+		at: 1 at: 3 put: (boardA2D  at: rs at: cs + 2) copy;
+		at: 2 at: 1 put: (boardA2D  at: rs + 1 at: cs) copy;
+		at: 2 at: 2 put: (boardA2D  at: rs + 1 at: cs + 1) copy;
+		at: 2 at: 3 put: (boardA2D  at: rs + 1 at: cs + 2) copy;
+		at: 3 at: 1 put: (boardA2D  at: rs + 2 at: cs) copy;
+		at: 3 at: 2 put: (boardA2D  at: rs + 2 at: cs + 1) copy;
+		at: 3 at: 3 put: (boardA2D  at: rs + 2 at: cs + 2) copy.
 
 	^ block
 ]
