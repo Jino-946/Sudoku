@@ -285,7 +285,7 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 			cells := aBlock blockA2D asArray select: [ :item |
 				item class = SudokuCell and: [ 
 					logger debug:  ( 'item => {1}' format: {item}).
-					item ~= thisCell and:[
+					(item notSameCoordinates: thisCell) and:[
 						(item possibleNumbers intersection: thisCell possibleNumbers ) isNotEmpty]]].	
 			logger debug: cells.
 			^cells]
