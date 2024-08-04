@@ -275,6 +275,8 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 	"
 	aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
     配置可能な時にSudokuCellオブジェクトの配列として返す。	
+	但し.非対称ペアセルの場合は getAlliedCellForMappingNoPairNumber:cell: の中でボードに
+	マッピングするのでSudokuCellオブジェクトの配列は返さない。
 	"
 	| cells logger |
 	logger := M946FileLogger new.
@@ -290,24 +292,22 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 			logger debug: cells.
 			^cells]
 		ifFalse: [ 
-			^self getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell]
+			self getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell]
 	
 ]
 
 { #category : #logic }
 OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 	"
-	aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
-    配置可能な時にSudokuCellオブジェクトの配列として返す。	
+	aBlockの中にaCellの非対称ペアナンバー(ペアセル)があり、自動的にボードに数が
+    配置可能な時にsudokuBoard にマップする。
 	ただしthisCellに入ることが確定した数字はペア数字以外の数字
 	"
-	| cells results logger |
+	| cells  logger |
 	logger := M946FileLogger new.
 	logger debug: thisContext.
-	results := OrderedCollection new.
 	cells := aBlock blockA2D asOrderedCollection select: [ :item |
 				item class = SudokuCell and: [ item notSameCoordinates: thisCell]].
-	logger debug: '========================'.
 	logger debug: ('thisCell => {1}' format:  {thisCell}).
 	logger debug: cells.
 	thisCell possibleNumbers size = 1 
@@ -321,7 +321,8 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 							ifTrue: [ 
 								(cells at: 2) element: ((cells at: 2) possibleNumbers at: 1).
 								(cells at: 1) clearPossibleNumbers .
-								(cells at: 2) clearPossibleNumbers ]]]]
+								(cells at: 2) clearPossibleNumbers.
+								sudokuBoard map: (cells at:1);map: (cells at: 2)]]]]
 		ifFalse:[
 			thisCell possibleNumbers size = 2
 				ifTrue: [ 
@@ -329,15 +330,15 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 						and: [ (cells at: 1) possibleNumbers size = 1
 							ifTrue: [ 
 								(cells at: 1) element: ((cells at: 1) possibleNumbers at: 1).
-								(cells at: 1) clearPossibleNumbers ]].
+								(cells at: 1) clearPossibleNumbers.
+								sudokuBoard map: (cells at: 1)]].
 					(thisCell possibleNumbers intersection: (cells at: 2) possibleNumbers ) isNotEmpty 
 						and: [ (cells at: 2) possibleNumbers size = 1
 							ifTrue: [ 
 								(cells at: 2) element: ((cells at: 2) possibleNumbers at: 1).
-								(cells at: 2) clearPossibleNumbers ]]]].
-		thisCell clearPossibleNumbers.
-		results add: thisCell; addAll: cells.
-		^results asArray.
+								(cells at: 2) clearPossibleNumbers. 
+								sudokuBoard map: (cells at: 2)]]]].
+
 ]
 
 { #category : #logic }

@@ -31,7 +31,7 @@ Class {
 { #category : #'class initialization' }
 M946FileLogger class >> initialize [ 
 
-	logLevel := LogLevel debug 
+	logLevel := LogLevel info
 	
 ]
 

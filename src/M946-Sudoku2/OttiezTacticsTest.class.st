@@ -336,7 +336,7 @@ OttiezTacticsTest >> testGetAlliedCellForMappingCell [
 
 { #category : #tests }
 OttiezTacticsTest >> testGetAlliedCellForMappingNoPairNumberCell [
-	| logger  ottie board thisCell  block candidates |
+	| logger  ottie board thisCell  block |
 	M946FileLogger logLevel: LogLevel debug.
 	logger := M946FileLogger new.
 	logger clearLog .
@@ -353,24 +353,29 @@ OttiezTacticsTest >> testGetAlliedCellForMappingNoPairNumberCell [
 	logger info: block .
 	thisCell := (board getCellRow: 5 cellColumn: 3) copy.
 	thisCell element: 9.
-	candidates := ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
+	ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
 	thisCell clearPossibleNumbers .
-	logger info: candidates.
-	self assert: (candidates at: 1) equals: thisCell.
-	self assert: (candidates at: 2) equals: (SudokuCell row: 6  column: 3 element: 4).
-	self assert: (candidates at: 3) equals: (SudokuCell row: 4  column: 3 element: 5).
+	board map: thisCell.
+	self assert: (board boardA2D at: 4 at: 3 ) equals: 5.
+	self assert: (board boardA2D at: 6 at: 3) equals: 4.
+	logger info: board.
 	
+	board := FLMaterializer new 
+        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := board getBlock: 4 verifyNumber: 9.
 	logger info: block .	
 	thisCell := (board getCellRow: 6 cellColumn: 3) copy.
 	thisCell element: 9.
-	candidates := ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
+	ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
 	thisCell clearPossibleNumbers .
-	logger info: candidates.
-	self assert: (candidates at: 1) equals: thisCell.
-	self assert: (candidates at: 2) equals: (SudokuCell row: 4  column: 3 element: 5).
-	self assert: (candidates at: 3) equals: (SudokuCell row: 5  column: 3 element: 4).
+	board map: thisCell.
+	self assert: (board boardA2D at: 4 at: 3 ) equals: 5.
+	self assert: (board boardA2D at: 5 at: 3) equals: 4.
+	logger info: board.
+
 
 ]
 
