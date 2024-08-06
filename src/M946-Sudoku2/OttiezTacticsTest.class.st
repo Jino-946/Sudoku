@@ -87,7 +87,7 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board solver block |
-	M946FileLogger logLevel: LogLevel off.
+	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
 	logger clearLog .
@@ -111,47 +111,54 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	board loadFromString: task.
 	solver := OttiezTactics new: board.
 	block := board getBlock: 6 verifyNumber: 1.
+	logger info: ('1st block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
-	logger info: (board getSudokuCell: 7@4).
 	
 
 	block := board getBlock: 2 verifyNumber: 2.
+	logger info: ('2nd block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
 	
 
 	block := board getBlock: 7 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	block := board getBlock: 9 verifyNumber: 4.
-	solver formBilateralAlliance: block.
-	logger info: board.
-
-
-"
-	block := board getBlock: 4 verifyNumber: 4.
+	logger info: ('3rd block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
+	block := board getBlock: 9 verifyNumber: 4.
+	logger info: ('4rh block => {1}' format: { block  }).
+	solver formBilateralAlliance: block.
+	logger info: board.
+	board serializeToFileNamed: 'fuel/formBilateralAllianceB4N4.fuel'.
+
+
+	block := board getBlock: 4 verifyNumber: 4.
+	logger info: ('5th block => {1}' format: { block  }).
+	solver formBilateralAlliance: block.
+	logger info: board.
+
 	block := board getBlock: 4 verifyNumber: 5.
+	logger info: ('6th block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number5done.fuel'.
 
 	block := board getBlock: 3 verifyNumber: 6.
+	logger info: ('7th block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number6done.fuel'.
 	
 	block := board getBlock: 7 verifyNumber: 7.
+	logger info: ('8th block => {1}' format: { block  }).
 	solver formBilateralAlliance: block.
 	logger info: board.
 	
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
 	
-"
 
 
 
@@ -169,6 +176,34 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 
 
 
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceB4N4 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	
+	board := FLMaterializer new 
+        filePath: 'fuel/formBilateralAllianceB4N4.fuel' ;
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 4 verifyNumber: 4.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	
+	block := board getBlock: 4 verifyNumber: 5.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
 ]
 
 { #category : #tests }

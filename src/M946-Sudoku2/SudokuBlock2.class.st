@@ -417,10 +417,14 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブランクセルを$Xでマークする。
 	"
-	(self includes: aSudokuCell element) ifTrue: [ ^self ].
+	| markedPoints |
+	markedPoints := OrderedCollection new.
+	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints  ].
 	self blankCellsAsArray do: [ :blankCell | 
 		(blankCell y = aSudokuCell y) ifTrue: [ 
-			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+			markedPoints add: blankCell x @ blankCell y.
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
+	^markedPoints
 
 
 ]
@@ -431,13 +435,17 @@ SudokuBlock2 >> markByNumberToMark: numberToMark [
 	ブランクセルに直交するSudokuRowとSudokuColumnを検査し
 	numberToMark があるときはブランクセルを$Xでマークする
 	"
-	(self includes: numberToMark) ifTrue: [ ^self ].
+	| markedPoints |
+	markedPoints := OrderedCollection new..
+	(self includes: numberToMark) ifTrue: [ ^markedPoints  ].
 	
 	self blankCellsAsArray do: [ :blankCell | 	| sudokuRow sudokuColumn |
 		sudokuRow := self rowsOnBoard  at: (self localY: blankCell y).
 		sudokuColumn := self colsOnBoard at: (self localX: blankCell x).
 		((sudokuRow includes: numberToMark) or: [ sudokuColumn includes: numberToMark  ]) ifTrue: [ 
-			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+			markedPoints add: blankCell x @ blankCell y.
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
+	^markedPoints 
 
 ]
 
@@ -447,10 +455,14 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
 	"
-	(self includes: aSudokuCell element) ifTrue: [ ^self ].
+	| markedPoints |
+	markedPoints := OrderedCollection new.
+	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints ].
 	self blankCellsAsArray do: [ :blankCell | 
 		(blankCell x = aSudokuCell x) ifTrue: [ 		
-			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]]
+			markedPoints add: blankCell x @ blankCell y.
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
+	^markedPoints 
 
 
 ]
