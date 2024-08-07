@@ -255,13 +255,13 @@ SudokuBlock2 >> get3Allies: blankCells [
 	
 	| cell1 cell2 cell3 cellAllies |
 	cellAllies := Array new: 3.
-	cell1 := (blankCells at: 1) copy.
+	cell1 := (blankCells at: 1) deepCopy.
 	(cell1 possibleNumbers includes: self verifyNumber)
 		ifFalse: [ cell1 possibleNumbers add: self verifyNumber  ].
-	cell2 := (blankCells at: 2) copy.
+	cell2 := (blankCells at: 2) deepCopy.
 	(cell2 possibleNumbers includes: self verifyNumber)
 		ifFalse: [ cell2 possibleNumbers add: self verifyNumber  ].
-	cell3 := (blankCells at: 3) copy.
+	cell3 := (blankCells at: 3) deepCopy.
 	(cell3 possibleNumbers includes: self verifyNumber)
 		ifFalse: [ cell3 possibleNumbers add: self verifyNumber  ].
 		

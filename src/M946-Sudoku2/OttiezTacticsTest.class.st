@@ -86,7 +86,7 @@ OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAlliance [
 
-	| logger task board solver block |
+	| logger task board ottie block |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -109,59 +109,55 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	solver := OttiezTactics new: board.
+	ottie := OttiezTactics new: board.
+	logger info: board.
 	block := board getBlock: 6 verifyNumber: 1.
 	logger info: ('1st block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance2.fuel'.
+	
+"
 	
 
-	block := board getBlock: 2 verifyNumber: 2.
-	logger info: ('2nd block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
-	logger info: board.
-	
-	
-
-	block := board getBlock: 7 verifyNumber: 3.
+	block := board getBlock: 7 verifyNumber: 2.
 	logger info: ('3rd block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	
 	block := board getBlock: 9 verifyNumber: 4.
 	logger info: ('4rh block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/formBilateralAllianceB4N4.fuel'.
 
 
 	block := board getBlock: 4 verifyNumber: 4.
 	logger info: ('5th block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 
 	block := board getBlock: 4 verifyNumber: 5.
 	logger info: ('6th block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number5done.fuel'.
 
 	block := board getBlock: 3 verifyNumber: 6.
 	logger info: ('7th block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	board serializeToFileNamed: 'fuel/number6done.fuel'.
 	
 	block := board getBlock: 7 verifyNumber: 7.
 	logger info: ('8th block => {1}' format: { block  }).
-	solver formBilateralAlliance: block.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	
 	board serializeToFileNamed: 'fuel/number7done.fuel'.
-	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance2.fuel'.
 
-
-
+"
 
 
 
@@ -180,7 +176,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 ]
 
 { #category : #tests }
-OttiezTacticsTest >> testFormBilateralAllianceB4N4 [
+OttiezTacticsTest >> testFormBilateralAlliance2 [
 
 	| logger  board ottie block |
 	M946FileLogger logLevel: LogLevel debug.
@@ -188,22 +184,170 @@ OttiezTacticsTest >> testFormBilateralAllianceB4N4 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	
 	board := FLMaterializer new 
-        filePath: 'fuel/formBilateralAllianceB4N4.fuel' ;
+        filePath: 'fuel/testFormBilateralAlliance2.fuel';
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
+	block := board getBlock: 2 verifyNumber: 2.
+	logger info: ('2nd block => {1}' format: { block  }).
+	ottie formBilateralAlliance: block.
+	logger info: board.
+
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance3.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance3 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance3.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 7 verifyNumber: 2.
+	logger info: ('1st block => {1}' format: { block  }).
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance4.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance4 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance4.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 7 verifyNumber: 3.
+	logger info: ('1st block => {1}' format: { block  }).
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance5.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance5 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance5.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 9 verifyNumber: 4.
+	logger info: ('1st block => {1}' format: { block  }).
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance6.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance6 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance6.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
 	block := board getBlock: 4 verifyNumber: 4.
+	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
 	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance7.fuel'.
 	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance7 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance7.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
 	block := board getBlock: 4 verifyNumber: 5.
+	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
 	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance8.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance8 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance8.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 7 verifyNumber: 7.
+	logger info: ('1st block => {1}' format: { block  }).
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAlliance9.fuel'.
+	
+
 ]
 
 { #category : #tests }

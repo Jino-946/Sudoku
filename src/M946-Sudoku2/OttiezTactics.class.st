@@ -161,7 +161,10 @@ OttiezTactics >> findNextBlock: aBlock singleCell: cell [
 { #category : #logic }
 OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
 
-	| cell |
+	| cell logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
+	logger debug: aBlock.
 	cell := (trioCells at: 1) copy.
 	cell element: aBlock verifyNumber .
 	((trioCells at: 1) x = (trioCells at: 2) x and: [(trioCells at: 2) x = (trioCells at:3 ) x ])
@@ -195,10 +198,13 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
 	blankCells := self getAllianceCellsAfterMark: aBlock.
-
+	logger debug: ('blankCells => {1}' format:{blankCells}).
+	
 	checkResult := self checkForTwoPairs: aBlock.
+	logger debug: ('checkResult => {1}' format:{checkResult}).
+	
 	checkResult = self ifFalse: [ blankCells := checkResult ].
-	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].
+	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].  "<= clear marks, here"
 	nextBlock := self.
 	blankCells size = 1 ifTrue:[ 
 		nextBlock := self getNextBlockOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
@@ -222,11 +228,15 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	で垂直方向または水平方向にブランクセルが並んでいる時、
 	セルの配列を返す。
 	"
-	| blankCells |
+	| blankCells logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 
 	self rowMarking: aBlock.
 	self columnMarking: aBlock.
 	blankCells := aBlock blankCellsAsArray .
+	logger debug: aBlock.
+	logger debug: blankCells.
 	blankCells size = 1 ifTrue: [ ^blankCells ].
 	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
 										or: [(blankCells at: 1) y = (blankCells at: 2) y])
@@ -238,11 +248,6 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 											and: [ (blankCells at: 2) y = (blankCells at: 3) y])
 										ifTrue:[^blankCells]].
 	^#()
-		
-
-
-	
-	
 	
 ]
 
@@ -314,7 +319,9 @@ OttiezTactics >> getNextBlockOfAsymmetricPair: aBlock thisCell: thisCell cells: 
 
 	次の検証対象となるsudokuBlockを返す。
 	"
-	| nextBlock alliedCell |
+	| nextBlock alliedCell logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 
 	alliedCell := nil.
 	otherCells do: [ :otherCell |
@@ -326,6 +333,7 @@ OttiezTactics >> getNextBlockOfAsymmetricPair: aBlock thisCell: thisCell cells: 
 	sudokuBoard map: thisCell.
 	self checkTenpai: aBlock cell: thisCell.
 	nextBlock := self findNextBlock: aBlock singleCell: thisCell.
+	logger debug: nextBlock.
 	^nextBlock.
 ]
 
@@ -364,6 +372,7 @@ OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
 	"ペアセル取得"
 	otherCells  := self getAlliedCellForMapping: actualBlock  cell: aCell.
+	logger debug: ('pairCells => {1}' format: {otherCells}) .
 	(otherCells class = Array and: [ otherCells size = 2 ]) ifTrue: [ 
 		nextBlock := self getNextBlockOfAsymmetricPair: aBlock thisCell: aCell cells: otherCells.
 		nextBlock class = SudokuBlock2 ifTrue: [ ^nextBlock ]
@@ -390,7 +399,9 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	|  trioCells nextBlock logger |
 	logger := M946FileLogger new.
 	logger debug: thisContext.
-	trioCells := aBlock get3Allies: blankCells .
+	trioCells := aBlock get3Allies: blankCells . "<= 37 two pairs"
+	logger debug: ('trioCells => 
+{1}' format: {trioCells}).
 	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
 	
 	^nextBlock 
@@ -399,7 +410,9 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 { #category : #logic }
 OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 
-	| bNumber1 bNumber2 block1 block2 |
+	| bNumber1 bNumber2 block1 block2 logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 	bNumber1 := (self relatedHorBlocks at: aBlock blockNumber) at: 1.
 	bNumber2 := (self relatedHorBlocks at: aBlock blockNumber) at: 2.
 	block1 := sudokuBoard
@@ -409,12 +422,13 @@ OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 		          getBlock: bNumber2
 		          verifyNumber: aBlock verifyNumber.
 	(block1 includes: aBlock verifyNumber) 
-		ifTrue: [ ^self ]
 		ifFalse: [
 			^self horizontalBlockMarking: block1  sudokuCell: cell].
 
-	(block2 includes: aBlock verifyNumber) ifTrue: [ ^ self ].
-	^self horizontalBlockMarking: block2  sudokuCell: cell
+	(block2 includes: aBlock verifyNumber) 
+		ifFalse: [
+			^self horizontalBlockMarking: block2  sudokuCell: cell ].
+	^self
 ]
 
 { #category : #logic }
@@ -493,12 +507,12 @@ OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 		          getBlock: bNumber2
 		          verifyNumber: aBlock verifyNumber.
 	(block1 includes: aBlock verifyNumber) 
-		ifTrue: [ ^self]	
 		ifFalse: [ 
 			^self verticalBlockMarking: block1  sudokuCell: cell ].
 		
-	(block2 includes: aBlock verifyNumber) ifTrue: [ ^ self ].	
-	^self verticalBlockMarking: block2  sudokuCell: cell 
+	(block2 includes: aBlock verifyNumber) 
+		ifFalse: [
+			^self verticalBlockMarking: block2  sudokuCell: cell]
 ]
 
 { #category : #logic }
