@@ -399,7 +399,7 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	|  trioCells nextBlock logger |
 	logger := M946FileLogger new.
 	logger debug: thisContext.
-	trioCells := aBlock get3Allies: blankCells . "<= 37 two pairs"
+	trioCells := aBlock get3Allies: blankCells . 
 	logger debug: ('trioCells => 
 {1}' format: {trioCells}).
 	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
