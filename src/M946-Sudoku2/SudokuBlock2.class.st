@@ -416,6 +416,7 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	"
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブランクセルを$Xでマークする。
+	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。	
 	"
 	| markedPoints |
 	markedPoints := OrderedCollection new.
@@ -423,7 +424,11 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	self blankCellsAsArray do: [ :blankCell | 
 		(blankCell y = aSudokuCell y) ifTrue: [ 
 			markedPoints add: blankCell x @ blankCell y.
-			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
+			blankCell possibleNumbers isEmpty 
+				ifTrue: [  
+					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+				ifFalse: [
+					blankCell marked: true ]]].			
 	^markedPoints
 
 
@@ -454,15 +459,20 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	"
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
+	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。
 	"
 	| markedPoints |
 	markedPoints := OrderedCollection new.
 	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints ].
 	self blankCellsAsArray do: [ :blankCell | 
-		(blankCell x = aSudokuCell x) ifTrue: [ 		
+		(blankCell x = aSudokuCell x) ifTrue: [ 	
 			markedPoints add: blankCell x @ blankCell y.
-			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
-	^markedPoints 
+			blankCell possibleNumbers isEmpty 
+				ifTrue: [  
+					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+				ifFalse: [
+					blankCell marked: true ]]].
+	^markedPoints  
 
 
 ]

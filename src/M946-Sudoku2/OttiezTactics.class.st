@@ -444,7 +444,13 @@ OttiezTactics >> horizontalBlockMarking: aBlock sudokuCell: cell [
 	copyBlock := aBlock deepCopy.
 	markedPoints :=  copyBlock  markByHorizontalCell:  cell.
 	(markedPoints isEmpty or: [ (aBlock includes: $X) and: [aBlock = copyBlock ]]) ifTrue:[^self].	
-	markedPoints do: [ :point | sudokuBoard boardA2D at: point y at: point x put: $X].
+	markedPoints do: [ :point | |cellOfBoard|
+		cellOfBoard := sudokuBoard boardA2D at: point y at: point x.
+		cellOfBoard class = SudokuCell 
+			ifTrue: [ cellOfBoard marked: true ]
+			ifFalse: [  sudokuBoard boardA2D at: point y at: point x put: $X ]
+
+		].
 	^copyBlock
 ]
 
@@ -533,6 +539,11 @@ OttiezTactics >> verticalBlockMarking: aBlock sudokuCell: cell [
 	
 	markedPoints :=  copyBlock  markByVerticalCell: cell.
 	(markedPoints isEmpty or: [ (aBlock includes: $X) and: [aBlock = copyBlock ]]) ifTrue:[^self].	
-	markedPoints do: [ :point | sudokuBoard boardA2D at: point y at: point x put: $X].
+	markedPoints do: [ :point | |cellOfBoard|
+		cellOfBoard := sudokuBoard boardA2D at: point y at: point x.
+		cellOfBoard class = SudokuCell 
+			ifTrue: [ cellOfBoard marked: true ]
+			ifFalse: [  sudokuBoard boardA2D at: point y at: point x put: $X ]
+		].
 	^copyBlock
 ]

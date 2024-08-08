@@ -6,6 +6,7 @@
 	colIndex        <SmallInteger>	  ボードの列インデックス
 	element	         <Object>		      セルの要素
 	possibleNumbers <OrderedCollection> セルに入る可能性がある数
+	marked			 <Boolean>           検証ナンバー配備不可マーク
 				
 想定する使いみち
 - ボードの指定座標に要素をセットする
@@ -21,7 +22,8 @@ Class {
 		'rowIndex',
 		'colIndex',
 		'element',
-		'possibleNumbers'
+		'possibleNumbers',
+		'marked'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
@@ -35,6 +37,7 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 	cell colIndex:  cIndex .
 	cell element: elem.
 	cell possibleNumbers: OrderedCollection new.
+	cell marked: false.
 	^ cell 
 	
 
@@ -51,16 +54,19 @@ SudokuCell >> = sudokuCell [
 					and: [ sudokuCell possibleNumbers = self possibleNumbers ] ] ] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #converting }
 SudokuCell >> asSimpleString [	
 	"
 	SudokuBoard2>>asStringでSudokuCellを見やすく表示するために使用するメソッド
 	"
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: '$'.
-	possibleNumbers do: [ :num |
-		aStream nextPutAll: num asString].
+	self marked 
+		ifTrue: [ aStream nextPutAll: '$X' ]
+		ifFalse: [  
+			aStream nextPutAll: '$'.
+			possibleNumbers do: [ :num |
+				aStream nextPutAll: num asString]].
 
 	^aStream contents 
 			
@@ -80,6 +86,7 @@ SudokuCell >> asString [
 	aStream nextPutAll: ' possibleNumbers:( '.
 	possibleNumbers do: [ :num |  aStream  nextPutAll: num asString; space].	
 	aStream nextPutAll: ')'.
+	aStream nextPutAll: '  marked: '; nextPutAll: marked asString.
 	^ aStream contents
 ]
 
@@ -160,6 +167,19 @@ SudokuCell >> isPairCell: otherCell [
 
 	(self pairNumbers: otherCell ) isEmpty ifFalse: [ ^true ].
 	^false
+]
+
+{ #category : #accessing }
+SudokuCell >> marked [
+
+	^marked
+]
+
+{ #category : #accessing }
+SudokuCell >> marked: aBoolean [
+
+	marked := aBoolean 
+	
 ]
 
 { #category : #'as yet unclassified' }

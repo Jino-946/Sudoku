@@ -135,9 +135,12 @@ SudokuBoard2 >> clearMarks [
 	不要になったら消すためのメソッド
 	"
 	1 to: 9 do: [ :i |
-		1 to: 9 do: [ :j |
-			(boardA2D at: i at: j) class = Character ifTrue: [
-				boardA2D at: i at: j put: 0 ] ] ]
+		1 to: 9 do: [ :j | |cellOfBoard|
+			cellOfBoard := boardA2D at: i at: j.		
+			cellOfBoard  class = Character 
+				ifTrue: [ boardA2D at: i at: j put: 0 ].
+			cellOfBoard class = SudokuCell 
+				ifTrue: [ cellOfBoard marked: false ]] ]
 ]
 
 { #category : #'as yet unclassified' }
