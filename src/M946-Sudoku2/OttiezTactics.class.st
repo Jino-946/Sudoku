@@ -204,7 +204,9 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	logger debug: ('checkResult => {1}' format:{checkResult}).
 	
 	checkResult = self ifFalse: [ blankCells := checkResult ].
-	(blankCells size between: 1 and: 3) ifFalse: [ ^self ].  "<= clear marks, here"
+	(blankCells size between: 1 and: 3) ifFalse: [ 
+		sudokuBoard clearMarks .
+		^self ].  
 	nextBlock := self.
 	blankCells size = 1 ifTrue:[ 
 		nextBlock := self getNextBlockOfSingleBlankCell: aBlock cell: (blankCells at: 1)].
