@@ -204,7 +204,7 @@ OttiezTacticsTest >> testFormBilateralAlliance2 [
 OttiezTacticsTest >> testFormBilateralAlliance3 [
 
 	| logger  board ottie block |
-	M946FileLogger logLevel: LogLevel debug.
+	M946FileLogger logLevel: LogLevel trace.
 
 	logger := M946FileLogger new.
 	logger clearLog .
@@ -346,6 +346,30 @@ OttiezTacticsTest >> testFormBilateralAlliance8 [
 	logger info: board.
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance9.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAlliance9 [
+
+	| logger  board ottie |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAlliance9.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+
+	ottie letsRetsme.
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA1.fuel'.
 	
 
 ]

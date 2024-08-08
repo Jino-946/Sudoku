@@ -426,7 +426,8 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 	sudokuCol := self getSudokuColumn: sudokuCell x.
 	sudokuCol column do: [ :cell |
 		cell class = SudokuCell 
-			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
 				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
 				"1)"	cell possibleNumbers remove: (sudokuCell element). 
@@ -444,7 +445,9 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
      がある場合はもう一方のセルの値を確定させる。 	
 	"
-	| sudokuRow  |
+	| sudokuRow  logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 	sudokuRow := self getSudokuRow: sudokuCell y.
 	sudokuRow row do: [ :cell |
 		cell class = SudokuCell 

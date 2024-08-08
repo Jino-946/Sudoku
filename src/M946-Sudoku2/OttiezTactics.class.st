@@ -214,11 +214,13 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
 		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
-	
+	logger trace: sudokuBoard .
 	logger debug: ('nextBlock => {1}' format: {nextBlock}).
+	sudokuBoard clearMarks .
+	logger trace: sudokuBoard .
 	nextBlock class = SudokuBlock2 
 		ifTrue: [self formBilateralAlliance: nextBlock]	
-		ifFalse: [sudokuBoard clearMarks]
+		"ifFalse: [sudokuBoard clearMarks]"
 
 ]
 
@@ -449,6 +451,9 @@ OttiezTactics >> horizontalBlockMarking: aBlock sudokuCell: cell [
 { #category : #logic }
 OttiezTactics >> letsRetsme [
 
+	|logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
 	1 to: 9 do: [ :i | | column |
 		column := sudokuBoard getSudokuColumn: i.
 		column countOfReservedBlankCells = 1 ifTrue:[
@@ -501,6 +506,7 @@ OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 	logger debug: thisContext.
 	bNumber1 := (self relatedVertBlocks at: aBlock blockNumber) at: 1.
 	bNumber2 := (self relatedVertBlocks at: aBlock blockNumber) at: 2.
+	logger trace: ('sudokuCell => {1}' format: {cell}).
 	logger debug: sudokuBoard .
 	block1 := sudokuBoard
 		          getBlock: bNumber1
