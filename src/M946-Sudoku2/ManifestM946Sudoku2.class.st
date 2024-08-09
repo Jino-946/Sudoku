@@ -29,6 +29,13 @@ ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePo
 ]
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleDetectContainsRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBlock2 #includes: #false)) #'2024-08-09T20:34:28.374978+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleInconsistentMethodClassificationRuleV1FalsePositive [
 
 	<ignoreForCoverage>

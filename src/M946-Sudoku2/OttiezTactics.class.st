@@ -249,13 +249,10 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
 		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
-	logger trace: sudokuBoard .
 	logger debug: ('nextBlock => {1}' format: {nextBlock}).
-	sudokuBoard clearMarks .
-	logger trace: sudokuBoard .
-	nextBlock class = SudokuBlock2 
+		nextBlock class = SudokuBlock2 
 		ifTrue: [self formBilateralAlliance: nextBlock]	
-		"ifFalse: [sudokuBoard clearMarks]"
+		ifFalse: [sudokuBoard clearMarks]
 
 ]
 
@@ -581,9 +578,14 @@ OttiezTactics >> verticalBlockMarking: aBlock sudokuCell: cell [
 	copyBlock := aBlock deepCopy .
 	
 	markedPoints :=  copyBlock  markByVerticalCell: cell.
+	logger debug: ('markedPoints => {1}' format: {markedPoints}).
+	logger debug: ('aBlock => {1}' format: {aBlock}).
+	logger debug: ('copyBlock => {1}' format: {copyBlock}).
+
 	(markedPoints isEmpty or: [ (aBlock includes: $X) and: [aBlock = copyBlock ]]) ifTrue:[^self].	
 	markedPoints do: [ :point | |cellOfBoard|
 		cellOfBoard := sudokuBoard boardA2D at: point y at: point x.
+		logger debug: ('cellOfBoard => {1}' format: {cellOfBoard }).
 		cellOfBoard class = SudokuCell 
 			ifTrue: [ cellOfBoard marked: true ]
 			ifFalse: [  sudokuBoard boardA2D at: point y at: point x put: $X ]

@@ -347,10 +347,10 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-    (blockA2D asArray includes: number) ifTrue: [ ^true].
-
-    ^false
-
+	(number class = SmallInteger or: [ number = $X ]) ifTrue: [
+		^ blockA2D asArray includes: number ].
+	^ blockA2D asArray anySatisfy: [ :cell |
+		  cell class = SudokuCell and: [ cell marked ] ]
 ]
 
 { #category : #testing }
