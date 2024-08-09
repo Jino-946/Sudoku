@@ -22,6 +22,9 @@ logger debug: thisContext.
 Class {
 	#name : #M946FileLogger,
 	#superclass : #TinyLogger,
+	#instVars : [
+		'context'
+	],
 	#classVars : [
 		'logLevel'
 	],
@@ -31,7 +34,7 @@ Class {
 { #category : #'class initialization' }
 M946FileLogger class >> initialize [ 
 
-	logLevel := LogLevel info
+	logLevel := LogLevel info.
 	
 ]
 
@@ -59,7 +62,7 @@ M946FileLogger class >> named: pathToLogFile [
 		aStream << ' '.
 		timestamp asTime print24: true on: aStream ].
 	
-	
+	logger context: ''.
 	^ logger 
 ]
 
@@ -72,18 +75,34 @@ M946FileLogger class >> new [
 ]
 
 { #category : #'instance creation' }
-M946FileLogger class >> new: fileName [
+M946FileLogger class >> new: context [
 
 	| logger |
-	logger := self named: fileName.
+	logger := self named: 'log/default.log'.
+	logger context: context asString.
 	^logger
+]
+
+{ #category : #accessing }
+M946FileLogger >> context [
+
+	^context 
+]
+
+{ #category : #accessing }
+M946FileLogger >> context: aContext [
+
+	context := aContext
 ]
 
 { #category : #private }
 M946FileLogger >> debug: anObject [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
-		ifTrue: [ self record: ('debug: {1}' format: {anObject})]
+		ifTrue: [ self record: ('{1} 
+debug: {2}
+
+' format: {context . anObject})]
 ]
 
 { #category : #'accessing - structure variables' }

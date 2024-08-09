@@ -134,7 +134,8 @@ SudokuBlock2 >> blankCellsAsArray [
 						 row: (rowsOnBoard at: i) rowIndex
 						 column: (colsOnBoard at: j) colIndex
 						 element: 0) ].
-			cellItem class = SudokuCell ifTrue: [ collection add: cellItem ]]].
+			(cellItem class = SudokuCell and: [ cellItem marked not ] )
+				ifTrue: [ collection add: cellItem ]]].
 	^ collection asArray
 ]
 

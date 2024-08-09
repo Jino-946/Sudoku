@@ -334,7 +334,7 @@ SudokuBoard2 >> map:  sudokuItem [
 	"
 	| logger |
 	logger := M946FileLogger new.
-	logger debug: thisContext.
+	logger info: thisContext.
 	sudokuItem class = SudokuCell ifTrue: [ 
 		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
 			ifTrue: [  
