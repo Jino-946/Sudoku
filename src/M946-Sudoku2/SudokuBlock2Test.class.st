@@ -304,6 +304,29 @@ SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
 ]
 
 { #category : #tests }
+SudokuBlock2Test >> testReadyForFillTwoPair [
+
+	| logger  board  block pairCells |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testReadyForFillTwoPair.fuel';
+        materializeRoot .
+	logger info: board.
+	block := board getBlock: 3.
+	logger info: block.
+	pairCells := block readyForFillTwoPair .
+	logger info: pairCells .
+	board map: (pairCells at: 1).
+	board map: (pairCells at: 2).
+	logger info: board.
+	
+]
+
+{ #category : #tests }
 SudokuBlock2Test >> testRowIndexOnBoard [
 
 	| board block task  |
@@ -440,4 +463,140 @@ SudokuBlock2Test >> testTsumo [
 	cell := block tsumo.
 	self assert: cell equals: (SudokuCell row: 7 column: 5 element: 9)
 	
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testXOnBoard [
+	| board  task   block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board getBlock: 1.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 2.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 3.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+	block := board getBlock: 4.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 5.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 6.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+	block := board getBlock: 7.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 8.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 9.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testYOnBoard [
+	| board  task   block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	
+	block := board getBlock: 1.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+	
+	block := board getBlock: 2.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+	
+	block := board getBlock: 3.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+
+	block := board getBlock: 4.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+
+	block := board getBlock: 5.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+	
+	block := board getBlock: 6.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+
+	block := board getBlock: 7.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+	
+	block := board getBlock: 8.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+	
+	block := board getBlock: 9.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+
+
+
 ]

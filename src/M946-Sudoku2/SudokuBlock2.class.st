@@ -497,6 +497,30 @@ SudokuBlock2 >> printOn: aStream [
 		nextPutAll: self asString; cr.
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> readyForFillTwoPair [
+	"
+	ブロックが2つのブランクセルを残すだけで残りの7つのセルが1-9までの数字
+	で埋まっている時、ツーペア状態の1組のSudokuCellオブジェクトを返す。
+	"
+	|numberCells blankCells result pairNumbers |
+	numberCells := blockA2D asArray select: [ :i | i class = SmallInteger and: [ i between: 1 and: 9 ] ].
+	blankCells := blockA2D asArray select: [ :i | i = 0 ].
+	(numberCells size = 7 and: [ blankCells size = 2 ]) ifFalse: [ ^self ].
+	pairNumbers := #(1 2 3 4 5 6 7 8 9) difference: numberCells.
+	result := OrderedCollection new.
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j | |pairCell|
+			pairCell := blockA2D at: i at: j.
+			pairCell = 0 ifTrue: [ 
+				pairCell := SudokuCell row: (self yOnBoard: i) column:( self xOnBoard: j) element: 0.
+				pairCell possibleNumbers addAll: pairNumbers .
+				result add: pairCell]]].
+	^result asArray.
+	
+	
+]
+
 { #category : #accessing }
 SudokuBlock2 >> row: rIndex column: cIndex [
 
@@ -529,9 +553,9 @@ SudokuBlock2 >> rowIndexOnBoard: index [
 	(self blockNumber between: 1 and: 3)
 		ifTrue: [ start := 1 ]
 		ifFalse: [
-			start := (self blockNumber between: 4 and: 6)
-				         ifTrue: [ 4 ]
-				         ifFalse: [ 7 ] ].
+			(self blockNumber between: 4 and: 6)
+				ifTrue: [ start := 4 ]
+				ifFalse: [ start := 7 ] ].
 	^ start + index - 1
 ]
 
@@ -663,7 +687,7 @@ SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
 { #category : #converting }
 SudokuBlock2 >> xOnBoard: indexOnBlock [
 
-	self rowIndexOnBoard: indexOnBlock 
+	^self colIndexOnBoard: indexOnBlock 
 
 	
 ]
@@ -671,5 +695,5 @@ SudokuBlock2 >> xOnBoard: indexOnBlock [
 { #category : #converting }
 SudokuBlock2 >> yOnBoard: indexOnBlock [
 
-	self colIndexOnBoard: indexOnBlock 
+	^self rowIndexOnBoard: indexOnBlock 
 ]

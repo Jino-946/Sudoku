@@ -270,10 +270,13 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
 		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
+	
 	logger debug: ('nextBlock => {1}' format: {nextBlock}).
 		nextBlock class = SudokuBlock2 
 		ifTrue: [self formBilateralAlliance: nextBlock]	
-		ifFalse: [sudokuBoard clearMarks]
+		ifFalse: [
+			sudokuBoard clearMarks.
+			self setTwoPairOnBlock]
 
 ]
 
@@ -551,6 +554,21 @@ OttiezTactics >> rowMarking: aBlock [
 				cell element: aBlock verifyNumber.
 				cell clearPossibleNumbers.
 				aBlock markByHorizontalCell: cell]]].
+]
+
+{ #category : #logic }
+OttiezTactics >> setTwoPairOnBlock [
+	"
+	formBilateralAlliance: を抜ける時にツーペアがセットできるブロックがあれば
+	ツーペアをセットする。
+	"
+	| logger block twoPairs |
+	logger := M946FileLogger new: thisContext.
+	1 to: 9 do: [ :i |
+		block := sudokuBoard getBlock: i.
+		twoPairs := block readyForFillTwoPair .
+		(twoPairs class = Array and: [ twoPairs size = 2 ]) ifTrue: [ 
+			sudokuBoard map: (twoPairs at: 1); map: (twoPairs at: 2)]]
 ]
 
 { #category : #logic }
