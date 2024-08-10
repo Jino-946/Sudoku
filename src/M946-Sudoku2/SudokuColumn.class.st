@@ -197,9 +197,9 @@ SudokuColumn >> countOfReservedBlankCells [
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
 	| items |
-	items := column select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
-	^ items size
-	
+	items := column select: [ :i | i class = SmallInteger and: [i between: 1 and: 9]].
+	^ 9 - items size
+
 ]
 
 { #category : #comparing }

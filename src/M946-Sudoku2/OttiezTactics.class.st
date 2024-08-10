@@ -12,23 +12,31 @@ Class {
 { #category : #logic }
 OttiezTactics >> checkBlockTenpai: aBlock [
 
-	| reloadBlock tsumoCell |
+	| reloadBlock tsumoCell logger blankCellCount |
+	logger := M946FileLogger new: thisContext.
 	reloadBlock := sudokuBoard
 		               getBlock: aBlock blockNumber
 		               verifyNumber: aBlock verifyNumber.
-	reloadBlock countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
+	logger debug: ('reloadBlock => {1}' format: {reloadBlock}).
+	blankCellCount := reloadBlock countOfReservedBlankCells.
+	logger debug: ('reloadBlock countOfReservedBlankCell => {1}' format: {blankCellCount}).
+	
+	blankCellCount  = 1 ifFalse: [ ^ self ].
 	tsumoCell := reloadBlock allGreen.
+	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
 ]
 
 { #category : #logic }
 OttiezTactics >> checkColumnTenpai: aCell [
 
-	| column tsumoCell |
+	| column tsumoCell logger |
+	logger := M946FileLogger new: thisContext.
 	column := sudokuBoard getSudokuColumn: aCell colIndex.
 
 	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
 	tsumoCell := column tsumo.
+	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
 	^ self
 ]
@@ -36,10 +44,13 @@ OttiezTactics >> checkColumnTenpai: aCell [
 { #category : #logic }
 OttiezTactics >> checkForTwoPairs: aBlock [ 
 
-	| reloadBlock twoPairs  blankCells |
+	| reloadBlock twoPairs  blankCells logger |
+	logger := M946FileLogger new: thisContext.
+	
 	reloadBlock := sudokuBoard getBlock:  (aBlock blockNumber) verifyNumber: (aBlock verifyNumber).
 	twoPairs := reloadBlock blockA2D asArray select: [ :item |
 		item class = SudokuCell and: [ item possibleNumbers isNotEmpty ]].
+	logger debug: ('twoPairs => {1}' format: {twoPairs }).
 	twoPairs size = 2 ifFalse: [ ^self ].	
 	((twoPairs at: 1) possibleNumbers size = 2 and: [(twoPairs at: 2) possibleNumbers size = 2 ])
 		ifFalse: [ ^self ].
@@ -52,11 +63,13 @@ OttiezTactics >> checkForTwoPairs: aBlock [
 { #category : #logic }
 OttiezTactics >> checkRowTenpai: aCell [
 
-	| row tsumoCell |
+	| row tsumoCell logger |
+	logger := M946FileLogger new: thisContext.
 	row := sudokuBoard getSudokuRow: aCell colIndex.
 
 	row countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
 	tsumoCell := row tsumo.
+	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
 	^ self
 ]
@@ -73,11 +86,13 @@ OttiezTactics >> checkTenpai: aBlock cell: aCell [
 { #category : #logic }
 OttiezTactics >> checkTwoPairsTenpai: aBlock [
 
-	| reloadBlock tsumoCell  |
+	| reloadBlock tsumoCell logger |
+	logger := M946FileLogger new: thisContext.
 	reloadBlock := sudokuBoard
 		               getBlock: aBlock blockNumber
 		               verifyNumber: aBlock verifyNumber.
 	tsumoCell := reloadBlock twoPairsTenpai .
+	logger debug: ('tsumoCell class => {1}' format: {tsumoCell class}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
 ]
 
@@ -100,11 +115,14 @@ OttiezTactics >> columnMarking: aBlock [
 { #category : #logic }
 OttiezTactics >> fillOneBlankCellOfColumn: column [
 
-	| cell |
+	| cell logger |
+	logger := M946FileLogger new: thisContext.
+	logger debug:('column => {1}' format: {column}).
 	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
 	cell := column cellOf: 0.
 	cell class = SudokuCell ifFalse: [ ^ self ].
 	cell element: (column missingNumbers at: 1).
+	logger debug: ('cell for mapping => {1}' format: {cell}).
 	sudokuBoard map: cell
 ]
 
@@ -122,14 +140,17 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 { #category : #logic }
 OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
-	| missingNumbers bingo |
+	| missingNumbers bingo logger |
+	logger := M946FileLogger new: thisContext.
 	sudokuColumn countOfReservedBlankCells = 2 ifFalse: [ ^ self ].
 	missingNumbers := sudokuColumn missingNumbers.
+	logger debug: ('missingNumbers => {1}' format: {missingNumbers}).
 	bingo := #().
 	sudokuColumn column doWithIndex: [ :num :i | | sudokuRow |
 		sudokuRow := sudokuBoard getSudokuRow: i.
 		(num = 0  or: [num class = SudokuCell ])ifTrue: [  
 			bingo := missingNumbers difference: (sudokuRow row intersection: missingNumbers).
+			logger debug: ('bingo => {1}' format: {bingo}).
 			bingo size = 1 ifTrue: [ 
 				sudokuColumn at: i put: (bingo at: 1).
 				sudokuBoard map: sudokuColumn.
@@ -196,9 +217,9 @@ OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
 	cell2 := (trioCells at: 2) deepCopy.
 	cell3 := (trioCells at: 3) deepCopy.
 	
-	(((cell1 possibleNumbers asOrderedCollection) 
-		intersection: ( cell2 possibleNumbers asOrderedCollection ))
-			intersection: (cell3 possibleNumbers asOrderedCollection )) size = 1
+	(((cell1 possibleNumbers) 
+		intersection: ( cell2 possibleNumbers))
+			intersection: (cell3 possibleNumbers)) size = 1
 	ifFalse: [ ^self ]	.
 				
 	cell1 element: aBlock verifyNumber .
@@ -418,6 +439,7 @@ OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 			 (otherCells at: 1) class = SudokuCell]]) ifTrue: [ 
 		"ペアセルに入る数を確定する"
 		alliedCell := (BilateralAlliance thisCell: aCell otherCell: (otherCells at: 1)) determineTheNumber ].
+		logger debug: ('alliedCell => {1}' format: {alliedCell}).
 		alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
 	aCell clearPossibleNumbers .
 	sudokuBoard map: aCell.
@@ -436,7 +458,9 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	trioCells := aBlock get3Allies: blankCells . 
 	logger debug: ('trioCells => 
 {1}' format: {trioCells}).
+	"
 	sudokuBoard map: (trioCells  at: 1); map: (trioCells at: 2); map: (trioCells at: 3).
+	"
 	nextBlock := self findNextBlock: aBlock trioCells: trioCells .
 	
 	^nextBlock 
@@ -510,23 +534,6 @@ OttiezTactics >> letsRetsme [
 		column countOfReservedBlankCells = 2 ifTrue: [ 
 			self fillTwoBlankCellsOfColumn: column.
 			]]
-
-]
-
-{ #category : #logic }
-OttiezTactics >> letsRetsme: colNumber [
-	"
-	letsRetsme  動作検証用メソッド
-	"
-	| column countOfBlankCell |
-	column := sudokuBoard getSudokuColumn: colNumber.
-	countOfBlankCell := column countOfReservedBlankCells.
-	countOfBlankCell  = 1 ifTrue: [
-		self fillOneBlankCellOfColumn: column.
-		column := sudokuBoard getSudokuColumn: colNumber.].
-	countOfBlankCell  = 2 ifFalse: [ ^ self ].
-	self fillTwoBlankCellsOfColumn: column.
-	column := sudokuBoard getSudokuColumn: colNumber.
 
 ]
 

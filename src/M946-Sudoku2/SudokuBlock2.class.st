@@ -72,6 +72,10 @@ SudokuBlock2 >> allGreen [
     Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
     "
 	| cell array shortOfNumber |
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j |
+			(blockA2D at: i at: j) = $X
+			ifTrue: [ blockA2D at: i at: j put: 0 ] ]].
 	cell := self tenpai.
 	cell class = SudokuCell 
 	ifTrue: [ 
@@ -222,9 +226,11 @@ SudokuBlock2 >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
-	| items |
-	items := blockA2D asArray select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
-	^ items size
+	| items logger |
+	logger := M946FileLogger new: thisContext.
+	logger debug: ('self => {1}' format: {self}).
+	items := blockA2D asArray select: [ :i | i class = SmallInteger and: [i between: 1 and: 9]].
+	^ 9 - 	items size
 	
 ]
 
@@ -588,13 +594,16 @@ SudokuBlock2 >> twoPairsTenpai [
 	ブロックにブランクセル１つと1組のツーペアが残った場合ブランクセルに数をセットした
 	SudokuCellのインスタンスを返す。
 	"
-	| blankCells array result twoPairs sum |
+	| blankCells array result twoPairs sum logger |
+	logger := M946FileLogger new: thisContext.
 	blankCells := self blankCellsAsArray .
+	logger debug: ('blankCells => {1}' format:{blankCells}).
 	blankCells size = 3 ifFalse: [ ^self ].
 	array := blankCells select: [ :cell | cell possibleNumbers isEmpty ].
 	(array isEmpty or: [ array size ~= 1 ] )ifTrue: [ ^self ].
 	result := array at: 1.
-	twoPairs := blankCells select: [ :cell | cell possibleNumbers isNotEmpty ].
+	twoPairs := blankCells select: [ :cell | cell possibleNumbers size = 2 ].
+	twoPairs size = 2 ifFalse: [ ^self ].
 	(twoPairs at: 1) possibleNumbers asBag = (twoPairs at: 2) possibleNumbers asBag 
 		ifFalse: [ ^self ].
 	sum := (self blockA2D asArray select: [ :n | n class = SmallInteger ]) sum.

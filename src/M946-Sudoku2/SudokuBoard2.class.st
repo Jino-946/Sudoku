@@ -333,8 +333,8 @@ SudokuBoard2 >> map:  sudokuItem [
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
 	| logger |
-	logger := M946FileLogger new.
-	logger info: thisContext.
+	logger := M946FileLogger new:thisContext.
+	logger debug: ('sudokuItem => {1}' format: {sudokuItem}).
 	sudokuItem class = SudokuCell ifTrue: [ 
 		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
 			ifTrue: [  

@@ -360,7 +360,7 @@ OttiezTacticsTest >> testFormBilateralAlliance9 [
 	logger clearLog .
 	logger info: thisContext.
 	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAlliance8.fuel';
+        filePath: 'fuel/testFormBilateralAlliance9.fuel';
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
@@ -370,14 +370,16 @@ OttiezTacticsTest >> testFormBilateralAlliance9 [
 	ottie formBilateralAlliance: block.
 	logger info: board.
 	
-	board serializeToFileNamed: 'fuel/testFormBilateralAlliance9.fuel'.
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA1.fuel'.
 	
 
 ]
 
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAllianceA1 [
-
+	"
+	
+	"
 	| logger  board ottie |
 	M946FileLogger logLevel: LogLevel debug.
 
@@ -385,16 +387,69 @@ OttiezTacticsTest >> testFormBilateralAllianceA1 [
 	logger clearLog .
 	logger info: thisContext.
 	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAlliance9.fuel';
+        filePath: 'fuel/testFormBilateralAllianceA1.fuel';
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
-
+	self assert: (board boardA2D at: 4 at: 1) equals: 0.
+	self assert: (board boardA2D at: 6 at: 1) equals: 0.
 	ottie letsRetsme.
 	logger info: board.
+	self assert: (board boardA2D at: 4 at: 1) equals: 6.
+	self assert: (board boardA2D at: 6 at: 1) equals: 3.
 	
-	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA1.fuel'.
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA2.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceA2 [
+	"
+	
+	"
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA2.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 5 verifyNumber: 3.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA3.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceA3 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA3.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+
+	block := board getBlock: 7 verifyNumber: 6.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA4.fuel'.
 	
 
 ]
@@ -475,170 +530,6 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 ]
 
 { #category : #tests }
-OttiezTacticsTest >> testGetAlliedCellForMappingCell [
-	"ブロック4列3における非対称ペアのテスト"
-	| logger  solver board thisCell cell1 cell2  block candidates |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-
-	board := FLMaterializer new 
-        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
-        materializeRoot .
-	solver := OttiezTactics new: board.
-	logger info: board.
-	
-	cell1 := nil.
-	cell2 := nil.
-	
-	logger info: 'テスト1 セル3@4 => 5 '.
-	thisCell := board getCellRow: 4 cellColumn: 3.
-	thisCell element: 5.
-	
-	block := board getBlock: 4 verifyNumber: 5.
-	candidates := solver getAlliedCellForMapping: block cell: thisCell.
-	logger info: candidates .
-	self assert: candidates size equals: 1.
-	cell1 := board getCellRow: 6 cellColumn: 3.
-	self assert: (candidates at: 1) equals: cell1.
-	
-	logger info: 'テスト2 セル3@5 => 4 '.	
-	thisCell := board getCellRow: 5 cellColumn: 3.
-	thisCell element: 4.
-	
-	block := board getBlock: 4 verifyNumber: 4.
-	candidates := solver getAlliedCellForMapping: block cell: thisCell.
-	logger info: candidates .
-	self assert: candidates size equals: 1.
-	cell1 := board getCellRow: 6 cellColumn: 3.
-	self assert: (candidates at: 1) equals: cell1.
-		
-	logger info: 'テスト3 セル3@6 => 4 '.
-	" テスト3 セル 3@6 => 4  "
-	thisCell := board getCellRow: 6 cellColumn: 3.
-	thisCell element: 4.
-	
-	block := board getBlock: 4 verifyNumber: 4.
-	candidates := solver getAlliedCellForMapping: block cell: thisCell.
-	logger info: candidates .
-	self assert: candidates size equals: 2.
-
-	cell1 := board getCellRow: 4 cellColumn: 3. 
-	self assert: (candidates at: 1) equals: cell1.	
-	cell2 := board getCellRow: 5 cellColumn: 3. 
-	self assert: (candidates at: 2) equals: cell2.	
-
-	logger info: 'テスト4 セル3@6 => 5 '.	 
-	thisCell := board getCellRow: 6 cellColumn: 3.
-	thisCell element: 5.
-	
-	block := board getBlock: 4 verifyNumber: 4.
-	candidates := solver getAlliedCellForMapping: block cell: thisCell.
-	logger info: candidates .
-	self assert: candidates size equals: 2.
-
-	cell1 := board getCellRow: 4 cellColumn: 3. 
-	self assert: (candidates at: 1) equals: cell1.	
-	cell2 := board getCellRow: 5 cellColumn: 3. 
-	self assert: (candidates at: 2) equals: cell2.	
-
-	logger info: 'テスト5 セル3@4 => 9'.	 
-	thisCell := board getCellRow: 4 cellColumn: 3.
-	thisCell element: 9.
-	
-	block := board getBlock: 4 verifyNumber: 9.
-	candidates := solver getAlliedCellForMapping: block cell: thisCell.
-	logger info: candidates .
-	self assert: candidates size equals: 2.
-
-	cell1 := board getCellRow: 5 cellColumn: 3. 
-	self assert: (candidates at: 1) equals: cell1.	
-	cell2 := board getCellRow: 6 cellColumn: 3. 
-	self assert: (candidates at: 2) equals: cell2.	
-	 						
-	
-
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testGetAlliedCellForMappingNoPairNumberCell [
-	| logger  ottie board thisCell  block |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-
-	board := FLMaterializer new 
-        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
-        materializeRoot .
-	ottie := OttiezTactics new: board.
-	logger info: board.
-	
-	block := board getBlock: 4 verifyNumber: 9.
-	logger info: block .
-	thisCell := (board getCellRow: 5 cellColumn: 3) copy.
-	thisCell element: 9.
-	ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	self assert: (board boardA2D at: 4 at: 3 ) equals: 5.
-	self assert: (board boardA2D at: 6 at: 3) equals: 4.
-	logger info: board.
-	
-	board := FLMaterializer new 
-        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
-        materializeRoot .
-	ottie := OttiezTactics new: board.
-	logger info: board.
-	block := board getBlock: 4 verifyNumber: 9.
-	logger info: block .	
-	thisCell := (board getCellRow: 6 cellColumn: 3) copy.
-	thisCell element: 9.
-	ottie getAlliedCellForMappingNoPairNumber: block cell: thisCell.
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	self assert: (board boardA2D at: 4 at: 3 ) equals: 5.
-	self assert: (board boardA2D at: 5 at: 3) equals: 4.
-	logger info: board.
-
-
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testGetNextBlockOfAsymmetricPairCells [
-	"
-	BilateralAllianceTest>>testDetermineTheNumberBlock5Col2に対応する結合テスト
-	"
-	| logger solver board block blankCells thisCell |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-	
-	board := FLMaterializer new 
-        filePath: 'fuel/testGetNextBlockOfAsymmetricPairCells.fuel';
-        materializeRoot .
-	logger info: board.
-	solver := OttiezTactics new: board .
-	thisCell  := SudokuCell row: 4 column: 5 element: 3.
-	thisCell possibleNumbers add: 1.
-	thisCell possibleNumbers add: 3. 
-	
-	block := board getBlock: 5 verifyNumber: 3.
-	blankCells := solver getAlliedCellForMapping: block cell: thisCell.
-	solver getNextBlockOfAsymmetricPair: block thisCell: thisCell  cells: blankCells .
-	logger info: board.
-	
-	self assert: (board boardA2D at: 4 at: 5 ) equals: 3.
-	self assert: (board boardA2D at: 5 at: 5 ) equals: 0.
-	self assert: (board boardA2D at: 6 at: 5 ) equals: 1.
-
-]
-
-{ #category : #tests }
 OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	| logger task board solver block blankCells nextBlock|
@@ -676,122 +567,4 @@ OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	logger info: (board getSudokuCell: 7@4) asString.
 
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testLetsRetsme [
-
-	| logger  board solver  |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/number7done.fuel';
-        materializeRoot .
-	solver := OttiezTactics new: board.
-	
-	logger info: board.
-	logger info: (board getSudokuCell: 4@3).
-	
-	solver letsRetsme: 1  .
-	solver letsRetsme: 2.
-	solver letsRetsme: 3.
-	logger info: board.
-	"SudokuBoard>>removePossibleNumbersOfRowAndCol: のテスト用にboardをシリアライズ"
-	board serializeToFileNamed: 'fuel/forRemovePossibleNumbers.fuel'.
-	solver letsRetsme: 4.
-	solver letsRetsme: 5.
-	solver letsRetsme: 6.
-	solver letsRetsme: 7.
-	solver letsRetsme: 8.
-	solver letsRetsme: 9.	
-	logger info: board.
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testN3Block1AutoFillPair5 [
-
-	| logger  board solver block |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/forRemovePossibleNumbers.fuel';
-        materializeRoot .
-	logger info: board .
-	
-	solver := OttiezTactics new: board.
-	
-	block := board getBlock: 1 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	
-	self assert: (board boardA2D at: 3 at: 2 ) equals: 3. 
-	self assert: (board boardA2D at: 2 at: 2 ) equals: 5. 
-	logger info: board.
-	
-	board serializeToFileNamed: 'fuel/n3Block1AutoFillPair5.fuel'.
-	
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testN3Block5OnePair3 [
-	"
-	6分26秒から
-	"
-	| logger  board solver block |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-	(M946FileLogger new) clearLog.
-	board := FLMaterializer new 
-        filePath: 'fuel/n3Block1AutoFillPair5.fuel';
-        materializeRoot .
-	logger info: board .
-	solver := OttiezTactics new: board.
-	
-	block := board getBlock: 5 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	
-	block := board getBlock: 7 verifyNumber: 6.
-	solver formBilateralAlliance: block.
-
-	
-	block := board getBlock: 5 verifyNumber: 6.
-	solver formBilateralAlliance: block.
-	logger info: board.
-
-	block := board getBlock: 6 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	logger info: board.
-
-	
-	
-	block := board getBlock: 5 verifyNumber: 6.
-	solver formBilateralAlliance: block.
-	logger info: board.
-
-
-	block := board getBlock: 6 verifyNumber: 8.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	board serializeToFileNamed: 'fuel/checkForTwoPairsBlankCells.fuel'.
-	
-	block := board getBlock: 6 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	board serializeToFileNamed: 'fuel/N3Block5_OnePair3_OnePair1.fuel'.		
-"	
-	block := board getBlock: 5 verifyNumber: 3.
-	solver formBilateralAlliance: block.
-	logger info: board.
-"
-	
 ]
