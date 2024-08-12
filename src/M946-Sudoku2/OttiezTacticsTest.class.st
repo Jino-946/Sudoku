@@ -56,7 +56,7 @@ OttiezTacticsTest >> testCheckForTwoPairs [
 
 { #category : #tests }
 OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
-	| logger  board ottie column |
+	| logger  board ottie column block |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -74,6 +74,15 @@ OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 	self assert: (board boardA2D  at: 5 at: 5) equals: 4.
 	logger info: board.
 	
+	block := board getBlock: 4 verifyNumber: 4.
+	ottie formBilateralAlliance: block.
+	"非対象ペアの解決により4と5の入るセルが決定する"
+	self assert: (board boardA2D  at: 6 at: 3) equals: 4.	
+	self assert: (board boardA2D  at: 4 at: 3) equals: 5.	
+	"allGreenになるので9の入るセルが決まる"
+	self assert: (board boardA2D  at: 5 at: 3) equals: 9.	
+			
+	logger info: board.
 ]
 
 { #category : #tests }

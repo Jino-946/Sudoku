@@ -206,7 +206,11 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 
 { #category : #logic }
 OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
-
+	"
+	ツーペア1組と0セル１個のブランクセルを含む列の0セルを解決する。
+	決定した数字をSudokuBoardに配置する時はSudokuBoard>>map:を使わず
+	Array2D>>at: at: put:を使い数字を配置するだけにする。
+	"
 	| logger twoPair array numbersOfColumn number zeroCell |
 	logger := M946FileLogger new: thisContext.
 	twoPair := sudokuColumn column select: [ :cell |
@@ -225,7 +229,7 @@ OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 	number := (#( 1 2 3 4 5 6 7 8 9 ) difference: numbersOfColumn) at: 1.
 	zeroCell := sudokuColumn cellOf: 0.
 	zeroCell class = SudokuCell ifTrue: [
-		sudokuBoard map: (zeroCell element: number) ]
+		sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: number]
 ]
 
 { #category : #logic }
