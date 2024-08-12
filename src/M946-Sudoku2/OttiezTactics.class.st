@@ -187,7 +187,6 @@ OttiezTactics >> fillOneBlankCellOfColumn: column [
 	| cell logger |
 	logger := M946FileLogger new: thisContext.
 	logger debug:('column => {1}' format: {column}).
-	column countOfReservedBlankCells = 1 ifFalse: [ ^ self ].
 	cell := column cellOf: 0.
 	cell class = SudokuCell ifFalse: [ ^ self ].
 	cell element: (column missingNumbers at: 1).
@@ -199,7 +198,6 @@ OttiezTactics >> fillOneBlankCellOfColumn: column [
 OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 
 	| cell |
-	sudokuRow countOfReservedBlankCells = 1 ifFalse: [ ^self ].
 	cell := sudokuRow cellOf: 0.
 	cell class = SudokuCell ifFalse: [ ^self ].
 	cell element: (sudokuRow missingNumbers at: 1).
@@ -207,11 +205,34 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 ]
 
 { #category : #logic }
+OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
+
+	| logger twoPair array numbersOfColumn number zeroCell |
+	logger := M946FileLogger new: thisContext.
+	twoPair := sudokuColumn column select: [ :cell |
+		           cell class = SudokuCell and: [
+			           cell possibleNumbers size = 2 ] ].
+	(twoPair size = 2 and: [
+		 (twoPair at: 1) possibleNumbers = (twoPair at: 2) possibleNumbers ])
+		ifFalse: [ ^ self ].
+	array := sudokuColumn column select:
+		                   [ :cell |
+		                   cell class = SmallInteger and: [
+			                   cell between: 1 and: 9 ] ].
+	numbersOfColumn := array asOrderedCollection .
+	numbersOfColumn addAll: (twoPair at: 1) possibleNumbers.
+	numbersOfColumn size = 8 ifFalse: [ ^ self ].
+	number := (#( 1 2 3 4 5 6 7 8 9 ) difference: numbersOfColumn) at: 1.
+	zeroCell := sudokuColumn cellOf: 0.
+	zeroCell class = SudokuCell ifTrue: [
+		sudokuBoard map: (zeroCell element: number) ]
+]
+
+{ #category : #logic }
 OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
 	| missingNumbers bingo logger |
 	logger := M946FileLogger new: thisContext.
-	sudokuColumn countOfReservedBlankCells = 2 ifFalse: [ ^ self ].
 	missingNumbers := sudokuColumn missingNumbers.
 	logger debug: ('missingNumbers => {1}' format: {missingNumbers}).
 	bingo := #().
@@ -231,7 +252,6 @@ OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 
 	| missingNumbers bingo |
-	sudokuRow countOfReservedBlankCells = 2 ifFalse: [ ^self ].
 	missingNumbers := sudokuRow missingNumbers .
 	bingo := #().
 	sudokuRow row doWithIndex: [ :num :i | | sudokuColumn |
@@ -605,6 +625,9 @@ OttiezTactics >> letsRetsme [
 			].
 		column countOfReservedBlankCells = 2 ifTrue: [ 
 			self fillTwoBlankCellsOfColumn: column.
+			].
+		column countOfReservedBlankCells = 3 ifTrue: [ 
+			self fillThreeBlankCellsOfColumn: column.
 			]]
 
 ]

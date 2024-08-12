@@ -126,13 +126,15 @@ SudokuColumn >> blankCellsAsArray [
     "
 	| collection |
 	collection := OrderedCollection new.
-	1 to: 9 do: [ :i |
-		(column at: i ) = 0 ifTrue: [
+	1 to: 9 do: [ :i | |cell|
+		cell := column at: i .
+		cell = 0 ifTrue: [
 			collection add: (SudokuCell
 						 		row: i
 						 		column: colIndex 
 						 		element: 0)].					
-		(column at: i) class = SudokuCell ifTrue:[ collection add: (column at: i)] ].
+		(cell class = SudokuCell and: [ cell marked not ])
+			ifTrue:[ collection add: cell] ].
 
 	^ collection  asArray
 ]

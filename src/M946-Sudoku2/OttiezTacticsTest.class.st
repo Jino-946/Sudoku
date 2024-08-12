@@ -55,6 +55,28 @@ OttiezTacticsTest >> testCheckForTwoPairs [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
+	| logger  board ottie column |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB5.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	column := board getSudokuColumn: 5.
+	logger info: column.
+	ottie fillThreeBlankCellsOfColumn: column.
+	self assert: (board boardA2D  at: 5 at: 5) equals: 4.
+	logger info: board.
+	
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
 	"
 	ブロック7検証番号7でformBilateralAlliance 実行後の
@@ -703,7 +725,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAllianceB5 [
 
-	| logger  board ottie block |
+	| logger  board ottie |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -715,10 +737,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
-	
-	block := board getBlock: 8 verifyNumber: 7.
-
-	ottie formBilateralAlliance: block.
+	ottie letsRetsme .
 	logger info: board.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB6.fuel'.
