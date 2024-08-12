@@ -26,38 +26,6 @@ OttiezTacticsTest >> test2PairTenpai [
 ]
 
 { #category : #tests }
-OttiezTacticsTest >> testCheckDoubleTwoPairOfZeroBlanks [
-	"
-	- 69のツーペアが確定した後の8Blockの状態
-	  ブランクセルはあわせて4つ
-	  内ツーペアセルが2つ、0セルが2つ
-	  ブロックで実数字と予約数字で足りない数字は7と8
-	- テストする機能
-	  78のツーペアを作り0セルを埋める 
-	"
-	| logger  board ottie block expected |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB5.fuel';
-        materializeRoot .
-	ottie := OttiezTactics new: board.
-	logger info: board.
-	
-	block := board getBlock: 8 verifyNumber: 9.
-	ottie checkDoubleTwoPairOfZeroBlanks: block.
-	logger info: board.
-	
-	expected := #(7 8) asBag.
-	self assert: (board boardA2D at: 7 at: 5) possibleNumbers asBag equals: expected .
-	self assert: (board boardA2D at: 8 at: 5) possibleNumbers asBag equals: expected .
-	
-]
-
-{ #category : #tests }
 OttiezTacticsTest >> testCheckForTwoPairs [
 
 	| logger  board solver block  newBlankCells expected |

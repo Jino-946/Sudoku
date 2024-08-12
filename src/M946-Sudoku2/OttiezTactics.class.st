@@ -20,7 +20,9 @@ OttiezTactics >> checkBlockTenpai: aBlock [
 	logger debug: ('reloadBlock => {1}' format: {reloadBlock}).
 	blankCellCount := reloadBlock countOfReservedBlankCells.
 	logger debug: ('reloadBlock countOfReservedBlankCell => {1}' format: {blankCellCount}).
-	blankCellCount = 4 ifTrue: [ self checkDoubleTwoPairOfZeroBlanks: reloadBlock ].
+	blankCellCount = 4 ifTrue: [ 
+		self checkDoubleTwoPairOfZeroBlanks: reloadBlock.
+		self checkDoubleTwoPairOfOnePair: reloadBlock].
 	blankCellCount  = 1 ifFalse: [ ^ self ].
 	tsumoCell := reloadBlock allGreen.
 	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
@@ -39,6 +41,40 @@ OttiezTactics >> checkColumnTenpai: aCell [
 	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
 	^ self
+]
+
+{ #category : #logic }
+OttiezTactics >> checkDoubleTwoPairOfOnePair: reloadBlock [
+	"
+	2組のツーペアができた場合、新にできたツーペアをボードにマップする
+	reloadBlockには1組のツーペアがすでにある。
+	------------------------------
+	- ブランクセルはあわせて4つ
+	- 内ツーペアセルが2つ、ワンペアセルが2つ
+	- ブロックで実数字と予約数字で足りない数字を求める
+	- ワンペアセルのpossibleNumbersに足りない数字を追加し、ツーペアにする
+	"
+	|blankSudokuCell twoPairBlank  onePairBlank numbersOfBlock newPossibleNumber logger |
+	logger := M946FileLogger new: thisContext.
+	blankSudokuCell := reloadBlock blankCellsAsArray .
+	logger debug: ('blankSudokuCell => {1}' format: {blankSudokuCell}).
+	twoPairBlank := blankSudokuCell  select: [ :cell | cell possibleNumbers size = 2 ].
+	(twoPairBlank size = 2 
+		and: [ (twoPairBlank at: 1) possibleNumbers = (twoPairBlank at: 2) possibleNumbers ])
+		ifFalse: [ ^self ].
+	onePairBlank := blankSudokuCell select: [ :cell | cell possibleNumbers size = 1 ].
+	(onePairBlank size = 2 
+				and: [ (onePairBlank at: 1) possibleNumbers = (onePairBlank at:2 ) possibleNumbers ])
+		ifFalse: [ ^self ].
+	numbersOfBlock :=  (reloadBlock blockA2D asArray select: 
+		[:cell |  cell class = SmallInteger and: [ cell between: 1 and: 9]]) asOrderedCollection.
+	numbersOfBlock addAll: ((twoPairBlank at: 1) possibleNumbers ); addAll:((onePairBlank at: 1) possibleNumbers ).
+	newPossibleNumber := #(1 2 3 4 5 6 7 8 9) difference: numbersOfBlock .
+	newPossibleNumber size = 1 ifFalse: [ ^self ].
+	(onePairBlank at: 1) possibleNumbers addAll: newPossibleNumber .
+	(onePairBlank at: 2) possibleNumbers addAll: newPossibleNumber .
+	sudokuBoard map: (onePairBlank at: 1); map: (onePairBlank at: 2)
+
 ]
 
 { #category : #logic }
