@@ -20,7 +20,7 @@ OttiezTactics >> checkBlockTenpai: aBlock [
 	logger debug: ('reloadBlock => {1}' format: {reloadBlock}).
 	blankCellCount := reloadBlock countOfReservedBlankCells.
 	logger debug: ('reloadBlock countOfReservedBlankCell => {1}' format: {blankCellCount}).
-	
+	blankCellCount = 4 ifTrue: [ self checkDoubleTwoPairOfZeroBlanks: reloadBlock ].
 	blankCellCount  = 1 ifFalse: [ ^ self ].
 	tsumoCell := reloadBlock allGreen.
 	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
@@ -39,6 +39,39 @@ OttiezTactics >> checkColumnTenpai: aCell [
 	logger debug: ('tsumoCell => {1}' format: {tsumoCell}).
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ].
 	^ self
+]
+
+{ #category : #logic }
+OttiezTactics >> checkDoubleTwoPairOfZeroBlanks: reloadBlock [
+	"
+	2組のツーペアができた場合、新にできたツーペアをボードにマップする
+	reloadBlockには1組のツーペアがすでにある。
+	------------------------------
+	- ブランクセルはあわせて4つ
+	- 内ツーペアセルが2つ、0セルが2つ
+	- ブロックで実数字と予約数字で足りない数字を求める
+	- 求めた数字のツーペアを作り0セルを埋める 	
+	"
+	|blankSudokuCell twoPairBlank  zeroBlank numbersOfBlock newPossibleNumbers logger |
+	logger := M946FileLogger new: thisContext.
+	blankSudokuCell := reloadBlock blankCellsAsArray .
+	logger debug: ('blankSudokuCell => {1}' format: {blankSudokuCell}).
+	twoPairBlank := blankSudokuCell  select: [ :cell | cell possibleNumbers size = 2 ].
+	(twoPairBlank size = 2 
+		and: [ (twoPairBlank at: 1) possibleNumbers = (twoPairBlank at: 2) possibleNumbers ])
+		ifFalse: [ ^self ].
+	zeroBlank := blankSudokuCell  select: [ :cell | cell possibleNumbers isEmpty].
+	zeroBlank size = 2 ifFalse: [ ^self ].
+	numbersOfBlock :=  (reloadBlock blockA2D asArray select: 
+		[:cell |  cell class = SmallInteger and: [ cell between: 1 and: 9]]) asOrderedCollection.
+	numbersOfBlock addAll: ((twoPairBlank at: 1) possibleNumbers ).
+	newPossibleNumbers := #(1 2 3 4 5 6 7 8 9) difference: numbersOfBlock .
+	newPossibleNumbers size = 2 ifFalse: [ ^self ].
+	(zeroBlank at: 1) possibleNumbers addAll: newPossibleNumbers .
+	(zeroBlank at: 2) possibleNumbers addAll: newPossibleNumbers .
+	sudokuBoard map: (zeroBlank at: 1); map: (zeroBlank at: 2).
+	
+
 ]
 
 { #category : #logic }
