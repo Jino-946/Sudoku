@@ -191,7 +191,7 @@ OttiezTactics >> fillOneBlankCellOfColumn: column [
 	cell class = SudokuCell ifFalse: [ ^ self ].
 	cell element: (column missingNumbers at: 1).
 	logger debug: ('cell for mapping => {1}' format: {cell}).
-	sudokuBoard map: cell
+	sudokuBoard boardA2D at: (cell y) at: (cell x) put: (cell element)
 ]
 
 { #category : #logic }
@@ -201,7 +201,7 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 	cell := sudokuRow cellOf: 0.
 	cell class = SudokuCell ifFalse: [ ^self ].
 	cell element: (sudokuRow missingNumbers at: 1).
-	sudokuBoard map: cell
+	sudokuBoard boardA2D at: (cell y) at: (cell x) put: (cell element)
 ]
 
 { #category : #logic }
@@ -233,6 +233,34 @@ OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 ]
 
 { #category : #logic }
+OttiezTactics >> fillThreeBlankCellsOfRow: sudokuRow [
+	"
+	ツーペア1組と0セル１個のブランクセルを含む行の0セルを解決する。
+	決定した数字をSudokuBoardに配置する時はSudokuBoard>>map:を使わず
+	Array2D>>at: at: put:を使い数字を配置するだけにする。
+	"
+	| logger twoPair array numbersOfRow number zeroCell |
+	logger := M946FileLogger new: thisContext.
+	twoPair := sudokuRow row select: [ :cell |
+		           cell class = SudokuCell and: [
+			           cell possibleNumbers size = 2 ] ].
+	(twoPair size = 2 and: [
+		 (twoPair at: 1) possibleNumbers = (twoPair at: 2) possibleNumbers ])
+		ifFalse: [ ^ self ].
+	array := sudokuRow row select:
+		                   [ :cell |
+		                   cell class = SmallInteger and: [
+			                   cell between: 1 and: 9 ] ].
+	numbersOfRow := array asOrderedCollection .
+	numbersOfRow addAll: (twoPair at: 1) possibleNumbers.
+	numbersOfRow size = 8 ifFalse: [ ^ self ].
+	number := (#( 1 2 3 4 5 6 7 8 9 ) difference: numbersOfRow) at: 1.
+	zeroCell := sudokuRow cellOf: 0.
+	zeroCell class = SudokuCell ifTrue: [
+		sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: number]
+]
+
+{ #category : #logic }
 OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
 	| missingNumbers bingo logger |
@@ -246,8 +274,7 @@ OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 			bingo := missingNumbers difference: (sudokuRow row intersection: missingNumbers).
 			logger debug: ('bingo => {1}' format: {bingo}).
 			bingo size = 1 ifTrue: [ 
-				sudokuColumn at: i put: (bingo at: 1).
-				sudokuBoard map: sudokuColumn.
+				sudokuBoard boardA2D at: (sudokuColumn column at: i) at: (sudokuColumn colIndex) put: (bingo at: 1).
 				 self fillOneBlankCellOfColumn: sudokuColumn ]]].
 
 ]
@@ -263,8 +290,7 @@ OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 		(num = 0 or: [num class = SudokuCell ]) ifTrue: [ 
 			bingo := missingNumbers difference: (sudokuColumn column intersection: missingNumbers ).
 			bingo size = 1 ifTrue: [ 
-				sudokuRow at: i put: (bingo at: 1).
-				sudokuBoard map: sudokuRow .
+				sudokuBoard boardA2D at: (sudokuRow rowIndex) at: (sudokuRow row at: i) put: (bingo at: 1).
 				self fillOneBlankCellOfRow: sudokuRow]]]
 ]
 
