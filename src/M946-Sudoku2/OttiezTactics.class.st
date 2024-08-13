@@ -268,14 +268,16 @@ OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 	missingNumbers := sudokuColumn missingNumbers.
 	logger debug: ('missingNumbers => {1}' format: {missingNumbers}).
 	bingo := #().
-	sudokuColumn column doWithIndex: [ :num :i | | sudokuRow |
-		sudokuRow := sudokuBoard getSudokuRow: i.
+	sudokuColumn column doWithIndex: [ :num :i | | originalRow |
 		(num = 0  or: [num class = SudokuCell ])ifTrue: [  
-			bingo := missingNumbers difference: (sudokuRow row intersection: missingNumbers).
+			originalRow := sudokuBoard getOriginalRow: i.			
+			logger debug: ( 'originalRow => {1}' format: {originalRow}).
+			bingo := missingNumbers difference: (originalRow  intersection: missingNumbers).
 			logger debug: ('bingo => {1}' format: {bingo}).
-			bingo size = 1 ifTrue: [ 
-				sudokuBoard boardA2D at: (sudokuColumn column at: i) at: (sudokuColumn colIndex) put: (bingo at: 1).
-				 self fillOneBlankCellOfColumn: sudokuColumn ]]].
+			bingo size = 1 ifTrue: [ |tempColumn|
+				sudokuBoard boardA2D at: i at: (sudokuColumn colIndex) put: (bingo at: 1).
+				tempColumn := sudokuBoard getSudokuColumn: (sudokuColumn colIndex).
+				 self fillOneBlankCellOfColumn: tempColumn ]]].
 
 ]
 
@@ -285,13 +287,14 @@ OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 	| missingNumbers bingo |
 	missingNumbers := sudokuRow missingNumbers .
 	bingo := #().
-	sudokuRow row doWithIndex: [ :num :i | | sudokuColumn |
-		sudokuColumn := sudokuBoard getSudokuColumn: i.
+	sudokuRow row doWithIndex: [ :num :i | | originalColumn |
 		(num = 0 or: [num class = SudokuCell ]) ifTrue: [ 
-			bingo := missingNumbers difference: (sudokuColumn column intersection: missingNumbers ).
-			bingo size = 1 ifTrue: [ 
+			originalColumn := sudokuBoard getOriginalColumn: i.
+			bingo := missingNumbers difference: (originalColumn  intersection: missingNumbers ).
+			bingo size = 1 ifTrue: [ |tempRow|
 				sudokuBoard boardA2D at: (sudokuRow rowIndex) at: (sudokuRow row at: i) put: (bingo at: 1).
-				self fillOneBlankCellOfRow: sudokuRow]]]
+				tempRow := sudokuBoard getSudokuRow: sudokuRow rowIndex.
+				self fillOneBlankCellOfRow: tempRow]]]
 ]
 
 { #category : #logic }

@@ -5,56 +5,6 @@ Class {
 }
 
 { #category : #tests }
-OttiezTacticsTest >> test2PairTenpai [
-	| logger  board solver block  tsumoCell |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/2pairTenpai.fuel';
-        materializeRoot .
-	logger info: board .
-	solver := OttiezTactics new: board.
-	block := board getBlock: 7.
-	logger info: block.
-	
-	tsumoCell := block twoPairsTenpai .
-	logger info: tsumoCell.
-	
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testCheckForTwoPairs [
-
-	| logger  board solver block  newBlankCells expected |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/checkForTwoPairsBlankCells.fuel';
-        materializeRoot .
-	logger info: board .
-	solver := OttiezTactics new: board.
-	
-	block := board getBlock: 6 verifyNumber: 3.
-	solver getAllianceCellsAfterMark: block.
-	newBlankCells := solver checkForTwoPairs: block .
-	logger info: newBlankCells .
-	
-	expected := Array new: 2.
-	expected at: 1 put: (SudokuCell row: 5 column: 7 element: 0).
-	expected at: 2 put: (SudokuCell row: 5 column: 8 element: 0).
-	
-	
-	self assert: newBlankCells  equals: expected .
-	
-]
-
-{ #category : #tests }
 OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 	| logger  board ottie column block |
 	M946FileLogger logLevel: LogLevel debug.
@@ -82,35 +32,6 @@ OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 	"allGreenになるので9の入るセルが決まる"
 	self assert: (board boardA2D  at: 5 at: 3) equals: 9.	
 			
-	logger info: board.
-]
-
-{ #category : #tests }
-OttiezTacticsTest >> testFillTwoBlankCellsOfColumn [
-	"
-	ブロック7検証番号7でformBilateralAlliance 実行後の
-	第1列の２つのブランクセルを埋める
-	"
-	| logger  board solver block sudokuColumn column |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath: 'fuel/number6done.fuel';
-        materializeRoot .
-	solver := OttiezTactics new: board.
-	
-	block := board getBlock: 7 verifyNumber: 7.
-	solver formBilateralAlliance: block.
-	logger info: board.
-	
-	sudokuColumn := board getSudokuColumn: 1.
-	solver fillTwoBlankCellsOfColumn: sudokuColumn .
-	column := board getSudokuColumn: 1.
-	self assert: (column column at: 4) equals: 6.
-	self assert: (column column at: 6) equals: 3.
 	logger info: board.
 ]
 
@@ -734,7 +655,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAllianceB5 [
 
-	| logger  board ottie |
+	| logger  board ottie block expected |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -745,10 +666,34 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
-	
+	self assert:( board boardA2D at: 5 at: 5) equals: 0.
 	ottie letsRetsme .
 	logger info: board.
-
+	self assert:( board boardA2D at: 5 at: 5) equals: 4.
+	
+	expected := SudokuCell row: 4 column: 3  element: 0 .
+	expected possibleNumbers add: 5.
+	self assert: (board boardA2D at: 4 at: 3) equals: expected.
+	
+	expected := SudokuCell row: 5 column: 3  element: 0 .
+	expected possibleNumbers add: 4.
+	self assert: (board boardA2D at: 5 at: 3) equals: expected.
+	
+	expected := SudokuCell row: 6 column: 3  element: 0 .
+	expected possibleNumbers add: 4; add: 5.
+	self assert: (board boardA2D at: 6 at: 3) equals: expected.
+	
+	block := board getBlock: 4 verifyNumber: 4.
+	ottie formBilateralAlliance: block.
+	
+	self assert: (board boardA2D at: 4 at: 3) equals: 5.	
+	self assert: (board boardA2D at: 5 at: 3) equals: 9.
+	self assert: (board boardA2D at: 6 at: 3) equals: 4.
+	
+	
+	logger info: board .
+	
+	
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB6.fuel'.
 	
 

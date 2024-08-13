@@ -255,6 +255,50 @@ SudokuBoard2 >> getCellRow: rowIndex cellColumn: colIndex [
 ]
 
 { #category : #accessing }
+SudokuBoard2 >> getOriginalColumn: x [
+	"
+	0-9までの数字だけをを取り出すためのメソッド。
+	
+	ペアセル(ワンペア・ツーペア・非対称ペア)のいづれかのセル
+	数が入った時、他のセルの数が自動的に決定できることがある。
+	この機能を実装する際にペアセルの印としてsudokuCellをsudokuBoard
+	配置するようにした。
+	"
+	| originalColumn |
+	originalColumn := OrderedCollection new.
+	1 to: 9 do: [ :y | | number |
+		number := boardA2D at: y at: x.
+		number class = SmallInteger 	
+			ifTrue: [ originalColumn add: number ]
+			ifFalse: [ originalColumn add: 0 ]].
+	^originalColumn asArray
+	
+
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> getOriginalRow: y [
+	"
+	0-9までの数字だけをを取り出すためのメソッド。
+	
+	ペアセル(ワンペア・ツーペア・非対称ペア)のいづれかのセル
+	数が入った時、他のセルの数が自動的に決定できることがある。
+	この機能を実装する際にペアセルの印としてsudokuCellをsudokuBoard
+	配置するようにした。
+	"
+	| originalRow |
+	originalRow := OrderedCollection new.
+	1 to: 9 do: [ :x | | number|
+		number := boardA2D at: y at: x.
+		number  class = SmallInteger 
+			ifTrue: [ originalRow add: number ]
+			ifFalse: [ originalRow add: 0 ]].
+	^originalRow asArray
+	
+	
+]
+
+{ #category : #accessing }
 SudokuBoard2 >> getSudokuCell: aPoint [
 
 	
