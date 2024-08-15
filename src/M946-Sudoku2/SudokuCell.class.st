@@ -231,6 +231,17 @@ SudokuCell >> sameCoordinates: aSudokuCell [
 	^self x = aSudokuCell x and: [ self y = aSudokuCell y ]
 ]
 
+{ #category : #boolean }
+SudokuCell >> sameDirection: otherCell [
+	"
+	レシーバと引数が垂直または水平に並んでいる時はtrue,斜めの時はfalseを返す
+	"
+	(self x = otherCell x or: [self y = otherCell y])
+		ifTrue: [ ^true ].
+	^false
+	
+]
+
 { #category : #'accessing - structure variables' }
 SudokuCell >> x [
 

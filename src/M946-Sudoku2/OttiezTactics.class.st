@@ -405,7 +405,7 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 { #category : #logic }
 OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	"
-	aBlockの中での2国同盟,3国同盟を探す。
+	aBlockの中でのワンペア・スリーカードを探す。
 	ブランクセルが1つの時、またはブランクセルが2つあるいは3つ
 	で垂直方向または水平方向にブランクセルが並んでいる時、
 	セルの配列を返す。
@@ -418,10 +418,12 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	blankCells := aBlock blankCellsAsArray .
 	logger debug: aBlock.
 	logger debug: blankCells.
-	blankCells size = 1 ifTrue: [ ^blankCells ].
+	(blankCells size between: 1 and: 2 ) ifTrue: [ ^blankCells ].
+	"
 	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
 										or: [(blankCells at: 1) y = (blankCells at: 2) y])
 											ifTrue: [ ^blankCells ]].
+	"
 	blankCells size = 3 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x 	
 											and: [ (blankCells at: 2) x = (blankCells at: 3) x])
 										ifTrue:[^blankCells].
@@ -440,7 +442,8 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 	但し.非対称ペアセルの場合は getAlliedCellForMappingNoPairNumber:cell: の中でボードに
 	マッピングするのでSudokuCellオブジェクトの配列は返さない。
 	"
-	| cells  |
+	| cells logger |
+	logger := M946FileLogger new: thisContext.
 	(thisCell possibleNumbers includes: thisCell element)
 		ifTrue: [  
 			cells := aBlock blockA2D asArray select: [ :item |
@@ -460,9 +463,13 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
     配置可能な時にsudokuBoard にマップする。
 	ただしthisCellに入ることが確定した数字はペア数字以外の数字
 	"
-	| cells  |
+	| cells  logger |
+	logger := M946FileLogger new: thisContext.
 	cells := aBlock blockA2D asOrderedCollection select: [ :item |
 				item class = SudokuCell and: [ item notSameCoordinates: thisCell]].
+	logger debug: ('thisCell => {1}' format: {thisCell}).
+	logger debug: ('asymmetric cells =>
+{1}'  format: {cells}).
 	thisCell possibleNumbers size = 1 
 		ifTrue: [  
 			cells sort: [ :a :b | a possibleNumbers size > b possibleNumbers size ].
@@ -475,17 +482,19 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 								(cells at: 2) element: ((cells at: 2) possibleNumbers at: 1).
 								(cells at: 1) clearPossibleNumbers .
 								(cells at: 2) clearPossibleNumbers.
-								sudokuBoard map: (cells at:1);map: (cells at: 2)]]]]
+								sudokuBoard map: thisCell clearPossibleNumbers ; map: (cells at:1);map: (cells at: 2)]]]]
 		ifFalse:[
 			thisCell possibleNumbers size = 2
-				ifTrue: [ 
-					(thisCell possibleNumbers intersection: (cells at: 1) possibleNumbers ) isNotEmpty 
+				ifTrue: [ | possibleNumbers |
+					possibleNumbers := thisCell possibleNumbers deepCopy.
+					sudokuBoard map: thisCell clearPossibleNumbers .
+					(possibleNumbers intersection: (cells at: 1) possibleNumbers ) isNotEmpty 
 						and: [ (cells at: 1) possibleNumbers size = 1
 							ifTrue: [ 
 								(cells at: 1) element: ((cells at: 1) possibleNumbers at: 1).
 								(cells at: 1) clearPossibleNumbers.
 								sudokuBoard map: (cells at: 1)]].
-					(thisCell possibleNumbers intersection: (cells at: 2) possibleNumbers ) isNotEmpty 
+					(possibleNumbers intersection: (cells at: 2) possibleNumbers ) isNotEmpty 
 						and: [ (cells at: 2) possibleNumbers size = 1
 							ifTrue: [ 
 								(cells at: 2) element: ((cells at: 2) possibleNumbers at: 1).
@@ -523,16 +532,16 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 	2国同盟が決まったセルをsudokuBoardにマップし、
 	次の検証対象となるsudokuBlockを返す。
 	"
-	|  pairCells nextBlock logger|	
+	|  pairCells  logger|	
 	logger := M946FileLogger new: thisContext.
 	pairCells := aBlock get2Allies: blankCells .
 	logger debug: ('pairCells => 
 {1}' format: {pairCells}).
 	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
 	self checkBlockTenpai: aBlock.
-	nextBlock := self findNextBlock: aBlock pairCells: pairCells .
-	
-	^nextBlock 
+	((pairCells at: 1) sameDirection: (pairCells at: 2))
+		ifTrue: [ ^self findNextBlock: aBlock pairCells: pairCells ].
+
 ]
 
 { #category : #logic }

@@ -107,27 +107,27 @@ SudokuBoard2Test >> testRemovePossibleNumbersOfRowAndCol [
 	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
 	"
 	| logger  board  cell |
-	logger := M946Logger new: LogLevel info.
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
 
 	board := FLMaterializer new 
-        filePath: 'fuel/forRemovePossibleNumbers.fuel';
+        filePath:  'fuel/testFormBilateralAlliance2.fuel';
         materializeRoot .
 
 	logger info: board.
-	
-	self assert: (board getSudokuCell: 4@3) asSimpleString  equals: '$2'.
-	self assert: (board getSudokuCell: 6@5) asSimpleString  equals: '$2'.
+	logger info: (board getSudokuCell: 7@4) .
+	self assert: (board getSudokuCell: 7@4) asSimpleString  equals: '$1'.
+	self assert: (board getSudokuCell: 7@6) asSimpleString  equals: '$1'.
 	
 	"セルに入る数字が確定したと仮定する"
-	cell := SudokuCell row: 3 column: 6 element: 2.
+	cell := SudokuCell row: 4 column: 7 element: 1.
 	board map: cell.
 	
 	logger info: board.
-	
-	self assert: (board boardA2D at: 3 at: 4)  equals: 0.
-	self assert: (board boardA2D at: 5 at: 6)  equals: 0.
-
+	self assert: (board boardA2D at: 5 at: 5)  equals: 0.	
+	self assert: (board boardA2D at: 6 at: 5)  equals: 1.	
+	self assert: (board boardA2D at: 6 at: 7)  equals: 0.
 	
 ]

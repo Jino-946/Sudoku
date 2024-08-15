@@ -105,6 +105,13 @@ SudokuBoard2 >> asString [
 ]
 
 { #category : #accessing }
+SudokuBoard2 >> at: aPoint [
+
+	^boardA2D at: aPoint y at: aPoint x
+	
+]
+
+{ #category : #accessing }
 SudokuBoard2 >> atColumn: colIndex [
 	"
 	boardA2DよりcolIndexで指定した列を返す。

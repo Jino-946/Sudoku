@@ -14,7 +14,8 @@ otherCell は OttiezTactics>>getAlliedCellForMapping: aBlock cell: thisCell を�
 
 - ツーペア   2つの数字が2つのセルのどちらか一方に必ず入る状態
 
-- 非対称ペア ワンペアを構成し,かつどちらかのセルにもう一つ入る可能性がある数字がある状態
+- 非対称ペア 2つの数字で重なる2つのワンペアを作り,いづれかのセルに入る数字が決まれば他のセルに入る数字が決まる状態
+             (1)  -  (1 2)   - (2)
 "
 Class {
 	#name : #BilateralAlliance,

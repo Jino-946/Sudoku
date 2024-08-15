@@ -67,6 +67,17 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@4) asSimpleString  equals: '$1'.
+	self assert: (board at: 7@6) asSimpleString  equals: '$1'.
+	self assert: (board at: 8@3)   equals: 1.
+	self assert: (board at: 3@1)   equals: 1.
+	self assert: (board at: 2@7)   equals: 1.
+	self assert: (board at: 6@9)   equals: 1.
+	self assert: (board at: 5@4) asSimpleString  equals: '$1'.
+	self assert: (board at: 5@6) asSimpleString  equals: '$1'.
+
+	
+	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance2.fuel'.
 	
 
@@ -146,6 +157,8 @@ OttiezTacticsTest >> testFormBilateralAlliance2 [
 	logger info: ('2nd block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 4@3) asSimpleString  equals: '$2'.
+	self assert: (board at: 6@3) asSimpleString  equals: '$2'.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance3.fuel'.
 	
@@ -171,6 +184,8 @@ OttiezTacticsTest >> testFormBilateralAlliance3 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 1@7)  equals: 2.
+	self assert: (board at: 7@8)  equals: 2.
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance4.fuel'.
 	
@@ -196,6 +211,10 @@ OttiezTacticsTest >> testFormBilateralAlliance4 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 3@7) asSimpleString   equals: '$3'.
+	self assert: (board at: 3@9) asSimpleString   equals: '$3'.
+	
+	
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance5.fuel'.
 	
@@ -221,6 +240,10 @@ OttiezTacticsTest >> testFormBilateralAlliance5 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@7) asSimpleString   equals: '$4'.
+	self assert: (board at: 9@7) asSimpleString   equals: '$4'.
+
+
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance6.fuel'.
 	
@@ -246,6 +269,10 @@ OttiezTacticsTest >> testFormBilateralAlliance6 [
 	logger debug: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger debug: board.
+	self assert: (board at: 3@5) asSimpleString   equals: '$4'.
+	self assert: (board at: 3@6) asSimpleString   equals: '$4'.
+
+
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance7.fuel'.
 	
@@ -271,6 +298,10 @@ OttiezTacticsTest >> testFormBilateralAlliance7 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 3@4) asSimpleString   equals: '$5'.
+	self assert: (board at: 3@6) asSimpleString   equals: '$45'.
+
+
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance8.fuel'.
 	
@@ -296,6 +327,10 @@ OttiezTacticsTest >> testFormBilateralAlliance8 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@2) asSimpleString   equals: '$6'.
+	self assert: (board at: 7@3) asSimpleString   equals: '$6'.
+	
+	
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance9.fuel'.
 	
@@ -321,6 +356,13 @@ OttiezTacticsTest >> testFormBilateralAlliance9 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 1@3)    equals: 7.
+	self assert: (board at: 2@3)    equals: 3.
+	self assert: (board at: 2@2)    equals: 5.
+	self assert: (board at: 3@3)    equals: 6.
+	self assert: (board at: 7@2)    equals: 6.
+
+	
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA1.fuel'.
 	
@@ -376,6 +418,10 @@ OttiezTacticsTest >> testFormBilateralAllianceA2 [
 	block := board getBlock: 5 verifyNumber: 3.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 5@4) asSimpleString  equals: '$13'.
+	self assert: (board at: 5@5) asSimpleString  equals: '$3'.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA3.fuel'.
 	
@@ -400,6 +446,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA3 [
 	block := board getBlock: 7 verifyNumber: 6.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 2@8)  equals: 6.
+	self assert: (board at: 2@5)  equals: 8.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA4.fuel'.
 	
@@ -424,6 +472,11 @@ OttiezTacticsTest >> testFormBilateralAllianceA4 [
 	block := board getBlock: 5 verifyNumber: 6.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 4@5) asSimpleString  equals: '$26'.
+	self assert: (board at: 6@5) asSimpleString  equals: '$26'.
+
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA5.fuel'.
 	
@@ -448,6 +501,9 @@ OttiezTacticsTest >> testFormBilateralAllianceA5 [
 	block := board getBlock: 7 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 3@7) asSimpleString  equals: '$38'.
+	self assert: (board at: 3@8) asSimpleString  equals: '$8'.
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA6.fuel'.
 	
@@ -472,6 +528,10 @@ OttiezTacticsTest >> testFormBilateralAllianceA6 [
 	block := board getBlock: 6 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@4) asSimpleString  equals: '$18'.
+	self assert: (board at: 7@6) asSimpleString  equals: '$18'.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA7.fuel'.
 	
@@ -496,6 +556,12 @@ OttiezTacticsTest >> testFormBilateralAllianceA7 [
 	block := board getBlock: 6 verifyNumber: 3.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@5) asSimpleString  equals: '$3'.
+	self assert: (board at: 8@5) asSimpleString  equals: '$3'.
+	self assert: (board at: 5@4)   equals: 3.
+	self assert: (board at: 5@6)   equals: 1.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA8.fuel'.
 	
@@ -520,6 +586,12 @@ OttiezTacticsTest >> testFormBilateralAllianceA8 [
 	block := board getBlock: 3 verifyNumber: 5.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 7@1) asSimpleString   equals: '$5'.
+	self assert: (board at: 7@3) asSimpleString   equals: '$5'.
+	self assert: (board at: 8@7)   equals: 5.
+	self assert: (board at: 4@9)   equals: 5.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA9.fuel'.
 	
@@ -544,6 +616,10 @@ OttiezTacticsTest >> testFormBilateralAllianceA9 [
 	block := board getBlock: 5 verifyNumber: 5.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 5@3)   equals: 5.
+	self assert: (board at: 7@1)   equals: 5.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB1.fuel'.
 	
@@ -568,6 +644,13 @@ OttiezTacticsTest >> testFormBilateralAllianceB1 [
 	block := board getBlock: 3 verifyNumber: 7.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 8@2)   equals: 7.
+	self assert: (board at: 4@1) asSimpleString equals: '$7'.
+	self assert: (board at: 6@1) asSimpleString equals: '$7'.
+	self assert: (board at: 7@3) asSimpleString equals: '$49'.
+	self assert: (board at: 9@3) asSimpleString equals: '$49'.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB2.fuel'.
 	
@@ -592,6 +675,10 @@ OttiezTacticsTest >> testFormBilateralAllianceB2 [
 	block := board getBlock: 2 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 4@3) asSimpleString equals: '$28'.
+	self assert: (board at: 6@3) asSimpleString equals: '$28'.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB3.fuel'.
 	
@@ -620,6 +707,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB3 [
 
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 5@2)  equals: 9.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB4.fuel'.
 	
@@ -646,6 +734,11 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 
 	ottie formBilateralAlliance: block.
 	logger info: board.
+	self assert: (board at: 4@7) asSimpleString equals: '$69'.
+	self assert: (board at: 6@7) asSimpleString equals: '$69'.
+	self assert: (board at: 8@8)  equals: 9.
+
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB5.fuel'.
 	
@@ -697,6 +790,25 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB6.fuel'.
 	
 
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceB6 [
+
+	| logger  board ottie block expected |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB6.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 6 verifyNumber: 9.
+	logger info: board.
 ]
 
 { #category : #tests }
