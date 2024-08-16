@@ -69,9 +69,9 @@ SudokuCell >> asSimpleString [
 	| aStream |
 	aStream := ReadWriteStream on: String new.
 	self marked 
-		ifTrue: [ aStream nextPutAll: '$X$' ]
+		ifTrue: [ aStream nextPutAll: '?X' ]
 		ifFalse: [  
-			aStream nextPutAll: '$'.
+			aStream nextPutAll: '?'.
 			possibleNumbers do: [ :num |
 				aStream nextPutAll: num asString]].
 
