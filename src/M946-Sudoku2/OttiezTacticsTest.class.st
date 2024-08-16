@@ -561,10 +561,10 @@ OttiezTacticsTest >> testFormBilateralAllianceA7 [
 	self assert: (board at: 5@4)   equals: 3.
 	self assert: (board at: 5@6)   equals: 1.
 
-
-
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA8.fuel'.
 	
+	
+
 
 ]
 
@@ -738,7 +738,9 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 	self assert: (board at: 6@7) asSimpleString equals: '$69'.
 	self assert: (board at: 8@8)  equals: 9.
 
-
+	"6block 9の斜めツーペアを配置を試みるためテストメソッドに追加する"
+	block := board getBlock: 6 verifyNumber: 9.
+	logger info: board.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB5.fuel'.
 	

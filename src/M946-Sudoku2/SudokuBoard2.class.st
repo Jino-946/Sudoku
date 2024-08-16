@@ -182,8 +182,7 @@ SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
 	がある場合はもう一方のセルの値を確定させる。
 	"
 	| block cells pairCell logger |
-	logger := M946FileLogger new.
-	logger debug: thisContext.
+	logger := M946FileLogger new: thisContext.
 	logger debug: sudokuCell.
 	block := self getBlock: sudokuCell blockNumber .
 	cells := block blockA2D asArray select: [ :cell |
@@ -475,16 +474,17 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
       がある場合はもう一方のセルの値を確定させる。 
 	"
 	| sudokuCol logger|
-	logger := M946FileLogger new.
-	logger debug: thisContext.
+	logger := M946FileLogger new: thisContext.
 	sudokuCol := self getSudokuColumn: sudokuCell x.
 	sudokuCol column do: [ :cell |
 		cell class = SudokuCell 
 			ifTrue: [ 
 					(cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
+						logger debug: cell.
 				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
 				"1)"	cell possibleNumbers remove: (sudokuCell element). 
+						logger debug: cell.
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			
@@ -500,15 +500,16 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
      がある場合はもう一方のセルの値を確定させる。 	
 	"
 	| sudokuRow  logger |
-	logger := M946FileLogger new.
-	logger debug: thisContext.
+	logger := M946FileLogger new: thisContext.
 	sudokuRow := self getSudokuRow: sudokuCell y.
 	sudokuRow row do: [ :cell |
 		cell class = SudokuCell 
 			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
 					ifTrue: [
+						logger debug: cell.
 				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
 			    "1)"	cell possibleNumbers remove: (sudokuCell element). 
+						logger debug: cell.
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			

@@ -54,6 +54,13 @@ SudokuCell >> = sudokuCell [
 					and: [ sudokuCell possibleNumbers = self possibleNumbers ] ] ] ]
 ]
 
+{ #category : #adding }
+SudokuCell >> addPossibleNumber: aNumber [
+
+	possibleNumbers add: aNumber.
+	^self 
+]
+
 { #category : #converting }
 SudokuCell >> asSimpleString [	
 	"
@@ -211,6 +218,15 @@ SudokuCell >> possibleNumbers: anOrderedCollection [
 SudokuCell >> printOn: aStream [
 
 	aStream nextPutAll: self asString; cr.
+]
+
+{ #category : #removing }
+SudokuCell >> removePossibleNumber: aNumber [
+
+	possibleNumbers remove: aNumber .
+	^self
+	
+	
 ]
 
 { #category : #accessing }

@@ -76,7 +76,13 @@ BilateralAlliance >> thisCell: sudokuCell [
 
 { #category : #logic }
 BilateralAlliance >> treatAsAsymmetricPair1 [
+	"
+	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
 
+	2  1  $38  <= thisCell
+	4  5  $8
+	9  4  $3	
+	"
 	| logger |
 	logger := M946FileLogger new.
 	logger debug: thisContext.
@@ -92,13 +98,22 @@ BilateralAlliance >> treatAsAsymmetricPair1 [
 
 { #category : #logic }
 BilateralAlliance >> treatAsAsymmetricPair2 [
+	"
+	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
 
+	2  1  $38  <= otherCell
+	4  5  $8
+	9  4  $3	
+	"
 	(thisCell possibleNumbers intersection: otherCell possibleNumbers)
 		isEmpty ifTrue: [ ^ self ].
 
 	(otherCell possibleNumbers includes: thisCell element) ifFalse: [
 		^ self ].
 	otherCell possibleNumbers remove: thisCell element.
+	otherCell element: (otherCell possibleNumbers at: 1).
+	otherCell clearPossibleNumbers .
+	
 	^ otherCell
 ]
 
@@ -111,6 +126,7 @@ BilateralAlliance >> treatAsOnePair [
 				ifTrue: [ otherCell element: 0]
 				ifFalse: [ otherCell element: (thisCell possibleNumbers at: 1)].
 			otherCell clearPossibleNumbers.
+			thisCell clearPossibleNumbers .
 			^otherCell].
 	^self
 ]
@@ -123,6 +139,7 @@ BilateralAlliance >> treatAsTwoPairs [
 			otherCell possibleNumbers remove: (thisCell element).
 			otherCell element: (otherCell possibleNumbers at: 1).
 			otherCell clearPossibleNumbers.
+			thisCell clearPossibleNumbers.
 			^otherCell].
 	^self
 ]

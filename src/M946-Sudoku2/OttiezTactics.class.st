@@ -406,9 +406,9 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	"
 	aBlockの中でのワンペア・スリーカードを探す。
-	ブランクセルが1つの時、またはブランクセルが2つあるいは3つ
-	で垂直方向または水平方向にブランクセルが並んでいる時、
-	セルの配列を返す。
+	ブランクセルが1つの時、またはブランクセルが2つの時はそのまま返し,
+	ブランクセルが3つの時は垂直方向または水平方向にブランクセルが並ん
+	でいる時にセルの配列を返す。
 	"
 	| blankCells logger |
 	logger := M946FileLogger new: thisContext.

@@ -5,270 +5,181 @@ Class {
 }
 
 { #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock2Row3 [
-	"ワンペアで片方のセルに入る数字が決まったケース"
-	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
-	| logger  solver board thisCell  allies block candidates expected |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAlliance3.fuel';
-        materializeRoot .
-	logger info: board.
-	solver := OttiezTactics new: board.
-
-	
-	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
-	thisCell := board getSudokuCell: 4@3.
-	thisCell element: 2.
-	block := board getBlock: 2 verifyNumber: 2.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 1.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	expected := SudokuCell row: 3 column: 6 element: 0.
-	self assert: allies equals: expected  .
-	board map: allies.
-
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	logger info: board.
-	
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock4Col3 [
-	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
-	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
-	| logger  solver board thisCell  allies block candidates expected |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAlliance8.fuel';
-        materializeRoot .
-	logger info: board.
-	solver := OttiezTactics new: board.
-	
-	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
-	thisCell := board boardA2D at: 5 at: 3.
-	thisCell element: 4.
-	block := board getBlock: 4 verifyNumber: 4.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 1.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	expected := SudokuCell row: 6 column: 3 element: 0.
-	expected possibleNumbers add: 5.
-	self assert: allies equals: expected  .
-	board map: allies.
-
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	logger info: board.
-	
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_2 [
-	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース
-	 ブロック4 セル3@1 => 5
-	 ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
-	| logger  solver board thisCell  allies block candidates expected |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAlliance8.fuel';
-        materializeRoot .
-	solver := OttiezTactics new: board.
-	logger info: board.
-	
-
-
-	"ブロック4 列3#($5 $4 $45) -> #(5  $4  $4)"
-	thisCell := board boardA2D at: 4 at: 3.
-	thisCell element: 5.
-	block := board getBlock: 4 verifyNumber: 5.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 1.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	expected := SudokuCell row: 6 column: 3 element: 0.
-	expected possibleNumbers add: 4.
-	self assert: allies equals: expected  .
-	board map: allies.
-
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	logger info: board.
-	
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock4Col3_3 [
-	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
-	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(5  9  4)"
-	| logger  ottie board thisCell  block candidates |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAlliance8.fuel';
-        materializeRoot .
-	ottie := OttiezTactics new: board.
-	logger info: board .	
-	
-
-	"ブロック4 列3#($5 $4 $45) -> #(5  9  4)"
-	thisCell := board boardA2D at: 5 at: 3.
-	thisCell element: 9.
-	board map: thisCell.
-	block := board getBlock: 4 verifyNumber: 9.
-	candidates :=  ottie getAlliedCellForMapping: block cell: thisCell.
-	logger info: board.
-
-	
-
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock5Col2 [
-	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
-	"ブロック5 列2#($13 $3 $1) -> #(3 0 1)"
-	| logger  solver board thisCell  allies block candidates |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	"ボードの初期化 他のテストと盤面を統一するためブロック5を修正"
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAllianceA3.fuel';
-        materializeRoot .
-	solver := OttiezTactics new: board.
-	logger info: board .
-	thisCell := board boardA2D at: 4 at: 5.
-	thisCell element: 3.
-	
-	"ブロック5 列2  検証数字3  #($13 $3 $1) -> #(3 0 1)"
-	block := board getBlock: 5 verifyNumber: 3.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 2.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	self assert: allies equals: (SudokuCell row: 5 column: 5 element: 0).
-	board map: allies.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 2)) determineTheNumber .
-	self assert: allies equals: (SudokuCell row: 6 column: 5 element: 1).
-	board map: allies .
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	logger info: board.
-	
-
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock5Col2_2 [
-	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
-	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
-	| logger  solver board thisCell  allies block candidates |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAllianceA3.fuel';
-        materializeRoot .
-	logger info: board.
-	
-	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
-	thisCell  := SudokuCell row: 4 column: 5 element: 1	.
-	thisCell possibleNumbers add: 1.
-	thisCell possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: thisCell .
-	logger info: board .
-	solver := OttiezTactics new: board.
-
-	
-	block := board getBlock: 5 verifyNumber: 1.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 2.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	self assert: allies equals: (SudokuCell row: 5 column: 5 element: 3).
-	board map: allies.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 2)) determineTheNumber .
-	self assert: allies equals: (SudokuCell row: 6 column: 5 element: 0).
-	board map: allies .
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	logger info: board.
-
-
-]
-
-{ #category : #tests }
-BilateralAllianceTest >> testDetermineTheNumberBlock5Row2 [
-	"ツーペアで1つのセルに入る数字が決まったケース
-	 ブロック5 セル3@2に2が入ったと仮定する
-	
-	 求める結果
-	 --------------------------------------
-	 ブロック5 行2#($26 $3 $26) -> #(6 $3 2)
-	 ブロック2 行3#($2  0  $2)  -> #(2 0  0)
-	 ブロック8 行3#($6  0  $6)  -> #(0 0  6)	 
+BilateralAllianceTest >> testTreatAsAsymmetricPair1 [
 	"
-	| logger  solver board thisCell allies block candidates |
+	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
+
+	block 7
+	---------	
+	2  1  $38   <= thisCell
+	4  5  $8
+	9  4  $3	
+	"
+	| thisCell otherCell ba |
+	"セル初期化"
+	thisCell := SudokuCell row: 7 column: 3 element: 0.
+	thisCell addPossibleNumber: 3; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 8 column: 3 element: 0.
+	otherCell addPossibleNumber: 8.
+
+	"thisCell の3が確定"
+	thisCell element: 3.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsAsymmetricPair1   .
+	self assert: thisCell equals: ((SudokuCell row: 7 column: 3 element: 3) addPossibleNumber: 3; addPossibleNumber: 8).
+	self assert: thisCell possibleNumbers size equals: 2.
+	self assert: otherCell equals: (SudokuCell row: 8 column: 3 element: 8).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+	"セル初期化"
+	thisCell := SudokuCell row: 7 column: 3 element: 0.
+	thisCell addPossibleNumber: 3; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 9 column: 3 element: 0.
+	otherCell addPossibleNumber: 3.
+
+	"thisCell の8が確定"
+	thisCell element: 8.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsAsymmetricPair1   .
+	self assert: thisCell equals: ((SudokuCell row: 7 column: 3 element: 8) addPossibleNumber: 3; addPossibleNumber: 8).
+	self assert: thisCell possibleNumbers size equals: 2.
+	self assert: otherCell equals: (SudokuCell row: 9 column: 3 element: 3).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+]
+
+{ #category : #tests }
+BilateralAllianceTest >> testTreatAsAsymmetricPair2 [
+	"
+	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
+
+	block 7
+	---------	
+	2  1  $38   <= otherCell
+	4  5  $8
+	9  4  $3	
+	"
+	| thisCell otherCell ba |
+	"セル初期化"
+	thisCell := SudokuCell row: 8 column: 3 element: 0.
+	thisCell addPossibleNumber: 8.
+	otherCell := SudokuCell row: 7 column: 3 element: 0.
+	otherCell addPossibleNumber: 8; addPossibleNumber: 3.
+	
+	"thisCell の8が確定"
+	thisCell element: 8.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsAsymmetricPair2.
+	
+	self assert: thisCell equals: ((SudokuCell row: 8 column: 3 element: 8) addPossibleNumber: 8).
+	self assert: otherCell equals: (SudokuCell row: 7 column: 3  element: 3).
+
+	"セル初期化"
+	thisCell := SudokuCell row: 9 column: 3 element: 0.
+	thisCell addPossibleNumber: 3.
+	otherCell := SudokuCell row: 7 column: 3 element: 0.
+	otherCell addPossibleNumber: 8; addPossibleNumber: 3.
+
+	"thisCell の3が確定"
+	thisCell element: 3.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsAsymmetricPair2.
+	
+	self assert: thisCell equals: ((SudokuCell row: 9 column: 3 element: 3) addPossibleNumber: 3).
+	self assert: otherCell equals: (SudokuCell row: 7 column: 3  element: 8).
+
+]
+
+{ #category : #tests }
+BilateralAllianceTest >> testTreatAsOnePair [
+
+	| thisCell otherCell ba logger |
 	M946FileLogger logLevel: LogLevel debug.
-
 	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
+	logger clearLog.
+	
+	thisCell := SudokuCell row: 3 column: 4  element: 0.
+	thisCell addPossibleNumber: 2.
+	otherCell := SudokuCell row: 3 column: 6 element: 0.
+	otherCell addPossibleNumber: 2.
 
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAllianceA5.fuel';
-        materializeRoot .
-	logger info: board.
-	
-	solver := OttiezTactics new: board.
-	thisCell  := SudokuCell row: 4 column: 5 element: 3.
-	thisCell possibleNumbers add: 1.
-	thisCell possibleNumbers add: 3. 
-	board boardA2D at: 4 at: 5 put: thisCell .
-	
-	"ブロック5 行2#($26 0 $26) -> #(6 0 2)"
-	thisCell := board boardA2D at: 5 at: 6.
+	"thisCell のブランクが確定"
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsOnePair .
+	self assert: thisCell equals: (SudokuCell row: 3 column: 4 element: 0).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 3 column: 6 element: 2).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+	thisCell := SudokuCell row: 3 column: 4  element: 0.
+	thisCell addPossibleNumber: 2.
+	otherCell := SudokuCell row: 3 column: 6 element: 0.
+	otherCell addPossibleNumber: 2.
 	thisCell element: 2.
-	block := board getBlock: 5 verifyNumber: 2.
-	candidates :=  solver getAlliedCellForMapping: block cell: thisCell.
-	self assert: candidates size equals: 1.
-	allies := (BilateralAlliance thisCell: thisCell otherCell: (candidates at: 1)) determineTheNumber .
-	self assert: allies equals: (SudokuCell row: 5 column: 4 element: 6).
-	board map: allies.
-	thisCell clearPossibleNumbers .
-	board map: thisCell.
-	self assert: (board boardA2D at: 5 at: 6) equals: 2.
-	self assert: (board boardA2D at: 5 at: 4) equals: 6.
-	self assert: (board boardA2D at: 3 at: 6) equals: 0.
-	self assert: (board boardA2D at: 3 at: 4) equals: 2.
-	self assert: (board boardA2D at: 7 at: 6) equals: 6.
-	self assert: (board boardA2D at: 7 at: 4) equals: 0.
+	"thisCell の予約数 2が確定"
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsOnePair .
+	self assert: thisCell equals: (SudokuCell row: 3 column: 4 element: 2).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 3 column: 6 element: 0).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+
+	thisCell := SudokuCell row: 3 column: 4  element: 0.
+	thisCell addPossibleNumber: 2.
+	otherCell := SudokuCell row: 3 column: 6 element: 0.
+	otherCell addPossibleNumber: 2.
+	thisCell element: 7.
+	"thisCell が予約数以外の7に確定"
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsOnePair .
+	self assert: thisCell equals: (SudokuCell row: 3 column: 4 element: 7).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 3 column: 6 element: 2).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+
+
+]
+
+{ #category : #tests }
+BilateralAllianceTest >> testTreatAsTwoPairs [
+
+	| thisCell otherCell ba |
+	"セル初期化"
+	thisCell := SudokuCell row: 4 column: 7 element: 0.
+	thisCell addPossibleNumber: 1; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 6 column: 7 element: 0.
+	otherCell addPossibleNumber: 1; addPossibleNumber: 8.
 	
-	logger info: board.
+	"thisCell の1が確定"
+	thisCell element: 1.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsTwoPairs  .
+	self assert: thisCell equals: (SudokuCell row: 4 column: 7 element: 1).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 6 column: 7 element: 8).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+	"セル初期化"
+	thisCell := SudokuCell row: 4 column: 7 element: 0.
+	thisCell addPossibleNumber: 1; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 6 column: 7 element: 0.
+	otherCell addPossibleNumber: 1; addPossibleNumber: 8.
 	
-		
-	
+	"thisCell の8が確定"
+	thisCell element: 8.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	ba treatAsTwoPairs  .
+	self assert: thisCell equals: (SudokuCell row: 4 column: 7 element: 8).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 6 column: 7 element: 1).
+	self assert: otherCell possibleNumbers size equals: 0.	
+
+
+
+
+
+
+
 ]
