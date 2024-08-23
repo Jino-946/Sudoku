@@ -280,6 +280,30 @@ SudokuBlock2 >> get3Allies: blankCells [
 
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> getBuddyCellsOf: thisCell [
+	"
+	thisCellがワンペア・ツーペア・非対称ペアの時,となる相棒セルを返す。
+	"
+	| buddies possibleNumbers logger |
+	logger := M946FileLogger new: thisContext.
+	buddies := blockA2D asArray select: [ :cell |
+		
+		cell class = SudokuCell 
+			and: [( cell notSameCoordinates: thisCell) 	
+				and: [((cell possibleNumbers) intersection: (thisCell possibleNumbers)) isNotEmpty ] ]].
+	buddies size = 2 ifTrue: [ ^buddies ].			
+	buddies size = 1 ifFalse: [ ^#() ].
+	(buddies at: 1) possibleNumbers = thisCell possibleNumbers ifTrue:[ ^buddies].
+	possibleNumbers := (buddies at: 1) possibleNumbers copy.
+	buddies := blockA2D asArray select: [ :cell |
+		cell class = SudokuCell 
+			and: [( cell notSameCoordinates: thisCell) 	
+				and: [((cell possibleNumbers) intersection:  possibleNumbers) isNotEmpty ] ]].		
+	^buddies .												
+
+]
+
 { #category : #deprecated }
 SudokuBlock2 >> getPairCellsFromCells: pairOfSudokuCell [
 	"

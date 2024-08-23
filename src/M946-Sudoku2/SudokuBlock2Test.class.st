@@ -165,6 +165,36 @@ SudokuBlock2Test >> testColsOnBoard [
 ]
 
 { #category : #tests }
+SudokuBlock2Test >> testGetBuddyCellsOf [
+	| logger  board  block thisCell buddies |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
+        materializeRoot .
+	logger info: board.
+	
+	block := board getBlock: 6.
+	thisCell := (SudokuCell row: 6 column: 7 element: 8) addPossibleNumber: 1; addPossibleNumber: 8.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+	block := board getBlock: 5.	
+	thisCell := (SudokuCell row: 4 column: 5 element: 1) addPossibleNumber: 1; addPossibleNumber: 3.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+	block := board getBlock: 5.	
+	thisCell := (SudokuCell row: 5 column: 5 element: 0)  addPossibleNumber: 3.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+]
+
+{ #category : #tests }
 SudokuBlock2Test >> testLocalX [
 
 	| board block |

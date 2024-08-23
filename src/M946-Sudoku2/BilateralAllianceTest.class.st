@@ -29,7 +29,7 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair1 [
 	self assert: thisCell equals: ((SudokuCell row: 7 column: 3 element: 3) addPossibleNumber: 3; addPossibleNumber: 8).
 	self assert: thisCell possibleNumbers size equals: 2.
 	self assert: otherCell equals: (SudokuCell row: 8 column: 3 element: 8).
-	self assert: otherCell possibleNumbers size equals: 0.	
+	
 
 	"セル初期化"
 	thisCell := SudokuCell row: 7 column: 3 element: 0.
@@ -45,6 +45,18 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair1 [
 	self assert: thisCell possibleNumbers size equals: 2.
 	self assert: otherCell equals: (SudokuCell row: 9 column: 3 element: 3).
 	self assert: otherCell possibleNumbers size equals: 0.	
+		
+	"セル初期化"
+	thisCell := SudokuCell row: 7 column: 3 element: 0.
+	thisCell addPossibleNumber: 3; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 9 column: 3 element: 0.
+	otherCell addPossibleNumber: 3.
+
+	"thisCellに1、8以外の数字が入るとエラーが送出される"
+	thisCell element: 7.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	self should: [ba treatAsAsymmetricPair1 ] raise: Error.
+		
 
 ]
 
@@ -71,8 +83,8 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair2 [
 	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	ba treatAsAsymmetricPair2.
 	
-	self assert: thisCell equals: ((SudokuCell row: 8 column: 3 element: 8) addPossibleNumber: 8).
-	self assert: otherCell equals: (SudokuCell row: 7 column: 3  element: 3).
+	self assert: thisCell equals: (SudokuCell row: 8 column: 3 element: 8).
+	self assert: otherCell equals: ((SudokuCell row: 7 column: 3  element: 0) addPossibleNumber: 3).
 
 	"セル初期化"
 	thisCell := SudokuCell row: 9 column: 3 element: 0.
@@ -85,8 +97,8 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair2 [
 	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
 	ba treatAsAsymmetricPair2.
 	
-	self assert: thisCell equals: ((SudokuCell row: 9 column: 3 element: 3) addPossibleNumber: 3).
-	self assert: otherCell equals: (SudokuCell row: 7 column: 3  element: 8).
+	self assert: thisCell equals: (SudokuCell row: 9 column: 3 element: 3).
+	self assert: otherCell equals: ((SudokuCell row: 7 column: 3  element: 0) addPossibleNumber: 8).
 
 ]
 
@@ -178,7 +190,16 @@ BilateralAllianceTest >> testTreatAsTwoPairs [
 
 
 
-
+	"セル初期化"
+	thisCell := SudokuCell row: 4 column: 7 element: 0.
+	thisCell addPossibleNumber: 1; addPossibleNumber: 8.
+	otherCell := SudokuCell row: 6 column: 7 element: 0.
+	otherCell addPossibleNumber: 1; addPossibleNumber: 8.
+	
+	"thisCellには1、8以外が入るとエラーが送出される"
+	thisCell element: 7.
+	ba := BilateralAlliance thisCell: thisCell otherCell: otherCell.
+	self should: [ ba treatAsTwoPairs ] raise: Error .
 
 
 

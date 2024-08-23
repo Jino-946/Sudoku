@@ -67,14 +67,14 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@4) asSimpleString  equals: '$1'.
-	self assert: (board at: 7@6) asSimpleString  equals: '$1'.
+	self assert: (board at: 7@4) asSimpleString  equals: '?1'.
+	self assert: (board at: 7@6) asSimpleString  equals: '?1'.
 	self assert: (board at: 8@3)   equals: 1.
 	self assert: (board at: 3@1)   equals: 1.
 	self assert: (board at: 2@7)   equals: 1.
 	self assert: (board at: 6@9)   equals: 1.
-	self assert: (board at: 5@4) asSimpleString  equals: '$1'.
-	self assert: (board at: 5@6) asSimpleString  equals: '$1'.
+	self assert: (board at: 5@4) asSimpleString  equals: '?1'.
+	self assert: (board at: 5@6) asSimpleString  equals: '?1'.
 
 	
 	
@@ -157,8 +157,8 @@ OttiezTacticsTest >> testFormBilateralAlliance2 [
 	logger info: ('2nd block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 4@3) asSimpleString  equals: '$2'.
-	self assert: (board at: 6@3) asSimpleString  equals: '$2'.
+	self assert: (board at: 4@3) asSimpleString  equals: '?2'.
+	self assert: (board at: 6@3) asSimpleString  equals: '?2'.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance3.fuel'.
 	
@@ -211,8 +211,8 @@ OttiezTacticsTest >> testFormBilateralAlliance4 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 3@7) asSimpleString   equals: '$3'.
-	self assert: (board at: 3@9) asSimpleString   equals: '$3'.
+	self assert: (board at: 3@7) asSimpleString   equals: '?3'.
+	self assert: (board at: 3@9) asSimpleString   equals: '?3'.
 	
 	
 	
@@ -240,8 +240,8 @@ OttiezTacticsTest >> testFormBilateralAlliance5 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@7) asSimpleString   equals: '$4'.
-	self assert: (board at: 9@7) asSimpleString   equals: '$4'.
+	self assert: (board at: 7@7) asSimpleString   equals: '?4'.
+	self assert: (board at: 9@7) asSimpleString   equals: '?4'.
 
 
 	
@@ -269,8 +269,8 @@ OttiezTacticsTest >> testFormBilateralAlliance6 [
 	logger debug: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger debug: board.
-	self assert: (board at: 3@5) asSimpleString   equals: '$4'.
-	self assert: (board at: 3@6) asSimpleString   equals: '$4'.
+	self assert: (board at: 3@5) asSimpleString   equals: '?4'.
+	self assert: (board at: 3@6) asSimpleString   equals: '?4'.
 
 
 	
@@ -298,8 +298,8 @@ OttiezTacticsTest >> testFormBilateralAlliance7 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 3@4) asSimpleString   equals: '$5'.
-	self assert: (board at: 3@6) asSimpleString   equals: '$45'.
+	self assert: (board at: 3@4) asSimpleString   equals: '?5'.
+	self assert: (board at: 3@6) asSimpleString   equals: '?45'.
 
 
 	
@@ -327,8 +327,8 @@ OttiezTacticsTest >> testFormBilateralAlliance8 [
 	logger info: ('1st block => {1}' format: { block  }).
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@2) asSimpleString   equals: '$6'.
-	self assert: (board at: 7@3) asSimpleString   equals: '$6'.
+	self assert: (board at: 7@2) asSimpleString   equals: '?6'.
+	self assert: (board at: 7@3) asSimpleString   equals: '?6'.
 	
 	
 	
@@ -418,8 +418,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA2 [
 	block := board getBlock: 5 verifyNumber: 3.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 5@4) asSimpleString  equals: '$13'.
-	self assert: (board at: 5@5) asSimpleString  equals: '$3'.
+	self assert: (board at: 5@4) asSimpleString  equals: '?13'.
+	self assert: (board at: 5@5) asSimpleString  equals: '?3'.
 
 
 
@@ -472,8 +472,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA4 [
 	block := board getBlock: 5 verifyNumber: 6.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 4@5) asSimpleString  equals: '$26'.
-	self assert: (board at: 6@5) asSimpleString  equals: '$26'.
+	self assert: (board at: 4@5) asSimpleString  equals: '?26'.
+	self assert: (board at: 6@5) asSimpleString  equals: '?26'.
 
 
 
@@ -501,8 +501,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA5 [
 	block := board getBlock: 7 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 3@7) asSimpleString  equals: '$38'.
-	self assert: (board at: 3@8) asSimpleString  equals: '$8'.
+	self assert: (board at: 3@7) asSimpleString  equals: '?38'.
+	self assert: (board at: 3@8) asSimpleString  equals: '?8'.
 
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA6.fuel'.
@@ -528,8 +528,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA6 [
 	block := board getBlock: 6 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@4) asSimpleString  equals: '$18'.
-	self assert: (board at: 7@6) asSimpleString  equals: '$18'.
+	self assert: (board at: 7@4) asSimpleString  equals: '?18'.
+	self assert: (board at: 7@6) asSimpleString  equals: '?18'.
 
 
 
@@ -556,8 +556,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA7 [
 	block := board getBlock: 6 verifyNumber: 3.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@5) asSimpleString  equals: '$3'.
-	self assert: (board at: 8@5) asSimpleString  equals: '$3'.
+	self assert: (board at: 7@5) asSimpleString  equals: '?3'.
+	self assert: (board at: 8@5) asSimpleString  equals: '?3'.
 	self assert: (board at: 5@4)   equals: 3.
 	self assert: (board at: 5@6)   equals: 1.
 
@@ -586,8 +586,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA8 [
 	block := board getBlock: 3 verifyNumber: 5.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 7@1) asSimpleString   equals: '$5'.
-	self assert: (board at: 7@3) asSimpleString   equals: '$5'.
+	self assert: (board at: 7@1) asSimpleString   equals: '?5'.
+	self assert: (board at: 7@3) asSimpleString   equals: '?5'.
 	self assert: (board at: 8@7)   equals: 5.
 	self assert: (board at: 4@9)   equals: 5.
 
@@ -645,10 +645,10 @@ OttiezTacticsTest >> testFormBilateralAllianceB1 [
 	ottie formBilateralAlliance: block.
 	logger info: board.
 	self assert: (board at: 8@2)   equals: 7.
-	self assert: (board at: 4@1) asSimpleString equals: '$7'.
-	self assert: (board at: 6@1) asSimpleString equals: '$7'.
-	self assert: (board at: 7@3) asSimpleString equals: '$49'.
-	self assert: (board at: 9@3) asSimpleString equals: '$49'.
+	self assert: (board at: 4@1) asSimpleString equals: '?7'.
+	self assert: (board at: 6@1) asSimpleString equals: '?7'.
+	self assert: (board at: 7@3) asSimpleString equals: '?49'.
+	self assert: (board at: 9@3) asSimpleString equals: '?49'.
 
 
 
@@ -675,8 +675,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB2 [
 	block := board getBlock: 2 verifyNumber: 8.
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 4@3) asSimpleString equals: '$28'.
-	self assert: (board at: 6@3) asSimpleString equals: '$28'.
+	self assert: (board at: 4@3) asSimpleString equals: '?28'.
+	self assert: (board at: 6@3) asSimpleString equals: '?28'.
 
 
 
@@ -734,8 +734,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 
 	ottie formBilateralAlliance: block.
 	logger info: board.
-	self assert: (board at: 4@7) asSimpleString equals: '$69'.
-	self assert: (board at: 6@7) asSimpleString equals: '$69'.
+	self assert: (board at: 4@7) asSimpleString equals: '?69'.
+	self assert: (board at: 6@7) asSimpleString equals: '?69'.
 	self assert: (board at: 8@8)  equals: 9.
 
 	"6block 9の斜めツーペアを配置を試みるためテストメソッドに追加する"

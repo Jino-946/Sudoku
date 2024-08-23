@@ -29,6 +29,13 @@ ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePo
 ]
 
 { #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleCollectionProtocolRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBuddyCellInTheBlock: #false)) #'2024-08-18T17:54:14.094395+09:00') )
+]
+
+{ #category : #'code-critics' }
 ManifestM946Sudoku2 class >> ruleDetectContainsRuleV1FalsePositive [
 
 	<ignoreForCoverage>

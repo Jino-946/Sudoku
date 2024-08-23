@@ -80,7 +80,7 @@ M946FileLogger class >> new: context [
 	| logger |
 	logger := self named: 'log/default.log'.
 	logger context: context asString.
-	logger record: ('Hello!! ... "{1}"'  format: {logger context}) .
+	logger debug: ('Hello!! ... "{1}"'  format: {logger context}) .
 	^logger
 ]
 

@@ -81,6 +81,108 @@ SudokuBoard2 >> _getBlock: rowStart at: colStart [
 	^ block
 ]
 
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessing: sudokuCell [
+	"
+	センダーはSudokuBoard2>>map:
+	セルに入る数字が確定したとき,セルに交差する行と列の対応する予約セルの
+	同盟処理を行う。
+	
+	removePossibleNumbersOfRowAndCol: の機能拡張・リネーム版
+	"
+	| cells |
+	
+	cells := self allianceProcessingOfRow: sudokuCell.
+	cells := self allianceProcessingOfCol: sudokuCell
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell [
+
+	| block buddyCells ba logger result cell |
+	logger := M946FileLogger new: thisContext.
+	block := self getBlock: thisCell blockNumber.
+	logger debug: block.
+	buddyCells := block getBuddyCellsOf: thisCell.
+	logger debug: ('buddyCells => 
+{1}' format: {buddyCells}) .
+	
+	buddyCells size > 2 ifTrue: [ ^ self ].
+	buddyCells size = 1 ifTrue: [  
+		ba := BilateralAlliance
+		      thisCell: thisCell deepCopy
+		      otherCell: (buddyCells at: 1) deepCopy.
+		^ ba determineTheNumber].
+
+	result := OrderedCollection new.
+	buddyCells do: [ :otherCell | 
+		logger info: ('*** thisCell => 
+{1}' format: {thisCell}).		
+		
+		logger info: ('*** otherCell => 
+{1}' format: {otherCell}).		
+		ba  := BilateralAlliance
+		      thisCell: thisCell deepCopy
+		      otherCell: otherCell deepCopy.
+		cell := ba determineTheNumber .
+		logger info: ('** cell => 
+{1}' format: {cell}).
+		result add: cell].	
+	
+	^result asArray
+	
+	
+		
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
+	"
+	引数に交差する列のセルのpossibleNumbersにsudokuCellのelementが含まれていたら
+	ワンペア・ツーペア・非対称ペアの処理(同盟の解決処理)を行う。
+	removePossibleNumbersOfCol:の機能拡張・リネーム版
+	"
+	| sudokuCol logger|
+	logger := M946FileLogger new: thisContext.
+	sudokuCol := self getSudokuColumn: sudokuCell x.
+	sudokuCol column do: [ :cell | | buddyCells |
+		cell class = SudokuCell 
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [  |copyPossibleNumbers |
+						copyPossibleNumbers := cell possibleNumbers deepCopy.
+						copyPossibleNumbers remove: sudokuCell element.
+						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)].
+						buddyCells := self allianceProcessingBuddyCellInTheBlock:  cell.
+						boardA2D at: cell y at: cell x put: cell element.
+						^buddyCells ]]].
+			
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
+	"
+	引数に交差する列のセルのpossibleNumbersにsudokuCellのelementが含まれていたら
+	ワンペア・ツーペア・非対称ペアの処理(同盟の解決処理)を行う。
+	removePossibleNumbersOfRow:の機能拡張・リネーム版
+	"
+	| sudokuRow logger|
+	logger := M946FileLogger new: thisContext.
+	sudokuRow := self getSudokuRow: sudokuCell y.
+	sudokuRow row do: [ :cell | | buddyCells |
+		cell class = SudokuCell 
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [ | copyPossibleNumbers|
+						copyPossibleNumbers := cell possibleNumbers deepCopy.
+						copyPossibleNumbers remove: sudokuCell element.
+						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)].
+						buddyCells := self allianceProcessingBuddyCellInTheBlock:  cell.
+						boardA2D at: cell y at: cell x put: cell element.				
+						^buddyCells ]]].
+			
+]
+
 { #category : #'private - printing' }
 SudokuBoard2 >> asString [
 
@@ -177,6 +279,7 @@ SudokuBoard2 >> completed [
 
 { #category : #logic }
 SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
 	同一ブロックにsudokuCellのワンペアのもう一方のセル
 	がある場合はもう一方のセルの値を確定させる。
@@ -467,7 +570,9 @@ SudokuBoard2 >> printOn: aStream [
 
 { #category : #removing }
 SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
+	SudokuBoard2>>removePossibleNumbersOfCol: sudokuCell
 	1)引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
 	  possibleNumbersが空になったらあらためて0をセットする。
 	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
@@ -488,11 +593,12 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 						cell possibleNumbers isEmpty ifTrue: [ 
 							boardA2D at: cell y at: cell x put: 0]]]].
 			
-			
+
 ]
 
 { #category : #removing }
 SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
 	1)引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
 	  possibleNumbersが空になったらあらためて0をセットする。
@@ -519,6 +625,7 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 
 { #category : #removing }
 SudokuBoard2 >> removePossibleNumbersOfRowAndCol: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
 	センダーはSudokuBoard2>>map:
 	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
