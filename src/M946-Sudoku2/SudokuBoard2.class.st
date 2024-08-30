@@ -93,43 +93,131 @@ SudokuBoard2 >> allianceProcessing: sudokuCell [
 	| cells |
 	
 	cells := self allianceProcessingOfRow: sudokuCell.
-	cells := self allianceProcessingOfCol: sudokuCell
+	self allianceProcessingReflectOnSelf: cells.
+
+	cells := self allianceProcessingOfCol: sudokuCell.
+	self allianceProcessingReflectOnSelf: cells
 ]
 
 { #category : #logic }
-SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell [
+SudokuBoard2 >> allianceProcessingBCITB1: buddyCells thisCell: thisCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド1
+	thisCellは配列の先頭に格納する。
+	
+	buddyCellsの要素が1個の時, (ワンペアまたはツーペアの時)
+	"
+	| ba  logger result buddyCell|
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	ba := BilateralAllianceOfRelatedBlock 
+		thisCell: thisCell 
+		otherCell: (buddyCells at: 1)
+		confirmNumber: aNumber.
+	buddyCell  :=  ba determineTheNumber.
+	result add: thisCell.
+	result add: buddyCell.
+	^result asArray
+]
 
-	| block buddyCells ba logger result cell |
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBCITB2: buddyCells thisCell: thisCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド2
+	thisCellは配列の先頭に格納する。
+
+	thisCellの予約数が1種類、otherCellの予約数が2種類または1種類の非対称ペア 
+
+	2  1  $38  <= otherCell1
+	4  5  $8   <= thisCell
+	9  4  $3   <= otherCell2
+	"
+	| otherCell1 otherCell2 result  logger|
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	otherCell1 := buddyCells at: 1.
+	otherCell2 := buddyCells at: 2.
+	(otherCell1 possibleNumbers includes: aNumber) 
+		ifTrue: [ 
+
+			otherCell1 element: aNumber.
+			otherCell1 clearPossibleNumbers.
+			otherCell2 element: (otherCell2 possibleNumbers at: 1).
+			otherCell2 clearPossibleNumbers 
+		].
+	thisCell clearPossibleNumbers .
+	result add: thisCell.
+	result add: otherCell1.
+	result add: otherCell2.
+	^result asArray
+	
+	
+	
+	
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBCITB3: buddyCells thisCell: sudokuCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド3
+	thisCellは配列の先頭に格納する。
+	
+	thisCellの予約数が2種類、otherCellの1種類の非対称ペア 
+
+	2  1  $38  <= thisCell
+	4  5  $8   <= otherCell1
+	9  4  $3   <= otherCell2
+	
+
+	"
+	| result otherCell1 otherCell2 logger |
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	otherCell1 := buddyCells at: 1.
+	otherCell2 := buddyCells at: 2.
+	logger debug: ('thisCell => 
+{1}' format: {sudokuCell}).
+	(otherCell1 possibleNumbers includes: aNumber)
+		ifTrue: [
+			otherCell1 element: aNumber.
+			otherCell1 clearPossibleNumbers].
+	(otherCell2 possibleNumbers includes: aNumber)
+		ifTrue: [ 
+			otherCell2 element: aNumber.
+			otherCell2 clearPossibleNumbers].
+	sudokuCell removePossibleNumber: aNumber .	
+	result add: sudokuCell.
+	result add: otherCell1.
+	result add: otherCell2 .
+
+	^result asArray
+	
+	
+
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: aNumber [
+	"
+	thisCell の element は
+	"
+	| block buddyCells logger |
 	logger := M946FileLogger new: thisContext.
 	block := self getBlock: thisCell blockNumber.
 	logger debug: block.
-	buddyCells := block getBuddyCellsOf: thisCell.
+	buddyCells := (block getBuddyCellsOf: thisCell) 
+		sorted: [:c1 :c2 | c1 possibleNumbers size > c2 possibleNumbers size].
 	logger debug: ('buddyCells => 
 {1}' format: {buddyCells}) .
 	
-	buddyCells size > 2 ifTrue: [ ^ self ].
+	(buddyCells isEmpty or: [ buddyCells size > 2 ]) ifTrue: [ ^ self ].
 	buddyCells size = 1 ifTrue: [  
-		ba := BilateralAlliance
-		      thisCell: thisCell deepCopy
-		      otherCell: (buddyCells at: 1) deepCopy.
-		^ ba determineTheNumber].
+		^self allianceProcessingBCITB1: buddyCells  thisCell: thisCell  confirmNumber: aNumber].
 
-	result := OrderedCollection new.
-	buddyCells do: [ :otherCell | 
-		logger info: ('*** thisCell => 
-{1}' format: {thisCell}).		
-		
-		logger info: ('*** otherCell => 
-{1}' format: {otherCell}).		
-		ba  := BilateralAlliance
-		      thisCell: thisCell deepCopy
-		      otherCell: otherCell deepCopy.
-		cell := ba determineTheNumber .
-		logger info: ('** cell => 
-{1}' format: {cell}).
-		result add: cell].	
-	
-	^result asArray
+	(buddyCells at: 1) possibleNumbers size = 2 ifTrue: [ 
+		^self allianceProcessingBCITB2: buddyCells thisCell: thisCell  confirmNumber: aNumber ].
+
+	^self allianceProcessingBCITB3: buddyCells  thisCell: thisCell confirmNumber: aNumber 
 	
 	
 		
@@ -149,12 +237,11 @@ SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
 		cell class = SudokuCell 
 			ifTrue: [ 
 					(cell possibleNumbers includes: sudokuCell element)
-					ifTrue: [  |copyPossibleNumbers |
+					ifTrue: [  "|copyPossibleNumbers |
 						copyPossibleNumbers := cell possibleNumbers deepCopy.
 						copyPossibleNumbers remove: sudokuCell element.
-						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)].
-						buddyCells := self allianceProcessingBuddyCellInTheBlock:  cell.
-						boardA2D at: cell y at: cell x put: cell element.
+						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)]."
+						buddyCells := self allianceProcessingBuddyCellInTheBlock: cell confirmNumber: sudokuCell element.
 						^buddyCells ]]].
 			
 ]
@@ -162,8 +249,10 @@ SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
 { #category : #logic }
 SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
 	"
-	引数に交差する列のセルのpossibleNumbersにsudokuCellのelementが含まれていたら
-	ワンペア・ツーペア・非対称ペアの処理(同盟の解決処理)を行う。
+	引数の同一行上セルのpossibleNumbersにsudokuCellのelementが含まれていたら
+	そのセルのブロックの同盟セルの解決処理を行う。
+	
+	
 	removePossibleNumbersOfRow:の機能拡張・リネーム版
 	"
 	| sudokuRow logger|
@@ -173,14 +262,39 @@ SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
 		cell class = SudokuCell 
 			ifTrue: [ 
 					(cell possibleNumbers includes: sudokuCell element)
-					ifTrue: [ | copyPossibleNumbers|
+					ifTrue: [ "| copyPossibleNumbers|
 						copyPossibleNumbers := cell possibleNumbers deepCopy.
 						copyPossibleNumbers remove: sudokuCell element.
 						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)].
-						buddyCells := self allianceProcessingBuddyCellInTheBlock:  cell.
-						boardA2D at: cell y at: cell x put: cell element.				
+						cell element: sudokuCell element."
+						buddyCells := self allianceProcessingBuddyCellInTheBlock: cell confirmNumber: sudokuCell element.			
 						^buddyCells ]]].
 			
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> allianceProcessingReflectOnSelf: cells [
+	"
+	allianceProcessing:  の戻値を boardA2D に反映させる
+	"
+	cells class = Array ifFalse: [ ^self ].
+	cells do: [ :cell |
+		cell class = SudokuCell ifTrue: [ 
+			cell possibleNumbers isEmpty 
+				ifTrue: [ 
+					boardA2D at: cell y at: cell x put: cell element]	
+				ifFalse: [ 
+					boardA2D at: cell y at: cell x put: cell]]]
+	
+	"
+	cells class = SudokuCell 
+	ifTrue: [ boardA2D at: cells y at: cells x put: cells element ]
+	ifFalse: [ 
+		(cells class = Array and: [ cells size = 2 ])
+			ifTrue: [ 
+				boardA2D at: (cells at: 1) y at: (cells at:1) x put: (cells at: 1) element.
+				boardA2D at: (cells at: 2) y at: (cells at:2) x put: (cells at: 2) element ]].
+	"
 ]
 
 { #category : #'private - printing' }
@@ -492,7 +606,8 @@ SudokuBoard2 >> map:  sudokuItem [
 		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
 			ifTrue: [  
 				boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element.
-				self removePossibleNumbersOfRowAndCol: sudokuItem]
+				"self removePossibleNumbersOfRowAndCol: sudokuItem."
+				self allianceProcessing: sudokuItem.]
 			ifFalse: [  
 				 boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem ]].
 	

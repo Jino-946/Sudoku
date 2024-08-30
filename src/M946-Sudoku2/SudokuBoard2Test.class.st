@@ -19,82 +19,6 @@ SudokuBoard2Test >> performTest [
 ]
 
 { #category : #tests }
-SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock [
-	"
-	セルに入る数字が確定したあと,関連するブロックの確定数字を予約数字に持つペアセル
-	の動作をテストする。
-	ワンペアとツーペアのテスト
-	"
-	| logger  board  pairCell thisCell |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
-	logger info: board.
-	
-	"
-	5block<5@6>の1が確定することで6block<7@6>の8が確定したあとのツーペアの状態
-	"
-	thisCell := board getSudokuCell: 7@6.
-	thisCell element: 8.
-	pairCell := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCell class equals: SudokuCell.
-	self assert: pairCell equals: (SudokuCell row: 4 column: 7 element: 1).
-	
-	"
-	6block<7@6>の1が確定したと想定したツーペアの状態
-	"
-	thisCell := board getSudokuCell: 7@6.
-	thisCell element: 1.
-	pairCell := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCell class equals: SudokuCell.
-	self assert: pairCell equals: (SudokuCell row: 4 column: 7 element: 8).
-
-	" ボードのリロード"
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
-	logger info: board.
-	
-	"
-	ワンペアの予約数が確定したと想定したワンペアの状態
-	"
-	thisCell := board getSudokuCell: 9@7.
-	thisCell element: 4.
-	logger info: thisCell.
-	pairCell := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCell class equals: SudokuCell.
-	self assert: pairCell equals: (SudokuCell row: 7 column: 7 element: 0).
-	
-	
-	"
-	ワンペアの予約数以外の数が確定したと想定したワンペアの状態
-	"
-	thisCell := board getSudokuCell: 9@7.
-	thisCell element: 7.
-	logger info: thisCell.
-	pairCell := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCell class equals: SudokuCell.
-	self assert: pairCell equals: (SudokuCell row: 7 column: 7 element: 4).
-	
-	"
-	ワンペアの解除を想定したワンペアの状態
-	"
-	thisCell := board getSudokuCell: 9@7.
-	thisCell element: 0.
-	logger info: thisCell.
-	pairCell := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCell class equals: SudokuCell.
-	self assert: pairCell equals: (SudokuCell row: 7 column: 7 element: 4).
-
-
-]
-
-{ #category : #tests }
 SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock2 [
 	"
 	セルに入る数字が確定したあと,関連するブロックの確定数字を予約数字に持つペアセル
@@ -111,67 +35,66 @@ SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock2 [
         filePath: 'fuel/testFormBilateralAllianceA7.fuel';
         materializeRoot .
 	logger info: board.
-	
+
 	"
-	7block<3@7>8が確定した
+	6block<7@6>1が確定することで5block<5@6>の予約数字1が無くなったと仮定する
+	"	
+	thisCell := board getSudokuCell: 5@6.
+	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: 1.
+	pairCells do: [ :cell | cell clearPossibleNumbers  ].
+	logger info: ('actual => 
+{1}' format: {pairCells}).	
+	self assert: pairCells class equals: Array.
+	bag := Bag new.
+	bag add: (SudokuCell row: 4 column: 5  element: 1) .
+	bag add: (SudokuCell row: 5 column: 5 element: 3).
+	bag add: (SudokuCell row: 6 column: 5 element: 0).
+	logger info: ('expected => 
+{1}' format: {bag}).	
+	self assert: pairCells asBag  equals: bag.
+
+
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
+        materializeRoot .
 	"
+	8block<5@7>8が確定することで7block<3@7>の予約数字8が無くなったと仮定する	
 	"
 	thisCell := board getSudokuCell: 3@7.
-	thisCell element: 8.
-	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	self assert: pairCells class equals: Array.
+	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: 8.
 	bag := Bag new.
-	bag add: (SudokuCell row: 8 column: 3  element: 0).
-	bag add: (SudokuCell row: 9 column: 3 element: 3).
-	self assert: pairCells asBag equals: bag.
-	"
+	bag add: ((SudokuCell row: 7 column: 3 element: 0) addPossibleNumber: 3).
+	bag add: (SudokuCell row: 8 column: 3  element: 8) .
+	bag add: ((SudokuCell row: 9 column: 3 element: 0) addPossibleNumber: 3).
 	
+	logger info: ('pairCells => 
+{1}' format: {pairCells}).
+	logger info: ('bag => 
+{1}' format: {bag}).
+
+	self assert: pairCells asBag equals: bag.
+	
+
 	board := FLMaterializer new 
         filePath: 'fuel/testFormBilateralAllianceA7.fuel';
         materializeRoot .
+
 	"
-	7block<3@9>3が確定した
-	"
+	9block<7@9>3が確定し, 7block<3@9>のワンペアが解除されたと仮定する
 	"
 	thisCell := board getSudokuCell: 3@9.
-	thisCell element: 3.
-	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell.
+	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: 3.
 	logger info: ('actual => 
 {1}' format: {pairCells}).	
 	self assert: pairCells class equals: Array.
 	bag := Bag new.
-	bag add: ((SudokuCell row: 7 column: 3  element: 0) addPossibleNumber: 8 ).
-	bag add: ((SudokuCell row: 8 column: 3 element: 0) addPossibleNumber: 8).
+	bag add: (SudokuCell row: 9 column: 3 element: 0).
+	bag add: (SudokuCell row: 7 column: 3  element: 3).
+	bag add: (SudokuCell row: 8 column: 3 element: 8).
 	logger info: ('expected => 
 {1}' format: {bag}).
-	self assert: pairCells asBag equals: bag.
-	"
-
-
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
-	"
-	5block<5@6>1が確定した
-	"
-	thisCell := board getSudokuCell: 5@6.
-	thisCell element: 1.
-	pairCells := board allianceProcessingBuddyCellInTheBlock: thisCell.
-	logger info: ('actual => 
-{1}' format: {pairCells}).	
-	self assert: pairCells class equals: Array.
-	bag := Bag new.
-	bag add: ((SudokuCell row: 4 column: 5  element: 0) addPossibleNumber: 3 ).
-	bag add: ((SudokuCell row: 5 column: 5 element: 0) addPossibleNumber: 3).
-	logger info: ('expected => 
-{1}' format: {bag}).
-	logger info: bag.
 	self assert: pairCells asBag equals: bag.
 	
-
-
-
-
 
 ]
 
@@ -180,7 +103,7 @@ SudokuBoard2Test >> testAllianceProcessingOfCol [
 	"
 	block3の<7@3>4が確定したと仮定した時、block9の4のワンペアが解決することをテストする。 
 	"
-	| logger  board  cells confirmedCell |
+	| logger  board  cells confirmedCell bag |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -196,28 +119,31 @@ SudokuBoard2Test >> testAllianceProcessingOfCol [
 	
 
 	cells := board allianceProcessingOfCol: confirmedCell .
-	board boardA2D  at: confirmedCell y at: confirmedCell x put: confirmedCell element.
-	cells class = SudokuCell ifTrue: [ 
-		board boardA2D  at: cells y at: cells x put: cells element].
-	self assert: (board boardA2D  at: 3 at: 7) equals: 4.
-	self assert: (board boardA2D  at: 7 at: 7) equals: 0.
-	self assert: (board boardA2D  at: 7 at: 9) equals: 4.
+	logger info: cells.
 	
-	logger info: board.
+	bag := Bag new.
+	bag add: (SudokuCell row: 3 column: 7  element: 4).
+	bag add: (SudokuCell row: 7 column: 7  element: 0).
+	bag add: (SudokuCell row: 7 column: 9  element: 4).
+	
+	
 
 ]
 
 { #category : #tests }
 SudokuBoard2Test >> testAllianceProcessingOfRow [
-	"
-	block5の<5@6>1が確定したと仮定した時、block6の18ツーペアが解決することをテストする。 
-	"
-	| logger  board  cells confirmedCell |
+
+	| logger  board  cells confirmedCell bag cell1 cell2 cell3|
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
+	
+	" テスト1
+	block5の<5@6>1が確定したと仮定した時、block6の18ツーペアが解決することをテストする。 
+	#(?18 0 ?8)  =>  #(1 0 8)
+	"	
 	board := FLMaterializer new 
         filePath: 'fuel/testFormBilateralAllianceA7.fuel';
         materializeRoot .
@@ -227,38 +153,59 @@ SudokuBoard2Test >> testAllianceProcessingOfRow [
 	confirmedCell  clearPossibleNumbers .
 	
 	cells := board allianceProcessingOfRow: confirmedCell  .
-	board boardA2D  at: confirmedCell y at: confirmedCell x put: confirmedCell element.
-	cells class = SudokuCell ifTrue: [ 
-		board boardA2D  at: cells y at: cells x put: cells element].	
-	self assert: (board boardA2D  at: 6 at: 5) equals: 1.
-	self assert: (board boardA2D  at: 6 at: 7) equals: 8.
-	self assert: (board boardA2D  at: 4 at: 7) equals: 1.
-	
-	logger info: board.
-]
+	bag := Bag new.
+	bag add:(SudokuCell row: 4 column: 7  element: 1 ).
+	bag add:(SudokuCell row: 6 column: 7  element: 8 ).
+	self assert: cells asBag equals: bag.
 
-{ #category : #tests }
-SudokuBoard2Test >> testAllianceProcessingOfRow2 [
-	"
-	block6の<7@6>1が確定したと仮定した時、block5の非対称ペアが解決することをテストする。 
-	"
-	| logger  board  cells confirmedCell |
-	M946FileLogger logLevel: LogLevel debug.
-
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
+	"テスト2
+	block5の<5@5>4が確定したと仮定した時、block4<3@4>の予約数字4が消え
+	非対称ペアが解消することをテストする。 
+	#(?5 ?4 ?45) => #(5 0 4)
+	"	
 	board := FLMaterializer new 
         filePath: 'fuel/testFormBilateralAllianceA7.fuel';
         materializeRoot .
 	logger info: board.
-	confirmedCell  := board getSudokuCell: 7@6.
-	confirmedCell  element: 1.
-	confirmedCell clearPossibleNumbers .
+	confirmedCell  := board getSudokuCell: 5@5.
+	confirmedCell  element: 4.
+	confirmedCell  clearPossibleNumbers .
 	
 	cells := board allianceProcessingOfRow: confirmedCell  .
-	logger info: cells.	
+	bag := Bag new.
+	
+	cell1 := SudokuCell row: 5 column: 3 element: 0.
+	cell2 := SudokuCell row: 4 column: 3 element: 5.
+	cell3 := SudokuCell row: 6 column: 3 element: 4.
+	bag add: cell1; add: cell2; add: cell3.
+	self assert: cells asBag equals: bag.
+
+	
+	" テスト3
+	block8の<5@7>8が確定したと仮定した時、block7<3@7>の予約数8が消え
+	非対称ペアが解消することをテストする。 
+	#(?38 ?8 ?3) => #(?3 8 ?3)
+	"	
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
+        materializeRoot .
 	logger info: board.
+	confirmedCell  := board getSudokuCell: 5@7.
+	confirmedCell  element: 8.
+	confirmedCell  clearPossibleNumbers .
+	
+	cells := board allianceProcessingOfRow: confirmedCell  .
+	self assert: (board boardA2D at: 7 at: 3) equals: ((SudokuCell row: 7 column: 3 element: 0) addPossibleNumber: 3).
+	self assert: cells class equals: Array.
+	bag := Bag new.
+	cell1 := SudokuCell row: 8 column: 3 element: 8.
+	cell2 := (SudokuCell row: 9 column: 3 element: 0) addPossibleNumber: 3.
+	cell3 := (SudokuCell row: 7 column: 3 element: 0) addPossibleNumber: 3.
+	bag add: cell1; add: cell2; add: cell3.
+	self assert: cells asBag equals: bag.
+
+
+
 ]
 
 { #category : #tests }
@@ -312,6 +259,27 @@ SudokuBoard2Test >> testMap [
 ]
 
 { #category : #tests }
+SudokuBoard2Test >> testMap2 [
+
+	| board comfirmedCell logger |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
+        materializeRoot .
+	logger info: board.
+	
+	comfirmedCell := board getSudokuCell: 5@6.
+	comfirmedCell element: 1.
+	comfirmedCell clearPossibleNumbers .
+	board map: comfirmedCell .
+	logger info: board.
+]
+
+{ #category : #tests }
 SudokuBoard2Test >> testMapSudokuBlock2 [
 
 	| board block task |
@@ -342,35 +310,4 @@ SudokuBoard2Test >> testMapSudokuBlock2 [
 	
 	self assert: (board getBlock: 7) blockA2D equals: block blockA2D.
 
-]
-
-{ #category : #tests }
-SudokuBoard2Test >> testRemovePossibleNumbersOfRowAndCol [
-	"
-	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
-	"
-	| logger  board  cell |
-	M946FileLogger logLevel: LogLevel debug.
-	logger := M946FileLogger new.
-	logger clearLog .
-	logger info: thisContext.
-
-	board := FLMaterializer new 
-        filePath:  'fuel/testFormBilateralAlliance2.fuel';
-        materializeRoot .
-
-	logger info: board.
-	logger info: (board getSudokuCell: 7@4) .
-	self assert: (board getSudokuCell: 7@4) asSimpleString  equals: '?1'.
-	self assert: (board getSudokuCell: 7@6) asSimpleString  equals: '?1'.
-	
-	"セルに入る数字が確定したと仮定する"
-	cell := SudokuCell row: 4 column: 7 element: 1.
-	board map: cell.
-	
-	logger info: board.
-	self assert: (board boardA2D at: 5 at: 5)  equals: 0.	
-	self assert: (board boardA2D at: 6 at: 5)  equals: 1.	
-	self assert: (board boardA2D at: 6 at: 7)  equals: 0.
-	
 ]

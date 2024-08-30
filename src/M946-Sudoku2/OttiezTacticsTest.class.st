@@ -558,8 +558,12 @@ OttiezTacticsTest >> testFormBilateralAllianceA7 [
 	logger info: board.
 	self assert: (board at: 7@5) asSimpleString  equals: '?3'.
 	self assert: (board at: 8@5) asSimpleString  equals: '?3'.
-	self assert: (board at: 5@4)   equals: 3.
-	self assert: (board at: 5@6)   equals: 1.
+	self assert: (board at: 5@4)	equals: 3.
+	self assert: (board at: 5@6)	equals: 1.
+	"block5<5@6>が1に確定したことによりblock6の18ツーペアが解決した。"
+	self assert: (board at: 7@4)	equals: 1.
+	self assert: (board at: 7@6)	equals: 8.
+
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceA8.fuel'.
 	
@@ -738,9 +742,6 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 	self assert: (board at: 6@7) asSimpleString equals: '?69'.
 	self assert: (board at: 8@8)  equals: 9.
 
-	"6block 9の斜めツーペアを配置を試みるためテストメソッドに追加する"
-	block := board getBlock: 6 verifyNumber: 9.
-	logger info: board.
 
 	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB5.fuel'.
 	
@@ -761,7 +762,6 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
-	self assert:( board boardA2D at: 5 at: 5) equals: 0.
 	ottie letsRetsme .
 	logger info: board.
 	self assert:( board boardA2D at: 5 at: 5) equals: 4.
@@ -797,7 +797,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
 { #category : #tests }
 OttiezTacticsTest >> testFormBilateralAllianceB6 [
 
-	| logger  board ottie block expected |
+	| logger  board ottie block |
 	M946FileLogger logLevel: LogLevel debug.
 
 	logger := M946FileLogger new.
@@ -810,6 +810,63 @@ OttiezTacticsTest >> testFormBilateralAllianceB6 [
 	logger info: board.
 	
 	block := board getBlock: 6 verifyNumber: 9.
+	ottie formBilateralAlliance: block.
+	self assert: (board boardA2D at: 4 at: 9) equals: 9.
+	self assert: (board boardA2D at: 3 at: 9) equals: 4.
+	self assert: (board boardA2D at: 3 at: 7) equals: 9.
+	self assert: (board boardA2D at: 6 at: 4) equals: 9.
+	self assert: (board boardA2D at: 7 at: 4) equals: 6.
+	self assert: (board boardA2D at: 7 at: 6) equals: 9.
+		
+	logger info: board.
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB7.fuel'.
+	
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceB7 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB7.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 9 verifyNumber: 4.
+	ottie formBilateralAlliance: block.
+	self assert: (board boardA2D at: 7 at: 7) equals: 4.
+	
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB8.fuel'.
+
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceB8 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB8.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 9 verifyNumber: 3.
+	ottie formBilateralAlliance: block.
+	
 	logger info: board.
 ]
 

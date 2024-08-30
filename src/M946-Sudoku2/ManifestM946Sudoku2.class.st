@@ -32,7 +32,7 @@ ManifestM946Sudoku2 class >> ruleCollectionMessagesToExternalObjectRuleV1FalsePo
 ManifestM946Sudoku2 class >> ruleCollectionProtocolRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBuddyCellInTheBlock: #false)) #'2024-08-18T17:54:14.094395+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBuddyCellInTheBlock: #false)) #'2024-08-18T17:54:14.094395+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBuddyCellInTheBlock:confirmNumber: #false)) #'2024-08-25T14:18:30.835154+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBCITB2:thisCell:confirmNumber: #false)) #'2024-08-26T13:13:08.824891+09:00') #(#(#RGMethodDefinition #(#SudokuBoard2 #allianceProcessingBCITB3:thisCell:confirmNumber: #false)) #'2024-08-26T13:17:09.091256+09:00') )
 ]
 
 { #category : #'code-critics' }
@@ -40,6 +40,13 @@ ManifestM946Sudoku2 class >> ruleDetectContainsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
 	^ #(#(#(#RGMethodDefinition #(#SudokuBlock2 #includes: #false)) #'2024-08-09T20:34:28.374978+09:00') )
+]
+
+{ #category : #'code-critics' }
+ManifestM946Sudoku2 class >> ruleEndTrueFalseRuleV1FalsePositive [
+
+	<ignoreForCoverage>
+	^ #(#(#(#RGMethodDefinition #(#BilateralAllianceOfRelatedBlock #treatAsAsymmetricPair1 #false)) #'2024-08-27T11:59:07.224719+09:00') )
 ]
 
 { #category : #'code-critics' }
@@ -60,7 +67,7 @@ ManifestM946Sudoku2 class >> ruleLiteralArrayCharactersRuleV1FalsePositive [
 ManifestM946Sudoku2 class >> ruleLongMethodsRuleV1FalsePositive [
 
 	<ignoreForCoverage>
-	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #getBlock: #false)) #'2024-05-15T15:48:30.405135+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #formBilateralAlliance: #false)) #'2024-07-06T17:02:05.610881+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #checkDoubleTwoPairOfZeroBlanks: #false)) #'2024-08-12T11:03:18.13104+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #checkDoubleTwoPairOfOnePair: #false)) #'2024-08-12T14:08:00.499338+09:00') )
+	^ #(#(#(#RGMethodDefinition #(#SudokuBoard2 #getBlock: #false)) #'2024-05-15T15:48:30.405135+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #formBilateralAlliance: #false)) #'2024-07-06T17:02:05.610881+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #checkDoubleTwoPairOfZeroBlanks: #false)) #'2024-08-12T11:03:18.13104+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #checkDoubleTwoPairOfOnePair: #false)) #'2024-08-12T14:08:00.499338+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #fillThreeBlankCellsOfColumn: #false)) #'2024-08-30T10:43:09.168979+09:00') #(#(#RGMethodDefinition #(#OttiezTactics #getNextBlockOfSingleBlankCell:cell: #false)) #'2024-08-30T13:30:12.231103+09:00') )
 ]
 
 { #category : #'code-critics' }

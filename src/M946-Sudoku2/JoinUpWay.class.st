@@ -31,10 +31,29 @@ Class {
 
 { #category : #logic }
 JoinUpWay >> solve [
+	|task  board logger |
+	logger := M946Logger new.
+	task := '
+0 3 0   0 4 0   0 2 1
+5 0 0   0 0 0   0 0 9
+0 0 0   8 2 3   0 0 0
 
-	" 
-	ダミー
-	"
+0 0 3   9 0 7   8 0 0
+4 0 8   0 0 0   6 0 5
+0 0 9   4 0 5   1 0 0
+
+0 0 0   2 7 1   0 0 0
+9 0 0   0 0 0   0 0 7
+2 1 0   0 9 0   0 3 0
+'.
+
+
+	board := self solve: task.
+
+	logger  clearLog.
+	logger info: board.
+	board completed ifTrue: [  
+		logger info: 'completed!!']	
 ]
 
 { #category : #'sudoku - solution' }
@@ -63,9 +82,11 @@ JoinUpWay >> solve: taskOfString [
 	
 		eitherWay := EitherWay new: sudokuBoard .
 		eitherWay solve].
-
+	
+		^sudokuBoard
+"
 	^ sudokuBoard completed.
-
+"
 	
 " Example
 

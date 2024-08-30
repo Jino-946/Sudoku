@@ -113,7 +113,7 @@ OttiezTactics >> checkDoubleTwoPairOfZeroBlanks: reloadBlock [
 { #category : #logic }
 OttiezTactics >> checkForTwoPairs: aBlock [ 
 
-	| reloadBlock twoPairs  blankCells logger |
+	| reloadBlock twoPairs  "blankCells" logger |
 	logger := M946FileLogger new: thisContext.
 	
 	reloadBlock := sudokuBoard getBlock:  (aBlock blockNumber) verifyNumber: (aBlock verifyNumber).
@@ -125,8 +125,12 @@ OttiezTactics >> checkForTwoPairs: aBlock [
 		ifFalse: [ ^self ].
 	(twoPairs at: 1) possibleNumbers asBag = (twoPairs at: 2) possibleNumbers asBag 
 		ifFalse: [ ^self ].
+	^twoPairs 
+		
+	"
 	blankCells := aBlock blankCellsAsArray .
 	^(blankCells select: [ :cell | cell ~= (twoPairs at: 1) ]) select: [ :cell | cell ~=  (twoPairs at: 2) ]
+	"
 ]
 
 { #category : #logic }
@@ -207,46 +211,54 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 { #category : #logic }
 OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 	"
-	ツーペア1組と0セル１個のブランクセルを含む列の0セルを解決する。
+	ツーペア1組と１個のブランクセルを含む列のブランクセルを解決する。
 	決定した数字をSudokuBoardに配置する時はSudokuBoard>>map:を使わず
 	Array2D>>at: at: put:を使い数字を配置するだけにする。
 	"
-	| logger twoPair array numbersOfColumn number zeroCell |
+	| logger threeBlankCells twoPair array numbersOfColumn missingNumber zeroCell |
 	logger := M946FileLogger new: thisContext.
+	threeBlankCells := sudokuColumn blankCellsAsArray .
 	twoPair := sudokuColumn column select: [ :cell |
 		           cell class = SudokuCell and: [
 			           cell possibleNumbers size = 2 ] ].
+	logger debug: ('twoPair =>
+{1}' format:{twoPair}).
 	(twoPair size = 2 and: [
 		 (twoPair at: 1) possibleNumbers = (twoPair at: 2) possibleNumbers ])
 		ifFalse: [ ^ self ].
+	zeroCell := (threeBlankCells difference: twoPair) at: 1. 
+	logger debug: ('zeroCell => {1}' format: {zeroCell}).
 	array := sudokuColumn column select:
 		                   [ :cell |
 		                   cell class = SmallInteger and: [
 			                   cell between: 1 and: 9 ] ].
 	numbersOfColumn := array asOrderedCollection .
 	numbersOfColumn addAll: (twoPair at: 1) possibleNumbers.
+	logger debug: ('numbersOfColumn => {1}' format: {numbersOfColumn}).
 	numbersOfColumn size = 8 ifFalse: [ ^ self ].
-	number := (#( 1 2 3 4 5 6 7 8 9 ) difference: numbersOfColumn) at: 1.
-	zeroCell := sudokuColumn cellOf: 0.
-	zeroCell class = SudokuCell ifTrue: [
-		sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: number]
+	missingNumber := sudokuColumn missingNumbers  at: 1.
+	logger debug: ('missingNumber => {1}' format: {missingNumber}).
+	
+	sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: missingNumber
 ]
 
 { #category : #logic }
 OttiezTactics >> fillThreeBlankCellsOfRow: sudokuRow [
 	"
-	ツーペア1組と0セル１個のブランクセルを含む行の0セルを解決する。
+	ツーペア1組と１個のブランクセルを含む列のブランクセルを解決する。
 	決定した数字をSudokuBoardに配置する時はSudokuBoard>>map:を使わず
 	Array2D>>at: at: put:を使い数字を配置するだけにする。
 	"
-	| logger twoPair array numbersOfRow number zeroCell |
+	| logger threeBlankCells twoPair array numbersOfRow missingNumber zeroCell |
 	logger := M946FileLogger new: thisContext.
+	threeBlankCells := sudokuRow blankCellsAsArray .
 	twoPair := sudokuRow row select: [ :cell |
 		           cell class = SudokuCell and: [
 			           cell possibleNumbers size = 2 ] ].
 	(twoPair size = 2 and: [
 		 (twoPair at: 1) possibleNumbers = (twoPair at: 2) possibleNumbers ])
 		ifFalse: [ ^ self ].
+	zeroCell := (threeBlankCells difference: twoPair) at: 1. 	
 	array := sudokuRow row select:
 		                   [ :cell |
 		                   cell class = SmallInteger and: [
@@ -254,10 +266,9 @@ OttiezTactics >> fillThreeBlankCellsOfRow: sudokuRow [
 	numbersOfRow := array asOrderedCollection .
 	numbersOfRow addAll: (twoPair at: 1) possibleNumbers.
 	numbersOfRow size = 8 ifFalse: [ ^ self ].
-	number := (#( 1 2 3 4 5 6 7 8 9 ) difference: numbersOfRow) at: 1.
-	zeroCell := sudokuRow cellOf: 0.
-	zeroCell class = SudokuCell ifTrue: [
-		sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: number]
+	missingNumber := sudokuRow missingNumbers  at: 1.
+
+	sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: missingNumber
 ]
 
 { #category : #logic }

@@ -33,6 +33,17 @@ Class {
 	#category : #'M946-Sudoku2-Solution'
 }
 
+{ #category : #creating }
+BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 [
+	
+	| allies  |
+	allies := self new.
+	allies thisCell: cell1.
+	allies otherCell: cell2.
+	^allies
+	
+]
+
 { #category : #'as yet unclassified' }
 BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 confirmNumber: aNumber [
 	
@@ -55,6 +66,34 @@ BilateralAllianceOfRelatedBlock >> confirmNumber [
 BilateralAllianceOfRelatedBlock >> confirmNumber: aNumber [	
 
 	confirmNumber := aNumber 
+	
+]
+
+{ #category : #logic }
+BilateralAllianceOfRelatedBlock >> determineTheNumber [
+	"
+	他のブロックで確定した数字によりツーペアが解消する際は,thisCell element: に 
+	もう片方の数字をセットしpossibleNumber はいじらずにtreatAsTwoPairsを呼び出す
+	"
+	| logger result  |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
+	logger debug: ('thisCell =>
+{1}' format:{thisCell}).
+	logger debug: ('otherCell =>
+{1}' format:{otherCell}).
+	result := nil.
+	(thisCell possibleNumbers isEmpty or: [ otherCell possibleNumbers isEmpty ])
+		ifTrue: [ result := self ].
+	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers  size = 1])
+		ifTrue: [  result := self treatAsOnePair ].
+	(thisCell possibleNumbers size = 2 and: [ otherCell possibleNumbers  size = 2])
+		ifTrue: [ result := self treatAsTwoPairs ].
+	(thisCell possibleNumbers size = 2 and: [ otherCell possibleNumbers size = 1])
+		ifTrue: [ result := self treatAsAsymmetricPair1 ].
+	(thisCell possibleNumbers size = 1 and: [ otherCell possibleNumbers size = 2])
+		ifTrue: [ result := self treatAsAsymmetricPair2 ].
+	^result
 	
 ]
 
@@ -97,11 +136,16 @@ BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair1 [
 	| logger |
 	logger := M946FileLogger new.
 	logger debug: thisContext.
-	thisCell removePossibleNumber: confirmNumber .
+	thisCell removePossibleNumber: confirmNumber .	
 	(otherCell possibleNumbers includes: confirmNumber)
 		ifTrue: [  
-			otherCell element: confirmNumber .
+			otherCell element: confirmNumber.
 			otherCell clearPossibleNumbers].
+		"
+		ifFalse: [ 
+			otherCell element: (thisCell possibleNumbers at: 1).
+			otherCell clearPossibleNumbers].
+		"
 	^otherCell
 ]
 
@@ -114,11 +158,10 @@ BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair2 [
 	4  5  $8     <= thisCell 
 	9  4  $3    (<= thisCell)
 	"
-	| logger |
+	| logger  |
 	logger := M946FileLogger new: thisContext.
-	thisCell clearPossibleNumbers .
-	otherCell element: confirmNumber .
-	otherCell clearPossibleNumbers .
+	otherCell element: confirmNumber  .
+
 	^otherCell
 ]
 
@@ -129,11 +172,18 @@ BilateralAllianceOfRelatedBlock >> treatAsOnePair [
 	"
 	|logger|
 	logger := M946FileLogger new: thisContext.
+	logger debug: ('thisCell => 
+{1}' format: {thisCell}).
+	logger debug: ('otherCell => 
+{1}' format: {otherCell}).
 	(thisCell possibleNumbers = otherCell possibleNumbers and: [ thisCell possibleNumbers size = 1 ])
 		ifTrue: [ 
-			otherCell element: confirmNumber .
+			otherCell element: confirmNumber  .
 			thisCell clearPossibleNumbers .
 			otherCell clearPossibleNumbers.
+			logger debug: ('otherCell => 
+{1}' format: {otherCell}).
+		
 			^otherCell].
 	^otherCell
 ]
@@ -147,11 +197,10 @@ BilateralAllianceOfRelatedBlock >> treatAsTwoPairs [
 	logger := M946FileLogger new: thisContext.
 	(thisCell possibleNumbers = otherCell possibleNumbers and: [ thisCell possibleNumbers size = 2 ])
 	ifFalse: [ ^self ].
-		
 	thisCell removePossibleNumber: confirmNumber .
 	thisCell element: (thisCell possibleNumbers at: 1).
 	thisCell clearPossibleNumbers .
-	otherCell element: confirmNumber .
+	otherCell element: confirmNumber  .
 	otherCell clearPossibleNumbers .
 	^otherCell
 ]
