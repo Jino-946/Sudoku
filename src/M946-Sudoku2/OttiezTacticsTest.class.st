@@ -898,6 +898,33 @@ OttiezTacticsTest >> testFormBilateralAllianceB8 [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testFormBilateralAllianceB9 [
+
+	| logger  board ottie block |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 9 verifyNumber: 3.
+	ottie resolveAlliance:  block.
+	self assert: (board at: 9@7) equals: 7.
+	self assert: (board at: 7@9) equals: 3.
+	
+	
+	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceC1.fuel'.
+
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
@@ -1034,4 +1061,6 @@ OttiezTacticsTest >> testResolveAlliance [
 	self assert: ba thisCell equals: (SudokuCell row: 7 column: 9 element: 7 ).
 	self assert: ba otherCell equals: (SudokuCell row: 9 column: 7 element: 3 ).
 	logger info: board.
+	
+
 ]
