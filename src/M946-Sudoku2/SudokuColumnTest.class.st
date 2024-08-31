@@ -75,6 +75,26 @@ SudokuColumnTest >> testCellOf [
 ]
 
 { #category : #tests }
+SudokuColumnTest >> testGetAffectedCellOf [
+	| logger  board sudokuColumn affectedCell |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
+        materializeRoot .
+	logger info: board.
+	
+	sudokuColumn := board getSudokuColumn: 9.
+	affectedCell := sudokuColumn getAffectedCellOf: (board at: 9@7).
+	self assert: (SudokuCell row: 1 column: 9 element: 3) equals: affectedCell .
+	logger info: affectedCell .
+	
+]
+
+{ #category : #tests }
 SudokuColumnTest >> testTenpai [
 
 	|task board block cell |

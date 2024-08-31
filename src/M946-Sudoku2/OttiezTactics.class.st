@@ -309,6 +309,53 @@ OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 ]
 
 { #category : #logic }
+OttiezTactics >> findAffectedCell: aBlock [
+ 	"
+	ブロック内の同盟関係のセルに影響を与える他ブロックのセルをSudokuCellオブジェクトとして取得する。
+	todo: reservedCells size が3または4の時の機能も実装すること
+	"
+	| reservedCells |
+	reservedCells := aBlock blankCellsAsArray select: [ :cell |
+		cell possibleNumbers isNotEmpty ].
+	reservedCells size < 2 ifTrue: [ ^self ].
+	reservedCells size = 2 ifTrue: [ ^self findAffectedCellOfPairCell: aBlock pairCell: reservedCells ].
+
+]
+
+{ #category : #logic }
+OttiezTactics >> findAffectedCell: aBlock reservedCells: reservedCells [
+ 	"
+	ブロック内の同盟関係のセルに影響を与える他ブロックのセルをSudokuCellオブジェクトとして取得する。
+	todo: reservedCells size が3または4の時の機能も実装すること
+	"
+	reservedCells size < 2 ifTrue: [ ^self ].
+	reservedCells size = 2 ifTrue: [ ^self findAffectedCellOfPairCell: aBlock pairCell: reservedCells ].
+
+]
+
+{ #category : #logic }
+OttiezTactics >> findAffectedCellOfPairCell: aBlock pairCell: pairCell [
+	"
+	引数がワンペア・ツーペアのときの処理
+	"
+	| affectedCell |
+	affectedCell := self.
+	(pairCell at: 1) possibleNumbers = (pairCell at: 2) possibleNumbers 
+		ifFalse: [ ^self ].
+	aBlock rowsOnBoard do: [ :row |
+		affectedCell := row getAffectedCellOf: (pairCell at: 1)	.
+		affectedCell class = SudokuCell ifTrue: [ thisContext return ]].
+	affectedCell class = SudokuCell ifTrue: [ ^affectedCell  ].
+	
+	aBlock colsOnBoard do: [ :col |
+		affectedCell := col getAffectedCellOf: (pairCell at: 1).
+		affectedCell class = SudokuCell ifTrue: [ thisContext return ]].
+	^affectedCell 
+	
+	
+]
+
+{ #category : #logic }
 OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 
 	| cell cellDirection logger |
@@ -657,12 +704,15 @@ OttiezTactics >> letsGyome [
 
 	| logger |
 	logger := M946FileLogger new: thisContext.
-	1 to: 9 do: [ :i | | row |
+	1 to: 9 do: [ :i | | row blankCellCount|
 		row := sudokuBoard getSudokuRow: i.
-		row countOfReservedBlankCells = 1 ifTrue: [ 
+		blankCellCount := row countOfReservedBlankCells.
+		blankCellCount  = 1 ifTrue: [ 
 			self fillOneBlankCellOfRow: row].
-		row countOfReservedBlankCells = 2  ifTrue: [ 
-			self fillTwoBlankCellsOfRow: row]]
+		blankCellCount  = 2  ifTrue: [ 
+			self fillTwoBlankCellsOfRow: row].
+		blankCellCount = 3 ifTrue: [ 
+			self fillThreeBlankCellsOfRow: row]]
 ]
 
 { #category : #logic }
@@ -671,18 +721,45 @@ OttiezTactics >> letsRetsme [
 	|logger |
 	logger := M946FileLogger new: thisContext.
 	logger info: thisContext.
-	1 to: 9 do: [ :i | | column |
+	1 to: 9 do: [ :i | | column  blankCellCount |
 		column := sudokuBoard getSudokuColumn: i.
-		column countOfReservedBlankCells = 1 ifTrue:[
-			self fillOneBlankCellOfColumn: column.
-			].
-		column countOfReservedBlankCells = 2 ifTrue: [ 
-			self fillTwoBlankCellsOfColumn: column.
-			].
-		column countOfReservedBlankCells = 3 ifTrue: [ 
-			self fillThreeBlankCellsOfColumn: column.
-			]]
+		blankCellCount := column countOfReservedBlankCells .
+		blankCellCount  = 1 ifTrue:[
+			self fillOneBlankCellOfColumn: column].
+		blankCellCount  = 2 ifTrue: [ 
+			self fillTwoBlankCellsOfColumn: column].
+		blankCellCount  = 3 ifTrue: [ 
+			self fillThreeBlankCellsOfColumn: column]]
 
+]
+
+{ #category : #logic }
+OttiezTactics >> resolveAlliance: aBlock [
+	"
+	他ブロックの解決した数字を元にしてブロック内の同盟(ワンペア・ツーペア)を解決する。
+	"
+	| affectedCell reservedCells ba thisCell otherCell logger |
+	logger := M946FileLogger new: thisContext.
+	reservedCells := aBlock blankCellsAsArray select: [ :cell |
+		cell possibleNumbers isNotEmpty ].
+	affectedCell := self findAffectedCell: aBlock reservedCells: reservedCells .
+	((reservedCells at: 1) sameDirection: affectedCell ) 
+		ifTrue: [ thisCell := reservedCells at: 1.
+				   otherCell := reservedCells at: 2 ]
+		ifFalse: [ thisCell := reservedCells at: 2.
+					otherCell := reservedCells at: 1 ].
+	
+	ba := BilateralAllianceOfRelatedBlock thisCell: thisCell 
+											otherCell: otherCell 
+											confirmNumber: affectedCell element.
+	ba determineTheNumber .
+	logger debug: ('thisCell => {1}' format: {thisCell}).
+	logger debug: ('otherCell => {1}' format: {otherCell}).
+	sudokuBoard at: thisCell x @ thisCell y put: thisCell element.
+	sudokuBoard at: otherCell x @ otherCell y put: otherCell element.
+	
+	
+	^ba
 ]
 
 { #category : #logic }

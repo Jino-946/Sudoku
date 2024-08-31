@@ -204,6 +204,26 @@ SudokuColumn >> countOfReservedBlankCells [
 
 ]
 
+{ #category : #accessing }
+SudokuColumn >> getAffectedCellOf: anObject [
+	"
+	列の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
+	"
+	| possibleNumbers |
+	possibleNumbers := nil.
+	anObject class = SudokuCell 
+		ifTrue: [ possibleNumbers := anObject possibleNumbers ]
+		ifFalse: [ anObject class = OrderedCollection 
+						ifTrue: [ possibleNumbers := anObject ]
+						ifFalse: [ self error: 'a SudokuCell object or an OrderedCollection object expected' ]].
+
+	column doWithIndex: [ :e :i |
+		(possibleNumbers includes: e)
+			ifTrue: [ ^SudokuCell row: i  column: colIndex element: e  ]].
+		
+	^self
+]
+
 { #category : #comparing }
 SudokuColumn >> hash [ 
 

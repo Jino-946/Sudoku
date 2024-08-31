@@ -202,6 +202,26 @@ SudokuRow >> eitherCell [
 	 ^cells
 ]
 
+{ #category : #accessing }
+SudokuRow >> getAffectedCellOf: anObject [
+	"
+	行の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
+	"
+	| possibleNumbers |
+	possibleNumbers := nil.
+	anObject class = SudokuCell 
+		ifTrue: [ possibleNumbers := anObject possibleNumbers ]
+		ifFalse: [ anObject class = OrderedCollection 
+						ifTrue: [ possibleNumbers := anObject ]
+						ifFalse: [ self error: 'a SudokuCell object or an OrderedCollection object expected' ]].
+
+	row doWithIndex: [ :e :i |
+		(possibleNumbers includes: e)
+			ifTrue: [ ^SudokuCell row: rowIndex   column: i element: e  ]].
+		
+	^self
+]
+
 { #category : #comparing }
 SudokuRow >> hash [ 
 

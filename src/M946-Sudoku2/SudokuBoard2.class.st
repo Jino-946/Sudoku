@@ -328,6 +328,13 @@ SudokuBoard2 >> at: aPoint [
 ]
 
 { #category : #accessing }
+SudokuBoard2 >> at: aPoint put: anObject [
+
+	^boardA2D at: aPoint y at: aPoint x put: anObject 
+	
+]
+
+{ #category : #accessing }
 SudokuBoard2 >> atColumn: colIndex [
 	"
 	boardA2DよりcolIndexで指定した列を返す。

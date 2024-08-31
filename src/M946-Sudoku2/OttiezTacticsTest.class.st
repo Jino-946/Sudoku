@@ -36,6 +36,30 @@ OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testFindAffectedCell [
+	"
+	 ブロック内のワンペア・ツーペア(reservedCells size = 2)に影響を与える他ブロックのセルを取得する。
+	todo: reservedCells size が3または4の時の機能も実装すること
+	"
+	| logger  board block ottie affectedCell |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
+        materializeRoot .
+	logger info: board.
+	ottie := OttiezTactics new: board.
+	block := board getBlock: 9.
+	
+	affectedCell := ottie findAffectedCell: block.
+	self assert: affectedCell  equals: (SudokuCell row: 1 column: 9 element: 3).
+	
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board ottie block |
@@ -868,6 +892,9 @@ OttiezTacticsTest >> testFormBilateralAllianceB8 [
 	ottie formBilateralAlliance: block.
 	
 	logger info: board.
+	
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceB9.fuel'.
+
 ]
 
 { #category : #tests }
@@ -983,4 +1010,28 @@ OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	logger info: (board getSudokuCell: 7@4) asString.
 
+]
+
+{ #category : #tests }
+OttiezTacticsTest >> testResolveAlliance [
+	"
+	 ブロック内のワンペア・ツーペア(reservedCells size = 2)に影響を与える他ブロックのセルを取得する。
+	todo: reservedCells size が3または4の時の機能も実装すること
+	"
+	| logger  board block ottie ba |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
+        materializeRoot .
+	logger info: board.
+	ottie := OttiezTactics new: board.
+	block := board getBlock: 9.
+	ba := ottie resolveAlliance: block.
+	self assert: ba thisCell equals: (SudokuCell row: 7 column: 9 element: 7 ).
+	self assert: ba otherCell equals: (SudokuCell row: 9 column: 7 element: 3 ).
+	logger info: board.
 ]

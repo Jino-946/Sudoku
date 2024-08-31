@@ -185,7 +185,7 @@ BilateralAllianceOfRelatedBlock >> treatAsOnePair [
 {1}' format: {otherCell}).
 		
 			^otherCell].
-	^otherCell
+	^self
 ]
 
 { #category : #logic }
