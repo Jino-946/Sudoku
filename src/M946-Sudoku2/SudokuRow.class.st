@@ -203,20 +203,17 @@ SudokuRow >> eitherCell [
 ]
 
 { #category : #accessing }
-SudokuRow >> getAffectedCellOf: anObject [
+SudokuRow >> getAffectedCellOf: sudokuCell [
 	"
 	行の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
 	"
-	| possibleNumbers |
-	possibleNumbers := nil.
-	anObject class = SudokuCell 
-		ifTrue: [ possibleNumbers := anObject possibleNumbers ]
-		ifFalse: [ anObject class = OrderedCollection 
-						ifTrue: [ possibleNumbers := anObject ]
-						ifFalse: [ self error: 'a SudokuCell object or an OrderedCollection object expected' ]].
+	sudokuCell  class = SudokuCell 
+		ifFalse: [ self error: 'a SudokuCell object expected' ].
+	sudokuCell y = rowIndex 
+		ifFalse: [ ^self ].
 
 	row doWithIndex: [ :e :i |
-		(possibleNumbers includes: e)
+		(e class = SmallInteger and: [sudokuCell possibleNumbers includes: e])
 			ifTrue: [ ^SudokuCell row: rowIndex   column: i element: e  ]].
 		
 	^self

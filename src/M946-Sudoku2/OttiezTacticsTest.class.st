@@ -60,6 +60,33 @@ OttiezTacticsTest >> testFindAffectedCell [
 ]
 
 { #category : #tests }
+OttiezTacticsTest >> testFindAffectedCellOfPairCellPairCell [
+
+	|board block reservedCells ottie logger expected affectedCell |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFindAffectedCellOfPairCellPairCell.fuel';
+        materializeRoot .
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	
+	block := board getBlock: 8.
+	reservedCells := block blankCellsAsArray select: [ :cell |
+		cell possibleNumbers isNotEmpty ].
+	expected := Bag new.
+	expected add: (board at: 5@7 ).
+	expected add: (board at: 5@8 ).
+	self assert: reservedCells asBag equals: expected.
+	
+	affectedCell := ottie findAffectedCellOfPairCell: block pairCell: reservedCells .
+	self assert: affectedCell equals: (board getSudokuCell: 9@7).
+]
+
+{ #category : #tests }
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board ottie block |
@@ -913,14 +940,45 @@ OttiezTacticsTest >> testFormBilateralAllianceB9 [
 	logger info: board.
 	
 	block := board getBlock: 9 verifyNumber: 3.
+
 	ottie resolveAlliance:  block.
 	self assert: (board at: 9@7) equals: 7.
 	self assert: (board at: 7@9) equals: 3.
+	logger info: board.
+	board serializeToFileNamed: 'fuel/testFindAffectedCellOfPairCellPairCell.fuel'.	
+	block := board getBlock: 8.
+	ottie resolveAlliance: block.
+	self assert: (board at: 5@7) equals: 8.
+	self assert: (board at: 5@8) equals: 7.
+	logger info: board.
+
+	block := board getBlock: 5.
+	ottie resolveAlliance: block.
+	logger info: board.
+	self assert: (board at: 4@5) equals: 2.
+	self assert: (board at: 6@5) equals: 6.
+			
+	board serializeToFileNamed: 'fuel/testFormBilateralAllianceC1.fuel'.
 	
-	
+	block := board getBlock: 6 verifyNumber: 3.
+	ottie formBilateralAlliance: block.
 	logger info: board.
 	
-	board serializeToFileNamed: 'fuel/testFormBilateralAllianceC1.fuel'.
+	block := board getBlock: 7 verifyNumber: 3.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	block := board getBlock: 2 verifyNumber: 2.
+	ottie formBilateralAlliance: block.
+	logger info: board.
+	
+	block := board getBlock: 2 verifyNumber: 7.
+	ottie resolveAlliance:  block.
+	logger info: board.
+	
+
+
+	
 
 ]
 

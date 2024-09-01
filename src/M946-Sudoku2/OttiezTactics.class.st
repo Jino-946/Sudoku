@@ -338,19 +338,21 @@ OttiezTactics >> findAffectedCellOfPairCell: aBlock pairCell: pairCell [
 	"
 	引数がワンペア・ツーペアのときの処理
 	"
-	| affectedCell |
+	| affectedCell logger |
+	logger := M946FileLogger new: thisContext.
 	affectedCell := self.
 	(pairCell at: 1) possibleNumbers = (pairCell at: 2) possibleNumbers 
 		ifFalse: [ ^self ].
 	aBlock rowsOnBoard do: [ :row |
+		logger debug: ('row => {1}' format: {row}).
 		affectedCell := row getAffectedCellOf: (pairCell at: 1)	.
-		affectedCell class = SudokuCell ifTrue: [ thisContext return ]].
-	affectedCell class = SudokuCell ifTrue: [ ^affectedCell  ].
+		logger debug: ('affectedCell => {1}' format: {affectedCell}).
+		affectedCell class = SudokuCell ifTrue: [^affectedCell]].
 	
 	aBlock colsOnBoard do: [ :col |
 		affectedCell := col getAffectedCellOf: (pairCell at: 1).
-		affectedCell class = SudokuCell ifTrue: [ thisContext return ]].
-	^affectedCell 
+		affectedCell class = SudokuCell ifTrue: [ ^affectedCell ]].
+	^self
 	
 	
 ]
@@ -742,10 +744,13 @@ OttiezTactics >> resolveAlliance: aBlock [
 	logger := M946FileLogger new: thisContext.
 	reservedCells := aBlock blankCellsAsArray select: [ :cell |
 		cell possibleNumbers isNotEmpty ].
+	logger debug: ('reservedCells => {1}' format: {reservedCells }).
 	affectedCell := self findAffectedCell: aBlock reservedCells: reservedCells .
+	affectedCell class = SudokuCell ifFalse: [ ^self ].
+	logger debug: ('affectedCell => {1}' format: {affectedCell  }).
 	((reservedCells at: 1) sameDirection: affectedCell ) 
 		ifTrue: [ thisCell := reservedCells at: 1.
-				   otherCell := reservedCells at: 2 ]
+				   otherCell := reservedCells at: 2 ]		
 		ifFalse: [ thisCell := reservedCells at: 2.
 					otherCell := reservedCells at: 1 ].
 	

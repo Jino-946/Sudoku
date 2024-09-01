@@ -102,7 +102,7 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsOnePair [
 { #category : #tests }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs [
 	"
-	同一行(列)の他セルがこのセルの予約数字のいづれかと同じ数字に確定したワンペア
+	同一行(列)の他セルがこのセルの予約数字のいづれかと同じ数字に確定した
 	"
 	| thisCell otherCell ba |
 	"セル初期化"
@@ -134,4 +134,26 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs [
 	self assert: thisCell possibleNumbers size equals: 0.
 	self assert: otherCell equals: (SudokuCell row: 6 column: 7 element: 8).
 	self assert: otherCell possibleNumbers size equals: 0.	
+]
+
+{ #category : #tests }
+BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs2 [
+	"
+	同一行(列)の他セルがこのセルの予約数字のいづれかと同じ数字に確定した
+	"
+	| thisCell otherCell ba |
+	"セル初期化"
+	thisCell := SudokuCell row: 5 column: 4 element: 0.
+	thisCell addPossibleNumber: 2; addPossibleNumber: 6.
+	otherCell := SudokuCell row: 5 column: 6 element: 0.
+	otherCell addPossibleNumber: 2; addPossibleNumber: 6.
+	
+	"thisCell "
+	ba := BilateralAllianceOfRelatedBlock  thisCell: thisCell otherCell: otherCell confirmNumber: 6.
+	ba treatAsTwoPairs  .
+	self assert: thisCell equals: (SudokuCell row: 5 column: 4 element: 2).
+	self assert: thisCell possibleNumbers size equals: 0.
+	self assert: otherCell equals: (SudokuCell row: 5 column: 6 element: 6).
+	self assert: otherCell possibleNumbers size equals: 0.	
+	
 ]
