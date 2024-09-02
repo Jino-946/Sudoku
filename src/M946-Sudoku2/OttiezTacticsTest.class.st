@@ -69,10 +69,21 @@ OttiezTacticsTest >> testFindAffectedCellOfPairCellPairCell [
 	logger clearLog .
 	logger info: thisContext.
 	board := FLMaterializer new 
-        filePath: 'fuel/testFindAffectedCellOfPairCellPairCell.fuel';
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
         materializeRoot .
 	ottie := OttiezTactics new: board.
 	logger info: board.
+	
+	block := board getBlock: 9.
+	reservedCells :=  block blankCellsAsArray select: [ :cell |
+		cell possibleNumbers isNotEmpty ].
+	expected := Bag new.
+	expected add: (board at: 9@7).
+	expected add: (board at: 7@9).
+	affectedCell := ottie findAffectedCellOfPairCell: block pairCell: reservedCells .
+	self assert: affectedCell equals: (board getSudokuCell: 9@1).
+	
+	ottie resolveAlliance: block.
 	
 	block := board getBlock: 8.
 	reservedCells := block blankCellsAsArray select: [ :cell |

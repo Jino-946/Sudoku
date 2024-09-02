@@ -93,10 +93,12 @@ SudokuBoard2 >> allianceProcessing: sudokuCell [
 	| cells |
 	
 	cells := self allianceProcessingOfRow: sudokuCell.
-	self allianceProcessingReflectOnSelf: cells.
+	cells class = Array ifTrue: [
+		self allianceProcessingReflectOnSelf: cells].
 
 	cells := self allianceProcessingOfCol: sudokuCell.
-	self allianceProcessingReflectOnSelf: cells
+	cells class = Array ifTrue: [  
+		self allianceProcessingReflectOnSelf: cells]
 ]
 
 { #category : #logic }

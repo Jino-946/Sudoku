@@ -798,6 +798,28 @@ OttiezTactics >> setTwoPairOnBlock [
 			sudokuBoard map: (twoPairs at: 1); map: (twoPairs at: 2)]]
 ]
 
+{ #category : #'sudoku - solution' }
+OttiezTactics >> solve: taskString [
+
+	|logger|
+	M946FileLogger logLevel: LogLevel info.
+	logger := M946FileLogger new: thisContext.
+	logger clearLog.
+	sudokuBoard := SudokuBoard2 new.
+	sudokuBoard loadFromString: taskString.
+	logger info: sudokuBoard.
+	5 timesRepeat: [  
+		1 to: 9 do: [ :vNum |
+			1 to: 9 do: [ :bNum | |block|
+				block := sudokuBoard getBlock: bNum verifyNumber: vNum.
+				self formBilateralAlliance: block]].
+		logger info: sudokuBoard .
+		self letsRetsme .
+		self letsGyome .
+		logger info: sudokuBoard .]
+
+]
+
 { #category : #logic }
 OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 

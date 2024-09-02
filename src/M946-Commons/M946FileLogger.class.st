@@ -106,6 +106,22 @@ debug: {2}
 ' format: {context . anObject})]
 ]
 
+{ #category : #'as yet unclassified' }
+M946FileLogger >> debug: anObject message: message [
+
+	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
+		ifTrue: [ self record: ('{1}  debug: {2} {3}{4}' format: 
+			  {context . message . anObject . Character cr})]
+]
+
+{ #category : #'as yet unclassified' }
+M946FileLogger >> debug: anObject messageWithCR: message [
+
+	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
+		ifTrue: [ self record: ('{1}  debug: {2} {3}{4} {5}' format: 
+			  {context . message . Character cr. anObject . Character cr})]
+]
+
 { #category : #'accessing - structure variables' }
 M946FileLogger >> info: anObject [
 
@@ -114,12 +130,32 @@ M946FileLogger >> info: anObject [
 
 { #category : #accessing }
 M946FileLogger >> logLevel [
-
+.
 	^self class  logLevel
 ]
 
 { #category : #tracing }
 M946FileLogger >> trace: anObject [
 
-	self logLevel = LogLevel trace ifTrue: [ self record: ('trace: {1}' format: {anObject})]
+	(self logLevel = LogLevel trace )
+		ifTrue: [ self record: ('{1} 
+trace: {2}
+
+' format: {context . anObject})]
+]
+
+{ #category : #'as yet unclassified' }
+M946FileLogger >> trace: anObject message: message [
+
+	(self logLevel = LogLevel trace )
+		ifTrue: [ self record: ('{1}  trace: {2} {3}{4}' format: 
+			  {context . message . anObject . Character cr})]
+]
+
+{ #category : #'as yet unclassified' }
+M946FileLogger >> trace: anObject messageWithCR: message [
+
+	(self logLevel = LogLevel trace)
+		ifTrue: [ self record: ('{1}  trace: {2} {3}{4} {5}' format: 
+			  {context . message . Character cr. anObject . Character cr})]
 ]
