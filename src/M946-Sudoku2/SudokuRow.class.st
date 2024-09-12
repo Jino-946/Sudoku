@@ -6,7 +6,15 @@
 	rowIndex	<SmallInteger>		ボード上の行インデックス
 
 
-  
+主なAPI
+- allGreen               1つのブランクセル以外の8つのセルが1-9までの数字で埋まっている時
+                         足りない数字をSudokuCellに格納して返す、でなければ0を返す
+- blankCellsAsArray      SudokuRowのブランクセルをSudokuCellの配列にして返す
+- cellOf:                number(値)の座標をSudokuCell にマップして返す, 見つからないときは0を返す
+- countOfReservedBlankCells ブランクセル以外のセルが1-9の数字で埋まっている時のブランクセルの数を返す
+- tenpai                 列にブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す
+                         ブランクセルが複数のときは0を返す。
+
 "
 Class {
 	#name : #SudokuRow,
@@ -61,6 +69,31 @@ SudokuRow >> allGreen [
 ]
 
 { #category : #converting }
+SudokuRow >> asArray [
+
+	^row
+]
+
+{ #category : #converting }
+SudokuRow >> asSimpleString [ 
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'aSudokuRow #';
+			nextPutAll: rowIndex asString;
+			nextPutAll: '('.
+	row doWithIndex: [ :c :idx |
+				idx = 1 ifTrue: [ aStream space ].
+			 	(idx > 1 and: [idx % 3 = 1]) ifTrue: [ aStream tab ].
+				c class = SudokuCell 
+					ifTrue: [ aStream nextPutAll: c asSimpleString ; space ]
+					ifFalse:[	aStream print: c; space ]].
+	aStream nextPutAll: ' )'.
+
+	^ aStream contents 
+]
+
+{ #category : #converting }
 SudokuRow >> asString [
 
 	| aStream |
@@ -84,12 +117,65 @@ SudokuRow >> at: index put: value [
 	row at: index put: value
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+SudokuRow >> blankCellsAsArray [
+	"
+    SudokuRowのブランクセルをSudokuCellの配列にして返す
+    "
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 9 do: [ :i | |cell|
+		cell := row at: i .
+		cell = 0 ifTrue: [
+			collection add: (SudokuCell
+						 		row: rowIndex
+						 		column: i
+						 		element: 0)].
+		(cell class = SudokuCell and: [ cell marked not ] ) 
+			ifTrue: [ collection add: cell ]	] .
+
+	^ collection  asArray
+]
+
+{ #category : #accessing }
+SudokuRow >> cellOf: number [
+	"
+	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
+	"
+	| index cell|
+	cell := 0.
+	index := self asArray indexOf: number.
+	index = 0
+	ifFalse: [ 
+		cell := SudokuCell row: rowIndex column: index element: number.
+	].
+	
+	^cell
+]
+
+{ #category : #'private - utility' }
 SudokuRow >> clearMarks [
 
 	1 to: 9 do: [ :i | (row at: i) class = Character 
 							ifTrue:[row at:i put: 0]]
 
+	
+]
+
+{ #category : #logic }
+SudokuRow >> completed [ 
+
+	^(#(1 2 3 4 5 6 7 8 9) difference: row) isEmpty
+]
+
+{ #category : #accessing }
+SudokuRow >> countOfReservedBlankCells [
+	"
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+	"
+	| items |
+	items := row select: [ :i | i class = SmallInteger and: [i < 10 and:[ i = 0 ]]].
+	^ items size
 	
 ]
 
@@ -116,6 +202,23 @@ SudokuRow >> eitherCell [
 	 ^cells
 ]
 
+{ #category : #accessing }
+SudokuRow >> getAffectedCellOf: sudokuCell [
+	"
+	行の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
+	"
+	sudokuCell  class = SudokuCell 
+		ifFalse: [ self error: 'a SudokuCell object expected' ].
+	sudokuCell y = rowIndex 
+		ifFalse: [ ^self ].
+
+	row doWithIndex: [ :e :i |
+		(e class = SmallInteger and: [sudokuCell possibleNumbers includes: e])
+			ifTrue: [ ^SudokuCell row: rowIndex   column: i element: e  ]].
+		
+	^self
+]
+
 { #category : #comparing }
 SudokuRow >> hash [ 
 
@@ -123,9 +226,27 @@ SudokuRow >> hash [
 ]
 
 { #category : #testing }
-SudokuRow >> includes: anObject [
+SudokuRow >> includes: number [
 
-	^ row includes: anObject 
+	| sudokuCells  |
+	(row includes: number) ifTrue: [ ^true ].
+	
+	sudokuCells := row select: [ :item | item class = SudokuCell and: [ item possibleNumbers includes: number ] ].
+	sudokuCells size > 1 ifTrue: [ ^true ].
+	^false
+]
+
+{ #category : #accessing }
+SudokuRow >> indexOf: number [
+
+	| cells sudokuCells |
+	cells := row select: [ :cell | cell class = SmallInteger ].
+	(cells includes: number) ifTrue: [ ^row indexOf: number ].
+	
+	sudokuCells := row select: [ :cell | cell class = SudokuCell ].
+	cells := sudokuCells select: [ :cell | cell possibleNumbers includes: number ].
+	cells size > 1 ifFalse: [ ^0 ].
+	^row indexOf: (cells at: 1)
 ]
 
 { #category : #'private - logics' }
@@ -134,6 +255,12 @@ SudokuRow >> markBlankCells [
 	1 to: 9 do: [ :i | 
 		 (self at: i) = 0
 			ifTrue: [ self at: i put: $X ]]
+]
+
+{ #category : #'private - utility' }
+SudokuRow >> missingNumbers [
+
+	^#(1 2 3 4 5 6 7 8 9) difference: row
 ]
 
 { #category : #printing }

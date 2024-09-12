@@ -2,10 +2,11 @@
 数独ボードの一つのセルを表現するクラス
 
     Instance Variables
-	rowIndex	<SmallInteger>	ボードの行インデックス
-	colIndex	<SmallInteger>	ボードの列インデックス
-	element		<Object>		セルの要素
-				
+	rowIndex        <SmallInteger>	  ボードの行インデックス
+	colIndex        <SmallInteger>	  ボードの列インデックス
+	element	         <Object>		      セルの要素
+	possibleNumbers <OrderedCollection> セルに入る可能性がある数
+	marked			 <Boolean>           検証ナンバー配備不可マーク
 				
 想定する使いみち
 - ボードの指定座標に要素をセットする
@@ -20,7 +21,9 @@ Class {
 	#instVars : [
 		'rowIndex',
 		'colIndex',
-		'element'
+		'element',
+		'possibleNumbers',
+		'marked'
 	],
 	#category : #'M946-Sudoku2-Core'
 }
@@ -33,7 +36,8 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 	cell rowIndex:  rIndex .
 	cell colIndex:  cIndex .
 	cell element: elem.
-	
+	cell possibleNumbers: OrderedCollection new.
+	cell marked: false.
 	^ cell 
 	
 
@@ -43,10 +47,37 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 { #category : #comparing }
 SudokuCell >> = sudokuCell [
 
-	^ sudokuCell class == self class
+	^ sudokuCell class = self class
 		and: [ sudokuCell rowIndex = self rowIndex 
 			and: [ sudokuCell colIndex  = self colIndex 
-				and: [ sudokuCell element = self element  ] ] ]
+				and: [ sudokuCell element = self element 
+					and: [ sudokuCell possibleNumbers = self possibleNumbers ] ] ] ]
+]
+
+{ #category : #adding }
+SudokuCell >> addPossibleNumber: aNumber [
+
+	possibleNumbers add: aNumber.
+	^self 
+]
+
+{ #category : #converting }
+SudokuCell >> asSimpleString [	
+	"
+	SudokuBoard2>>asStringでSudokuCellを見やすく表示するために使用するメソッド
+	"
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	self marked 
+		ifTrue: [ aStream nextPutAll: '?X' ]
+		ifFalse: [  
+			aStream nextPutAll: '?'.
+			possibleNumbers do: [ :num |
+				aStream nextPutAll: num asString]].
+
+	^aStream contents 
+			
+
 ]
 
 { #category : #converting }
@@ -54,13 +85,48 @@ SudokuCell >> asString [
 
 	| aStream elem |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; cr;
-			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; cr.
+	aStream nextPutAll: 'rowIndex: '; nextPutAll: rowIndex asString; space;
+			nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space.
 	elem := element.
 	element class = Character ifTrue: [ elem := '$', element asString ].
 	aStream nextPutAll: 'element:  '; nextPutAll: elem asString.
-			
+	aStream nextPutAll: ' possibleNumbers:( '.
+	possibleNumbers do: [ :num |  aStream  nextPutAll: num asString; space].	
+	aStream nextPutAll: ')'.
+	aStream nextPutAll: '  marked: '; nextPutAll: marked asString.
 	^ aStream contents
+]
+
+{ #category : #accessing }
+SudokuCell >> blockNumber [
+
+	| number |
+	number := 0.
+	rowIndex < 4
+		ifTrue: [
+			number := 1.
+			(colIndex between: 4 and: 6)
+				ifTrue: [ number := 2 ]
+				ifFalse: [ (colIndex between: 7 and: 9) ifTrue: [ number := 3 ] ] ]
+		ifFalse: [
+			(rowIndex between: 4 and: 6)
+				ifTrue: [
+					number := 4.
+					(colIndex between: 4 and: 6)
+						ifTrue: [ number := 5 ]
+						ifFalse: [ (colIndex between: 7 and: 9) ifTrue: [ number := 6 ] ] ]
+				ifFalse: [
+					number := 7.
+					(colIndex between: 4 and: 6)
+						ifTrue: [ number := 8 ]
+						ifFalse: [ (colIndex between: 7 and: 9) ifTrue: [ number := 9 ] ] ] ].
+	^ number
+]
+
+{ #category : #'as yet unclassified' }
+SudokuCell >> clearPossibleNumbers [	
+
+	self possibleNumbers: OrderedCollection new.
 ]
 
 { #category : #accessing }
@@ -76,6 +142,14 @@ SudokuCell >> colIndex: index [
 ]
 
 { #category : #accessing }
+SudokuCell >> direction: anotherCell [
+
+	self colIndex = anotherCell colIndex ifTrue: [ ^CellDirection vertical ].
+	self rowIndex = anotherCell rowIndex ifTrue: [ ^CellDirection horizontal ].
+	^CellDirection diagonal 
+]
+
+{ #category : #accessing }
 SudokuCell >> element [
 
 	^element 
@@ -84,6 +158,7 @@ SudokuCell >> element [
 { #category : #accessing }
 SudokuCell >> element: elem [
 
+	elem class = SudokuCell ifTrue: [ self error: 'SudokuCell object not allowed!' ].
 	element := elem
 ]
 
@@ -94,10 +169,64 @@ SudokuCell >> hash [
 			bitXor:  element hash))
 ]
 
+{ #category : #testing }
+SudokuCell >> isPairCell: otherCell [
+
+	(self pairNumbers: otherCell ) isEmpty ifFalse: [ ^true ].
+	^false
+]
+
+{ #category : #accessing }
+SudokuCell >> marked [
+
+	^marked
+]
+
+{ #category : #accessing }
+SudokuCell >> marked: aBoolean [
+
+	marked := aBoolean 
+	
+]
+
+{ #category : #'as yet unclassified' }
+SudokuCell >> notSameCoordinates: aSudokuCell [
+
+	^self x ~= aSudokuCell x or: [ self y ~= aSudokuCell y ]
+]
+
+{ #category : #'as yet unclassified' }
+SudokuCell >> pairNumbers: otherCell [
+
+	^self possibleNumbers intersection: otherCell possibleNumbers
+
+]
+
+{ #category : #accessing }
+SudokuCell >> possibleNumbers [
+
+	^possibleNumbers 
+]
+
+{ #category : #accessing }
+SudokuCell >> possibleNumbers: anOrderedCollection [
+
+	possibleNumbers := anOrderedCollection 
+]
+
 { #category : #printing }
 SudokuCell >> printOn: aStream [
 
 	aStream nextPutAll: self asString; cr.
+]
+
+{ #category : #removing }
+SudokuCell >> removePossibleNumber: aNumber [
+
+	possibleNumbers remove: aNumber .
+	^self
+	
+	
 ]
 
 { #category : #accessing }
@@ -108,6 +237,47 @@ SudokuCell >> rowIndex [
 
 { #category : #accessing }
 SudokuCell >> rowIndex: index [
+
+	rowIndex := index
+]
+
+{ #category : #comparing }
+SudokuCell >> sameCoordinates: aSudokuCell [
+
+	^self x = aSudokuCell x and: [ self y = aSudokuCell y ]
+]
+
+{ #category : #boolean }
+SudokuCell >> sameDirection: otherCell [
+	"
+	レシーバと引数が垂直または水平に並んでいる時はtrue,斜めの時はfalseを返す
+	"
+	(self x = otherCell x or: [self y = otherCell y])
+		ifTrue: [ ^true ].
+	^false
+	
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> x [
+
+^colIndex 
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> x: index [
+
+	colIndex := index
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> y [
+
+	^rowIndex 
+]
+
+{ #category : #'accessing - structure variables' }
+SudokuCell >> y: index [
 
 	rowIndex := index
 ]

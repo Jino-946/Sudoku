@@ -3,9 +3,28 @@
 
 BlockenWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-content/uploads/2023/02/sd41_rule.pdf)で紹介されている「考え方①」の実装です。
 
-[使い方]
-BlockenWay >> example を参照してください。
 
+Example
+```
+task := '
+1 9 7  0 0 4  2 0 5
+6 8 0  5 3 0  9 0 0 
+5 0 3  0 7 2  1 6 8
+	
+0 6 0  4 0 9  7 0 2
+0 7 5  0 1 0  6 8 0 
+2 0 9  8 0 7  0 4 0
+	
+7 5 6  3 2 0  4 0 1
+0 0 1  0 4 5  0 2 6
+8 0 4  1 0 0  3 5 7
+'.
+board := SudokuBoard2 new.
+board loadFromString: task.
+blockenWay := BlockenWay new: board.
+blockenWay solve.
+Transcript clear; show: board
+```
 "
 Class {
 	#name : #BlockenWay,
@@ -89,12 +108,12 @@ BlockenWay >> solve [
 	block := nil.
 	1 to: 9 do: [ :bNum |
 		1 to: 9 do: [ :vNum |
-			block := sudokuBoard atBlock: bNum verifyNumber: vNum.
+			block := sudokuBoard getBlock: bNum verifyNumber: vNum.
 			block includesVerifyNumber ifFalse: [
 				cell := self sujiYomi: block.
 				cell class = SudokuCell ifTrue: [ sudokuBoard  map: cell ]]].
 			
-		block := sudokuBoard atBlock: bNum verifyNumber: 0.
+		block := sudokuBoard getBlock: bNum verifyNumber: 0.
 		cell := block allGreen .
 		cell class = SudokuCell ifTrue: [ sudokuBoard map: cell ]
 		

@@ -4,6 +4,20 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
+{ #category : #private }
+SudokuColumnTest >> performTest [ 
+
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
+]
+
 { #category : #tests }
 SudokuColumnTest >> testAllGreen [
 
@@ -26,12 +40,58 @@ SudokuColumnTest >> testAllGreen [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	
 	cell := SudokuCell row: 7 column: 2  element: 3.
 	self assert: (block colsOnBoard at: 2) allGreen  equals: cell.
+]
+
+{ #category : #tests }
+SudokuColumnTest >> testCellOf [ 
+
+	| task board column cell |
+		task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	column := board getSudokuColumn: 4.
+	
+	cell := SudokuCell row: 9 column: 4  element: 7.
+	self assert: cell equals: (column cellOf: 7)
+]
+
+{ #category : #tests }
+SudokuColumnTest >> testGetAffectedCellOf [
+	| logger  board sudokuColumn affectedCell |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
+        materializeRoot .
+	logger info: board.
+	
+	sudokuColumn := board getSudokuColumn: 9.
+	affectedCell := sudokuColumn getAffectedCellOf: (board at: 9@7).
+	self assert: (SudokuCell row: 1 column: 9 element: 3) equals: affectedCell .
+	logger info: affectedCell .
+	
 ]
 
 { #category : #tests }
@@ -56,7 +116,7 @@ SudokuColumnTest >> testTenpai [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	
@@ -87,7 +147,7 @@ SudokuColumnTest >> testTsumo [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	
 	self assert: (block colsOnBoard at: 2) column equals: #(7 1 4   9 6 8   0 2 5).
 	

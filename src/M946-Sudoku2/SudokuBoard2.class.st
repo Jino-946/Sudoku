@@ -1,11 +1,22 @@
 "
 数独の盤面(ボード:9X9)全体を表現するクラス
 
-    Instance Variables
+Instance Variables
 	boardA2D		<Array2D>  ボードの内部表現
 
-
-    Implementation Points
+   主なAPI
+   セルのあるブロックを得る
+```
+   aSudokuBlock := aSudokuBoard atBlock: aSudokuCell blockNumber
+```		
+   セルのある行を得る
+```
+   aSudokuRow := aSudokuBoard atSudokuRow: aSudokuCell rowIndex
+```
+   セルのある列を得る
+```
+   aSudokuColumn := aSudokuBoard atSudokuColumn: aSudokuCell colIndex
+```
 "
 Class {
 	#name : #SudokuBoard2,
@@ -25,7 +36,7 @@ SudokuBoard2 >> = sudokuBoard [
 ]
 
 { #category : #'private - accessing' }
-SudokuBoard2 >> _atBlock: rowStart at: colStart [
+SudokuBoard2 >> _getBlock: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
 	ブロック(3X3)を取り出す。
@@ -57,43 +68,234 @@ SudokuBoard2 >> _atBlock: rowStart at: colStart [
 
 
 	block blockA2D
-		at: 1 at: 1 put: (boardA2D  at: rs at: cs);
-		at: 1 at: 2 put: (boardA2D  at: rs at: cs + 1);
-		at: 1 at: 3 put: (boardA2D  at: rs at: cs + 2);
-		at: 2 at: 1 put: (boardA2D  at: rs + 1 at: cs);
-		at: 2 at: 2 put: (boardA2D  at: rs + 1 at: cs + 1);
-		at: 2 at: 3 put: (boardA2D  at: rs + 1 at: cs + 2);
-		at: 3 at: 1 put: (boardA2D  at: rs + 2 at: cs);
-		at: 3 at: 2 put: (boardA2D  at: rs + 2 at: cs + 1);
-		at: 3 at: 3 put: (boardA2D  at: rs + 2 at: cs + 2).
+		at: 1 at: 1 put: (boardA2D  at: rs at: cs) copy;
+		at: 1 at: 2 put: (boardA2D  at: rs at: cs + 1) copy;
+		at: 1 at: 3 put: (boardA2D  at: rs at: cs + 2) copy;
+		at: 2 at: 1 put: (boardA2D  at: rs + 1 at: cs) copy;
+		at: 2 at: 2 put: (boardA2D  at: rs + 1 at: cs + 1) copy;
+		at: 2 at: 3 put: (boardA2D  at: rs + 1 at: cs + 2) copy;
+		at: 3 at: 1 put: (boardA2D  at: rs + 2 at: cs) copy;
+		at: 3 at: 2 put: (boardA2D  at: rs + 2 at: cs + 1) copy;
+		at: 3 at: 3 put: (boardA2D  at: rs + 2 at: cs + 2) copy.
 
 	^ block
 ]
 
-{ #category : #'private - creation' }
-SudokuBoard2 >> _atHorGroup: rowStart [
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessing: sudokuCell [
+	"
+	センダーはSudokuBoard2>>map:
+	セルに入る数字が確定したとき,セルに交差する行と列の対応する予約セルの
+	同盟処理を行う。
+	
+	removePossibleNumbersOfRowAndCol: の機能拡張・リネーム版
+	"
+	| cells |
+	
+	cells := self allianceProcessingOfRow: sudokuCell.
+	cells class = Array ifTrue: [
+		self allianceProcessingReflectOnSelf: cells].
 
-	| hGroup rs  |
-	rs := rowStart.
-	hGroup := SudokuHorGroup  new: self.
+	cells := self allianceProcessingOfCol: sudokuCell.
+	cells class = Array ifTrue: [  
+		self allianceProcessingReflectOnSelf: cells]
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBCITB1: buddyCells thisCell: thisCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド1
+	thisCellは配列の先頭に格納する。
 	
-	1 to: 3 do: [ :i |
-		1 to: 9 do: [ :j |
-			hGroup 	groupA2D at: i  at: j put: (boardA2D at: rowStart + i - 1 at: j) ]].
+	buddyCellsの要素が1個の時, (ワンペアまたはツーペアの時)
+	"
+	| ba  logger result buddyCell|
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	ba := BilateralAllianceOfRelatedBlock 
+		thisCell: thisCell 
+		otherCell: (buddyCells at: 1)
+		confirmNumber: aNumber.
+	buddyCell  :=  ba determineTheNumber.
+	result add: thisCell.
+	result add: buddyCell.
+	^result asArray
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBCITB2: buddyCells thisCell: thisCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド2
+	thisCellは配列の先頭に格納する。
+
+	thisCellの予約数が1種類、otherCellの予約数が2種類または1種類の非対称ペア 
+
+	2  1  $38  <= otherCell1
+	4  5  $8   <= thisCell
+	9  4  $3   <= otherCell2
+	"
+	| otherCell1 otherCell2 result  logger|
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	otherCell1 := buddyCells at: 1.
+	otherCell2 := buddyCells at: 2.
+	(otherCell1 possibleNumbers includes: aNumber) 
+		ifTrue: [ 
+
+			otherCell1 element: aNumber.
+			otherCell1 clearPossibleNumbers.
+			otherCell2 element: (otherCell2 possibleNumbers at: 1).
+			otherCell2 clearPossibleNumbers 
+		].
+	thisCell clearPossibleNumbers .
+	result add: thisCell.
+	result add: otherCell1.
+	result add: otherCell2.
+	^result asArray
 	
 	
-	^hGroup 
+	
+	
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBCITB3: buddyCells thisCell: sudokuCell confirmNumber: aNumber [
+	"
+	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド3
+	thisCellは配列の先頭に格納する。
+	
+	thisCellの予約数が2種類、otherCellの1種類の非対称ペア 
+
+	2  1  $38  <= thisCell
+	4  5  $8   <= otherCell1
+	9  4  $3   <= otherCell2
+	
 
 	"
-	hGroup rowsOnBoard
-		at: 1 put: (SudokuRow new: rs row: (self atRow: rs));
-		at: 2 put: (SudokuRow new: rs + 1 row: (self atRow: rs + 1));
-		at: 3 put: (SudokuRow new:  rs + 2 row: (self atRow: rs + 2)).
+	| result otherCell1 otherCell2 logger |
+	logger := M946FileLogger new: thisContext.
+	result := OrderedCollection new.
+	otherCell1 := buddyCells at: 1.
+	otherCell2 := buddyCells at: 2.
+	logger debug: ('thisCell => 
+{1}' format: {sudokuCell}).
+	(otherCell1 possibleNumbers includes: aNumber)
+		ifTrue: [
+			otherCell1 element: aNumber.
+			otherCell1 clearPossibleNumbers].
+	(otherCell2 possibleNumbers includes: aNumber)
+		ifTrue: [ 
+			otherCell2 element: aNumber.
+			otherCell2 clearPossibleNumbers].
+	sudokuCell removePossibleNumber: aNumber .	
+	result add: sudokuCell.
+	result add: otherCell1.
+	result add: otherCell2 .
+
+	^result asArray
+	
+	
+
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: aNumber [
+	"
+	thisCell の element は
+	"
+	| block buddyCells logger |
+	logger := M946FileLogger new: thisContext.
+	block := self getBlock: thisCell blockNumber.
+	logger debug: block.
+	buddyCells := (block getBuddyCellsOf: thisCell) 
+		sorted: [:c1 :c2 | c1 possibleNumbers size > c2 possibleNumbers size].
+
+	logger debug: buddyCells  messageWithCR: 'buddyCells =>'.
+	
+	(buddyCells isEmpty or: [ buddyCells size > 2 ]) ifTrue: [ ^ self ].
+	buddyCells size = 1 ifTrue: [  
+		^self allianceProcessingBCITB1: buddyCells  thisCell: thisCell  confirmNumber: aNumber].
+
+	(buddyCells at: 1) possibleNumbers size = 2 ifTrue: [ 
+		^self allianceProcessingBCITB2: buddyCells thisCell: thisCell  confirmNumber: aNumber ].
+
+	^self allianceProcessingBCITB3: buddyCells  thisCell: thisCell confirmNumber: aNumber 
+	
+	
 		
-	1 to: 9 do: [ :i | 
-		hGroup colsOnBoard
-		at: i put: (SudokuColumn new: i column: (self atColumn: i)).
-	].
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
+	"
+	引数に交差する列のセルのpossibleNumbersにsudokuCellのelementが含まれていたら
+	ワンペア・ツーペア・非対称ペアの処理(同盟の解決処理)を行う。
+	removePossibleNumbersOfCol:の機能拡張・リネーム版
+	"
+	| sudokuCol logger|
+	logger := M946FileLogger new: thisContext.
+	sudokuCol := self getSudokuColumn: sudokuCell x.
+	sudokuCol column do: [ :cell | | buddyCells |
+		cell class = SudokuCell 
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [  "|copyPossibleNumbers |
+						copyPossibleNumbers := cell possibleNumbers deepCopy.
+						copyPossibleNumbers remove: sudokuCell element.
+						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)]."
+						buddyCells := self allianceProcessingBuddyCellInTheBlock: cell confirmNumber: sudokuCell element.
+						^buddyCells ]]].
+			
+]
+
+{ #category : #logic }
+SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
+	"
+	引数の同一行上セルのpossibleNumbersにsudokuCellのelementが含まれていたら
+	そのセルのブロックの同盟セルの解決処理を行う。
+	
+	
+	removePossibleNumbersOfRow:の機能拡張・リネーム版
+	"
+	| sudokuRow logger|
+	logger := M946FileLogger new: thisContext.
+	sudokuRow := self getSudokuRow: sudokuCell y.
+	sudokuRow row do: [ :cell | | buddyCells |
+		cell class = SudokuCell 
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [ "| copyPossibleNumbers|
+						copyPossibleNumbers := cell possibleNumbers deepCopy.
+						copyPossibleNumbers remove: sudokuCell element.
+						copyPossibleNumbers size = 1 ifTrue: [cell element: (copyPossibleNumbers at: 1)].
+						cell element: sudokuCell element."
+						buddyCells := self allianceProcessingBuddyCellInTheBlock: cell confirmNumber: sudokuCell element.			
+						^buddyCells ]]].
+			
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> allianceProcessingReflectOnSelf: cells [
+	"
+	allianceProcessing:  の戻値を boardA2D に反映させる
+	"
+	cells class = Array ifFalse: [ ^self ].
+	cells do: [ :cell |
+		cell class = SudokuCell ifTrue: [ 
+			cell possibleNumbers isEmpty 
+				ifTrue: [ 
+					boardA2D at: cell y at: cell x put: cell element]	
+				ifFalse: [ 
+					boardA2D at: cell y at: cell x put: cell]]]
+	
+	"
+	cells class = SudokuCell 
+	ifTrue: [ boardA2D at: cells y at: cells x put: cells element ]
+	ifFalse: [ 
+		(cells class = Array and: [ cells size = 2 ])
+			ifTrue: [ 
+				boardA2D at: (cells at: 1) y at: (cells at:1) x put: (cells at: 1) element.
+				boardA2D at: (cells at: 2) y at: (cells at:2) x put: (cells at: 2) element ]].
 	"
 ]
 
@@ -108,19 +310,119 @@ SudokuBoard2 >> asString [
 		1 to: 9 do: [ :colIndex | |number|
 			number := self boardA2D  at: rowIndex at: colIndex.	
 			number class = Character ifTrue: [ number := '$', number asString ].
+			number class = SudokuCell ifTrue: [ number := number asSimpleString  ].
 			aStream nextPutAll: number asString; tab.
 			(separateIndices includes: colIndex)
-			ifTrue:[ aStream  tab]].
+			ifTrue:[ aStream tab "space; space; space"]].
 		aStream cr.
 		(separateIndices includes: rowIndex )
-		ifTrue: [ aStream  cr;cr ]
+		ifTrue: [ aStream  cr]
 	].
 	
 	^aStream contents 
 ]
 
+{ #category : #accessing }
+SudokuBoard2 >> at: aPoint [
+
+	^boardA2D at: aPoint y at: aPoint x
+	
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> at: aPoint put: anObject [
+
+	^boardA2D at: aPoint y at: aPoint x put: anObject 
+	
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> atColumn: colIndex [
+	"
+	boardA2DよりcolIndexで指定した列を返す。
+	"
+
+	^ boardA2D atColumn: colIndex
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> atRow: rowIndex [
+	"
+	boardA2DよりrowIndexで指定した行を返す。
+	"
+
+	^ boardA2D  atRow: rowIndex
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> boardA2D [
+
+	^ boardA2D 
+]
+
+{ #category : #logic }
+SudokuBoard2 >> clearMarks [
+	"
+	AnyWay実装に$X,$1-$9などのマークをboardA2Dに直接書き込むようになったので、
+	不要になったら消すためのメソッド
+	"
+	1 to: 9 do: [ :i |
+		1 to: 9 do: [ :j | |cellOfBoard|
+			cellOfBoard := boardA2D at: i at: j.		
+			cellOfBoard  class = Character 
+				ifTrue: [ boardA2D at: i at: j put: 0 ].
+			cellOfBoard class = SudokuCell 
+				ifTrue: [ cellOfBoard marked: false ]] ]
+]
+
+{ #category : #'as yet unclassified' }
+SudokuBoard2 >> clearPairCells [
+
+	1 to: 9 do: [ :i |
+		1 to: 9 do: [ :j |
+			(boardA2D at: i at: j) class = SudokuPairCell  ifTrue: [
+				boardA2D at: i at: j put: 0 ] ] ]
+]
+
+{ #category : #logic }
+SudokuBoard2 >> completed [
+	"
+	数独問題を解けたか判定する
+	"
+	1 to: 9 do: [ :number | 
+		(self getBlock: number) completed 
+		ifFalse: [ ^false ].
+		(self getSudokuColumn:  number) completed 
+		ifFalse: [ ^false ].
+		(self getSudokuRow:  number) completed 
+		ifFalse: [ ^false ].	
+	].
+	^ true
+]
+
+{ #category : #logic }
+SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
+	"
+	同一ブロックにsudokuCellのワンペアのもう一方のセル
+	がある場合はもう一方のセルの値を確定させる。
+	"
+	| block cells pairCell logger |
+	logger := M946FileLogger new: thisContext.
+	logger debug: sudokuCell.
+	block := self getBlock: sudokuCell blockNumber .
+	cells := block blockA2D asArray select: [ :cell |
+		 cell class = SudokuCell 
+			and: [ cell ~= sudokuCell
+				and: [ cell possibleNumbers size = 1
+					and: [  cell possibleNumbers = sudokuCell possibleNumbers]]]] .
+	cells size = 1 ifFalse: [ ^self ].
+	pairCell := cells at: 1.
+	self boardA2D at: pairCell y at: pairCell x put: (pairCell possibleNumbers at: 1 ).
+]
+
 { #category : #creation }
-SudokuBoard2 >> atBlock: blockNumber [
+SudokuBoard2 >> getBlock: blockNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
 	
@@ -146,102 +448,98 @@ SudokuBoard2 >> atBlock: blockNumber [
 	| block |
 	block := SudokuBlock2 new.
 	blockNumber = 1 ifTrue: [
-		block := (self _atBlock: 1 at: 1) blockNumber: blockNumber ].
+		block := (self _getBlock: 1 at: 1) blockNumber: blockNumber ].
 	blockNumber = 2 ifTrue: [
-		block := (self _atBlock: 1 at: 4) blockNumber: blockNumber ].
+		block := (self _getBlock: 1 at: 4) blockNumber: blockNumber ].
 	blockNumber = 3 ifTrue: [
-	 	block := (self _atBlock:  1 at: 7) blockNumber: blockNumber ].
+	 	block := (self _getBlock:  1 at: 7) blockNumber: blockNumber ].
 	blockNumber = 4 ifTrue: [
-		block := (self _atBlock: 4 at: 1) blockNumber: blockNumber ].
+		block := (self _getBlock: 4 at: 1) blockNumber: blockNumber ].
 	blockNumber = 5 ifTrue: [
-		block := (self _atBlock: 4 at: 4) blockNumber: blockNumber ].
+		block := (self _getBlock: 4 at: 4) blockNumber: blockNumber ].
 	blockNumber = 6 ifTrue: [
-		block := (self _atBlock: 4 at: 7) blockNumber: blockNumber ].
+		block := (self _getBlock: 4 at: 7) blockNumber: blockNumber ].
 	blockNumber = 7 ifTrue: [
-		block := (self _atBlock: 7 at: 1) blockNumber: blockNumber ].
+		block := (self _getBlock: 7 at: 1) blockNumber: blockNumber ].
 	blockNumber = 8 ifTrue: [
-		block :=  (self _atBlock: 7 at: 4) blockNumber: blockNumber ].
+		block :=  (self _getBlock: 7 at: 4) blockNumber: blockNumber ].
 	blockNumber = 9 ifTrue: [
-		block := (self _atBlock: 7 at: 7) blockNumber: blockNumber ].
-	
-	self setEitherCells: block.	
+		block := (self _getBlock: 7 at: 7) blockNumber: blockNumber ].
+
 	^block
 	
 
 ]
 
 { #category : #creation }
-SudokuBoard2 >> atBlock: bNum verifyNumber: vNum [
+SudokuBoard2 >> getBlock: bNum verifyNumber: vNum [
 
 	| block |
-	block := self atBlock: bNum.
+	block := self getBlock: bNum.
 	^ block verifyNumber: vNum
 ]
 
 { #category : #accessing }
-SudokuBoard2 >> atColumn: colIndex [
-	"
-	boardA2DよりcolIndexで指定した列を返す。
-	"
+SudokuBoard2 >> getCellRow: rowIndex cellColumn: colIndex [
 
-	^ boardA2D atColumn: colIndex
+	(boardA2D at: rowIndex at: colIndex) class = SudokuCell ifTrue: [ ^boardA2D at: rowIndex at: colIndex ].
+	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
 ]
 
-{ #category : #creation }
-SudokuBoard2 >> atHorGroup: groupNumber [
+{ #category : #accessing }
+SudokuBoard2 >> getOriginalColumn: x [
 	"
-	数独ボード(9X9)よりgroupNumberを指定して(3X9)を取り出す。
+	0-9までの数字だけをを取り出すためのメソッド。
 	
-	数独ボード
-	1 2 3  4 5 6  7 8 9
-	2 3 4  5 6 7  8 9 1 
-	3 4 5  6 7 8  9 1 2
-	
-	4 5 6  7 8 9  1 2 3
-	5 6 7  8 9 1  2 3 4
-	6 7 8  9 1 2  3 4 5
-	
-	7 8 9  1 2 3  4 5 6
-	8 9 1  2 3 4  5 6 7 
-	9 1 2  3 4 5  6 7 8	
-	
-	数独ボード(9X9)とgroupNumberの位置関係	
-	ブロック(ナンバー)
-	 G1
-	 G2
-	 G3
+	ペアセル(ワンペア・ツーペア・非対称ペア)のいづれかのセル
+	数が入った時、他のセルの数が自動的に決定できることがある。
+	この機能を実装する際にペアセルの印としてsudokuCellをsudokuBoard
+	配置するようにした。
 	"
-
-	groupNumber = 1 ifTrue: [
-		^ (self _atHorGroup: 1 ) groupNumber: groupNumber ].
-
-	groupNumber = 2 ifTrue: [
-		^ (self _atHorGroup: 4 ) groupNumber: groupNumber ].
-
-	groupNumber = 3 ifTrue: [
-		^ (self _atHorGroup: 7 ) groupNumber: groupNumber ].
+	| originalColumn |
+	originalColumn := OrderedCollection new.
+	1 to: 9 do: [ :y | | number |
+		number := boardA2D at: y at: x.
+		number class = SmallInteger 	
+			ifTrue: [ originalColumn add: number ]
+			ifFalse: [ originalColumn add: 0 ]].
+	^originalColumn asArray
+	
 
 ]
 
 { #category : #accessing }
-SudokuBoard2 >> atHorGroup: groupNumber verifyNumber: number [
-
-	| group |
-	group := self atHorGroup: groupNumber .
-	^ group verifyNumber: number
+SudokuBoard2 >> getOriginalRow: y [
+	"
+	0-9までの数字だけをを取り出すためのメソッド。
+	
+	ペアセル(ワンペア・ツーペア・非対称ペア)のいづれかのセル
+	数が入った時、他のセルの数が自動的に決定できることがある。
+	この機能を実装する際にペアセルの印としてsudokuCellをsudokuBoard
+	配置するようにした。
+	"
+	| originalRow |
+	originalRow := OrderedCollection new.
+	1 to: 9 do: [ :x | | number|
+		number := boardA2D at: y at: x.
+		number  class = SmallInteger 
+			ifTrue: [ originalRow add: number ]
+			ifFalse: [ originalRow add: 0 ]].
+	^originalRow asArray
+	
+	
 ]
 
 { #category : #accessing }
-SudokuBoard2 >> atRow: rowIndex [
-	"
-	boardA2DよりrowIndexで指定した行を返す。
-	"
+SudokuBoard2 >> getSudokuCell: aPoint [
 
-	^ boardA2D  atRow: rowIndex
+	
+	^ self getCellRow: aPoint y cellColumn: aPoint x.
+
 ]
 
 { #category : #creation }
-SudokuBoard2 >> atSudokuColumn: colIndex [
+SudokuBoard2 >> getSudokuColumn: colIndex [
 	"
 	colIndex で指定した行を SudokuColumn に変換して返す
 	"
@@ -250,41 +548,11 @@ SudokuBoard2 >> atSudokuColumn: colIndex [
 ]
 
 { #category : #creation }
-SudokuBoard2 >> atSudokuRow: rowIndex [
+SudokuBoard2 >> getSudokuRow: rowIndex [
 	"
 	rowIndex で指定した行を SudokuRow に変換して返す
 	"
 	^SudokuRow new: rowIndex row: (self atRow: rowIndex)
-]
-
-{ #category : #accessing }
-SudokuBoard2 >> boardA2D [
-
-	^ boardA2D 
-]
-
-{ #category : #logic }
-SudokuBoard2 >> clearMarks [
-	"
-	AnyWay実装に$X,$1-$9などのマークをboardA2Dに直接書き込むようになったので、
-	不要になったら消すためのメソッド
-	"
-	1 to: 9 do: [ :i |
-		1 to: 9 do: [ :j |
-			(boardA2D at: i at: j) class = Character ifTrue: [
-				boardA2D at: i at: j put: 0 ] ] ]
-]
-
-{ #category : #logic }
-SudokuBoard2 >> completed [
-	"
-	数独問題を解けたか判定する
-	"
-	1 to: 9 do: [ :blockNumber | 
-		(self atBlock: blockNumber) completed 
-		ifFalse: [ ^false ]
-	].
-	^ true
 ]
 
 { #category : #comparing }
@@ -340,8 +608,17 @@ SudokuBoard2 >> map:  sudokuItem [
 	"
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
 	"
-	sudokuItem class = SudokuCell ifTrue: [  
-		boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element ].
+	| logger |
+	logger := M946FileLogger new:thisContext.
+	logger debug: ('sudokuItem => {1}' format: {sudokuItem}).
+	sudokuItem class = SudokuCell ifTrue: [ 
+		sudokuItem possibleNumbers isEmpty "ペアセルか単独セルか判定: isEmpty=>true 単独セル"
+			ifTrue: [  
+				boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem  element.
+				"self removePossibleNumbersOfRowAndCol: sudokuItem."
+				self allianceProcessing: sudokuItem.]
+			ifFalse: [  
+				 boardA2D at: sudokuItem  rowIndex  at: sudokuItem  colIndex  put: sudokuItem ]].
 	
 	sudokuItem class = SudokuRow ifTrue: [  
 		1 to: 9 do: [ :i | 
@@ -352,7 +629,10 @@ SudokuBoard2 >> map:  sudokuItem [
 			boardA2D at: i at: sudokuItem colIndex put: (sudokuItem column at: i)]].
 	
 	sudokuItem class = SudokuBlock2 ifTrue: [ 
-		self mapSudokuBlock2: sudokuItem ]
+		self mapSudokuBlock2: sudokuItem ].
+	
+	sudokuItem class = SudokuPairCell ifTrue: [ 
+		self mapSudokuPairCell: sudokuItem ]
 
 	
 ]
@@ -373,23 +653,107 @@ SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
  	]
 ]
 
+{ #category : #accessing }
+SudokuBoard2 >> mapSudokuCell: sudokuCell [
+	"
+	sudokuCellの座標で示されるセル値のクラスがSudokuPairCellの時、片方のペアの数字が決まると
+	もう一方の数字が自動的に決定する動作を実装する。
+	"
+	| pairCell rIndex cIndex logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
+	logger debug: (boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class.
+	(boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex) class= SudokuPairCell ifTrue: [ 
+		pairCell := boardA2D at: sudokuCell rowIndex at: sudokuCell colIndex.
+		rIndex := pairCell otherCell rowIndex.
+		cIndex := pairCell otherCell colIndex.
+		boardA2D at: rIndex at: cIndex put: (pairCell pairOfNumbers at: 1)].
+	
+	boardA2D
+		at: sudokuCell rowIndex
+		at: sudokuCell colIndex
+		put: sudokuCell element.
+
+
+]
+
+{ #category : #accessing }
+SudokuBoard2 >> mapSudokuPairCell: aPairCell [
+
+	| rowIndex colIndex |
+	rowIndex := aPairCell thisCell rowIndex.
+	colIndex := aPairCell thisCell colIndex.
+	boardA2D at: rowIndex at: colIndex put: aPairCell 
+]
+
 { #category : #printing }
 SudokuBoard2 >> printOn: aStream [
 
 	aStream nextPutAll: self asString 
 ]
 
-{ #category : #initialization }
-SudokuBoard2 >> setEitherCells: block [
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
+	"
+	SudokuBoard2>>removePossibleNumbersOfCol: sudokuCell
+	1)引数に交差する列のセルのpossibleNumbersより引数のelementを除去する。
+	  possibleNumbersが空になったらあらためて0をセットする。
+	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
+      がある場合はもう一方のセルの値を確定させる。 
+	"
+	| sudokuCol logger|
+	logger := M946FileLogger new: thisContext.
+	sudokuCol := self getSudokuColumn: sudokuCell x.
+	sudokuCol column do: [ :cell |
+		cell class = SudokuCell 
+			ifTrue: [ 
+					(cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [
+						logger debug: cell.
+				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
+				"1)"	cell possibleNumbers remove: (sudokuCell element). 
+						logger debug: cell.
+						cell possibleNumbers isEmpty ifTrue: [ 
+							boardA2D at: cell y at: cell x put: 0]]]].
+			
 
-	| charDigits |
-	charDigits := #($1 $2 $3 $4 $5 $6 $7 $8 $9).
-	1 to: 3 do: [ :i |
-		1 to: 3 do: [ :j | | char rowIndex colIndex |
-			char := block blockA2D at: i at: j.
-			(charDigits includes: char)	ifTrue: [ 
-				rowIndex := block rowIndexOnBoard: i.
-				colIndex := block colIndexOnBoard: j.
-				block eitherCells add: (SudokuCell row: rowIndex column: colIndex element: char )	]]]
-	
+]
+
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
+	"
+	1)引数に交差する行のセルのpossibleNumbersより引数のelementを除去する。
+	  possibleNumbersが空になったらあらためて0をセットする。
+	2)sudokuCellがあるブロックにsudokuCellのワンペアのもう一方のセル
+     がある場合はもう一方のセルの値を確定させる。 	
+	"
+	| sudokuRow  logger |
+	logger := M946FileLogger new: thisContext.
+	sudokuRow := self getSudokuRow: sudokuCell y.
+	sudokuRow row do: [ :cell |
+		cell class = SudokuCell 
+			ifTrue: [ (cell possibleNumbers includes: sudokuCell element)
+					ifTrue: [
+						logger debug: cell.
+				"2)"	self confirmTheOtherCellOfThePairInTheBlock: cell.
+			    "1)"	cell possibleNumbers remove: (sudokuCell element). 
+						logger debug: cell.
+						cell possibleNumbers isEmpty ifTrue: [ 
+							boardA2D at: cell y at: cell x put: 0]]]].
+			
+			
+
+]
+
+{ #category : #removing }
+SudokuBoard2 >> removePossibleNumbersOfRowAndCol: sudokuCell [
+	" 現行バージョン保存    コミット番号 #d946b62 現在"
+	"
+	センダーはSudokuBoard2>>map:
+	セルに入る数字が確定したとき,セルに交差する行と列の予約セルの内容を更新する
+	"
+	self removePossibleNumbersOfRow: sudokuCell.
+	self removePossibleNumbersOfCol: sudokuCell
 ]

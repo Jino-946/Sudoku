@@ -4,6 +4,32 @@ Class {
 	#category : #'M946-Sudoku2-Tests'
 }
 
+{ #category : #private }
+SudokuBlock2Test >> performTest [ 
+
+    | logger |
+    logger := TinyLogger new addTranscriptLogger ; yourself .
+    logger  timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+    logger clearLog.
+    
+    TinyCurrentLogger value: logger during: [ super performTest ]
+]
+
+{ #category : #running }
+SudokuBlock2Test >> setUp [
+	super setUp.
+
+	TinyLogger default ensureFileLoggerNamed: 'sudoku.log'; clearLog.
+    TinyLogger default 
+        timestampFormatBlock: [ :aStream :timestamp |
+            timestamp asDate yyyymmdd printOn: aStream.
+            aStream << ' '.
+            timestamp asTime print24: true on: aStream ].
+]
+
 { #category : #tests }
 SudokuBlock2Test >> testAllGreen [
 
@@ -27,43 +53,14 @@ SudokuBlock2Test >> testAllGreen [
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	"ブロック4のツモを確認する"
-	block := board atBlock: 4.
+	block := board getBlock: 4.
 	cell := block allGreen.
 	self assert: cell equals: (SudokuCell row: 5 column: 1 element: 7).
 	
 	"ブロック8のツモを確認する"
-	block := board atBlock: 8.
+	block := board getBlock: 8.
 	cell := block allGreen.
 	self assert: cell equals: (SudokuCell row: 7 column: 5 element: 9)
-	
-]
-
-{ #category : #tests }
-SudokuBlock2Test >> testBlankCellsAsArray [
-	|task board block cells|
-	task := '
-1 9 7  0 0 4  2 0 5
-6 8 0  5 3 0  9 0 0 
-5 0 3  0 7 2  1 6 8
-	
-0 6 0  4 0 9  7 0 2
-0 7 5  0 1 0  6 8 0 
-2 0 9  8 0 7  0 4 0
-	
-7 5 6  3 2 0  4 0 1
-0 0 1  0 4 5  0 2 6
-8 0 4  1 0 0  3 5 7	
-	'.
-	
-	board := SudokuBoard2 new.
-	board loadFromString: task.
-	block := board atBlock: 9.
-	
-	cells := Array new: 2.
-	cells at: 1 put: (SudokuCell row: 7 column: 8 element: 0).
-	cells at: 2 put: (SudokuCell row: 8 column: 7 element: 0).
-	
-	self assert: block blankCellsAsArray  equals: cells.
 	
 ]
 
@@ -87,7 +84,7 @@ SudokuBlock2Test >> testCellOf [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 5.
+	block := board getBlock: 5.
 	
 	cell := SudokuCell row: 4 column: 6 element: 9.
 	
@@ -118,13 +115,13 @@ SudokuBlock2Test >> testColIndexOnBoard [
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	
-	block := board atBlock: 1.
+	block := board getBlock: 1.
 	self assert: (block colIndexOnBoard: 2) equals: 2.
 	
-	block := board atBlock: 5.
+	block := board getBlock: 5.
 	self assert: (block colIndexOnBoard: 2) equals: 5.
 	
-	block := board atBlock: 9.
+	block := board getBlock: 9.
 	self assert: (block rowIndexOnBoard: 3) equals: 9.
 ]
 
@@ -151,7 +148,7 @@ SudokuBlock2Test >> testColsOnBoard [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 3.
+	block := board getBlock: 3.
 	cols := block colsOnBoard .
 	
 	column := SudokuColumn new.
@@ -168,41 +165,195 @@ SudokuBlock2Test >> testColsOnBoard [
 ]
 
 { #category : #tests }
-SudokuBlock2Test >> testRowIndexOf [
-	"
-	rowIndexOf: number
-	ブロックにおけるnumberの行インデックスを返す
-	"
-	| task board block group |
-	task := '
-	9	4	7		6	5	3		2	1	8	
-	8	6	1		9	2	7		3	5	4	
-	2	3	5		0	0	4		7	9	6	
+SudokuBlock2Test >> testGetBuddyCellsOf [
+	| logger  board  block thisCell buddies |
+	M946FileLogger logLevel: LogLevel debug.
 
-
-	0	0	0		0	0	2		0	4	9	
-	4	2	9		0	0	1		0	0	0	
-	0	0	6		4	0	9		0	0	2	
-
-
-	0	9	2		7	4	0		0	6	0	
-	6	0	4		0	0	0		9	2	7	
-	5	7	0		2	9	6		4	0	0	
-
-	'.
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
+        materializeRoot .
+	logger info: board.
 	
+	block := board getBlock: 6.
+	thisCell := (SudokuCell row: 6 column: 7 element: 8) addPossibleNumber: 1; addPossibleNumber: 8.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+	block := board getBlock: 5.	
+	thisCell := (SudokuCell row: 4 column: 5 element: 1) addPossibleNumber: 1; addPossibleNumber: 3.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+	block := board getBlock: 5.	
+	thisCell := (SudokuCell row: 5 column: 5 element: 0)  addPossibleNumber: 3.
+	buddies := block getBuddyCellsOf: thisCell .
+	logger info: buddies.
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testLocalX [
+
+	| board block |
+
+	board := SudokuBoard2 new.
+	
+	block := board getBlock: 2.
+	self assert: 1 equals: (block localX: 4).
+	self assert: 2 equals: (block localX: 5).
+	self assert: 3 equals: (block localX: 6).
+	
+	block := board getBlock: 4.
+	self assert: 1 equals: (block localX: 1).
+	self assert: 2 equals: (block localX: 2).
+	self assert: 3 equals: (block localX: 3).
+	
+	block := board getBlock: 9.
+	self assert: 1 equals: (block localX: 7).
+	self assert: 2 equals: (block localX: 8).
+	self assert: 3 equals: (block localX: 9).
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testLocalY [
+
+	| board block |
+
+	board := SudokuBoard2 new.
+	
+	block := board getBlock: 2.
+	self assert: 1 equals: (block localY: 1).
+	self assert: 2 equals: (block localY: 2).
+	self assert: 3 equals: (block localY: 3).
+	
+	block := board getBlock: 4.
+	self assert: 1 equals: (block localY: 4).
+	self assert: 2 equals: (block localY: 5).
+	self assert: 3 equals: (block localY: 6).
+	
+	block := board getBlock: 9.
+	self assert: 1 equals: (block localY: 7).
+	self assert: 2 equals: (block localY: 8).
+	self assert: 3 equals: (block localY: 9).
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testMarkByHorizontalCell [
+	| board solver task cells blockNumber sudokuNumber block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	group := board atHorGroup: 3.
-	block := group atBlock: 1.
+	solver := YokoNicoMethod new: board.
 	
-	self assert: (block rowIndexOf:5) equals: 3.
-	self assert: (block rowIndexOf:9) equals: 1.
+	"test 1"
+	blockNumber := 1.
+	sudokuNumber  := 8.
+	cells := solver nicoCells: blockNumber  number: sudokuNumber .
+	block := board getBlock: blockNumber.
 	
-	block := group atBlock: 3.
-	self assert: (block rowIndexOf:6) equals: 1.
-	self assert: (block rowIndexOf:9) equals: 2.
+	self assert: 5 equals: (block blankCellsAsArray size).
+	
+	block markByHorizontalCell: (cells at: 1).
+	block markByHorizontalCell: (cells at: 2).
 
+	('{1}' format: {thisContext}) record.
+	('test 1 {1}' format: {block}) record.
+	
+	self assert: 2 equals: (block blankCellsAsArray size).
+	self assert: $X equals: (block row: 3 column: 1).
+	self assert: $X equals: (block row: 3 column: 2).	
+	self assert: $X equals: (block row: 3 column: 3).	
+
+
+	"test 2"
+	sudokuNumber := 5.
+	cells := solver nicoCells: blockNumber  number: sudokuNumber .
+	block := board getBlock: blockNumber.
+	
+	block markByHorizontalCell: (cells at: 1).
+	block markByHorizontalCell: (cells at: 2).
+
+	('{1}' format: {thisContext}) record.
+	('test 2 {1}' format: {block}) record.
+
+	self assert: 3 equals: (block blankCellsAsArray size).
+	self assert: $X equals: (block row: 2 column: 1).
+	self assert: $X equals: (block row: 2 column: 3).	
+
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
+
+	| task board block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board getBlock: 1.
+	
+	self assert: 5 equals: (block blankCellsAsArray size).
+	block markByNumberToMark: 8.
+	
+	('{1}' format: {thisContext}) record.
+	('{1}' format: {block}) record.	
+	
+	self assert: 1 equals: (block blankCellsAsArray size).
+	self assert: 0 equals: (block row: 2 column: 1).
+	
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testReadyForFillTwoPair [
+
+	| logger  board  block pairCells |
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	board := FLMaterializer new 
+        filePath: 'fuel/testReadyForFillTwoPair.fuel';
+        materializeRoot .
+	logger info: board.
+	block := board getBlock: 3.
+	logger info: block.
+	pairCells := block readyForFillTwoPair .
+	logger info: pairCells .
+	board map: (pairCells at: 1).
+	board map: (pairCells at: 2).
+	logger info: board.
+	
 ]
 
 { #category : #tests }
@@ -229,13 +380,13 @@ SudokuBlock2Test >> testRowIndexOnBoard [
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	
-	block := board atBlock: 1.
+	block := board getBlock: 1.
 	self assert: (block rowIndexOnBoard: 2) equals: 2.
 	
-	block := board atBlock: 5.
+	block := board getBlock: 5.
 	self assert: (block rowIndexOnBoard: 2) equals: 5.
 	
-	block := board atBlock: 9.
+	block := board getBlock: 9.
 	self assert: (block rowIndexOnBoard: 2) equals: 8.
 ]
 
@@ -262,7 +413,7 @@ SudokuBlock2Test >> testRowsOnBoard [
 	
 	board := SudokuBoard2 new.
 	board loadFromString: task.
-	block := board atBlock: 7.
+	block := board getBlock: 7.
 	rows := block rowsOnBoard .
 	
 	row := SudokuRow new.
@@ -299,12 +450,12 @@ SudokuBlock2Test >> testTenpai [
 	board loadFromString: data.
 
 	"ブロック5のテンパイを確認する"
-	block := board atBlock: 5.
+	block := board getBlock: 5.
 	expected := SudokuCell row: 6 column: 5 element: 0.
 	self assert: block tenpai equals: expected.
 
     "ブロック9のテンパイを確認する"
-	block := board atBlock: 9.
+	block := board getBlock: 9.
 	expected := SudokuCell row: 8 column: 9  element: 0.
 	self assert: block tenpai equals: expected .
 
@@ -333,13 +484,149 @@ SudokuBlock2Test >> testTsumo [
 	board := SudokuBoard2 new.
 	board loadFromString: task.
 	"ブロック4のツモを確認する"
-	block := board atBlock: 4.
+	block := board getBlock: 4.
 	cell := block tsumo.
 	self assert: cell equals: (SudokuCell row: 5 column: 1 element: 7).
 	
 	"ブロック8のツモを確認する"
-	block := board atBlock: 8.
+	block := board getBlock: 8.
 	cell := block tsumo.
 	self assert: cell equals: (SudokuCell row: 7 column: 5 element: 9)
 	
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testXOnBoard [
+	| board  task   block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	block := board getBlock: 1.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 2.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 3.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+	block := board getBlock: 4.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 5.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 6.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+	block := board getBlock: 7.
+	self assert: (block xOnBoard: 1) equals: 1.
+	self assert: (block xOnBoard: 2) equals: 2.
+	self assert: (block xOnBoard: 3) equals: 3.
+	
+	block := board getBlock: 8.
+	self assert: (block xOnBoard: 1) equals: 4.
+	self assert: (block xOnBoard: 2) equals: 5.
+	self assert: (block xOnBoard: 3) equals: 6.
+
+	block := board getBlock: 9.
+	self assert: (block xOnBoard: 1) equals: 7.
+	self assert: (block xOnBoard: 2) equals: 8.
+	self assert: (block xOnBoard: 3) equals: 9.
+
+
+]
+
+{ #category : #tests }
+SudokuBlock2Test >> testYOnBoard [
+	| board  task   block |
+	task := '
+3 6 9   8 0 1   5 0 0
+0 2 0   5 0 6   0 0 0
+0 0 0   0 7 0   0 0 8
+
+0 9 8   6 3 2   0 1 7
+0 0 0   0 8 0   0 0 0
+6 7 0   9 1 5   8 2 0
+
+9 0 0   0 5 0   0 0 0
+0 0 0   2 0 4   0 8 0
+0 0 1   7 0 8   9 5 2
+'.
+
+	board := SudokuBoard2 new.
+	board loadFromString: task.
+	
+	block := board getBlock: 1.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+	
+	block := board getBlock: 2.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+	
+	block := board getBlock: 3.
+	self assert: (block yOnBoard: 1 )  equals: 1.
+	self assert: (block yOnBoard: 2 )  equals: 2.
+	self assert: (block yOnBoard: 3 )  equals: 3.
+
+	block := board getBlock: 4.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+
+	block := board getBlock: 5.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+	
+	block := board getBlock: 6.
+	self assert: (block yOnBoard: 1 )  equals: 4.
+	self assert: (block yOnBoard: 2 )  equals: 5.
+	self assert: (block yOnBoard: 3 )  equals: 6.
+
+	block := board getBlock: 7.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+	
+	block := board getBlock: 8.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+	
+	block := board getBlock: 9.
+	self assert: (block yOnBoard: 1 )  equals: 7.
+	self assert: (block yOnBoard: 2 )  equals: 8.
+	self assert: (block yOnBoard: 3 )  equals: 9.
+
+
+
 ]

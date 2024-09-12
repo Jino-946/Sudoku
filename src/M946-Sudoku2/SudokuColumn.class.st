@@ -1,9 +1,18 @@
 "
 数独ボードの列を表現するクラス
 
-    Instance Variables
-	column		<Array>			列の9つのセルの配列
-	colIndex	<SmallInteger>	ボード上の列インデックス
+Instance Variables
+column		<Array>			列の9つのセルの配列
+colIndex	<SmallInteger>	ボード上の列インデックス
+		
+主なAPI
+- allGreen               1つのブランクセル以外の8つのセルが1-9までの数字で埋まっている時
+                         足りない数字をSudokuCellに格納して返す、でなければ0を返す
+- blankCellsAsArray      SudokuColumnのブランクセルをSudokuCellの配列にして返す
+- cellOf:                number(値)の座標をSudokuCell にマップして返す, 見つからないときは0を返す
+- countOfReservedBlankCells ブランクセル以外のセルが1-9の数字で埋まっている時のブランクセルの数を返す
+- tenpai                 列にブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す
+                         ブランクセルが複数のときは0を返す。
 
 
 
@@ -61,14 +70,39 @@ SudokuColumn >> allGreen [
 ]
 
 { #category : #converting }
+SudokuColumn >> asArray [
+
+	^column
+]
+
+{ #category : #converting }
+SudokuColumn >> asSimpleString [
+
+	| aStream |
+	aStream := ReadWriteStream on: String new.
+	aStream nextPutAll: 'aSudokuColumn #';
+			nextPutAll: colIndex asString;
+			nextPutAll: '('.
+	column doWithIndex: [ :c :idx |
+				idx = 1 ifTrue: [ aStream space ].
+			 	(idx > 1 and: [idx % 3 = 1]) ifTrue: [ aStream tab ]. 
+				c class = SudokuCell 
+					ifTrue: [ aStream nextPutAll: c asSimpleString ; space ]
+					ifFalse:[	aStream print: c; space ]].
+	aStream nextPutAll: ' )'.
+
+	^ aStream contents 
+]
+
+{ #category : #converting }
 SudokuColumn >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
-	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString.
+	aStream nextPutAll: 'colIndex: '; nextPutAll: colIndex asString; space; space.
 	column doWithIndex: [ :c :idx |
-			 	idx % 3 = 1 ifTrue: [ aStream cr ]. 
-				aStream print: c; cr. ].
+			 	idx % 3 = 1 ifTrue: [ aStream tab ]. 
+				aStream print: c; space. ].
 
 	^ aStream contents 
 ]
@@ -85,7 +119,41 @@ SudokuColumn >> at: index put: val [
 	column at: index put: val 
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
+SudokuColumn >> blankCellsAsArray [
+	"
+    SudokuColumnのブランクセルをSudokuCellの配列にして返す
+    "
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 9 do: [ :i | |cell|
+		cell := column at: i .
+		cell = 0 ifTrue: [
+			collection add: (SudokuCell
+						 		row: i
+						 		column: colIndex 
+						 		element: 0)].					
+		(cell class = SudokuCell and: [ cell marked not ])
+			ifTrue:[ collection add: cell] ].
+
+	^ collection  asArray
+]
+
+{ #category : #accessing }
+SudokuColumn >> cellOf: number [
+	"
+	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
+	"
+	| index cell|
+	cell := 0.
+	index := self asArray indexOf: number.
+	index = 0 ifFalse: [ 
+		cell := SudokuCell row: index column: colIndex element: number].
+	
+	^cell
+]
+
+{ #category : #'private - utility' }
 SudokuColumn >> clearMarks [
 
 	1 to: 9 do: [ :i | (column at: i) class = Character 
@@ -119,6 +187,40 @@ SudokuColumn >> column: anArray [
 	column := anArray copy.
 ]
 
+{ #category : #logic }
+SudokuColumn >> completed [ 
+
+	^(#(1 2 3 4 5 6 7 8 9) difference: column) isEmpty
+]
+
+{ #category : #accessing }
+SudokuColumn >> countOfReservedBlankCells [
+	"
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+	"
+	| items |
+	items := column select: [ :i | i class = SmallInteger and: [i between: 1 and: 9]].
+	^ 9 - items size
+
+]
+
+{ #category : #accessing }
+SudokuColumn >> getAffectedCellOf: sudokuCell [
+	"
+	列の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
+	"
+	sudokuCell  class = SudokuCell 
+		ifFalse: [ self error: 'a SudokuCell object expected' ].
+	sudokuCell x = colIndex 
+		ifFalse: [ ^self ].
+
+	column doWithIndex: [ :e :i |
+		( e class = SmallInteger and: [sudokuCell possibleNumbers includes: e])
+			ifTrue: [ ^SudokuCell row: i  column: colIndex element: e  ]].
+		
+	^self
+]
+
 { #category : #comparing }
 SudokuColumn >> hash [ 
 
@@ -126,9 +228,29 @@ SudokuColumn >> hash [
 ]
 
 { #category : #testing }
-SudokuColumn >> includes: anObject [
+SudokuColumn >> includes: number [
 
-	^ column includes: anObject 
+	| sudokuCells |
+	(column includes: number) ifTrue: [ ^true ].
+	
+	sudokuCells := column select: [ :item | item class = SudokuCell and: [ item possibleNumbers includes: number ] ].
+	sudokuCells size > 1 ifTrue: [ ^true ].
+	^false
+
+]
+
+{ #category : #accessing }
+SudokuColumn >> indexOf: number [
+
+	| cells sudokuCells |
+	cells := column select: [ :cell | cell class = SmallInteger].
+	(cells includes: number) ifTrue: [ ^column indexOf: number ].
+	
+	sudokuCells := column select: [ :cell | cell class = SudokuCell ].
+	cells := sudokuCells select: [ :cell | cell possibleNumbers includes: number ].
+	cells size > 1 ifFalse: [ ^0 ].
+	^column indexOf: (cells at: 1)
+	
 ]
 
 { #category : #'private - logics' }
@@ -137,6 +259,12 @@ SudokuColumn >> markBlankCells [
 	1 to: 9 do: [ :i | 
 		 (self at: i) = 0
 			ifTrue: [ self at: i put: $X ]]
+]
+
+{ #category : #'private - utility' }
+SudokuColumn >> missingNumbers [ 
+
+	^#(1 2 3 4 5 6 7 8 9) difference:  column
 ]
 
 { #category : #printing }

@@ -1,14 +1,30 @@
 "
 数独ボードを9つに分けた1ブロックを表現するクラス
 
-    Instance Variables
-	blockA2D			<Array2D>  		ブロックの内部表現
-	blockNumber			<Smalllnteger>	ブロック番号
-	colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
-	rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
-	verifyNumber		<SmallInteger>	検証数字
-	eitherCells			<EitherCells>	ブロックのブランクセルが２つになり必ずどちらかに検証数字が入るセル
-                  
+Instance Variables
+blockA2D			<Array2D>  		ブロックの内部表現
+blockNumber			<Smalllnteger>	ブロック番号
+colsOnBoard			<Array>			ブロックの列インデックスに対応するボード上の列(SudokuColumn)
+rowsOnBoard			<Array>			ブロックの行インデックスに対応するボード上の行(SudokuRow)
+verifyNumber		<SmallInteger>	検証数字
+eitherCells			<EitherCells>	ブロックのブランクセルが２つになり必ずどちらかに検証数字が入るセル
+	
+					
+主なAPI
+allGreen                  1つのブランクセル以外の8つのセルが1-9までの数字で埋まっている時
+                          足りない数字をSudokuCellに格納して返す、でなければ0を返す
+colsOnBoard               ブロックの列インデックスに対応するボードの列(SudokuColumnの配列)を返す
+countOfReservedBlankCells ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
+localX:                   ボードのX座標をブロックのX座標に変換し返す
+localY:                   ボードのY座標をブロックのY座標に変換し返す
+markBlankCells            すべてのブランクセルを$Xでマークする
+markByHorizontalCell:     ブランクセルのY座標と引数セルのY座標が等しい時ブランクセルを$Xでマークする
+markByVerticalCell:       ブランクセルのX座標と引数セルのX座標が等しい時ブランクセルを$Xでマークする
+rowsOnBoard               ブロックの行に対応するボードの行(SudokuRowの配列)を返す
+tenpai                    ブロックにブランクセル１つだけの時はブランクセルのボード座標をSudokuCellに
+                          マッピングして返す、でなければ0を返す(allGreenと異なり$Xなどの混在可)
+xOnBoard:                 ブロックのX座標をボードX座標に変換し返す
+yOnBoard:                 ブロックのX座標をボードY座標に変換し返す
 "
 Class {
 	#name : #SudokuBlock2,
@@ -33,7 +49,7 @@ SudokuBlock2 class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 
 	"
 	| block |
-	block := board atBlock: bNum.
+	block := board getBlock: bNum.
 	block verifyNumber: vNum.
 	
 	^ block
@@ -56,6 +72,10 @@ SudokuBlock2 >> allGreen [
     Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること
     "
 	| cell array shortOfNumber |
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j |
+			(blockA2D at: i at: j) = $X
+			ifTrue: [ blockA2D at: i at: j put: 0 ] ]].
 	cell := self tenpai.
 	cell class = SudokuCell 
 	ifTrue: [ 
@@ -71,18 +91,30 @@ SudokuBlock2 >> allGreen [
 	^ cell
 ]
 
-{ #category : #'private - printing' }
+{ #category : #converting }
+SudokuBlock2 >> asArray [
+
+	^blockA2D asArray
+]
+
+{ #category : #converting }
 SudokuBlock2 >> asString [
 
 	| aStream |
 	aStream := ReadWriteStream on: String new.
+	aStream cr.
 	aStream nextPutAll: 'Block '; nextPutAll: blockNumber asString;cr.
 	aStream nextPutAll: '検証数字:'; nextPutAll: verifyNumber asString;cr.
 	aStream nextPutAll: '========='; cr. 
 	(1 to: blockA2D  numberOfRows)
 		do: [ :r |
 				(blockA2D  atRow: r)
-					do: [ :each | aStream print: each ]
+					do: [ :each | 
+						each class = SudokuCell
+							ifTrue: [ 
+								aStream nextPutAll: each asSimpleString ]
+						 	ifFalse: [  
+								aStream nextPutAll: each asString ]]
 					separatedBy: [ aStream tab ]]
 		separatedBy: [ aStream cr].
 	aStream cr; nextPutAll: '========='.
@@ -93,23 +125,22 @@ SudokuBlock2 >> asString [
 
 { #category : #accessing }
 SudokuBlock2 >> blankCellsAsArray [
+	"
+    ブロックのブランクセルをSudokuCellの配列にして返す。
     "
-    ブロックのブランクセルをSudokuCellの配列にして返す
-    "
-    | array index |
-    array := Array new: 9.
-    index := 1.
-    1 to: 3 do: [ :i|
-        1 to: 3 do: [ :j|
-            (blockA2D at: i at: j) = 0
-            ifTrue: [ array at: index 
-						put: (SudokuCell row: (rowsOnBoard at: i) rowIndex column: ( colsOnBoard at: j ) colIndex  element: 0)
-			].
-            index := index + 1.
-        ]
-    ].
-
-    ^ array select: [ :each | each class = SudokuCell ]
+	| collection |
+	collection := OrderedCollection new.
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j | | cellItem |
+			cellItem := blockA2D at:i at: j.
+			(cellItem class = SmallInteger and: [ cellItem = 0 ]) ifTrue: [
+				collection add: (SudokuCell
+						 row: (rowsOnBoard at: i) rowIndex
+						 column: (colsOnBoard at: j) colIndex
+						 element: 0) ].
+			(cellItem class = SudokuCell and: [ cellItem marked not ] )
+				ifTrue: [ collection add: cellItem ]]].
+	^ collection asArray
 ]
 
 { #category : #accessing }
@@ -191,13 +222,15 @@ SudokuBlock2 >> completed [
 ]
 
 { #category : #accessing }
-SudokuBlock2 >> countOfBlankCells [
+SudokuBlock2 >> countOfReservedBlankCells [
 	"
-	ブロックのブランクセルをカウントする
+	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
 	"
-	| items |
-	items := blockA2D asArray select: [ :i | i = 0 ].
-	^ items size
+	| items logger |
+	logger := M946FileLogger new: thisContext.
+	logger debug: ('self => {1}' format: {self}).
+	items := blockA2D asArray select: [ :i | i class = SmallInteger and: [i between: 1 and: 9]].
+	^ 9 - 	items size
 	
 ]
 
@@ -205,6 +238,132 @@ SudokuBlock2 >> countOfBlankCells [
 SudokuBlock2 >> eitherCells [
 
 	^eitherCells 
+]
+
+{ #category : #converting }
+SudokuBlock2 >> get2Allies: blankCells [
+
+	| pairCell1 pairCell2 pairCells |
+	pairCells := Array new: 2.
+	pairCell1 := (blankCells at: 1) copy.
+	(pairCell1 possibleNumbers includes: self verifyNumber )
+		ifFalse: [ pairCell1 possibleNumbers add: self verifyNumber].
+	pairCell2 := (blankCells at: 2) copy.
+	(pairCell2 possibleNumbers includes: self verifyNumber )
+		ifFalse: [ pairCell2 possibleNumbers add: self verifyNumber].
+	pairCells at: 1 put: pairCell1 .
+	pairCells at: 2 put: pairCell2 .
+	^ pairCells.
+
+]
+
+{ #category : #converting }
+SudokuBlock2 >> get3Allies: blankCells [	
+	
+	| cell1 cell2 cell3 cellAllies |
+	cellAllies := Array new: 3.
+	cell1 := (blankCells at: 1) deepCopy.
+	(cell1 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell1 possibleNumbers add: self verifyNumber  ].
+	cell2 := (blankCells at: 2) deepCopy.
+	(cell2 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell2 possibleNumbers add: self verifyNumber  ].
+	cell3 := (blankCells at: 3) deepCopy.
+	(cell3 possibleNumbers includes: self verifyNumber)
+		ifFalse: [ cell3 possibleNumbers add: self verifyNumber  ].
+		
+	cellAllies at: 1 put: cell1.
+	cellAllies at: 2 put: cell2.
+	cellAllies at: 3 put: cell3.
+	
+	^cellAllies 
+
+]
+
+{ #category : #logic }
+SudokuBlock2 >> getBuddyCellsOf: thisCell [
+	"
+	thisCellがワンペア・ツーペア・非対称ペアの時,となる相棒セルを返す。
+	"
+	| buddies possibleNumbers logger |
+	logger := M946FileLogger new: thisContext.
+	buddies := blockA2D asArray select: [ :cell |
+		
+		cell class = SudokuCell 
+			and: [( cell notSameCoordinates: thisCell) 	
+				and: [((cell possibleNumbers) intersection: (thisCell possibleNumbers)) isNotEmpty ] ]].
+	buddies size = 2 ifTrue: [ ^buddies ].			
+	buddies size = 1 ifFalse: [ ^#() ].
+	(buddies at: 1) possibleNumbers = thisCell possibleNumbers ifTrue:[ ^buddies].
+	possibleNumbers := (buddies at: 1) possibleNumbers copy.
+	buddies := blockA2D asArray select: [ :cell |
+		cell class = SudokuCell 
+			and: [( cell notSameCoordinates: thisCell) 	
+				and: [((cell possibleNumbers) intersection:  possibleNumbers) isNotEmpty ] ]].		
+	^buddies .												
+
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromCells: pairOfSudokuCell [
+	"
+	2つのブランクセルがSudokuCellのインスタンスの時の処理
+	"
+	| pairCell1 pairCell2 pairCells |
+	pairCells := Array new: 2.
+	pairCell1 := self	x: (self localX: (pairOfSudokuCell  at: 1) colIndex)
+						y: (self localY: (pairOfSudokuCell  at: 1) rowIndex)
+						putPairCell: pairOfSudokuCell .
+	pairCell2 := self	x: (self localX: (pairOfSudokuCell  at: 2) colIndex)
+						y: (self localY: (pairOfSudokuCell  at: 2) rowIndex)
+						putPairCell: pairOfSudokuCell .
+	pairCells at: 1 put: pairCell1 .
+	pairCells at: 2 put: pairCell2 .
+	
+	^pairCells 
+
+
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromDifferentCells: blankCells [
+	"
+	2つのブランクセルがSudokuPairCellとSudokuCellのインスタンスが混在している時の処理
+	"
+	| cell pairCell resultArray pairCell2 logger |
+	logger := M946FileLogger new.
+	logger debug: thisContext.
+	resultArray := Array new: 2.
+	(blankCells at: 1) class = SudokuPairCell 
+		ifTrue: [ 
+			pairCell := blankCells at: 1.
+			cell := blankCells at: 2]
+		ifFalse: [ 
+			pairCell := blankCells at: 2.
+			cell := blankCells at: 1].
+	pairCell pairOfNumbers remove: 0.
+	pairCell pairOfNumbers add: self verifyNumber.
+
+	pairCell2 := self x: (self localX: cell colIndex)
+							  y: (self localY: cell rowIndex)
+							  putPairCell: { pairCell otherCell . cell}.
+	logger debug: ('pairCell => {1}' format: {pairCell}).
+	logger debug: ('pairCell2 => {1}' format: {pairCell2}).
+							
+							
+	resultArray at: 1 put: pairCell  .
+	resultArray at: 2 put: pairCell2 .
+	^resultArray 
+]
+
+{ #category : #deprecated }
+SudokuBlock2 >> getPairCellsFromPairCells: pairOfSudokuPairCells [
+	"
+	2つのブランクセルがSudokuPairCellのインスタンスの時の処理
+	"
+	(pairOfSudokuPairCells at: 1) pairOfNumbers add: self verifyNumber .
+	(pairOfSudokuPairCells at: 2) pairOfNumbers add: self verifyNumber.
+	^pairOfSudokuPairCells 
 ]
 
 { #category : #comparing }
@@ -218,7 +377,10 @@ SudokuBlock2 >> hash [
 { #category : #testing }
 SudokuBlock2 >> includes: number [
 
-	^blockA2D asArray includes: number 
+	(number class = SmallInteger or: [ number = $X ]) ifTrue: [
+		^ blockA2D asArray includes: number ].
+	^ blockA2D asArray anySatisfy: [ :cell |
+		  cell class = SudokuCell and: [ cell marked ] ]
 ]
 
 { #category : #testing }
@@ -235,8 +397,38 @@ SudokuBlock2 >> initialize [
 	colsOnBoard := Array new: 3.
 	rowsOnBoard := Array new: 3.
 	verifyNumber := 0.
-	eitherCells := EitherCells new.
+	eitherCells := OrderedCollection new.
 	
+]
+
+{ #category : #converting }
+SudokuBlock2 >> localX: boardX [
+	"
+	ボードのX座標をブロックのX座標に変換し返す。
+	変換できない時は0を返す。
+	"
+	| localX |
+	localX := boardX.
+	(#(2 5 8) includes: blockNumber ) ifTrue: [ localX := boardX - 3 ].
+	(#(3 6 9) includes: blockNumber ) ifTrue: [ localX := boardX - 6 ].
+	(localX between: 1 and: 3) ifFalse: [ localX := 0 ].
+	
+	^localX
+]
+
+{ #category : #converting }
+SudokuBlock2 >> localY: boardY [
+	"
+	ボードのY座標をブロックのY座標に変換し返す。
+	変換できない時は0を返す。
+	"
+	| localY |
+	localY := boardY.
+	(#(4 5 6) includes: blockNumber ) ifTrue: [ localY := boardY - 3 ].
+	(#(7 8 9) includes: blockNumber ) ifTrue: [ localY := boardY - 6 ].
+	(localY between: 1 and: 3) ifFalse: [ localY := 0 ].
+	
+	^localY
 ]
 
 { #category : #'private - logics' }
@@ -250,11 +442,107 @@ SudokuBlock2 >> markBlankCells [
 				ifTrue: [ self row: i column: j put: $X ]]]
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
+	"
+	ブランクセルのY座標と引数セルのY座標が等しい時、
+	ブランクセルを$Xでマークする。
+	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。	
+	"
+	| markedPoints |
+	markedPoints := OrderedCollection new.
+	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints  ].
+	self blankCellsAsArray do: [ :blankCell | 
+		(blankCell y = aSudokuCell y) ifTrue: [ 
+			markedPoints add: blankCell x @ blankCell y.
+			blankCell possibleNumbers isEmpty 
+				ifTrue: [  
+					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+				ifFalse: [
+					blankCell marked: true ]]].			
+	^markedPoints
+
+
+]
+
+{ #category : #'private - logics' }
+SudokuBlock2 >> markByNumberToMark: numberToMark [
+	"
+	ブランクセルに直交するSudokuRowとSudokuColumnを検査し
+	numberToMark があるときはブランクセルを$Xでマークする
+	"
+	| markedPoints |
+	markedPoints := OrderedCollection new..
+	(self includes: numberToMark) ifTrue: [ ^markedPoints  ].
+	
+	self blankCellsAsArray do: [ :blankCell | 	| sudokuRow sudokuColumn |
+		sudokuRow := self rowsOnBoard  at: (self localY: blankCell y).
+		sudokuColumn := self colsOnBoard at: (self localX: blankCell x).
+		((sudokuRow includes: numberToMark) or: [ sudokuColumn includes: numberToMark  ]) ifTrue: [ 
+			markedPoints add: blankCell x @ blankCell y.
+			self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]].
+	^markedPoints 
+
+]
+
+{ #category : #logic }
+SudokuBlock2 >> markByVerticalCell: aSudokuCell [
+	"
+	ブランクセルのY座標と引数セルのY座標が等しい時、
+	ブロックのブランクセルを$Xでマークする。
+	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。
+	"
+	| markedPoints |
+	markedPoints := OrderedCollection new.
+	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints ].
+	self blankCellsAsArray do: [ :blankCell | 
+		(blankCell x = aSudokuCell x) ifTrue: [ 	
+			markedPoints add: blankCell x @ blankCell y.
+			blankCell possibleNumbers isEmpty 
+				ifTrue: [  
+					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+				ifFalse: [
+					blankCell marked: true ]]].
+	^markedPoints  
+
+
+]
+
+{ #category : #'private - utility' }
+SudokuBlock2 >> missingNumbers [ 
+
+	^#(1 2 3 4 5 6 7 8 9) difference:  blockA2D asArray
+]
+
 { #category : #printing }
 SudokuBlock2 >> printOn: aStream [
 
 	aStream
 		nextPutAll: self asString; cr.
+]
+
+{ #category : #logic }
+SudokuBlock2 >> readyForFillTwoPair [
+	"
+	ブロックが2つのブランクセルを残すだけで残りの7つのセルが1-9までの数字
+	で埋まっている時、ツーペア状態の1組のSudokuCellオブジェクトを返す。
+	"
+	|numberCells blankCells result pairNumbers |
+	numberCells := blockA2D asArray select: [ :i | i class = SmallInteger and: [ i between: 1 and: 9 ] ].
+	blankCells := blockA2D asArray select: [ :i | i = 0 ].
+	(numberCells size = 7 and: [ blankCells size = 2 ]) ifFalse: [ ^self ].
+	pairNumbers := #(1 2 3 4 5 6 7 8 9) difference: numberCells.
+	result := OrderedCollection new.
+	1 to: 3 do: [ :i |
+		1 to: 3 do: [ :j | |pairCell|
+			pairCell := blockA2D at: i at: j.
+			pairCell = 0 ifTrue: [ 
+				pairCell := SudokuCell row: (self yOnBoard: i) column:( self xOnBoard: j) element: 0.
+				pairCell possibleNumbers addAll: pairNumbers .
+				result add: pairCell]]].
+	^result asArray.
+	
+	
 ]
 
 { #category : #accessing }
@@ -289,9 +577,9 @@ SudokuBlock2 >> rowIndexOnBoard: index [
 	(self blockNumber between: 1 and: 3)
 		ifTrue: [ start := 1 ]
 		ifFalse: [
-			start := (self blockNumber between: 4 and: 6)
-				         ifTrue: [ 4 ]
-				         ifFalse: [ 7 ] ].
+			(self blockNumber between: 4 and: 6)
+				ifTrue: [ start := 4 ]
+				ifFalse: [ start := 7 ] ].
 	^ start + index - 1
 ]
 
@@ -348,6 +636,30 @@ SudokuBlock2 >> tsumo [
 	^ cell
 ]
 
+{ #category : #logic }
+SudokuBlock2 >> twoPairsTenpai [
+	"
+	ブロックにブランクセル１つと1組のツーペアが残った場合ブランクセルに数をセットした
+	SudokuCellのインスタンスを返す。
+	"
+	| blankCells array result twoPairs sum logger |
+	logger := M946FileLogger new: thisContext.
+	blankCells := self blankCellsAsArray .
+	logger debug: ('blankCells => {1}' format:{blankCells}).
+	blankCells size = 3 ifFalse: [ ^self ].
+	array := blankCells select: [ :cell | cell possibleNumbers isEmpty ].
+	(array isEmpty or: [ array size ~= 1 ] )ifTrue: [ ^self ].
+	result := array at: 1.
+	twoPairs := blankCells select: [ :cell | cell possibleNumbers size = 2 ].
+	twoPairs size = 2 ifFalse: [ ^self ].
+	(twoPairs at: 1) possibleNumbers asBag = (twoPairs at: 2) possibleNumbers asBag 
+		ifFalse: [ ^self ].
+	sum := (self blockA2D asArray select: [ :n | n class = SmallInteger ]) sum.
+	sum := sum + (twoPairs at: 1) possibleNumbers sum.
+	^result element: 45 - sum
+	
+]
+
 { #category : #accessing }
 SudokuBlock2 >> verifyNumber [
 	"
@@ -360,4 +672,52 @@ SudokuBlock2 >> verifyNumber [
 SudokuBlock2 >> verifyNumber: aNumber [
 
 	verifyNumber := aNumber
+]
+
+{ #category : #'instance creation' }
+SudokuBlock2 >> x: colIndex y: rowIndex [
+
+	^self row:  rowIndex column: colIndex 
+]
+
+{ #category : #accessing }
+SudokuBlock2 >> x: colIndex y: rowIndex put: anObject [
+
+	(anObject class = Array and: [ (anObject at: 1) class = SudokuCell ]) 
+		ifTrue: [ 
+			self x: colIndex  y: rowIndex   putPairCell: anObject ]
+		ifFalse: [ 
+			self row: rowIndex column: colIndex  put: anObject ]
+]
+
+{ #category : #'private - logics' }
+SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
+
+	| cell1 cell2 pairCell |
+	
+	cell1 := anArrayOfCell at:1.
+	cell2 := anArrayOfCell at: 2.
+	pairCell := SudokuPairCell thisCell: cell1 otherCell: cell2.
+	(colIndex = (self localX: cell2 x) and: [ rowIndex = (self localY:  cell2 y)])
+	 	ifFalse: [ pairCell := SudokuPairCell thisCell: cell2 otherCell: cell1 ].
+	pairCell pairKinds: PairKinds onePair.
+	pairCell pairOfNumbers add: self verifyNumber .
+	pairCell pairOfNumbers add: 0.
+
+	self row: rowIndex column: colIndex  put: pairCell .
+	^pairCell
+]
+
+{ #category : #converting }
+SudokuBlock2 >> xOnBoard: indexOnBlock [
+
+	^self colIndexOnBoard: indexOnBlock 
+
+	
+]
+
+{ #category : #converting }
+SudokuBlock2 >> yOnBoard: indexOnBlock [
+
+	^self rowIndexOnBoard: indexOnBlock 
 ]
