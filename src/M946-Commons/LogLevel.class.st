@@ -24,30 +24,32 @@ M946Logger>>info: anObject
 
 "
 Class {
-	#name : #LogLevel,
-	#superclass : #Enum,
-	#category : #'M946-Commons-Enum'
+	#name : 'LogLevel',
+	#superclass : 'Enum',
+	#category : 'M946-Commons-Enum',
+	#package : 'M946-Commons',
+	#tag : 'Enum'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 LogLevel class >> debug [
 
 	^self new value: #debug
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 LogLevel class >> info [
 
 	^self new value: #info
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 LogLevel class >> off [
 
 	^self new value: #off
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 LogLevel class >> trace [
 
 	self new value: #trace

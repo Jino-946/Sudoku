@@ -20,37 +20,39 @@ logger debug: thisContext.
 
 "
 Class {
-	#name : #M946FileLogger,
-	#superclass : #TinyLogger,
+	#name : 'M946FileLogger',
+	#superclass : 'TinyLogger',
 	#instVars : [
 		'context'
 	],
 	#classVars : [
-		'logLevel'
+		'LOGLevel'
 	],
-	#category : #'M946-Commons-Logger'
+	#category : 'M946-Commons-Logger',
+	#package : 'M946-Commons',
+	#tag : 'Logger'
 }
 
-{ #category : #'class initialization' }
+{ #category : 'class initialization' }
 M946FileLogger class >> initialize [ 
 
-	logLevel := LogLevel info.
+	LOGLevel := LogLevel info.
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946FileLogger class >> logLevel [
 
-	^logLevel 
+	^LOGLevel 
 ]
 
-{ #category : #logging }
+{ #category : 'logging' }
 M946FileLogger class >> logLevel: level [
 
-	logLevel := level.
+	LOGLevel := level.
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 M946FileLogger class >> named: pathToLogFile [
 
 	| logger |
@@ -66,7 +68,7 @@ M946FileLogger class >> named: pathToLogFile [
 	^ logger 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 M946FileLogger class >> new [
 
 	| logger |
@@ -74,7 +76,7 @@ M946FileLogger class >> new [
 	^logger
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 M946FileLogger class >> new: context [
 
 	| logger |
@@ -84,19 +86,19 @@ M946FileLogger class >> new: context [
 	^logger
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946FileLogger >> context [
 
 	^context 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946FileLogger >> context: aContext [
 
 	context := aContext
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 M946FileLogger >> debug: anObject [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -106,7 +108,7 @@ debug: {2}
 ' format: {context . anObject})]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 M946FileLogger >> debug: anObject message: message [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -114,7 +116,7 @@ M946FileLogger >> debug: anObject message: message [
 			  {context . message . anObject . Character cr})]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 M946FileLogger >> debug: anObject messageWithCR: message [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -122,19 +124,19 @@ M946FileLogger >> debug: anObject messageWithCR: message [
 			  {context . message . Character cr. anObject . Character cr})]
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 M946FileLogger >> info: anObject [
 
 	self logLevel ~= LogLevel off ifTrue: [ self record: ('info: {1}' format: {anObject})]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946FileLogger >> logLevel [
 .
 	^self class  logLevel
 ]
 
-{ #category : #tracing }
+{ #category : 'tracing' }
 M946FileLogger >> trace: anObject [
 
 	(self logLevel = LogLevel trace )
@@ -144,7 +146,7 @@ trace: {2}
 ' format: {context . anObject})]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 M946FileLogger >> trace: anObject message: message [
 
 	(self logLevel = LogLevel trace )
@@ -152,7 +154,7 @@ M946FileLogger >> trace: anObject message: message [
 			  {context . message . anObject . Character cr})]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 M946FileLogger >> trace: anObject messageWithCR: message [
 
 	(self logLevel = LogLevel trace)

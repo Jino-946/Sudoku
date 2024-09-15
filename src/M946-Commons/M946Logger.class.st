@@ -20,15 +20,17 @@ logger debug: thisContext.
 
 "
 Class {
-	#name : #M946Logger,
-	#superclass : #TinyLogger,
+	#name : 'M946Logger',
+	#superclass : 'TinyLogger',
 	#instVars : [
 		'logLevel'
 	],
-	#category : #'M946-Commons-Logger'
+	#category : 'M946-Commons-Logger',
+	#package : 'M946-Commons',
+	#tag : 'Logger'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 M946Logger class >> new [
 
 	| logger |
@@ -44,7 +46,7 @@ M946Logger class >> new [
 	^ logger 
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 M946Logger class >> new: aLogLevel [
 
 	| logger |
@@ -56,7 +58,7 @@ M946Logger class >> new: aLogLevel [
 	
 ]
 
-{ #category : #logging }
+{ #category : 'logging' }
 M946Logger >> clearLog [
 
 	Transcript clear
@@ -64,31 +66,31 @@ M946Logger >> clearLog [
 
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 M946Logger >> debug: anObject [
 
 	logLevel = LogLevel debug ifTrue: [ self record: ('debug: {1}' format: {anObject})]
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 M946Logger >> info: anObject [
 
 	logLevel = LogLevel info ifTrue: [ self record: ('info: {1}' format: {anObject})]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946Logger >> logLevel [
 
 	^logLevel 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 M946Logger >> logLevel: aLogLevel [
 
 	logLevel := aLogLevel
 ]
 
-{ #category : #'public API' }
+{ #category : 'public API' }
 M946Logger >> record: anObject [	
 
 	super record: anObject asString
