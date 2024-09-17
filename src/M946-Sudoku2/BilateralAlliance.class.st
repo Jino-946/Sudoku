@@ -22,16 +22,18 @@ otherCell は OttiezTactics>>getAlliedCellForMapping: aBlock cell: thisCell を�
 
 "
 Class {
-	#name : #BilateralAlliance,
-	#superclass : #Object,
+	#name : 'BilateralAlliance',
+	#superclass : 'Object',
 	#instVars : [
 		'thisCell',
 		'otherCell'
 	],
-	#category : #'M946-Sudoku2-Solution'
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #creating }
+{ #category : 'creating' }
 BilateralAlliance class >> thisCell: cell1 otherCell: cell2 [
 	
 	| etherCell |
@@ -42,7 +44,7 @@ BilateralAlliance class >> thisCell: cell1 otherCell: cell2 [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAlliance >> determineTheNumber [
 	"
 	他のブロックで確定した数字によりツーペアが解消する際は,thisCell element: に 
@@ -72,21 +74,21 @@ BilateralAlliance >> determineTheNumber [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAlliance >> otherCell: sudokuCell [
 
 	otherCell := sudokuCell 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAlliance >> thisCell: sudokuCell [
 
 	thisCell := sudokuCell 
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAlliance >> treatAsAsymmetricPair1 [
 	"
 	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
@@ -111,7 +113,7 @@ BilateralAlliance >> treatAsAsymmetricPair1 [
 	^otherCell
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAlliance >> treatAsAsymmetricPair2 [
 	"
 	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
@@ -133,7 +135,7 @@ BilateralAlliance >> treatAsAsymmetricPair2 [
 	^self
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAlliance >> treatAsOnePair [
 	"
 	thisCellのelementが決まったときのワンペアの相棒の状態
@@ -153,7 +155,7 @@ BilateralAlliance >> treatAsOnePair [
 	^otherCell
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAlliance >> treatAsTwoPairs [
 	"
 	 thisCellのelementが確定した時のツーペアの相棒の状態。

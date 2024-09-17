@@ -1,10 +1,12 @@
 Class {
-	#name : #BilateralAllianceIntegrationTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'BilateralAllianceIntegrationTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock2Row3 [
 	"ワンペアで片方のセルに入る数字が決まったケース"
 	"ブロック2 列3#($2  0  $2) -> #(2  0  0)"
@@ -38,7 +40,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock2Row3 [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック4 列3#($5 $4 $45) -> #($5 4 $5)"
@@ -73,7 +75,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3 [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3_2 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(検証数字)が決まったケース
 	 ブロック4 セル3@1 => 5
@@ -112,7 +114,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3_2 [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3_3 [
 	"非対称ペアで設置可能数字が1つのセルに入る数字(ペア数字以外)が決まったケース"
 	"ブロック4でセル3@1に9が入ったと仮定   #($5 $4 $45) -> #(5  9  4)"
@@ -142,7 +144,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock4Col3_3 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock5Col2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2#($13 $3 $1) -> #(3 0 1)"
@@ -179,7 +181,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock5Col2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock5Col2_2 [
 	"非対称ペアで設置可能数字が2つのセルに入る数字(検証数字)が決まったケース"
 	"ブロック5 列2  検証数字1  #($13 $3 $1) -> #(1 3 0)"
@@ -220,7 +222,7 @@ BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock5Col2_2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceIntegrationTest >> testDetermineTheNumberBlock5Row2 [
 	"ツーペアで1つのセルに入る数字が決まったケース
 	 ブロック5 セル3@2に2が入ったと仮定する

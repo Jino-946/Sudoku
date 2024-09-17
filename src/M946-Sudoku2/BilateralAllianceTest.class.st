@@ -1,10 +1,12 @@
 Class {
-	#name : #BilateralAllianceTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'BilateralAllianceTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceTest >> testTreatAsAsymmetricPair1 [
 	"
 	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
@@ -60,7 +62,7 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair1 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceTest >> testTreatAsAsymmetricPair2 [
 	"
 	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
@@ -102,7 +104,7 @@ BilateralAllianceTest >> testTreatAsAsymmetricPair2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceTest >> testTreatAsOnePair [
 
 	| thisCell otherCell ba logger |
@@ -154,7 +156,7 @@ BilateralAllianceTest >> testTreatAsOnePair [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceTest >> testTreatAsTwoPairs [
 
 	| thisCell otherCell ba |

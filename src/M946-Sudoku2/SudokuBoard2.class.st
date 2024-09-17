@@ -19,15 +19,17 @@ Instance Variables
 ```
 "
 Class {
-	#name : #SudokuBoard2,
-	#superclass : #Object,
+	#name : 'SudokuBoard2',
+	#superclass : 'Object',
 	#instVars : [
 		'boardA2D'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuBoard2 >> = sudokuBoard [
 
 	^ sudokuBoard class == self class
@@ -35,7 +37,7 @@ SudokuBoard2 >> = sudokuBoard [
 
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 SudokuBoard2 >> _getBlock: rowStart at: colStart [
 	" private
 	数独ボード(9X9)より行の開始位置(rowStart)と列の開始位置(colStart)を指定して
@@ -81,7 +83,7 @@ SudokuBoard2 >> _getBlock: rowStart at: colStart [
 	^ block
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessing: sudokuCell [
 	"
 	センダーはSudokuBoard2>>map:
@@ -101,7 +103,7 @@ SudokuBoard2 >> allianceProcessing: sudokuCell [
 		self allianceProcessingReflectOnSelf: cells]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingBCITB1: buddyCells thisCell: thisCell confirmNumber: aNumber [
 	"
 	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド1
@@ -122,7 +124,7 @@ SudokuBoard2 >> allianceProcessingBCITB1: buddyCells thisCell: thisCell confirmN
 	^result asArray
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingBCITB2: buddyCells thisCell: thisCell confirmNumber: aNumber [
 	"
 	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド2
@@ -158,7 +160,7 @@ SudokuBoard2 >> allianceProcessingBCITB2: buddyCells thisCell: thisCell confirmN
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingBCITB3: buddyCells thisCell: sudokuCell confirmNumber: aNumber [
 	"
 	allianceProcessingBuddyCellInTheBlock: confirmNumber: の下請けメソッド3
@@ -198,7 +200,7 @@ SudokuBoard2 >> allianceProcessingBCITB3: buddyCells thisCell: sudokuCell confir
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: aNumber [
 	"
 	thisCell の element は
@@ -225,7 +227,7 @@ SudokuBoard2 >> allianceProcessingBuddyCellInTheBlock: thisCell confirmNumber: a
 		
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
 	"
 	引数に交差する列のセルのpossibleNumbersにsudokuCellのelementが含まれていたら
@@ -248,7 +250,7 @@ SudokuBoard2 >> allianceProcessingOfCol: sudokuCell [
 			
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
 	"
 	引数の同一行上セルのpossibleNumbersにsudokuCellのelementが含まれていたら
@@ -274,7 +276,7 @@ SudokuBoard2 >> allianceProcessingOfRow: sudokuCell [
 			
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> allianceProcessingReflectOnSelf: cells [
 	"
 	allianceProcessing:  の戻値を boardA2D に反映させる
@@ -299,7 +301,7 @@ SudokuBoard2 >> allianceProcessingReflectOnSelf: cells [
 	"
 ]
 
-{ #category : #'private - printing' }
+{ #category : 'private - printing' }
 SudokuBoard2 >> asString [
 
 	| aStream separateIndices |
@@ -322,21 +324,21 @@ SudokuBoard2 >> asString [
 	^aStream contents 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> at: aPoint [
 
 	^boardA2D at: aPoint y at: aPoint x
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> at: aPoint put: anObject [
 
 	^boardA2D at: aPoint y at: aPoint x put: anObject 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> atColumn: colIndex [
 	"
 	boardA2DよりcolIndexで指定した列を返す。
@@ -345,7 +347,7 @@ SudokuBoard2 >> atColumn: colIndex [
 	^ boardA2D atColumn: colIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> atRow: rowIndex [
 	"
 	boardA2DよりrowIndexで指定した行を返す。
@@ -354,13 +356,13 @@ SudokuBoard2 >> atRow: rowIndex [
 	^ boardA2D  atRow: rowIndex
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> boardA2D [
 
 	^ boardA2D 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> clearMarks [
 	"
 	AnyWay実装に$X,$1-$9などのマークをboardA2Dに直接書き込むようになったので、
@@ -375,7 +377,7 @@ SudokuBoard2 >> clearMarks [
 				ifTrue: [ cellOfBoard marked: false ]] ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 SudokuBoard2 >> clearPairCells [
 
 	1 to: 9 do: [ :i |
@@ -384,7 +386,7 @@ SudokuBoard2 >> clearPairCells [
 				boardA2D at: i at: j put: 0 ] ] ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> completed [
 	"
 	数独問題を解けたか判定する
@@ -400,7 +402,7 @@ SudokuBoard2 >> completed [
 	^ true
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
 	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
@@ -421,7 +423,7 @@ SudokuBoard2 >> confirmTheOtherCellOfThePairInTheBlock: sudokuCell [
 	self boardA2D at: pairCell y at: pairCell x put: (pairCell possibleNumbers at: 1 ).
 ]
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuBoard2 >> getBlock: blockNumber [
 	"
 	数独ボード(9X9)よりblockNumberを指定してブロック(3X3)を取り出す。
@@ -471,7 +473,7 @@ SudokuBoard2 >> getBlock: blockNumber [
 
 ]
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuBoard2 >> getBlock: bNum verifyNumber: vNum [
 
 	| block |
@@ -479,14 +481,14 @@ SudokuBoard2 >> getBlock: bNum verifyNumber: vNum [
 	^ block verifyNumber: vNum
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> getCellRow: rowIndex cellColumn: colIndex [
 
 	(boardA2D at: rowIndex at: colIndex) class = SudokuCell ifTrue: [ ^boardA2D at: rowIndex at: colIndex ].
 	^SudokuCell row: rowIndex column: colIndex element: (boardA2D at: rowIndex at: colIndex )
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> getOriginalColumn: x [
 	"
 	0-9までの数字だけをを取り出すためのメソッド。
@@ -508,7 +510,7 @@ SudokuBoard2 >> getOriginalColumn: x [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> getOriginalRow: y [
 	"
 	0-9までの数字だけをを取り出すためのメソッド。
@@ -530,7 +532,7 @@ SudokuBoard2 >> getOriginalRow: y [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> getSudokuCell: aPoint [
 
 	
@@ -538,7 +540,7 @@ SudokuBoard2 >> getSudokuCell: aPoint [
 
 ]
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuBoard2 >> getSudokuColumn: colIndex [
 	"
 	colIndex で指定した行を SudokuColumn に変換して返す
@@ -547,7 +549,7 @@ SudokuBoard2 >> getSudokuColumn: colIndex [
 
 ]
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuBoard2 >> getSudokuRow: rowIndex [
 	"
 	rowIndex で指定した行を SudokuRow に変換して返す
@@ -555,20 +557,20 @@ SudokuBoard2 >> getSudokuRow: rowIndex [
 	^SudokuRow new: rowIndex row: (self atRow: rowIndex)
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuBoard2 >> hash [ 
 
 	^ boardA2D   hash
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SudokuBoard2 >> initialize [ 
 
 	super initialize .
 	boardA2D  := Array2D new:9 element: 0.
 ]
 
-{ #category : #'initialization - data' }
+{ #category : 'initialization - data' }
 SudokuBoard2 >> loadFromString: aString [
 	"
 	数独問題(String)を数独ボードデータへ(Array2D)へコピーする。
@@ -603,7 +605,7 @@ SudokuBoard2 >> loadFromString: aString [
 "
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> map:  sudokuItem [
 	"
 	SudokuCell, SudokuRow, SudokuColumn, SudokuBlock2 をボードにマッピングする。
@@ -637,7 +639,7 @@ SudokuBoard2 >> map:  sudokuItem [
 	
 ]
 
-{ #category : #'accessing - private' }
+{ #category : 'accessing - private' }
 SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
 	"
 	sudokuBlock2をボードにマッピングする 
@@ -653,7 +655,7 @@ SudokuBoard2 >> mapSudokuBlock2: sudokuBlock [
  	]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> mapSudokuCell: sudokuCell [
 	"
 	sudokuCellの座標で示されるセル値のクラスがSudokuPairCellの時、片方のペアの数字が決まると
@@ -677,7 +679,7 @@ SudokuBoard2 >> mapSudokuCell: sudokuCell [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBoard2 >> mapSudokuPairCell: aPairCell [
 
 	| rowIndex colIndex |
@@ -686,13 +688,13 @@ SudokuBoard2 >> mapSudokuPairCell: aPairCell [
 	boardA2D at: rowIndex at: colIndex put: aPairCell 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 SudokuBoard2 >> printOn: aStream [
 
 	aStream nextPutAll: self asString 
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
@@ -720,7 +722,7 @@ SudokuBoard2 >> removePossibleNumbersOfCol: sudokuCell [
 
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"
@@ -747,7 +749,7 @@ SudokuBoard2 >> removePossibleNumbersOfRow: sudokuCell [
 
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 SudokuBoard2 >> removePossibleNumbersOfRowAndCol: sudokuCell [
 	" 現行バージョン保存    コミット番号 #d946b62 現在"
 	"

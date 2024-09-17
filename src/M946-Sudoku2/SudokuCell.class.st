@@ -16,8 +16,8 @@
 
 "
 Class {
-	#name : #SudokuCell,
-	#superclass : #Object,
+	#name : 'SudokuCell',
+	#superclass : 'Object',
 	#instVars : [
 		'rowIndex',
 		'colIndex',
@@ -25,10 +25,12 @@ Class {
 		'possibleNumbers',
 		'marked'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuCell class >> row: rIndex column: cIndex element: elem [
 
 	| cell |
@@ -44,7 +46,7 @@ SudokuCell class >> row: rIndex column: cIndex element: elem [
 	
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuCell >> = sudokuCell [
 
 	^ sudokuCell class = self class
@@ -54,14 +56,14 @@ SudokuCell >> = sudokuCell [
 					and: [ sudokuCell possibleNumbers = self possibleNumbers ] ] ] ]
 ]
 
-{ #category : #adding }
+{ #category : 'adding' }
 SudokuCell >> addPossibleNumber: aNumber [
 
 	possibleNumbers add: aNumber.
 	^self 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuCell >> asSimpleString [	
 	"
 	SudokuBoard2>>asStringでSudokuCellを見やすく表示するために使用するメソッド
@@ -80,7 +82,7 @@ SudokuCell >> asSimpleString [
 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuCell >> asString [
 
 	| aStream elem |
@@ -97,7 +99,7 @@ SudokuCell >> asString [
 	^ aStream contents
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> blockNumber [
 
 	| number |
@@ -123,25 +125,25 @@ SudokuCell >> blockNumber [
 	^ number
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 SudokuCell >> clearPossibleNumbers [	
 
 	self possibleNumbers: OrderedCollection new.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> colIndex [ 
 
 	^colIndex 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> colIndex: index [
 
 	colIndex  := index 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> direction: anotherCell [
 
 	self colIndex = anotherCell colIndex ifTrue: [ ^CellDirection vertical ].
@@ -149,78 +151,78 @@ SudokuCell >> direction: anotherCell [
 	^CellDirection diagonal 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> element [
 
 	^element 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> element: elem [
 
 	elem class = SudokuCell ifTrue: [ self error: 'SudokuCell object not allowed!' ].
 	element := elem
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuCell >> hash [ 
 
 	^ ((( rowIndex hash bitXor: colIndex hash)
 			bitXor:  element hash))
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SudokuCell >> isPairCell: otherCell [
 
 	(self pairNumbers: otherCell ) isEmpty ifFalse: [ ^true ].
 	^false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> marked [
 
 	^marked
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> marked: aBoolean [
 
 	marked := aBoolean 
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 SudokuCell >> notSameCoordinates: aSudokuCell [
 
 	^self x ~= aSudokuCell x or: [ self y ~= aSudokuCell y ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 SudokuCell >> pairNumbers: otherCell [
 
 	^self possibleNumbers intersection: otherCell possibleNumbers
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> possibleNumbers [
 
 	^possibleNumbers 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> possibleNumbers: anOrderedCollection [
 
 	possibleNumbers := anOrderedCollection 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 SudokuCell >> printOn: aStream [
 
 	aStream nextPutAll: self asString; cr.
 ]
 
-{ #category : #removing }
+{ #category : 'removing' }
 SudokuCell >> removePossibleNumber: aNumber [
 
 	possibleNumbers remove: aNumber .
@@ -229,25 +231,25 @@ SudokuCell >> removePossibleNumber: aNumber [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> rowIndex [
 
 	^rowIndex 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuCell >> rowIndex: index [
 
 	rowIndex := index
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuCell >> sameCoordinates: aSudokuCell [
 
 	^self x = aSudokuCell x and: [ self y = aSudokuCell y ]
 ]
 
-{ #category : #boolean }
+{ #category : 'boolean' }
 SudokuCell >> sameDirection: otherCell [
 	"
 	レシーバと引数が垂直または水平に並んでいる時はtrue,斜めの時はfalseを返す
@@ -258,25 +260,25 @@ SudokuCell >> sameDirection: otherCell [
 	
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuCell >> x [
 
 ^colIndex 
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuCell >> x: index [
 
 	colIndex := index
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuCell >> y [
 
 	^rowIndex 
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuCell >> y: index [
 
 	rowIndex := index

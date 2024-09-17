@@ -1,10 +1,12 @@
 Class {
-	#name : #LetsmeWayTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'LetsmeWayTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 LetsmeWayTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ LetsmeWayTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 LetsmeWayTest >> testLetsme [
 
 	| task board block letsmeWay|

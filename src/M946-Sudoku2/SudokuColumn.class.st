@@ -18,16 +18,18 @@ colIndex	<SmallInteger>	ボード上の列インデックス
 
 "
 Class {
-	#name : #SudokuColumn,
-	#superclass : #Object,
+	#name : 'SudokuColumn',
+	#superclass : 'Object',
 	#instVars : [
 		'colIndex',
 		'column'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SudokuColumn class >> new: index column: anArray [
 
 	| sudokuColumn |
@@ -38,7 +40,7 @@ SudokuColumn class >> new: index column: anArray [
 	^sudokuColumn 
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuColumn >> = sudokuColumn [
 
 	^ sudokuColumn class == self class 
@@ -46,7 +48,7 @@ SudokuColumn >> = sudokuColumn [
 			and: [ sudokuColumn column = self column ]  ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuColumn >> allGreen [
 	"
 	allGreen: 麻雀用語で緑一色のこと、 軍事用語でシステムが全て正しく作動すること
@@ -69,13 +71,13 @@ SudokuColumn >> allGreen [
 	^ cell
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuColumn >> asArray [
 
 	^column
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuColumn >> asSimpleString [
 
 	| aStream |
@@ -94,7 +96,7 @@ SudokuColumn >> asSimpleString [
 	^ aStream contents 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuColumn >> asString [
 
 	| aStream |
@@ -107,19 +109,19 @@ SudokuColumn >> asString [
 	^ aStream contents 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> at: index [
 
 	^column at: index
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> at: index put: val [
 
 	column at: index put: val 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> blankCellsAsArray [
 	"
     SudokuColumnのブランクセルをSudokuCellの配列にして返す
@@ -139,7 +141,7 @@ SudokuColumn >> blankCellsAsArray [
 	^ collection  asArray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> cellOf: number [
 	"
 	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
@@ -153,7 +155,7 @@ SudokuColumn >> cellOf: number [
 	^cell
 ]
 
-{ #category : #'private - utility' }
+{ #category : 'private - utility' }
 SudokuColumn >> clearMarks [
 
 	1 to: 9 do: [ :i | (column at: i) class = Character 
@@ -162,38 +164,38 @@ SudokuColumn >> clearMarks [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> colIndex [
 
 	^colIndex 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> colIndex: aNumber [
 
 	colIndex := aNumber 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> column [
 
 	^column 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> column: anArray [
 
 
 	column := anArray copy.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuColumn >> completed [ 
 
 	^(#(1 2 3 4 5 6 7 8 9) difference: column) isEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
@@ -204,7 +206,7 @@ SudokuColumn >> countOfReservedBlankCells [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> getAffectedCellOf: sudokuCell [
 	"
 	列の要素で引数の予約数字に値がが含まれる要素をSudokuCellオブジェクトとして返す
@@ -221,13 +223,13 @@ SudokuColumn >> getAffectedCellOf: sudokuCell [
 	^self
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuColumn >> hash [ 
 
 	^ (colIndex hash bitXor:  column hash)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SudokuColumn >> includes: number [
 
 	| sudokuCells |
@@ -239,7 +241,7 @@ SudokuColumn >> includes: number [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuColumn >> indexOf: number [
 
 	| cells sudokuCells |
@@ -253,7 +255,7 @@ SudokuColumn >> indexOf: number [
 	
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 SudokuColumn >> markBlankCells [ 
 
 	1 to: 9 do: [ :i | 
@@ -261,19 +263,19 @@ SudokuColumn >> markBlankCells [
 			ifTrue: [ self at: i put: $X ]]
 ]
 
-{ #category : #'private - utility' }
+{ #category : 'private - utility' }
 SudokuColumn >> missingNumbers [ 
 
 	^#(1 2 3 4 5 6 7 8 9) difference:  column
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 SudokuColumn >> printOn: aStream [
 
 	aStream nextPutAll: self asString; cr.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuColumn >> tenpai [ 
 	"
 	列にブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す。
@@ -288,7 +290,7 @@ SudokuColumn >> tenpai [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuColumn >> tsumo [
     "
     Senderは戻値がSudokuCellであることを確認後、SudokuBoard >> map:  でボードにマッピングすること

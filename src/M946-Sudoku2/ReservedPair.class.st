@@ -3,7 +3,9 @@
 
 "
 Class {
-	#name : #ReservedPair,
-	#superclass : #Object,
-	#category : #'M946-Sudoku2-Core'
+	#name : 'ReservedPair',
+	#superclass : 'Object',
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }

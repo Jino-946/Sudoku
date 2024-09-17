@@ -1,10 +1,12 @@
 Class {
-	#name : #DaddyNumPreMethodTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'DaddyNumPreMethodTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 DaddyNumPreMethodTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ DaddyNumPreMethodTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 DaddyNumPreMethodTest >> testBeginnerSolutions [
 
 	| task board solver |

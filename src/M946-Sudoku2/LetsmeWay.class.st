@@ -5,12 +5,14 @@ LetsmeWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-cont
 
 "
 Class {
-	#name : #LetsmeWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'LetsmeWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 LetsmeWay >> example [
 	"
 	一度のsolveの実行ではtaskを解決できないが二度実行することで解決できた
@@ -45,7 +47,7 @@ LetsmeWay >> example [
 	^ board completed "=> true"
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 LetsmeWay >> letsme: block [
 	"
 	verifyNumberが含まれているブロックを処理の対象としている。
@@ -75,7 +77,7 @@ LetsmeWay >> letsme: block [
 				self tsumo: cell ] ] ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 LetsmeWay >> solve [
 	"
 	レッツミー(列見)方式

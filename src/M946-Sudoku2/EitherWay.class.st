@@ -46,12 +46,14 @@ Transcript cr; show: board .
 ```
 "
 Class {
-	#name : #EitherWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'EitherWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> findCandidatesForEitherCells: verifyNumber [
 	"
 	検証番号を含まずブランクセルが２つのブロックを探し
@@ -66,7 +68,7 @@ EitherWay >> findCandidatesForEitherCells: verifyNumber [
 	
 ]
 
-{ #category : #'sudoku - solution' }
+{ #category : 'sudoku - solution' }
 EitherWay >> finish: verifyNumber [
 
 	1 to: 9 do: [ :n | | block eitherCells |
@@ -109,7 +111,7 @@ Transcript cr; show: board .
 "
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> horizontalProcessing: block rowIndex: rowIndex [
 	
 	| relatedBlockNumbers |
@@ -132,7 +134,7 @@ EitherWay >> horizontalProcessing: block rowIndex: rowIndex [
 			sudokuBoard map: cell2.]]
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> markBlankCellsOnBlocks: verifyNumber [
 	"
 	ブロックに検証数字があるときは全てのブランクセルを$Xでマークする
@@ -147,7 +149,7 @@ EitherWay >> markBlankCellsOnBlocks: verifyNumber [
 	
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> markBlankCellsOnColumns: verifyNumber [
 	"
 	検証数字のある列の全てのブランクセルを$Xでマークする
@@ -161,7 +163,7 @@ EitherWay >> markBlankCellsOnColumns: verifyNumber [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> markBlankCellsOnRows: verifyNumber [
 	"
 	検証数字のある行の全てのブランクセルを$Xでマークする
@@ -175,7 +177,7 @@ EitherWay >> markBlankCellsOnRows: verifyNumber [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> markEitherCellsOn: block [
 	"
 	２つのブランクセルを検証番号のcharacterDigitでマークし、ボードにマップする。
@@ -197,7 +199,7 @@ EitherWay >> markEitherCellsOn: block [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 EitherWay >> solve [
 
 	1 to: 9 do: [ :vNumber| 
@@ -249,7 +251,7 @@ Transcript cr; show: board .
 "
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 EitherWay >> verticalProcessing: block colIndex: colIndex [
 	
 	| relatedBlockNumbers |

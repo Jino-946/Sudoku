@@ -22,24 +22,26 @@ SudokuPairCellsの種類を表す
 
 "
 Class {
-	#name : #PairKinds,
-	#superclass : #Enum,
-	#category : #'M946-Sudoku2-Enum'
+	#name : 'PairKinds',
+	#superclass : 'Enum',
+	#category : 'M946-Sudoku2-Enum',
+	#package : 'M946-Sudoku2',
+	#tag : 'Enum'
 }
 
-{ #category : #creating }
+{ #category : 'creating' }
 PairKinds class >> onePair [
 
 	^self new value: #onePair
 ]
 
-{ #category : #creating }
+{ #category : 'creating' }
 PairKinds class >> twoPairs [
 
 	^self new value: #twoPairs 
 ]
 
-{ #category : #creating }
+{ #category : 'creating' }
 PairKinds class >> unknown [
 
 	^self new value: #unknown

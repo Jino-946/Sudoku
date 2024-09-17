@@ -24,12 +24,14 @@ Transcript cr; show: 'i solved  '; show: completed ; show: ' out of '; show: tas
 
 "
 Class {
-	#name : #JoinUpWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'JoinUpWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #logic }
+{ #category : 'logic' }
 JoinUpWay >> solve [
 	|task  board logger |
 	logger := M946Logger new.
@@ -56,7 +58,7 @@ JoinUpWay >> solve [
 		logger info: 'completed!!']	
 ]
 
-{ #category : #'sudoku - solution' }
+{ #category : 'sudoku - solution' }
 JoinUpWay >> solve: taskOfString [
 
 	"

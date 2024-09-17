@@ -1,10 +1,12 @@
 Class {
-	#name : #BilateralAllianceOfRelatedBlockTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'BilateralAllianceOfRelatedBlockTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsAsymmetricPair1 [
 	"
 	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
@@ -46,7 +48,7 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsAsymmetricPair1 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsAsymmetricPair2 [
 	"
 	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
@@ -75,7 +77,7 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsAsymmetricPair2 [
 	"セル初期化"
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsOnePair [ 
 	"
 	同一行(列)の他セルがこのセルの予約数字と同じ数字に確定したワンペア
@@ -99,7 +101,7 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsOnePair [
 	self assert: otherCell possibleNumbers size equals: 0.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs [
 	"
 	同一行(列)の他セルがこのセルの予約数字のいづれかと同じ数字に確定した
@@ -136,7 +138,7 @@ BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs [
 	self assert: otherCell possibleNumbers size equals: 0.	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BilateralAllianceOfRelatedBlockTest >> testTreatAsTwoPairs2 [
 	"
 	同一行(列)の他セルがこのセルの予約数字のいづれかと同じ数字に確定した

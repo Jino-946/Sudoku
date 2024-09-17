@@ -27,8 +27,8 @@ xOnBoard:                 ブロックのX座標をボードX座標に変換し�
 yOnBoard:                 ブロックのX座標をボードY座標に変換し返す
 "
 Class {
-	#name : #SudokuBlock2,
-	#superclass : #Object,
+	#name : 'SudokuBlock2',
+	#superclass : 'Object',
 	#instVars : [
 		'blockA2D',
 		'rowsOnBoard',
@@ -37,10 +37,12 @@ Class {
 		'verifyNumber',
 		'eitherCells'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuBlock2 class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 	"
     ブロッケン法で数独問題を解決するため、対象となる数独ボード(board)より
@@ -55,7 +57,7 @@ SudokuBlock2 class >> sudokuBoard: board blockNumber: bNum verifyNumber: vNum [
 	^ block
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuBlock2 >> = aSudokuBlock2 [
 
 	^ aSudokuBlock2 class == self class
@@ -65,7 +67,7 @@ SudokuBlock2 >> = aSudokuBlock2 [
 					and: [ aSudokuBlock2 verifyNumber = self verifyNumber  ] ] ] ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> allGreen [ 
 	"
 	allGreen: 麻雀用語で緑一色のこと、 軍事用語でシステムが全て正しく作動すること
@@ -91,13 +93,13 @@ SudokuBlock2 >> allGreen [
 	^ cell
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> asArray [
 
 	^blockA2D asArray
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> asString [
 
 	| aStream |
@@ -123,7 +125,7 @@ SudokuBlock2 >> asString [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> blankCellsAsArray [
 	"
     ブロックのブランクセルをSudokuCellの配列にして返す。
@@ -143,13 +145,13 @@ SudokuBlock2 >> blankCellsAsArray [
 	^ collection asArray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> blockA2D [
 
 	^ blockA2D 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> blockNumber [ 
 	"
 	ブロック番号を返す
@@ -157,13 +159,13 @@ SudokuBlock2 >> blockNumber [
 	^blockNumber 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> blockNumber: aNumber [
 
 	blockNumber := aNumber
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> cellOf: number [
 	"
 	numberの座標をSudokuCellにマップして返し見つからない場合は0を返す。
@@ -181,7 +183,7 @@ SudokuBlock2 >> cellOf: number [
 	^cell
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> colIndexOnBoard: index [
 	"
 	ブロックインデックスをボードインデックスに変換する
@@ -200,7 +202,7 @@ SudokuBlock2 >> colIndexOnBoard: index [
 	^start + index - 1.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> colsOnBoard [
 	"
 	ブロックの列に対応するボードの列を返す
@@ -208,7 +210,7 @@ SudokuBlock2 >> colsOnBoard [
 	^colsOnBoard 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> completed [ 
     "
     ブロックの全てのセルが1-9の数字で埋まりセルの合計が45の時trueを返す
@@ -221,7 +223,7 @@ SudokuBlock2 >> completed [
 		and: [ array sum = 45 ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> countOfReservedBlankCells [
 	"
 	ブランクセル以外のセルは1-9の数字で埋まっている時のブランクセルの数を返す
@@ -234,13 +236,13 @@ SudokuBlock2 >> countOfReservedBlankCells [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> eitherCells [
 
 	^eitherCells 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> get2Allies: blankCells [
 
 	| pairCell1 pairCell2 pairCells |
@@ -257,7 +259,7 @@ SudokuBlock2 >> get2Allies: blankCells [
 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> get3Allies: blankCells [	
 	
 	| cell1 cell2 cell3 cellAllies |
@@ -280,7 +282,7 @@ SudokuBlock2 >> get3Allies: blankCells [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> getBuddyCellsOf: thisCell [
 	"
 	thisCellがワンペア・ツーペア・非対称ペアの時,となる相棒セルを返す。
@@ -304,7 +306,7 @@ SudokuBlock2 >> getBuddyCellsOf: thisCell [
 
 ]
 
-{ #category : #deprecated }
+{ #category : 'deprecated' }
 SudokuBlock2 >> getPairCellsFromCells: pairOfSudokuCell [
 	"
 	2つのブランクセルがSudokuCellのインスタンスの時の処理
@@ -325,7 +327,7 @@ SudokuBlock2 >> getPairCellsFromCells: pairOfSudokuCell [
 
 ]
 
-{ #category : #deprecated }
+{ #category : 'deprecated' }
 SudokuBlock2 >> getPairCellsFromDifferentCells: blankCells [
 	"
 	2つのブランクセルがSudokuPairCellとSudokuCellのインスタンスが混在している時の処理
@@ -356,7 +358,7 @@ SudokuBlock2 >> getPairCellsFromDifferentCells: blankCells [
 	^resultArray 
 ]
 
-{ #category : #deprecated }
+{ #category : 'deprecated' }
 SudokuBlock2 >> getPairCellsFromPairCells: pairOfSudokuPairCells [
 	"
 	2つのブランクセルがSudokuPairCellのインスタンスの時の処理
@@ -366,7 +368,7 @@ SudokuBlock2 >> getPairCellsFromPairCells: pairOfSudokuPairCells [
 	^pairOfSudokuPairCells 
 ]
 
-{ #category : #comparing }
+{ #category : 'comparing' }
 SudokuBlock2 >> hash [ 
 	^(((( blockA2D hash bitXor: rowsOnBoard hash )
 			bitXor: colsOnBoard hash )
@@ -374,7 +376,7 @@ SudokuBlock2 >> hash [
 					bitXor: verifyNumber hash)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SudokuBlock2 >> includes: number [
 
 	(number class = SmallInteger or: [ number = $X ]) ifTrue: [
@@ -383,13 +385,13 @@ SudokuBlock2 >> includes: number [
 		  cell class = SudokuCell and: [ cell marked ] ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 SudokuBlock2 >> includesVerifyNumber [
 
 	^blockA2D asArray includes: verifyNumber
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SudokuBlock2 >> initialize [ 
 
 	super initialize .
@@ -401,7 +403,7 @@ SudokuBlock2 >> initialize [
 	
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> localX: boardX [
 	"
 	ボードのX座標をブロックのX座標に変換し返す。
@@ -416,7 +418,7 @@ SudokuBlock2 >> localX: boardX [
 	^localX
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> localY: boardY [
 	"
 	ボードのY座標をブロックのY座標に変換し返す。
@@ -431,7 +433,7 @@ SudokuBlock2 >> localY: boardY [
 	^localY
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 SudokuBlock2 >> markBlankCells [
 	"
 	すべてのブランクセルを$Xでマークする
@@ -442,7 +444,7 @@ SudokuBlock2 >> markBlankCells [
 				ifTrue: [ self row: i column: j put: $X ]]]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	"
 	ブランクセルのY座標と引数セルのY座標が等しい時、
@@ -465,7 +467,7 @@ SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 SudokuBlock2 >> markByNumberToMark: numberToMark [
 	"
 	ブランクセルに直交するSudokuRowとSudokuColumnを検査し
@@ -485,7 +487,7 @@ SudokuBlock2 >> markByNumberToMark: numberToMark [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	"
 	ブランクセルのY座標と引数セルのY座標が等しい時、
@@ -508,20 +510,20 @@ SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 
 ]
 
-{ #category : #'private - utility' }
+{ #category : 'private - utility' }
 SudokuBlock2 >> missingNumbers [ 
 
 	^#(1 2 3 4 5 6 7 8 9) difference:  blockA2D asArray
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 SudokuBlock2 >> printOn: aStream [
 
 	aStream
 		nextPutAll: self asString; cr.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> readyForFillTwoPair [
 	"
 	ブロックが2つのブランクセルを残すだけで残りの7つのセルが1-9までの数字
@@ -545,19 +547,19 @@ SudokuBlock2 >> readyForFillTwoPair [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> row: rIndex column: cIndex [
 
 	^blockA2D at: rIndex at: cIndex 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> row: rIndex column: cIndex put: elem [
 
 	blockA2D at: rIndex at: cIndex put: elem
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> rowIndexOf: number [
 	"
 	numberの行インデックスを返す
@@ -568,7 +570,7 @@ SudokuBlock2 >> rowIndexOf: number [
 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> rowIndexOnBoard: index [
 	"
 	ブロックインデックスをボードインデックスに変換する
@@ -583,7 +585,7 @@ SudokuBlock2 >> rowIndexOnBoard: index [
 	^ start + index - 1
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> rowsOnBoard [
 	"
 	ブロックの行に対応するボードの行を返す
@@ -591,7 +593,7 @@ SudokuBlock2 >> rowsOnBoard [
 	^rowsOnBoard 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> tenpai [ 
 	"
 	ブロックにブランクセル１つだけの時はブランクセルのボード座標をSudokuCellにマッピングして返す。
@@ -613,7 +615,7 @@ SudokuBlock2 >> tenpai [
 	
 ]
 
-{ #category : #deprecated }
+{ #category : 'deprecated' }
 SudokuBlock2 >> tsumo [
     "
 	Deprecated : use allGreen
@@ -636,7 +638,7 @@ SudokuBlock2 >> tsumo [
 	^ cell
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 SudokuBlock2 >> twoPairsTenpai [
 	"
 	ブロックにブランクセル１つと1組のツーペアが残った場合ブランクセルに数をセットした
@@ -660,7 +662,7 @@ SudokuBlock2 >> twoPairsTenpai [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> verifyNumber [
 	"
 	検証数字を返す
@@ -668,19 +670,19 @@ SudokuBlock2 >> verifyNumber [
 	^verifyNumber 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> verifyNumber: aNumber [
 
 	verifyNumber := aNumber
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SudokuBlock2 >> x: colIndex y: rowIndex [
 
 	^self row:  rowIndex column: colIndex 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuBlock2 >> x: colIndex y: rowIndex put: anObject [
 
 	(anObject class = Array and: [ (anObject at: 1) class = SudokuCell ]) 
@@ -690,7 +692,7 @@ SudokuBlock2 >> x: colIndex y: rowIndex put: anObject [
 			self row: rowIndex column: colIndex  put: anObject ]
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
 
 	| cell1 cell2 pairCell |
@@ -708,7 +710,7 @@ SudokuBlock2 >> x: colIndex y: rowIndex putPairCell: anArrayOfCell [
 	^pairCell
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> xOnBoard: indexOnBlock [
 
 	^self colIndexOnBoard: indexOnBlock 
@@ -716,7 +718,7 @@ SudokuBlock2 >> xOnBoard: indexOnBlock [
 	
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuBlock2 >> yOnBoard: indexOnBlock [
 
 	^self rowIndexOnBoard: indexOnBlock 

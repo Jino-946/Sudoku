@@ -1,10 +1,12 @@
 Class {
-	#name : #TateNicoMethodTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'TateNicoMethodTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 TateNicoMethodTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ TateNicoMethodTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TateNicoMethodTest >> testNicoCellsNumber [
 
 
@@ -77,7 +79,7 @@ TateNicoMethodTest >> testNicoCellsNumber [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TateNicoMethodTest >> testNicoCheck [
 
 	| board solver task |
@@ -116,7 +118,7 @@ TateNicoMethodTest >> testNicoCheck [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 TateNicoMethodTest >> testTargetBlock [
 
 	| board solver task blockNumber |

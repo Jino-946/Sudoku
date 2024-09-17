@@ -1,10 +1,12 @@
 Class {
-	#name : #SudokuBoard2Test,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'SudokuBoard2Test',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 SudokuBoard2Test >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ SudokuBoard2Test >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock2 [
 	"
 	セルに入る数字が確定したあと,関連するブロックの確定数字を予約数字に持つペアセル
@@ -98,7 +100,7 @@ SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testAllianceProcessingOfCol [
 	"
 	block3の<7@3>4が確定したと仮定した時、block9の4のワンペアが解決することをテストする。 
@@ -130,7 +132,7 @@ SudokuBoard2Test >> testAllianceProcessingOfCol [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testAllianceProcessingOfRow [
 
 	| logger  board  cells confirmedCell bag cell1 cell2 cell3|
@@ -208,7 +210,7 @@ SudokuBoard2Test >> testAllianceProcessingOfRow [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testMap [
 	"
 	ブロックのマッピングは別にtestMapSudokuBlock2で行う
@@ -258,7 +260,7 @@ SudokuBoard2Test >> testMap [
 	 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testMap2 [
 
 	| board comfirmedCell logger |
@@ -279,7 +281,7 @@ SudokuBoard2Test >> testMap2 [
 	logger info: board.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBoard2Test >> testMapSudokuBlock2 [
 
 	| board block task |

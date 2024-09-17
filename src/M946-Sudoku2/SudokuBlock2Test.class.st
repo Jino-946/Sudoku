@@ -1,10 +1,12 @@
 Class {
-	#name : #SudokuBlock2Test,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'SudokuBlock2Test',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 SudokuBlock2Test >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ SudokuBlock2Test >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 SudokuBlock2Test >> setUp [
 	super setUp.
 
@@ -30,7 +32,7 @@ SudokuBlock2Test >> setUp [
             timestamp asTime print24: true on: aStream ].
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testAllGreen [
 
 	| task board block cell |
@@ -64,7 +66,7 @@ SudokuBlock2Test >> testAllGreen [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testCellOf [
 
 	|task board block cell|
@@ -91,7 +93,7 @@ SudokuBlock2Test >> testCellOf [
 	self assert: (block cellOf: 9) equals:  cell.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testColIndexOnBoard [
 
 	| board block task  |
@@ -125,7 +127,7 @@ SudokuBlock2Test >> testColIndexOnBoard [
 	self assert: (block rowIndexOnBoard: 3) equals: 9.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testColsOnBoard [
 
 	| board block cols task column |
@@ -164,7 +166,7 @@ SudokuBlock2Test >> testColsOnBoard [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testGetBuddyCellsOf [
 	| logger  board  block thisCell buddies |
 	M946FileLogger logLevel: LogLevel debug.
@@ -194,7 +196,7 @@ SudokuBlock2Test >> testGetBuddyCellsOf [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testLocalX [
 
 	| board block |
@@ -217,7 +219,7 @@ SudokuBlock2Test >> testLocalX [
 	self assert: 3 equals: (block localX: 9).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testLocalY [
 
 	| board block |
@@ -240,7 +242,7 @@ SudokuBlock2Test >> testLocalY [
 	self assert: 3 equals: (block localY: 9).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testMarkByHorizontalCell [
 	| board solver task cells blockNumber sudokuNumber block |
 	task := '
@@ -299,7 +301,7 @@ SudokuBlock2Test >> testMarkByHorizontalCell [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
 
 	| task board block |
@@ -333,7 +335,7 @@ SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testReadyForFillTwoPair [
 
 	| logger  board  block pairCells |
@@ -356,7 +358,7 @@ SudokuBlock2Test >> testReadyForFillTwoPair [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testRowIndexOnBoard [
 
 	| board block task  |
@@ -390,7 +392,7 @@ SudokuBlock2Test >> testRowIndexOnBoard [
 	self assert: (block rowIndexOnBoard: 2) equals: 8.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testRowsOnBoard [
 
 	| board block rows row task|
@@ -424,7 +426,7 @@ SudokuBlock2Test >> testRowsOnBoard [
  
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testTenpai [ 
 
 	| board block expected data|
@@ -461,7 +463,7 @@ SudokuBlock2Test >> testTenpai [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testTsumo [ 
 
 	| task board block cell |
@@ -495,7 +497,7 @@ SudokuBlock2Test >> testTsumo [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testXOnBoard [
 	| board  task   block |
 	task := '
@@ -562,7 +564,7 @@ SudokuBlock2Test >> testXOnBoard [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuBlock2Test >> testYOnBoard [
 	| board  task   block |
 	task := '

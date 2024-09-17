@@ -4,12 +4,14 @@
 [初級問題の解き方](http://daddy-number-place.blog.jp/syokyu1.pdf)
 "
 Class {
-	#name : #TateNicoMethod,
-	#superclass : #DaddyNumPreMethod,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'TateNicoMethod',
+	#superclass : 'DaddyNumPreMethod',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 TateNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 	"
 	検証するブロックに垂直方向に関連する2つのブロックで重複する数字のセルをSudokuCellに変換し配列にして返す。
@@ -27,7 +29,7 @@ TateNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 TateNicoMethod >> nicoCheck: targetBlockNumber [
 	"
 	検証するブロックに垂直方向に関連する2つのブロックのどちらにもある数字を配列にして返す。
@@ -48,14 +50,14 @@ TateNicoMethod >> nicoCheck: targetBlockNumber [
 	^result
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 TateNicoMethod >> solve [
 
 	1 to: 9 do: [ :blockNumber |
 		self targetBlock: blockNumber ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 TateNicoMethod >> targetBlock: blockNumber [
 
 	| logger |

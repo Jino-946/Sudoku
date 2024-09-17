@@ -1,1 +1,1 @@
-Package { #name : #'M946-Sudoku2' }
+Package { #name : 'M946-Sudoku2' }

@@ -1,10 +1,12 @@
 Class {
-	#name : #YokoNicoMethodTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'YokoNicoMethodTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 YokoNicoMethodTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ YokoNicoMethodTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 YokoNicoMethodTest >> testNicoCellsNumber [
 
 
@@ -68,7 +70,7 @@ YokoNicoMethodTest >> testNicoCellsNumber [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 YokoNicoMethodTest >> testNicoCheck [
 
 	| board solver task |
@@ -109,7 +111,7 @@ YokoNicoMethodTest >> testNicoCheck [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 YokoNicoMethodTest >> testTargetBlock [
 
 	| board solver task blockNumber |

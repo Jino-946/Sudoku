@@ -1,10 +1,12 @@
 Class {
-	#name : #EitherCellTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'EitherCellTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 EitherCellTest >> testDeterminTheNumber [
 
 	| logger  board  thisCell otherCell eitherCell resultCell |
@@ -35,7 +37,7 @@ EitherCellTest >> testDeterminTheNumber [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 EitherCellTest >> testDeterminTheNumber2 [
 
 	| logger  board  thisCell otherCell eitherCell resultCell |
@@ -61,7 +63,7 @@ EitherCellTest >> testDeterminTheNumber2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 EitherCellTest >> testDeterminTheNumber3 [
 
 	| logger  board  thisCell otherCell eitherCell resultCell |
@@ -87,7 +89,7 @@ EitherCellTest >> testDeterminTheNumber3 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 EitherCellTest >> testDeterminTheNumber4 [
 
 	| logger  board  thisCell otherCell eitherCell resultCell |

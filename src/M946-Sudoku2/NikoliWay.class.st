@@ -10,7 +10,9 @@ Instance Variables
 
 "
 Class {
-	#name : #NikoliWay,
-	#superclass : #SudokuSolver,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'NikoliWay',
+	#superclass : 'SudokuSolver',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }

@@ -1,10 +1,12 @@
 Class {
-	#name : #SudokuCellTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'SudokuCellTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 SudokuCellTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ SudokuCellTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuCellTest >> testBlockNumber [
 
 	| cell |

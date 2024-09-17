@@ -3,17 +3,19 @@ Instance variables
 - sudokuBoard	   <SudokuBoard> 	 数独ボードを表現する
 "
 Class {
-	#name : #SudokuSolver,
-	#superclass : #Object,
+	#name : 'SudokuSolver',
+	#superclass : 'Object',
 	#instVars : [
 		'sudokuBoard',
 		'relatedVertBlocks',
 		'relatedHorBlocks'
 	],
-	#category : #'M946-Sudoku2-Solution'
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #exercises }
+{ #category : 'exercises' }
 SudokuSolver class >> beginnersEx [
 
 	^ #(
@@ -146,7 +148,7 @@ SudokuSolver class >> beginnersEx [
 )
 ]
 
-{ #category : #exercises }
+{ #category : 'exercises' }
 SudokuSolver class >> intermediateEx [
 
 	^ #(
@@ -591,7 +593,7 @@ SudokuSolver class >> intermediateEx [
 )
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 SudokuSolver class >> new: sudokuBoard [
 
 	| solver |
@@ -600,13 +602,13 @@ SudokuSolver class >> new: sudokuBoard [
 	^ solver
 ]
 
-{ #category : #'private - helpers' }
+{ #category : 'private - helpers' }
 SudokuSolver >> blankCell [ 
 
 	^0
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SudokuSolver >> initialize [
 
 	super initialize.
@@ -636,19 +638,19 @@ SudokuSolver >> initialize [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> relatedHorBlocks [
 
 	^relatedHorBlocks 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> relatedVertBlocks [
 
 	^relatedVertBlocks
 ]
 
-{ #category : #'sudoku - solution' }
+{ #category : 'sudoku - solution' }
 SudokuSolver >> solve: task [
 
 	| count logger |
@@ -711,32 +713,32 @@ Transcript show: 'i solved '; show: completed ; show: ' out of '; show: tasks si
 "
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> sudokuBoard [
 
 	^sudokuBoard 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> sudokuBoard: aBoard [
 
 	sudokuBoard := aBoard 
 ]
 
-{ #category : #creation }
+{ #category : 'creation' }
 SudokuSolver >> sudokuColumnAt: colIndex [
 
 	^ SudokuColumn new: colIndex column: (sudokuBoard atColumn: colIndex) 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> sudokuRowAt: rowIndex [
 
 	^SudokuRow new: rowIndex row: (sudokuBoard atRow: rowIndex)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuSolver >> tsumo: cell [
 
 	cell class = SudokuCell 

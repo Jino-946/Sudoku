@@ -27,12 +27,14 @@
 ```
 "
 Class {
-	#name : #DaddyNumPreMethod,
-	#superclass : #SudokuSolver,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'DaddyNumPreMethod',
+	#superclass : 'SudokuSolver',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #exercises }
+{ #category : 'exercises' }
 DaddyNumPreMethod class >> intermediateEx [ 
 
 	| dict |
@@ -55,7 +57,7 @@ DaddyNumPreMethod class >> intermediateEx [
 	^dict
 ]
 
-{ #category : #exercises }
+{ #category : 'exercises' }
 DaddyNumPreMethod class >> superAdvancedEx [
 	"
 	ナンプレおじさんの超上級問題
@@ -80,7 +82,7 @@ DaddyNumPreMethod class >> superAdvancedEx [
 	^ dict
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 DaddyNumPreMethod >> beginnerSolutions: board [
 
 	(TateNicoMethod new: board) solve.		
@@ -90,7 +92,7 @@ DaddyNumPreMethod >> beginnerSolutions: board [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 DaddyNumPreMethod >> finishBlock: block number: n [
 	"
     aBlock allGreenとはブロックのブランクセルが1つで残り8つのセルは1-9までの数字で埋まっている状態を表す。
@@ -107,7 +109,7 @@ DaddyNumPreMethod >> finishBlock: block number: n [
 	sudokuBoard map: cell
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 DaddyNumPreMethod >> missingNumbers: anArray [
 	"
     ブロック、行、列を配列に変換して引数とし(1-9)の中で足りない数字を配列にして返す。

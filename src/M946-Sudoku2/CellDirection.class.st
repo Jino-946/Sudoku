@@ -7,24 +7,26 @@
 	 CellDirection diagonal   複数セルが斜めに並んでいる。(x座標y座標共に等しくない)
 "
 Class {
-	#name : #CellDirection,
-	#superclass : #Enum,
-	#category : #'M946-Sudoku2-Enum'
+	#name : 'CellDirection',
+	#superclass : 'Enum',
+	#category : 'M946-Sudoku2-Enum',
+	#package : 'M946-Sudoku2',
+	#tag : 'Enum'
 }
 
-{ #category : #'row/column operations' }
+{ #category : 'row/column operations' }
 CellDirection class >> diagonal [
 
 	^self new value: #diagonal
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CellDirection class >> horizontal [
 
 	^self new value: #horizontal
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 CellDirection class >> vertical [
 
 	^self new value: #vertical

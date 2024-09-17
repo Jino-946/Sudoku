@@ -17,18 +17,20 @@ isHorizontal     2つのセルが水平に並んでいる(同一行にある)時
 isVertical       2つのセルが垂直に並んでいる(同一列にある)時true
 "
 Class {
-	#name : #SudokuPairCell,
-	#superclass : #Object,
+	#name : 'SudokuPairCell',
+	#superclass : 'Object',
 	#instVars : [
 		'thisCell',
 		'otherCell',
 		'pairOfNumbers',
 		'pairKinds'
 	],
-	#category : #'M946-Sudoku2-Core'
+	#category : 'M946-Sudoku2-Core',
+	#package : 'M946-Sudoku2',
+	#tag : 'Core'
 }
 
-{ #category : #creating }
+{ #category : 'creating' }
 SudokuPairCell class >> thisCell: aSudokuCell otherCell: aSudokuCell2 [
 
 	| sdPairCells |
@@ -43,7 +45,7 @@ SudokuPairCell class >> thisCell: aSudokuCell otherCell: aSudokuCell2 [
 	
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuPairCell >> asSimpleString [	
 	"
 	SudokuBoard2>>asStringでSudokuPairCellを見やすく表示するために使用するメソッド
@@ -58,7 +60,7 @@ SudokuPairCell >> asSimpleString [
 
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 SudokuPairCell >> asString [
 
 	| aStream |
@@ -72,65 +74,65 @@ SudokuPairCell >> asString [
 	^aStream contents 
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 SudokuPairCell >> initialize [ 
 
 	super initialize .
 	pairOfNumbers := OrderedCollection new.
 ]
 
-{ #category : #boolean }
+{ #category : 'boolean' }
 SudokuPairCell >> isHorizontal [
 
 	^thisCell y = otherCell y
 	
 ]
 
-{ #category : #boolean }
+{ #category : 'boolean' }
 SudokuPairCell >> isVertical [
 
 	^thisCell x = otherCell x
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> otherCell [
 
 	^otherCell 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> otherCell: aSudokuCell [
 
 	otherCell := aSudokuCell 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> pairKinds [
 
 	^pairKinds 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> pairKinds: aPairKinds [
 
 	pairKinds := aPairKinds 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> pairOfNumbers [ 
 
 	^pairOfNumbers 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> pairOfNumbers: anArray [
 
 	pairOfNumbers := anArray 
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 SudokuPairCell >> printOn: aStream [	
 
 	pairKinds = PairKinds onePair 
@@ -145,28 +147,28 @@ SudokuPairCell >> printOn: aStream [
 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> thisCell [
 
 	^thisCell 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 SudokuPairCell >> thisCell: aSudokuCell [
 
 	thisCell := aSudokuCell 
 	
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuPairCell >> x [
 
 	 ^thisCell x
 	
 ]
 
-{ #category : #'accessing - structure variables' }
+{ #category : 'accessing - structure variables' }
 SudokuPairCell >> y [
 
 	 ^ thisCell y

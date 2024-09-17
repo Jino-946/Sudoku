@@ -5,12 +5,14 @@
 
 "
 Class {
-	#name : #YokoNicoMethod,
-	#superclass : #DaddyNumPreMethod,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'YokoNicoMethod',
+	#superclass : 'DaddyNumPreMethod',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 YokoNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 	"
 	検証するブロックに水平方向に関連する2つのブロックで重複する数字のセルをSudokuCellに変換し配列にして返す。
@@ -28,7 +30,7 @@ YokoNicoMethod >> nicoCells: targetBlockNumber number: anInteger [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 YokoNicoMethod >> nicoCheck: targetBlockNumber [
 	"
 	検証するブロックに水平方向に関連する2つのブロックのどちらにもある数字を配列にして返す。
@@ -45,13 +47,13 @@ YokoNicoMethod >> nicoCheck: targetBlockNumber [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 YokoNicoMethod >> solve [
 
 	1 to: 9 do: [ :blockNumber | self targetBlock: blockNumber  ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 YokoNicoMethod >> targetBlock: blockNumber [
 
 	| logger |

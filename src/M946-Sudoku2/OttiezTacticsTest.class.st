@@ -1,10 +1,12 @@
 Class {
-	#name : #OttiezTacticsTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'OttiezTacticsTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 	| logger  board ottie column block |
 	M946FileLogger logLevel: LogLevel debug.
@@ -35,7 +37,7 @@ OttiezTacticsTest >> testFillThreeBlankCellsOfColumn [
 	logger info: board.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFindAffectedCell [
 	"
 	 ブロック内のワンペア・ツーペア(reservedCells size = 2)に影響を与える他ブロックのセルを取得する。
@@ -59,7 +61,7 @@ OttiezTacticsTest >> testFindAffectedCell [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFindAffectedCellOfPairCellPairCell [
 
 	|board block reservedCells ottie logger expected affectedCell |
@@ -97,7 +99,7 @@ OttiezTacticsTest >> testFindAffectedCellOfPairCellPairCell [
 	self assert: affectedCell equals: (board getSudokuCell: 9@7).
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance [
 
 	| logger task board ottie block |
@@ -200,7 +202,7 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance2 [
 
 	| logger  board ottie block |
@@ -227,7 +229,7 @@ OttiezTacticsTest >> testFormBilateralAlliance2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance3 [
 
 	| logger  board ottie block |
@@ -254,7 +256,7 @@ OttiezTacticsTest >> testFormBilateralAlliance3 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance4 [
 
 	| logger  board ottie block |
@@ -283,7 +285,7 @@ OttiezTacticsTest >> testFormBilateralAlliance4 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance5 [
 
 	| logger  board ottie block |
@@ -312,7 +314,7 @@ OttiezTacticsTest >> testFormBilateralAlliance5 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance6 [
 
 	| logger  board ottie block |
@@ -341,7 +343,7 @@ OttiezTacticsTest >> testFormBilateralAlliance6 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance7 [
 	"再帰無限ループ発生 テスト注意"
 	| logger  board ottie block |
@@ -370,7 +372,7 @@ OttiezTacticsTest >> testFormBilateralAlliance7 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance8 [
 
 	| logger  board ottie block |
@@ -399,7 +401,7 @@ OttiezTacticsTest >> testFormBilateralAlliance8 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAlliance9 [
 
 	| logger  board ottie block |
@@ -431,7 +433,7 @@ OttiezTacticsTest >> testFormBilateralAlliance9 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA1 [
 	"
 	
@@ -460,7 +462,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA1 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA2 [
 	"
 	
@@ -490,7 +492,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA3 [
 
 	| logger  board ottie block |
@@ -516,7 +518,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA3 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA4 [
 
 	| logger  board ottie block |
@@ -545,7 +547,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA4 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA5 [
 
 	| logger  board ottie block |
@@ -572,7 +574,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA5 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA6 [
 
 	| logger  board ottie block |
@@ -600,7 +602,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA6 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA7 [
 
 	| logger  board ottie block |
@@ -634,7 +636,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA7 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA8 [
 
 	| logger  board ottie block |
@@ -664,7 +666,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA8 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceA9 [
 
 	| logger  board ottie block |
@@ -692,7 +694,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA9 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB1 [
 
 	| logger  board ottie block |
@@ -723,7 +725,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB1 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB2 [
 
 	| logger  board ottie block |
@@ -751,7 +753,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB2 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB3 [
 
 	| logger  board ottie block |
@@ -780,7 +782,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB3 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB4 [
 
 	| logger  board ottie block |
@@ -810,7 +812,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB5 [
 
 	| logger  board ottie block expected |
@@ -856,7 +858,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB6 [
 
 	| logger  board ottie block |
@@ -886,7 +888,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB6 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB7 [
 
 	| logger  board ottie block |
@@ -911,7 +913,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB7 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB8 [
 
 	| logger  board ottie block |
@@ -935,7 +937,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB8 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testFormBilateralAllianceB9 [
 
 	| logger  board ottie block |
@@ -993,7 +995,7 @@ OttiezTacticsTest >> testFormBilateralAllianceB9 [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 	| logger task board solver block blankCells |
@@ -1068,7 +1070,7 @@ OttiezTacticsTest >> testGetAllianceCellsAfterMark [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 	| logger task board solver block blankCells nextBlock|
@@ -1108,7 +1110,7 @@ OttiezTacticsTest >> testGetNextBlockOfPairBlankCellsCells [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 OttiezTacticsTest >> testResolveAlliance [
 	"
 	 ブロック内のワンペア・ツーペア(reservedCells size = 2)に影響を与える他ブロックのセルを取得する。

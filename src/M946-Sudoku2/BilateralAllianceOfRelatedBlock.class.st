@@ -23,17 +23,19 @@ confirmNumber  <SmallInteger>  thisCellと関連するセルに入ることが�
 
 "
 Class {
-	#name : #BilateralAllianceOfRelatedBlock,
-	#superclass : #Object,
+	#name : 'BilateralAllianceOfRelatedBlock',
+	#superclass : 'Object',
 	#instVars : [
 		'thisCell',
 		'otherCell',
 		'confirmNumber'
 	],
-	#category : #'M946-Sudoku2-Solution'
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #creating }
+{ #category : 'creating' }
 BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 [
 	
 	| allies  |
@@ -44,7 +46,7 @@ BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 [
 	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 confirmNumber: aNumber [
 	
 	| allies  |
@@ -56,20 +58,20 @@ BilateralAllianceOfRelatedBlock class >> thisCell: cell1 otherCell: cell2 confir
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> confirmNumber [
 
 	^confirmNumber 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> confirmNumber: aNumber [	
 
 	confirmNumber := aNumber 
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAllianceOfRelatedBlock >> determineTheNumber [
 	"
 	他のブロックで確定した数字によりツーペアが解消する際は,thisCell element: に 
@@ -97,33 +99,33 @@ BilateralAllianceOfRelatedBlock >> determineTheNumber [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> otherCell [
 
 	^otherCell 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> otherCell: aSudokuCell [
 
 	otherCell := aSudokuCell 
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> thisCell [
 
 	^thisCell 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 BilateralAllianceOfRelatedBlock >> thisCell: aSudokuCell [
 
 	thisCell := aSudokuCell 
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair1 [
 	"
 	thisCellの予約数が2種類、otherCellの予約数が1種類の非対称ペア 
@@ -149,7 +151,7 @@ BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair1 [
 	^otherCell
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair2 [
 	"
 	thisCellの予約数が1種類、otherCellの予約数が2種類の非対称ペア 
@@ -165,7 +167,7 @@ BilateralAllianceOfRelatedBlock >> treatAsAsymmetricPair2 [
 	^otherCell
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAllianceOfRelatedBlock >> treatAsOnePair [
 	"
 	ワンペア同盟
@@ -188,7 +190,7 @@ BilateralAllianceOfRelatedBlock >> treatAsOnePair [
 	^self
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BilateralAllianceOfRelatedBlock >> treatAsTwoPairs [
 	"
 	2ペア同盟

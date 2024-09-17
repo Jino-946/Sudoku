@@ -1,10 +1,12 @@
 Class {
-	#name : #BasicWayTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'BasicWayTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 BasicWayTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ BasicWayTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BasicWayTest >> testSudokuColumnAt [
 
 		| task board  basicWay sudokuColumn array |
@@ -48,7 +50,7 @@ BasicWayTest >> testSudokuColumnAt [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BasicWayTest >> testSudokuRowAt [
 
 	| task board  basicWay sudokuRow array |

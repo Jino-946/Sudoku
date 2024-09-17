@@ -1,10 +1,12 @@
 Class {
-	#name : #SudokuRowTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'SudokuRowTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 SudokuRowTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ SudokuRowTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuRowTest >> testAllGreen [
 
 	|task board block cell |
@@ -48,7 +50,7 @@ SudokuRowTest >> testAllGreen [
 	self assert: (block rowsOnBoard at: 1) allGreen  equals: cell.
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuRowTest >> testCellOf [ 
 
 	| task board row cell |
@@ -74,7 +76,7 @@ SudokuRowTest >> testCellOf [
 	self assert: cell equals: (row cellOf: 2)
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuRowTest >> testGetAffectedCellOf [
 	| logger  board sudokuRow affectedCell |
 	M946FileLogger logLevel: LogLevel debug.
@@ -97,7 +99,7 @@ SudokuRowTest >> testGetAffectedCellOf [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuRowTest >> testTenpai [ 
 
 	|task board block cell |
@@ -128,7 +130,7 @@ SudokuRowTest >> testTenpai [
 	
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 SudokuRowTest >> testTsumo [ 
 
 	|task board block cell |

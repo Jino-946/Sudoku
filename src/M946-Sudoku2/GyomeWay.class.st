@@ -5,12 +5,14 @@ LetsmeWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-cont
 
 "
 Class {
-	#name : #GyomeWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'GyomeWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #logic }
+{ #category : 'logic' }
 GyomeWay >> gyome: block [
 	"
 	verifyNumberが含まれているブロックを処理の対象としている。
@@ -40,7 +42,7 @@ GyomeWay >> gyome: block [
 				self tsumo: cell ] ] ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 GyomeWay >> solve [
 	"
 	行見方式(LetsmeWayの90°回転バージョン)

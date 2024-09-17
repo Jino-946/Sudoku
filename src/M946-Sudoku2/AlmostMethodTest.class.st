@@ -1,10 +1,12 @@
 Class {
-	#name : #AlmostMethodTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'AlmostMethodTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 AlmostMethodTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ AlmostMethodTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFindBlocks [
 
 	| blocks solver board task|
@@ -51,7 +53,7 @@ AlmostMethodTest >> testFindBlocks [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFindColumns [
 
 	| columns solver board task|
@@ -80,7 +82,7 @@ AlmostMethodTest >> testFindColumns [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFindRows [
 
 	| rows solver board task|
@@ -108,7 +110,7 @@ AlmostMethodTest >> testFindRows [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFinishBlocks [
 
 	| task board solver|
@@ -138,7 +140,7 @@ AlmostMethodTest >> testFinishBlocks [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFinishColumns [
 
 	| solver board task|
@@ -173,7 +175,7 @@ AlmostMethodTest >> testFinishColumns [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testFinishRows [
 
 	| task board solver|
@@ -204,7 +206,7 @@ AlmostMethodTest >> testFinishRows [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 AlmostMethodTest >> testSolve [
 
 	| task board array1 array2 |

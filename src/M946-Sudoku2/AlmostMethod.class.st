@@ -11,15 +11,17 @@ Public methods
 	- finishBlocks
 "
 Class {
-	#name : #AlmostMethod,
-	#superclass : #DaddyNumPreMethod,
+	#name : 'AlmostMethod',
+	#superclass : 'DaddyNumPreMethod',
 	#instVars : [
 		'missingNumbers'
 	],
-	#category : #'M946-Sudoku2-Solution'
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> findBlocks [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満のブロックをコレクションにして返す
@@ -33,7 +35,7 @@ AlmostMethod >> findBlocks [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> findColumns [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の列をコレクションにして返す
@@ -47,7 +49,7 @@ AlmostMethod >> findColumns [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> findRows [
 	"
 	全てのセルの要素が1桁の数字でブランクセルの個数が3未満の行をコレクションにして返す
@@ -61,7 +63,7 @@ AlmostMethod >> findRows [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finish1stCrossingColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -93,7 +95,7 @@ AlmostMethod >> finish1stCrossingColumn: cells [
 	^false
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finish1stCrossingRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -124,7 +126,7 @@ AlmostMethod >> finish1stCrossingRow: cells [
 	^false
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finish2ndCrossingColumn: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -156,7 +158,7 @@ AlmostMethod >> finish2ndCrossingColumn: cells [
 		^false
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finish2ndCrossingRow: cells [
 	"
 	finishPairCells:block: の下請けメソッド
@@ -188,7 +190,7 @@ AlmostMethod >> finish2ndCrossingRow: cells [
 		^false
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 AlmostMethod >> finishBlocks [
 	"
 	ブロック内のブランクセルを特定の数字に確定できた時ボードに反映する
@@ -205,7 +207,7 @@ AlmostMethod >> finishBlocks [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 AlmostMethod >> finishColumns [
 	"
 	SudokuColumn内のブランクセルを特定の数字に確定できた時ボードに反映する
@@ -217,7 +219,7 @@ AlmostMethod >> finishColumns [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finishCurrentColumn: column [
 
 	| blankCells completed logger | 
@@ -244,7 +246,7 @@ AlmostMethod >> finishCurrentColumn: column [
 	
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finishCurrentRow: row [
 	"
 	finishRowsのループの中の処理を外出し
@@ -272,7 +274,7 @@ AlmostMethod >> finishCurrentRow: row [
 
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 AlmostMethod >> finishPairCells: cells block: block [
 	"
 	finishBlocksの下請けメソッド
@@ -290,7 +292,7 @@ AlmostMethod >> finishPairCells: cells block: block [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 AlmostMethod >> finishRows [
 	"
 	SudokuRow内のブランクセルを特定の数字に確定できた時ボードに反映する
@@ -304,7 +306,7 @@ AlmostMethod >> finishRows [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 AlmostMethod >> solve [
 
 	self finishBlocks .

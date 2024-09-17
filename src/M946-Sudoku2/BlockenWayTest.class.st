@@ -1,10 +1,12 @@
 Class {
-	#name : #BlockenWayTest,
-	#superclass : #TestCase,
-	#category : #'M946-Sudoku2-Tests'
+	#name : 'BlockenWayTest',
+	#superclass : 'TestCase',
+	#category : 'M946-Sudoku2-Tests',
+	#package : 'M946-Sudoku2',
+	#tag : 'Tests'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 BlockenWayTest >> performTest [ 
 
     | logger |
@@ -18,7 +20,7 @@ BlockenWayTest >> performTest [
     TinyCurrentLogger value: logger during: [ super performTest ]
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BlockenWayTest >> testColumnSuji [ 
 
 	|task board block blockenWay  exBlock|
@@ -69,7 +71,7 @@ BlockenWayTest >> testColumnSuji [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BlockenWayTest >> testRowSuji [ 
 
 	|task board block blockenWay  exBlock|
@@ -119,7 +121,7 @@ BlockenWayTest >> testRowSuji [
 
 ]
 
-{ #category : #tests }
+{ #category : 'tests' }
 BlockenWayTest >> testSujiYomi [ 
 
 	|task board block blockenWay cell exBoard|

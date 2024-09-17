@@ -27,12 +27,14 @@ Transcript clear; show: board
 ```
 "
 Class {
-	#name : #BlockenWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'BlockenWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 BlockenWay >> columnSuji: block [
 	"
 	当該ブロックに影響を与える他のブロックに検証数値がある時ブランクセルにXを置き目印とする。
@@ -51,7 +53,7 @@ BlockenWay >> columnSuji: block [
 					block row: ri column: ci put: $X ] ] ] ]
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 BlockenWay >> example [
 
 	| task board blockenWay |
@@ -75,7 +77,7 @@ BlockenWay >> example [
 	Transcript show: board
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 BlockenWay >> rowSuji: block [
 	"
 	当該ブロックに影響を与える他のブロックに検証数値がある時ブランクセルにXを置き目印とする。
@@ -94,7 +96,7 @@ BlockenWay >> rowSuji: block [
 					block row: ri column: ci put: $X ] ] ] ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 BlockenWay >> solve [
 	"
 	BlockenWay (ブロッ見方式)で解決する。
@@ -120,7 +122,7 @@ BlockenWay >> solve [
 	].
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 BlockenWay >> solvedTask [
 	"
 	BlockenWayで解けた数独問題
@@ -140,7 +142,7 @@ BlockenWay >> solvedTask [
 '
 ]
 
-{ #category : #'private - logics' }
+{ #category : 'private - logics' }
 BlockenWay >> sujiYomi: block [
 	"
  	対象となる他のブロックに検証数値があると重複が発生するためブランクセルにXを置き重複を回避する目印にしている。
@@ -159,7 +161,7 @@ BlockenWay >> sujiYomi: block [
 	^ cell
 ]
 
-{ #category : #examples }
+{ #category : 'examples' }
 BlockenWay >> unsolvedTask [
 	"
     ブロッケン方式だけでは解けなかった数独問題	

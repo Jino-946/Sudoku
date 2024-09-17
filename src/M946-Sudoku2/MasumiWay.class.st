@@ -5,12 +5,14 @@ MasumiWayは[数独のルールと解き方](https://www.nikoli.co.jp/ja/wp-cont
 
 "
 Class {
-	#name : #MasumiWay,
-	#superclass : #NikoliWay,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'MasumiWay',
+	#superclass : 'NikoliWay',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #examples }
+{ #category : 'examples' }
 MasumiWay >> example [
 	"
 	一度のsolveの実行ではtaskを解決できないが二度実行することで解決できた
@@ -43,7 +45,7 @@ MasumiWay >> example [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 MasumiWay >> solve [
 	"
 	ブロックのブランクセルの一つに注目する。

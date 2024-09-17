@@ -4,12 +4,14 @@
 [BOXの２ペアを探す2国同盟で数独なんて簡単さ！]( https://www.youtube.com/watch?v=H1aZ7jiz6Yo )
 "
 Class {
-	#name : #OttiezTactics,
-	#superclass : #SudokuSolver,
-	#category : #'M946-Sudoku2-Solution'
+	#name : 'OttiezTactics',
+	#superclass : 'SudokuSolver',
+	#category : 'M946-Sudoku2-Solution',
+	#package : 'M946-Sudoku2',
+	#tag : 'Solution'
 }
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkBlockTenpai: aBlock [
 
 	| reloadBlock tsumoCell logger blankCellCount |
@@ -29,7 +31,7 @@ OttiezTactics >> checkBlockTenpai: aBlock [
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkColumnTenpai: aCell [
 
 	| column tsumoCell logger |
@@ -43,7 +45,7 @@ OttiezTactics >> checkColumnTenpai: aCell [
 	^ self
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkDoubleTwoPairOfOnePair: reloadBlock [
 	"
 	2組のツーペアができた場合、新にできたツーペアをボードにマップする
@@ -77,7 +79,7 @@ OttiezTactics >> checkDoubleTwoPairOfOnePair: reloadBlock [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkDoubleTwoPairOfZeroBlanks: reloadBlock [
 	"
 	2組のツーペアができた場合、新にできたツーペアをボードにマップする
@@ -110,7 +112,7 @@ OttiezTactics >> checkDoubleTwoPairOfZeroBlanks: reloadBlock [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkForTwoPairs: aBlock [ 
 
 	| reloadBlock twoPairs  "blankCells" logger |
@@ -133,7 +135,7 @@ OttiezTactics >> checkForTwoPairs: aBlock [
 	"
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkRowTenpai: aCell [
 
 	| row tsumoCell logger |
@@ -147,7 +149,7 @@ OttiezTactics >> checkRowTenpai: aCell [
 	^ self
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkTenpai: aBlock cell: aCell [
 
 	self checkBlockTenpai: aBlock.
@@ -156,7 +158,7 @@ OttiezTactics >> checkTenpai: aBlock cell: aCell [
 	self checkRowTenpai: aCell.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> checkTwoPairsTenpai: aBlock [
 
 	| reloadBlock tsumoCell logger |
@@ -169,7 +171,7 @@ OttiezTactics >> checkTwoPairsTenpai: aBlock [
 	tsumoCell class = SudokuCell ifTrue: [ sudokuBoard map: tsumoCell ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> columnMarking: aBlock [
 
 	aBlock colsOnBoard do: [ :sudokuColumn |
@@ -185,7 +187,7 @@ OttiezTactics >> columnMarking: aBlock [
 				aBlock markByVerticalCell: cell]]].
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillOneBlankCellOfColumn: column [
 
 	| cell logger |
@@ -198,7 +200,7 @@ OttiezTactics >> fillOneBlankCellOfColumn: column [
 	sudokuBoard boardA2D at: (cell y) at: (cell x) put: (cell element)
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 
 	| cell |
@@ -208,7 +210,7 @@ OttiezTactics >> fillOneBlankCellOfRow: sudokuRow [
 	sudokuBoard boardA2D at: (cell y) at: (cell x) put: (cell element)
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 	"
 	ツーペア1組と１個のブランクセルを含む列のブランクセルを解決する。
@@ -242,7 +244,7 @@ OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 	sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: missingNumber
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillThreeBlankCellsOfRow: sudokuRow [
 	"
 	ツーペア1組と１個のブランクセルを含む列のブランクセルを解決する。
@@ -271,7 +273,7 @@ OttiezTactics >> fillThreeBlankCellsOfRow: sudokuRow [
 	sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: missingNumber
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
 	| missingNumbers bingo logger |
@@ -292,7 +294,7 @@ OttiezTactics >> fillTwoBlankCellsOfColumn: sudokuColumn [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 
 	| missingNumbers bingo |
@@ -308,7 +310,7 @@ OttiezTactics >> fillTwoBlankCellsOfRow: sudokuRow [
 				self fillOneBlankCellOfRow: tempRow]]]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findAffectedCell: aBlock [
  	"
 	ブロック内の同盟関係のセルに影響を与える他ブロックのセルをSudokuCellオブジェクトとして取得する。
@@ -322,7 +324,7 @@ OttiezTactics >> findAffectedCell: aBlock [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findAffectedCell: aBlock reservedCells: reservedCells [
  	"
 	ブロック内の同盟関係のセルに影響を与える他ブロックのセルをSudokuCellオブジェクトとして取得する。
@@ -333,7 +335,7 @@ OttiezTactics >> findAffectedCell: aBlock reservedCells: reservedCells [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findAffectedCellOfPairCell: aBlock pairCell: pairCell [
 	"
 	引数がワンペア・ツーペアのときの処理
@@ -357,7 +359,7 @@ OttiezTactics >> findAffectedCellOfPairCell: aBlock pairCell: pairCell [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 
 	| cell cellDirection logger |
@@ -374,7 +376,7 @@ OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 		^ self horizontalBlockFinding: aBlock sudokuCell: cell ]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findNextBlock: aBlock singleCell: cell [
 
 	| resultBlock |
@@ -388,7 +390,7 @@ OttiezTactics >> findNextBlock: aBlock singleCell: cell [
 	^ resultBlock
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
 
 	| cell1 cell2 cell3 logger |
@@ -414,7 +416,7 @@ OttiezTactics >> findNextBlock: aBlock trioCells: trioCells [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> formBilateralAlliance: aBlock [
 	"
 	2国同盟方式の中核メソッド
@@ -435,11 +437,10 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 
 	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
 	blankCells := self getAllianceCellsAfterMark: aBlock.
-	logger debug: ('blankCells => 
-{1}' format:{blankCells}).
+	logger debug: blankCells messageWithCR: 'blankCells => '.
 	
 	checkResult := self checkForTwoPairs: aBlock.
-	logger debug: ('checkResult => {1}' format:{checkResult}).
+	logger debug: checkResult message: 'checkResult => '.
 	
 	checkResult = self ifFalse: [ blankCells := checkResult ].
 	(blankCells size between: 1 and: 3) ifFalse: [ 
@@ -452,17 +453,17 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
 		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
+	logger debug: nextBlock message: 'nextBlock => '.
 	
-	logger debug: ('nextBlock => {1}' format: {nextBlock}).
-		nextBlock class = SudokuBlock2 
+	nextBlock class = SudokuBlock2 
 		ifTrue: [self formBilateralAlliance: nextBlock]	
 		ifFalse: [
 			sudokuBoard clearMarks.
-			self setTwoPairOnBlock]
+			self mapTwoPairOnBlock]
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	"
 	aBlockの中でのワンペア・スリーカードを探す。
@@ -494,7 +495,7 @@ OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 	"
 	aBlockの中にaCellの同盟セル(ペアセル)があり、自動的にボードに数が
@@ -516,7 +517,7 @@ OttiezTactics >> getAlliedCellForMapping: aBlock cell: thisCell [
 	
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 	"
 	aBlockの中にaCellの非対称ペアナンバー(ペアセル)があり、自動的にボードに数が
@@ -563,7 +564,7 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getNextBlockOfAsymmetricPair: aBlock thisCell: thisCell cells: otherCells [
 	"
 
@@ -586,7 +587,7 @@ OttiezTactics >> getNextBlockOfAsymmetricPair: aBlock thisCell: thisCell cells: 
 	^nextBlock.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 	"
 	2国同盟が決まったセルをsudokuBoardにマップし、
@@ -604,7 +605,7 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 	"
 	入る数字が決まったセルをsudokuBoardにマップする。
@@ -642,7 +643,7 @@ OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 	^nextBlock.
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	"
 	トリオセルはSudokuBoardにマップはせず、次の対象ブロックの検索にのみ使用する。
@@ -660,7 +661,7 @@ OttiezTactics >> getNextBlockOfTrioBlankCells: aBlock cells: blankCells [
 	^nextBlock 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 
 	| bNumber1 bNumber2 block1 block2 logger |
@@ -683,7 +684,7 @@ OttiezTactics >> horizontalBlockFinding: aBlock sudokuCell: cell [
 	^self
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> horizontalBlockMarking: aBlock sudokuCell: cell [
 
 	| markedPoints copyBlock logger |
@@ -701,7 +702,7 @@ OttiezTactics >> horizontalBlockMarking: aBlock sudokuCell: cell [
 	^copyBlock
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> letsGyome [
 
 	| logger |
@@ -717,7 +718,7 @@ OttiezTactics >> letsGyome [
 			self fillThreeBlankCellsOfRow: row]]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> letsRetsme [
 
 	|logger |
@@ -735,7 +736,22 @@ OttiezTactics >> letsRetsme [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
+OttiezTactics >> mapTwoPairOnBlock [
+	"
+	formBilateralAlliance: を抜ける時にツーペアがセットできるブロックがあれば
+	ツーペアをセットする。
+	"
+	| logger block twoPairs |
+	logger := M946FileLogger new: thisContext.
+	1 to: 9 do: [ :i |
+		block := sudokuBoard getBlock: i.
+		twoPairs := block readyForFillTwoPair .
+		(twoPairs class = Array and: [ twoPairs size = 2 ]) ifTrue: [ 
+			sudokuBoard map: (twoPairs at: 1); map: (twoPairs at: 2)]]
+]
+
+{ #category : 'logic' }
 OttiezTactics >> resolveAlliance: aBlock [
 	"
 	他ブロックの解決した数字を元にしてブロック内の同盟(ワンペア・ツーペア)を解決する。
@@ -767,7 +783,7 @@ OttiezTactics >> resolveAlliance: aBlock [
 	^ba
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> rowMarking: aBlock [
 	
 	aBlock rowsOnBoard do: [ :sudokuRow |
@@ -783,22 +799,7 @@ OttiezTactics >> rowMarking: aBlock [
 				aBlock markByHorizontalCell: cell]]].
 ]
 
-{ #category : #logic }
-OttiezTactics >> setTwoPairOnBlock [
-	"
-	formBilateralAlliance: を抜ける時にツーペアがセットできるブロックがあれば
-	ツーペアをセットする。
-	"
-	| logger block twoPairs |
-	logger := M946FileLogger new: thisContext.
-	1 to: 9 do: [ :i |
-		block := sudokuBoard getBlock: i.
-		twoPairs := block readyForFillTwoPair .
-		(twoPairs class = Array and: [ twoPairs size = 2 ]) ifTrue: [ 
-			sudokuBoard map: (twoPairs at: 1); map: (twoPairs at: 2)]]
-]
-
-{ #category : #'sudoku - solution' }
+{ #category : 'sudoku - solution' }
 OttiezTactics >> solve: taskString [
 
 	|logger|
@@ -820,7 +821,7 @@ OttiezTactics >> solve: taskString [
 
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 
 	| bNumber1 bNumber2 block1 block2 logger |
@@ -844,7 +845,7 @@ OttiezTactics >> verticalBlockFinding: aBlock sudokuCell: cell [
 			^self verticalBlockMarking: block2  sudokuCell: cell]
 ]
 
-{ #category : #logic }
+{ #category : 'logic' }
 OttiezTactics >> verticalBlockMarking: aBlock sudokuCell: cell [
 
 	| markedPoints copyBlock logger |
