@@ -33,8 +33,11 @@ Class {
 
 { #category : 'logic' }
 JoinUpWay >> solve [
-	|task  board logger |
-	logger := M946Logger new.
+	|task  board logger timeToRun|
+	M946FileLogger logLevel: LogLevel info.
+	logger := M946FileLogger new.
+	logger clearLog .
+"
 	task := '
 0 3 0   0 4 0   0 2 1
 5 0 0   0 0 0   0 0 9
@@ -48,14 +51,29 @@ JoinUpWay >> solve [
 9 0 0   0 0 0   0 0 7
 2 1 0   0 9 0   0 3 0
 '.
+"
+"2024/09/15 RF"
+	task := '
+0 4 0   0 2 0   0 1 0
+5 1 0   0 0 0   0 7 6
+0 0 0   5 0 8   0 0 0
 
+0 0 4   9 0 0   7 0 0
+3 0 0   0 4 0   0 0 2
+0 0 2   0 0 3   5 0 0
 
+0 0 0   6 0 1   0 0 0
+1 3 0   0 0 0   0 5 4
+0 6 0   0 5 0   0 8 0	
+'.
+	
+	timeToRun := [
 	board := self solve: task.
-
-	logger  clearLog.
 	logger info: board.
 	board completed ifTrue: [  
-		logger info: 'completed!!']	
+		logger info: 'completed!!']] timeToRun .
+	logger info: ('実行時間: {1}' format: { timeToRun }).
+
 ]
 
 { #category : 'sudoku - solution' }
@@ -65,10 +83,11 @@ JoinUpWay >> solve: taskOfString [
 	開発時の動作確認用のクラス
 	"
 
-	| blockenWay masumiWay letsmeWay gyomeWay eitherWay |
+	| blockenWay masumiWay letsmeWay gyomeWay eitherWay logger |
+	logger := M946FileLogger new.
 	sudokuBoard := SudokuBoard2 new.
 	sudokuBoard loadFromString: taskOfString.
-
+	logger info: sudokuBoard .
 	 10 timesRepeat: [
 		blockenWay := BlockenWay new: sudokuBoard.
 		blockenWay solve.

@@ -2,20 +2,28 @@
 TinyLoggerを継承し日付形式をISOにしたFileLoggerのインスタンスを生成するクラス。
 
 想定する使用法:
-グローバルなloggerを使わず一時的なログを記録するためメソッド内でloggerインスタンスを生成して使用する。
+LogLevelは実行するスクリプトの先頭でM946FileLoggerのクラス変数として指定する。
+```smalltalk
+|logger|
+M946FileLogger logLevel: LogLevel debug.
+logger := M946FileLogger new.
+logger clearLog .
+...
+```
 
+グローバルなloggerを使わずメソッド内でloggerインスタンスを生成して使用する。
 ``` smalltalk
+SomeClass>>someMethod
 | logger |
-logger := M946FileLoggerNamed new: 'pathToLogfile' logLevel: LogLebel debug.
-logger debug: thisContext.
+logger := M946FileLogger new: thisContext.
 
-1 to: 10 do: [ :n |
-	logger debug: n asString.]
+logger debug: someObject.
 ```
 
 主なメソッド
-- debug:  LogLevelがdebugの時,ログを出力する。
-- info:   LogLevelがinfoの時,ログを出力する。
+- info:   LogLevelがoff以外の時、ログを出力する。
+- debug:  LogLevelがdebug,traceの時、ログを出力する。
+- trace:  LogLevelがtraceの時、ログを出力する。
 - record: LogLevelに拘わらずログを出力する。
 
 "
@@ -98,7 +106,7 @@ M946FileLogger >> context: aContext [
 	context := aContext
 ]
 
-{ #category : 'private' }
+{ #category : 'logging' }
 M946FileLogger >> debug: anObject [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -108,7 +116,7 @@ debug: {2}
 ' format: {context . anObject})]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'logging' }
 M946FileLogger >> debug: anObject message: message [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -116,7 +124,7 @@ M946FileLogger >> debug: anObject message: message [
 			  {context . message . anObject . Character cr})]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'logging' }
 M946FileLogger >> debug: anObject messageWithCR: message [
 
 	(self logLevel = LogLevel debug or: [ self logLevel = LogLevel trace ])
@@ -124,10 +132,26 @@ M946FileLogger >> debug: anObject messageWithCR: message [
 			  {context . message . Character cr. anObject . Character cr})]
 ]
 
-{ #category : 'accessing - structure variables' }
+{ #category : 'logging' }
 M946FileLogger >> info: anObject [
 
 	self logLevel ~= LogLevel off ifTrue: [ self record: ('info: {1}' format: {anObject})]
+]
+
+{ #category : 'logging' }
+M946FileLogger >> info: anObject message: message [
+
+	self logLevel ~= LogLevel off 
+		ifTrue: [ self record: ('{1}  debug: {2} {3}{4}' format: 
+			  {context . message . anObject . Character cr})]
+]
+
+{ #category : 'logging' }
+M946FileLogger >> info: anObject messageWithCR: message [
+
+	self logLevel ~= LogLevel off
+		ifTrue: [ self record: ('{1}  debug: {2} {3}{4} {5}' format: 
+			  {context . message . Character cr. anObject . Character cr})]
 ]
 
 { #category : 'accessing' }
@@ -136,7 +160,7 @@ M946FileLogger >> logLevel [
 	^self class  logLevel
 ]
 
-{ #category : 'tracing' }
+{ #category : 'logging' }
 M946FileLogger >> trace: anObject [
 
 	(self logLevel = LogLevel trace )
@@ -146,7 +170,7 @@ trace: {2}
 ' format: {context . anObject})]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'logging' }
 M946FileLogger >> trace: anObject message: message [
 
 	(self logLevel = LogLevel trace )
@@ -154,7 +178,7 @@ M946FileLogger >> trace: anObject message: message [
 			  {context . message . anObject . Character cr})]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'logging' }
 M946FileLogger >> trace: anObject messageWithCR: message [
 
 	(self logLevel = LogLevel trace)

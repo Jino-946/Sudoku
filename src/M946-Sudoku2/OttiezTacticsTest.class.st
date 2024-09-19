@@ -144,7 +144,6 @@ OttiezTacticsTest >> testFormBilateralAlliance [
 	
 	board serializeToFileNamed: 'fuel/testFormBilateralAlliance2.fuel'.
 	
-
 "
 
 	block := board getBlock: 7 verifyNumber: 2.
