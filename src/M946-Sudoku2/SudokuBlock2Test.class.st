@@ -174,9 +174,7 @@ SudokuBlock2Test >> testGetBuddyCellsOf [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testFormBilateralAllianceA7.fuel'.
 	logger info: board.
 	
 	block := board getBlock: 6.
@@ -409,6 +407,7 @@ SudokuBlock2Test >> testMarkByVerticalCell [
 	logger := M946FileLogger new: thisContext.
 	logger clearLog .
 	board := MDeserialize fileNamed:  'fuel/testHard221_17.fuel'.
+	
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := board getBlock: 6 verifyNumber: 3.
@@ -429,9 +428,8 @@ SudokuBlock2Test >> testReadyForFillTwoPair [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testReadyForFillTwoPair.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testReadyForFillTwoPair.fuel'.
+
 	logger info: board.
 	block := board getBlock: 3.
 	logger info: block.

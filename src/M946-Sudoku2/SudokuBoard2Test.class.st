@@ -33,9 +33,8 @@ SudokuBoard2Test >> testAllianceProcessingBuddyCellInTheBlock2 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceA7.fuel'.
+
 	logger info: board.
 
 	"
@@ -111,9 +110,8 @@ SudokuBoard2Test >> testAllianceProcessingOfCol [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceA7.fuel'.
+
 	logger info: board.
 	confirmedCell  := (board getSudokuCell: 7@3) deepCopy.
 	confirmedCell  element: 4.
@@ -146,9 +144,8 @@ SudokuBoard2Test >> testAllianceProcessingOfRow [
 	block5の<5@6>1が確定したと仮定した時、block6の18ツーペアが解決することをテストする。 
 	#(?18 0 ?8)  =>  #(1 0 8)
 	"	
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceA7.fuel'.
+
 	logger info: board.
 	confirmedCell  := board getSudokuCell: 5@6.
 	confirmedCell  element: 1.
@@ -269,9 +266,8 @@ SudokuBoard2Test >> testMap2 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceA7.fuel'.
+
 	logger info: board.
 	
 	comfirmedCell := board getSudokuCell: 5@6.

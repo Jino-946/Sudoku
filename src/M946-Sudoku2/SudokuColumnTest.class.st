@@ -84,9 +84,7 @@ SudokuColumnTest >> testGetAffectedCellOf [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB9.fuel'.
 	logger info: board.
 	
 	sudokuColumn := board getSudokuColumn: 9.

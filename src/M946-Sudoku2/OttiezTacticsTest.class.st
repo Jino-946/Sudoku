@@ -704,9 +704,7 @@ OttiezTacticsTest >> testHard221_03 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_03.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_03.fuel'.
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -740,9 +738,8 @@ OttiezTacticsTest >> testHard221_04 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_04.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_04.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 3.
@@ -773,9 +770,8 @@ OttiezTacticsTest >> testHard221_05 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_05.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_05.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	"
@@ -805,9 +801,8 @@ OttiezTacticsTest >> testHard221_06 [
 	logger := M946FileLogger new: thisContext.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_06.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_06.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger debug: board.
 	block := ottie findBlockToVerify: 4.
@@ -836,9 +831,8 @@ OttiezTacticsTest >> testHard221_07 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_07.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_07.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 5.
@@ -870,9 +864,8 @@ OttiezTacticsTest >> testHard221_08 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_08.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_08.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	"
@@ -903,9 +896,8 @@ OttiezTacticsTest >> testHard221_09 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_09.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_09.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	"3連セルのあるブロックの関連ブロックに検証数字がないブロックがあるとき
@@ -943,9 +935,8 @@ OttiezTacticsTest >> testHard221_11 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_11.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_11.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -972,9 +963,8 @@ OttiezTacticsTest >> testHard221_12 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_12.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_12.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 3.
@@ -1001,9 +991,8 @@ OttiezTacticsTest >> testHard221_13 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_13.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_13.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 6.
@@ -1037,9 +1026,8 @@ OttiezTacticsTest >> testHard221_14 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_14.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_14.fuel'.	
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -1068,9 +1056,8 @@ OttiezTacticsTest >> testHard221_15 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_15.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_15.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 8.
@@ -1098,9 +1085,8 @@ OttiezTacticsTest >> testHard221_16 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testHard221_16.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testHard221_16.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 8.
@@ -1128,6 +1114,7 @@ OttiezTacticsTest >> testHard221_17 [
 	logger clearLog .
 	logger info: thisContext.
 	board := MDeserialize fileNamed:  'fuel/testHard221_17.fuel'.
+	
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	block := ottie findBlockToVerify: 3.
@@ -1165,9 +1152,8 @@ OttiezTacticsTest >> testResolveAlliance [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:'fuel/testFormBilateralAllianceB9.fuel'.
+
 	logger info: board.
 	ottie := OttiezTactics new: board.
 	block := board getBlock: 9.
