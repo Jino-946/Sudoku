@@ -11,7 +11,7 @@ logger clearLog .
 ...
 ```
 
-グローバルなloggerを使わずメソッド内でloggerインスタンスを生成して使用する。
+ログにはグローバルなloggerを使わずメソッド内でloggerインスタンスを生成して使用する。
 ``` smalltalk
 SomeClass>>someMethod
 | logger |
@@ -90,7 +90,7 @@ M946FileLogger class >> new: context [
 	| logger |
 	logger := self named: 'log/default.log'.
 	logger context: context asString.
-	logger debug: ('Hello!! ... "{1}"'  format: {logger context}) .
+	logger debug: 'Hello!!' .
 	^logger
 ]
 
@@ -142,7 +142,7 @@ M946FileLogger >> info: anObject [
 M946FileLogger >> info: anObject message: message [
 
 	self logLevel ~= LogLevel off 
-		ifTrue: [ self record: ('{1}  debug: {2} {3}{4}' format: 
+		ifTrue: [ self record: ('{1}  info: {2} {3}{4}' format: 
 			  {context . message . anObject . Character cr})]
 ]
 
@@ -150,7 +150,7 @@ M946FileLogger >> info: anObject message: message [
 M946FileLogger >> info: anObject messageWithCR: message [
 
 	self logLevel ~= LogLevel off
-		ifTrue: [ self record: ('{1}  debug: {2} {3}{4} {5}' format: 
+		ifTrue: [ self record: ('{1}  info: {2} {3}{4} {5}' format: 
 			  {context . message . Character cr. anObject . Character cr})]
 ]
 

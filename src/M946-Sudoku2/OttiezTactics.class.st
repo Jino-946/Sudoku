@@ -121,7 +121,7 @@ OttiezTactics >> checkForTwoPairs: aBlock [
 	reloadBlock := sudokuBoard getBlock:  (aBlock blockNumber) verifyNumber: (aBlock verifyNumber).
 	twoPairs := reloadBlock blockA2D asArray select: [ :item |
 		item class = SudokuCell and: [ item possibleNumbers isNotEmpty ]].
-	logger debug: ('twoPairs => {1}' format: {twoPairs }).
+	logger trace: twoPairs message: 'towPairs => '.
 	twoPairs size = 2 ifFalse: [ ^self ].	
 	((twoPairs at: 1) possibleNumbers size = 2 and: [(twoPairs at: 2) possibleNumbers size = 2 ])
 		ifFalse: [ ^self ].
@@ -129,10 +129,7 @@ OttiezTactics >> checkForTwoPairs: aBlock [
 		ifFalse: [ ^self ].
 	^twoPairs 
 		
-	"
-	blankCells := aBlock blankCellsAsArray .
-	^(blankCells select: [ :cell | cell ~= (twoPairs at: 1) ]) select: [ :cell | cell ~=  (twoPairs at: 2) ]
-	"
+
 ]
 
 { #category : 'logic' }
@@ -223,23 +220,22 @@ OttiezTactics >> fillThreeBlankCellsOfColumn: sudokuColumn [
 	twoPair := sudokuColumn column select: [ :cell |
 		           cell class = SudokuCell and: [
 			           cell possibleNumbers size = 2 ] ].
-	logger debug: ('twoPair =>
-{1}' format:{twoPair}).
+	logger debug: twoPair messageWithCR: 'towPair =>'.
 	(twoPair size = 2 and: [
 		 (twoPair at: 1) possibleNumbers = (twoPair at: 2) possibleNumbers ])
 		ifFalse: [ ^ self ].
 	zeroCell := (threeBlankCells difference: twoPair) at: 1. 
-	logger debug: ('zeroCell => {1}' format: {zeroCell}).
+	logger debug: zeroCell message: 'zeroCell => '.
 	array := sudokuColumn column select:
 		                   [ :cell |
 		                   cell class = SmallInteger and: [
 			                   cell between: 1 and: 9 ] ].
 	numbersOfColumn := array asOrderedCollection .
 	numbersOfColumn addAll: (twoPair at: 1) possibleNumbers.
-	logger debug: ('numbersOfColumn => {1}' format: {numbersOfColumn}).
+	logger debug: numbersOfColumn message: 'numberOfColumn => '.
 	numbersOfColumn size = 8 ifFalse: [ ^ self ].
 	missingNumber := sudokuColumn missingNumbers  at: 1.
-	logger debug: ('missingNumber => {1}' format: {missingNumber}).
+	logger debug: missingNumber message: 'missingNumber => '.
 	
 	sudokuBoard boardA2D  at: (zeroCell y) at: (zeroCell x) put: missingNumber
 ]
@@ -360,6 +356,50 @@ OttiezTactics >> findAffectedCellOfPairCell: aBlock pairCell: pairCell [
 ]
 
 { #category : 'logic' }
+OttiezTactics >> findBlockToVerify: verifyNumber [
+	"
+	検証するブロックを探す
+	"
+	^self findBlockToVerify: verifyNumber blockNumbers: (1 to: 9) asArray
+
+]
+
+{ #category : 'logic' }
+OttiezTactics >> findBlockToVerify: verifyNumber blockNumbers: collection [
+	"
+	検証するブロックを探す
+	
+	"
+	| dict logger blockNumber "sortedKeys" |
+	logger := M946FileLogger new: thisContext.
+	dict := Dictionary new.
+	blockNumber := self.
+	collection do: [ :n |
+		| block blankCells |
+		block := sudokuBoard getBlock: n verifyNumber: verifyNumber.
+		blankCells := self getAllianceCellsAfterMark: block.
+		blankCells size = 1 ifTrue: [ ^block].
+		(blankCells isNotEmpty and: [ blankCells size < 4 ]) ifTrue: [
+			logger trace: blankCells messageWithCR: ('blockNumber:{1} => ' format: { block blockNumber }).
+			dict at: block blockNumber put: blankCells deepCopy ] ].
+	dict isEmpty ifTrue: [ ^ self ].
+	"新規お試しコード"
+	blockNumber := self usefulBlankCells: dict verifyNumber: verifyNumber .
+	blockNumber class = SmallInteger ifTrue: [ 
+		^sudokuBoard getBlock: blockNumber verifyNumber: verifyNumber]
+
+
+
+	"以下現行コード"	
+	"
+	sortedKeys :=  (dict  associations asSortedCollection: [:x :y | x value size > y value size]) 
+            collect: [:assoc | assoc key].
+	^sudokuBoard getBlock: (sortedKeys at: 1) verifyNumber: verifyNumber 
+	"
+
+]
+
+{ #category : 'logic' }
 OttiezTactics >> findNextBlock: aBlock pairCells: pairCells [
 
 	| cell cellDirection logger |
@@ -425,8 +465,8 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	残ったブランクセルが3以下の時に処理する。
 	1)ブランクセルが1の時、検証数字が入るセルと確定するのでボードに検証数字をマップし
   	  次の対象ブロックを探し、formBilateralAlliance:を再帰呼び出しする。
-	2)ブランクセルが2の時、2国同盟と呼びSudokuCellのインスタンスのpossibleNumbersに
- 	  検証数字を追加しボードにマップする。
+	2)ブランクセルが2の時、ワンペアと呼びSmallIntegerではなくSudokuCellのインスタンスのpossibleNumbersに
+ 	  検証数字を追加したオブジェクトをボードにマップする。
   	  1)の時と同様に次の対象ブロックを探し、formBilateralAlliance:を再帰呼び出しする。
   	  対象ブロックの検索方法: ブランクセルが同一行にある時は水平方向に並ぶブロックが対象になり
       ブランクセルが同一列にある時は垂直方向に並ぶブロックが対象となる。
@@ -435,14 +475,16 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 	| blankCells  nextBlock  checkResult logger |	
 	logger := M946FileLogger new: thisContext.
 
-	(aBlock includes: aBlock verifyNumber) ifTrue: [ ^self ].
+
 	blankCells := self getAllianceCellsAfterMark: aBlock.
 	logger debug: blankCells messageWithCR: 'blankCells => '.
 	
+	"
 	checkResult := self checkForTwoPairs: aBlock.
 	logger debug: checkResult message: 'checkResult => '.
-	
 	checkResult = self ifFalse: [ blankCells := checkResult ].
+	"
+	
 	(blankCells size between: 1 and: 3) ifFalse: [ 
 		sudokuBoard clearMarks .
 		^self ].  
@@ -466,31 +508,34 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 { #category : 'logic' }
 OttiezTactics >> getAllianceCellsAfterMark: aBlock [
 	"
-	aBlockの中でのワンペア・スリーカードを探す。
+	aBlockで検証数字が入らないセルをマークし、残ったブランクセルを返す。
+	ただし1組のツーペアセルがあるときは、ツーペアセルを取り除く。
 	ブランクセルが1つの時、またはブランクセルが2つの時はそのまま返し,
 	ブランクセルが3つの時は垂直方向または水平方向にブランクセルが並ん
-	でいる時にセルの配列を返す。
+	でいる時だけセルの配列を返す。
+	それ以外は空の配列を返す。
 	"
-	| blankCells logger |
+	| blankCells logger twoPairCells |
 	logger := M946FileLogger new: thisContext.
-
+	((aBlock includes: aBlock verifyNumber) or: [aBlock hasPairOf: aBlock verifyNumber]) 
+		ifTrue: [ ^#() ].	
 	self rowMarking: aBlock.
+	logger debug: aBlock messageWithCR: 'aBlock after rowMarking => '.	
 	self columnMarking: aBlock.
+	logger debug: aBlock messageWithCR: 'aBlock after columnMarking => '.
+	twoPairCells := aBlock getTwoPairCells .
+	logger debug: twoPairCells messageWithCR: 'twoPairCells => '.
 	blankCells := aBlock blankCellsAsArray .
-	logger debug: aBlock.
-	logger debug: blankCells.
+	blankCells := blankCells difference: twoPairCells .
+	logger debug: blankCells messageWithCR: 'blankCells => '.
 	(blankCells size between: 1 and: 2 ) ifTrue: [ ^blankCells ].
-	"
-	blankCells size = 2 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x
-										or: [(blankCells at: 1) y = (blankCells at: 2) y])
-											ifTrue: [ ^blankCells ]].
-	"
-	blankCells size = 3 ifTrue: [ ((blankCells at: 1) x = (blankCells at: 2) x 	
-											and: [ (blankCells at: 2) x = (blankCells at: 3) x])
-										ifTrue:[^blankCells].
-									 ((blankCells at: 1) y = (blankCells at: 2) y 
-											and: [ (blankCells at: 2) y = (blankCells at: 3) y])
-										ifTrue:[^blankCells]].
+	blankCells size = 3 ifFalse: [ ^#() ].
+	((blankCells at: 1) x = (blankCells at: 2) x 	
+				and: [ (blankCells at: 2) x = (blankCells at: 3) x])
+	ifTrue:[^blankCells].
+	((blankCells at: 1) y = (blankCells at: 2) y 
+				and: [ (blankCells at: 2) y = (blankCells at: 3) y])
+	ifTrue:[^blankCells].
 	^#()
 	
 ]
@@ -528,9 +573,8 @@ OttiezTactics >> getAlliedCellForMappingNoPairNumber: aBlock cell: thisCell [
 	logger := M946FileLogger new: thisContext.
 	cells := aBlock blockA2D asOrderedCollection select: [ :item |
 				item class = SudokuCell and: [ item notSameCoordinates: thisCell]].
-	logger debug: ('thisCell => {1}' format: {thisCell}).
-	logger debug: ('asymmetric cells =>
-{1}'  format: {cells}).
+	logger trace: thisCell message: 'thisCell => '.
+	logger trace: cells messageWithCR: 'asymmetric cells => '.
 	thisCell possibleNumbers size = 1 
 		ifTrue: [  
 			cells sort: [ :a :b | a possibleNumbers size > b possibleNumbers size ].
@@ -595,9 +639,10 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 	"
 	|  pairCells  logger|	
 	logger := M946FileLogger new: thisContext.
+	logger debug: blankCells messageWithCR: 'blankCells => '.
+	(blankCells at: 1) possibleNumbers size = 2 ifTrue: [ ^self ].
 	pairCells := aBlock get2Allies: blankCells .
-	logger debug: ('pairCells => 
-{1}' format: {pairCells}).
+	logger debug: pairCells messageWithCR: 'pairCells => '.
 	sudokuBoard map: (pairCells at: 1); map: (pairCells at: 2).
 	self checkBlockTenpai: aBlock.
 	((pairCells at: 1) sameDirection: (pairCells at: 2))
@@ -609,7 +654,7 @@ OttiezTactics >> getNextBlockOfPairBlankCells: aBlock cells: blankCells [
 OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 	"
 	入る数字が決まったセルをsudokuBoardにマップする。
-	1)入る数字が決まったセルが2国同盟で、かつもう一方のセルに入る数が
+	1)入る数字が決まったセルがツーペアで、もう一方のセルに入る数が
       決まった時はsudokuBoardにマップする。
     2)入る数字が決まったセルが非対称ペアで、getNextBlockOfAsymmetricPair:thisCell:cells: により
       セルに入る数が決まった時はsudokuBoardにマップする。
@@ -622,8 +667,7 @@ OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 	actualBlock := sudokuBoard getBlock: (aBlock blockNumber) verifyNumber: (aBlock verifyNumber) .
 	"ペアセル取得"
 	otherCells  := self getAlliedCellForMapping: actualBlock  cell: aCell.
-	logger debug: ('pairCells => 
-{1}' format: {otherCells}) .
+	logger trace: otherCells messageWithCR: 'pairCells =>'.
 	(otherCells class = Array and: [ otherCells size = 2 ]) ifTrue: [ 
 		nextBlock := self getNextBlockOfAsymmetricPair: aBlock thisCell: aCell cells: otherCells.
 		nextBlock class = SudokuBlock2 ifTrue: [ ^nextBlock ]
@@ -634,7 +678,7 @@ OttiezTactics >> getNextBlockOfSingleBlankCell: aBlock cell: aCell [
 			 (otherCells at: 1) class = SudokuCell]]) ifTrue: [ 
 		"ペアセルに入る数を確定する"
 		alliedCell := (BilateralAlliance thisCell: aCell otherCell: (otherCells at: 1)) determineTheNumber ].
-		logger debug: ('alliedCell => {1}' format: {alliedCell}).
+		logger trace: alliedCell message: 'alliedCell => '.
 		alliedCell class = SudokuCell ifTrue: [ sudokuBoard map: alliedCell ].
 	aCell clearPossibleNumbers .
 	sudokuBoard map: aCell.
@@ -786,6 +830,8 @@ OttiezTactics >> resolveAlliance: aBlock [
 { #category : 'logic' }
 OttiezTactics >> rowMarking: aBlock [
 	
+	| logger |
+	logger := M946FileLogger new: thisContext.
 	aBlock rowsOnBoard do: [ :sudokuRow |
 		(sudokuRow includes: aBlock verifyNumber) ifTrue: [ 
 			| x y cell |
@@ -793,6 +839,7 @@ OttiezTactics >> rowMarking: aBlock [
 			y := sudokuRow rowIndex .
 			(x = 0 or: [ y = 0 ]) ifTrue: [ self error: 'x = 0 or y = 0' ].
 			cell := (sudokuBoard getCellRow: y cellColumn: x) copy.
+			logger debug: cell message: 'cell => '.
 			cell blockNumber = aBlock blockNumber ifFalse: [  
 				cell element: aBlock verifyNumber.
 				cell clearPossibleNumbers.
@@ -819,6 +866,38 @@ OttiezTactics >> solve: taskString [
 		self letsGyome .
 		logger info: sudokuBoard .]
 
+]
+
+{ #category : 'logic' }
+OttiezTactics >> usefulBlankCells: dict verifyNumber: verifyNumber [
+	"
+	3連ブランクセルのあるブロックの関連ブロックに検証数字がないブロックがあるとき該当ブロックを返す。
+	ブランクセルを降順ソートし、3連セルを最初に検証する。
+	"
+	| blockNumber sortedKeys logger |
+	logger := M946FileLogger new: thisContext.
+	logger debug: dict messageWithCR: 'dict => '.
+	blockNumber := self.
+	sortedKeys :=  (dict  associations asSortedCollection: [:x :y | x value size > y value size]) 
+            collect: [:assoc | assoc key].
+	sortedKeys do: [ :n | | blankCells refBlockNum1 refBlockNum2 |
+		refBlockNum1 := nil.
+		refBlockNum2 := nil.
+		blankCells := dict at: n.
+		blockNumber := (blankCells at: 1) blockNumber.
+		logger debug: blockNumber message: 'blockNumber => '.
+		((blankCells at: 1) verticallyAligned: (blankCells at: 2)) ifTrue: [ 
+			refBlockNum1 := (relatedVertBlocks at: blockNumber) at: 1.
+			refBlockNum2 := (relatedVertBlocks at: blockNumber) at: 2].
+		((blankCells at: 1) horizontallyAligned: (blankCells at: 2)) ifTrue: [ 
+			refBlockNum1 := (relatedHorBlocks at: blockNumber) at: 1.
+			refBlockNum2 := (relatedHorBlocks at: blockNumber) at: 2.].
+		refBlockNum1 ifNotNil: [ | block1 block2 |
+			block1 := sudokuBoard getBlock: refBlockNum1 verifyNumber: 	verifyNumber.
+			block2 := sudokuBoard getBlock: refBlockNum2 verifyNumber: verifyNumber.
+			(block1 includesVerifyNumber not or: [ block2 includesVerifyNumber not])
+				ifTrue: [ ^blockNumber ]]].
+	^blockNumber
 ]
 
 { #category : 'logic' }

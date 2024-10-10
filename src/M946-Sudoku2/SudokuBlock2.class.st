@@ -126,6 +126,20 @@ SudokuBlock2 >> asString [
 ]
 
 { #category : 'accessing' }
+SudokuBlock2 >> at: aPoint [
+
+	^self x: aPoint x y: aPoint y 
+	
+]
+
+{ #category : 'accessing' }
+SudokuBlock2 >> at: aPoint put: anObject [
+
+	self x: aPoint x y: aPoint y  put: anObject
+	 
+]
+
+{ #category : 'accessing' }
 SudokuBlock2 >> blankCellsAsArray [
 	"
     ブロックのブランクセルをSudokuCellの配列にして返す。
@@ -368,6 +382,35 @@ SudokuBlock2 >> getPairCellsFromPairCells: pairOfSudokuPairCells [
 	^pairOfSudokuPairCells 
 ]
 
+{ #category : 'accessing' }
+SudokuBlock2 >> getTwoPairCells [
+	"
+	ブロック内のツーペアセルを配列にして返す
+	"
+	| blankCells cellsWithTwoNumbers twoNumbers twoPairCells |
+	blankCells := self blankCellsAsArray .
+	cellsWithTwoNumbers := blankCells select: [ :cell | cell possibleNumbers size = 2 ].
+	twoNumbers := (cellsWithTwoNumbers collect: [ :cell | cell possibleNumbers copy ]) asSet asArray.
+	twoPairCells := OrderedCollection new.
+	1 to: twoNumbers size do: [ :n | | pairCells |
+		pairCells:=  blankCells select: [ :cell | cell possibleNumbers = (twoNumbers at: n) ].
+		pairCells size = 2 ifTrue: [ twoPairCells addAll: pairCells ]].
+	^twoPairCells asArray
+]
+
+{ #category : 'testing' }
+SudokuBlock2 >> hasPairOf: number [ 
+	"
+	ブロックにnumberのワンペアまたはツーペアがある時はtrueを返し、
+	でなければfalseを返す
+	"
+	| pair |
+	pair := blockA2D asArray select: [ :item |
+		(item class = SudokuCell and: [ item possibleNumbers includes: number] )].
+	pair size = 2 ifTrue: [^true].
+	^false
+]
+
 { #category : 'comparing' }
 SudokuBlock2 >> hash [ 
 	^(((( blockA2D hash bitXor: rowsOnBoard hash )
@@ -387,8 +430,15 @@ SudokuBlock2 >> includes: number [
 
 { #category : 'testing' }
 SudokuBlock2 >> includesVerifyNumber [
-
-	^blockA2D asArray includes: verifyNumber
+	"
+	検証番号そのものがあるだけでなく、検証番号を予約数に含むsudokuCellのペアがある時はtrueを返す。
+	"
+	| pairCells |
+	(blockA2D asArray includes: verifyNumber) ifTrue: [ ^true ].
+	pairCells := blockA2D asArray select: [ :item | 
+		item class = SudokuCell and: [ item possibleNumbers includes: verifyNumber ]].
+	pairCells size > 1 ifTrue: [ ^true ].
+	^false
 ]
 
 { #category : 'initialization' }
@@ -447,21 +497,30 @@ SudokuBlock2 >> markBlankCells [
 { #category : 'logic' }
 SudokuBlock2 >> markByHorizontalCell: aSudokuCell [
 	"
+	ブロック内のツーペア以外のブランクセルで
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブランクセルを$Xでマークする。
-	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。	
+	ブランクセルがワンペアの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。	
 	"
-	| markedPoints |
+	| markedPoints logger twoPairCells |
+	logger := M946FileLogger new: thisContext.
+	twoPairCells := self getTwoPairCells .
+	logger debug: twoPairCells messageWithCR: 'twoPairCells =>'.
 	markedPoints := OrderedCollection new.
 	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints  ].
 	self blankCellsAsArray do: [ :blankCell | 
-		(blankCell y = aSudokuCell y) ifTrue: [ 
-			markedPoints add: blankCell x @ blankCell y.
-			blankCell possibleNumbers isEmpty 
-				ifTrue: [  
-					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
-				ifFalse: [
-					blankCell marked: true ]]].			
+		(twoPairCells includes: blankCell) ifTrue: [ 
+			logger debug: blankCell message: 'two pair found => '].
+		
+		(blankCell y = aSudokuCell y 
+				and: [ (twoPairCells includes: blankCell) not ])
+			ifTrue: [ 
+				markedPoints add: blankCell x @ blankCell y.
+				blankCell possibleNumbers isEmpty 
+					ifTrue: [  
+						self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+					ifFalse: [
+						blankCell marked: true ]]].			
 	^markedPoints
 
 
@@ -490,21 +549,25 @@ SudokuBlock2 >> markByNumberToMark: numberToMark [
 { #category : 'logic' }
 SudokuBlock2 >> markByVerticalCell: aSudokuCell [
 	"
+	ブロック内のツーペア以外のブランクセルで
 	ブランクセルのY座標と引数セルのY座標が等しい時、
 	ブロックのブランクセルを$Xでマークする。
 	ブランクセルがペアセルの時 (possibleNumbers isNotEmpty) markedをtrue に設定する。
 	"
-	| markedPoints |
+	| markedPoints twoPairCells |
+	twoPairCells := self getTwoPairCells .
 	markedPoints := OrderedCollection new.
 	(self includes: aSudokuCell element) ifTrue: [ ^markedPoints ].
 	self blankCellsAsArray do: [ :blankCell | 
-		(blankCell x = aSudokuCell x) ifTrue: [ 	
-			markedPoints add: blankCell x @ blankCell y.
-			blankCell possibleNumbers isEmpty 
-				ifTrue: [  
-					self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
-				ifFalse: [
-					blankCell marked: true ]]].
+		(blankCell x = aSudokuCell x
+					and: [(twoPairCells includes: blankCell) not]) 
+			ifTrue: [ 	
+				markedPoints add: blankCell x @ blankCell y.
+				blankCell possibleNumbers isEmpty 
+					ifTrue: [  
+						self row: (self localY: (blankCell y)) column: (self localX: (blankCell x))  put: $X ]
+					ifFalse: [
+						blankCell marked: true ]]].
 	^markedPoints  
 
 

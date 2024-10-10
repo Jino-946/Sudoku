@@ -171,6 +171,17 @@ SudokuCell >> hash [
 			bitXor:  element hash))
 ]
 
+{ #category : 'as yet unclassified' }
+SudokuCell >> horizontallyAligned: otherCell [
+	"
+	レシーバと引数が水平に並んでいる時はtrue,でなければはfalseを返す
+	"
+	(self y = otherCell y )
+		ifTrue: [ ^true ].
+	^false
+	
+]
+
 { #category : 'testing' }
 SudokuCell >> isPairCell: otherCell [
 
@@ -255,6 +266,17 @@ SudokuCell >> sameDirection: otherCell [
 	レシーバと引数が垂直または水平に並んでいる時はtrue,斜めの時はfalseを返す
 	"
 	(self x = otherCell x or: [self y = otherCell y])
+		ifTrue: [ ^true ].
+	^false
+	
+]
+
+{ #category : 'as yet unclassified' }
+SudokuCell >> verticallyAligned: otherCell [
+	"
+	レシーバと引数が垂直に並んでいる時はtrue,でなければはfalseを返す
+	"
+	(self x = otherCell x )
 		ifTrue: [ ^true ].
 	^false
 	

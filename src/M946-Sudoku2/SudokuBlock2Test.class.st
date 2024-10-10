@@ -197,6 +197,53 @@ SudokuBlock2Test >> testGetBuddyCellsOf [
 ]
 
 { #category : 'tests' }
+SudokuBlock2Test >> testGetTwoPairCells [
+	| logger  board  file block twoPairCells expected cell|
+	M946FileLogger logLevel: LogLevel debug.
+
+	logger := M946FileLogger new.
+	logger clearLog .
+	logger info: thisContext.
+	
+	file := 'fuel/keepIt/2TwoPairs.fuel'.
+	board := MDeserialize fileNamed: file.
+	logger info: board.
+	block := board getBlock: 1.
+	twoPairCells := block getTwoPairCells .
+	self assert: twoPairCells size equals: 0.
+	
+	block := board getBlock: 2.
+	twoPairCells := block getTwoPairCells .
+	self assert: twoPairCells size equals: 0.
+
+	block := board getBlock: 4.
+	twoPairCells := block getTwoPairCells .
+	self assert: twoPairCells size equals: 0.
+	
+	block := board getBlock: 6.
+	twoPairCells := block getTwoPairCells .
+	self assert: twoPairCells size equals: 2.
+	expected := Bag new.
+	cell := SudokuCell row: 4 column: 7  element: 0.
+	cell possibleNumbers addAll: #(1 8).
+	expected add: cell.
+	cell := SudokuCell row: 6 column: 7  element: 0.
+	cell possibleNumbers addAll: #(1 8).
+	expected add: cell.
+	self assert: twoPairCells asBag equals: expected .
+
+	block := board getBlock: 5.
+	twoPairCells := block getTwoPairCells .
+	self assert: twoPairCells size equals: 4.
+
+
+	
+	
+
+
+]
+
+{ #category : 'tests' }
 SudokuBlock2Test >> testLocalX [
 
 	| board block |
@@ -244,7 +291,7 @@ SudokuBlock2Test >> testLocalY [
 
 { #category : 'tests' }
 SudokuBlock2Test >> testMarkByHorizontalCell [
-	| board solver task cells blockNumber sudokuNumber block |
+	| board solver task cells blockNumber sudokuNumber block  |
 	task := '
 3 6 9   8 0 1   5 0 0
 0 2 0   5 0 6   0 0 0
@@ -302,6 +349,26 @@ SudokuBlock2Test >> testMarkByHorizontalCell [
 ]
 
 { #category : 'tests' }
+SudokuBlock2Test >> testMarkByHorizontalCell2 [
+	"
+	ブロック内のツーペアセルはブランクセルとしてマークされないことをテストする
+	"
+	| logger board block ottie cell |
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new: thisContext.
+	logger clearLog .
+	board := MDeserialize fileNamed:  'fuel/testHard221_17.fuel'.
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	block := board getBlock: 6 verifyNumber: 3.
+	logger info: block.
+	cell := SudokuCell row: 6  column: 1 element: 3.
+	block markByHorizontalCell: cell.
+	logger info: block.
+	self assert: (block includes: $X) equals: false.
+]
+
+{ #category : 'tests' }
 SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
 
 	| task board block |
@@ -333,6 +400,24 @@ SudokuBlock2Test >> testMarkByNumberNumberToMark2 [
 	self assert: 0 equals: (block row: 2 column: 1).
 	
 
+]
+
+{ #category : 'tests' }
+SudokuBlock2Test >> testMarkByVerticalCell [
+	| logger board block ottie cell |
+	M946FileLogger logLevel: LogLevel debug.
+	logger := M946FileLogger new: thisContext.
+	logger clearLog .
+	board := MDeserialize fileNamed:  'fuel/testHard221_17.fuel'.
+	ottie := OttiezTactics new: board.
+	logger info: board.
+	block := board getBlock: 6 verifyNumber: 3.
+	logger info: block.
+	cell := SudokuCell row: 1  column: 9 element: 3.
+	block markByVerticalCell: cell.
+	logger info: block.
+	self assert: (block includes: $X) equals: true.
+	self assert: (block x: 3 y: 1) equals: $X.
 ]
 
 { #category : 'tests' }
