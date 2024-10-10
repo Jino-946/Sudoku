@@ -54,9 +54,8 @@ OttiezTacticsTest >> testFindAffectedCell [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:  'fuel/testFormBilateralAllianceB9.fuel'.
+
 	logger info: board.
 	ottie := OttiezTactics new: board.
 	block := board getBlock: 9.
@@ -75,9 +74,8 @@ OttiezTacticsTest >> testFindAffectedCellOfPairCellPairCell [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB9.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -113,9 +111,7 @@ OttiezTacticsTest >> testFormBilateralAllianceA8 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA8.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:  'fuel/testFormBilateralAllianceA8.fuel'.
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -143,9 +139,8 @@ OttiezTacticsTest >> testFormBilateralAllianceA9 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceA9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:  'fuel/testFormBilateralAllianceA9.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -171,9 +166,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB1 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB1.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB1.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -202,9 +196,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB2 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB2.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB2.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 
@@ -230,9 +223,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB3 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB3.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB3.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -259,9 +251,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB4 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB4.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:  'fuel/testFormBilateralAllianceB4.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -289,9 +280,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB5 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB5.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB5.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	ottie letsRetsme .
@@ -335,9 +325,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB6 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB6.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB6.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -365,9 +354,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB7 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB7.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB7.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -390,9 +378,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB8 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB8.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed: 'fuel/testFormBilateralAllianceB8.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	
@@ -414,9 +401,8 @@ OttiezTacticsTest >> testFormBilateralAllianceB9 [
 	logger := M946FileLogger new.
 	logger clearLog .
 	logger info: thisContext.
-	board := FLMaterializer new 
-        filePath: 'fuel/testFormBilateralAllianceB9.fuel';
-        materializeRoot .
+	board := MDeserialize fileNamed:  'fuel/testFormBilateralAllianceB9.fuel'.
+
 	ottie := OttiezTactics new: board.
 	logger info: board.
 	

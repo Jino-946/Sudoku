@@ -472,7 +472,7 @@ OttiezTactics >> formBilateralAlliance: aBlock [
       ブランクセルが同一列にある時は垂直方向に並ぶブロックが対象となる。
 	3)ブランクセルが3の時は、2の時に準じて処理する。
 	"
-	| blankCells  nextBlock  checkResult logger |	
+	| blankCells  nextBlock  "checkResult" logger |	
 	logger := M946FileLogger new: thisContext.
 
 
@@ -495,8 +495,8 @@ OttiezTactics >> formBilateralAlliance: aBlock [
 		nextBlock := self getNextBlockOfPairBlankCells: aBlock cells: blankCells].
 	blankCells size = 3 ifTrue: [ 
 		nextBlock := self getNextBlockOfTrioBlankCells: aBlock cells: blankCells ].
-	logger debug: nextBlock message: 'nextBlock => '.
 	
+	logger debug: nextBlock message: 'nextBlock => '.
 	nextBlock class = SudokuBlock2 
 		ifTrue: [self formBilateralAlliance: nextBlock]	
 		ifFalse: [
